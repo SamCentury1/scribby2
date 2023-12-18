@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "712370123958",
+    "project_id": "scribby-6934e",
+    "storage_bucket": "scribby-6934e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712370123958:android:1fdd7bd3b56d210d056217",
+        "android_client_info": {
+          "package_name": "com.example.scribby_flutter_v2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRs96lfDcjpM_iDtCOSSSYWtRS-X2VVJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
