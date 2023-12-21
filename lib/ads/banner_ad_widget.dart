@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 
 // import 'package:flutter/foundation.dart';
@@ -35,12 +33,9 @@ class BannerAdWidget extends StatefulWidget {
 }
 
 class _BannerAdWidgetState extends State<BannerAdWidget> {
-
   static const useAnchoredAdaptiveSize = true;
   BannerAd? _bannerAd;
   _LoadingState _adLoadingState = _LoadingState.initial;
-
-  
 
   late Orientation _currentOrientation;
 
@@ -48,7 +43,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   void dispose() {
     _bannerAd?.dispose();
     super.dispose();
-  }   
+  }
 
   @override
   void didChangeDependencies() {
@@ -57,15 +52,11 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     // _loadAd(); /// added this line following this issue: https://github.com/googleads/googleads-mobile-flutter/issues/78
   }
 
-
-
-
-
- 
   // Load (another) ad, disposing of the current ad if there is one.
   Future<void> _loadAd() async {
     if (!mounted) return;
-    if (_adLoadingState == _LoadingState.loading || _adLoadingState == _LoadingState.disposing) {
+    if (_adLoadingState == _LoadingState.loading ||
+        _adLoadingState == _LoadingState.disposing) {
       debugPrint("ad is already being loaded or disposed. aborting");
       return;
     }
@@ -87,7 +78,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     AdSize size;
 
     if (useAnchoredAdaptiveSize) {
-      final AnchoredAdaptiveBannerAdSize? adaptiveSize = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MediaQuery.of(context).size.width.truncate());
+      final AnchoredAdaptiveBannerAdSize? adaptiveSize =
+          await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+              MediaQuery.of(context).size.width.truncate());
       if (adaptiveSize == null) {
         debugPrint("unable to get height of anchored banner");
         size = AdSize.banner;
@@ -105,18 +98,18 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     // you replace this with your own, production ad unit ID,
     // created in https://apps.admob.com/.
     _bannerAd = BannerAd(
-      size: size, 
+      size: size,
       adUnitId: Theme.of(context).platform == TargetPlatform.android
-        ? 'ca-app-pub-3940256099942544/6300978111'
-        : 'ca-app-pub-3940256099942544/2934735716',
+          ? 'ca-app-pub-3940256099942544/6300978111'
+          : 'ca-app-pub-3940256099942544/2934735716',
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           setState(() {
             // When the ad is loaded, get the ad size and use it to set
-            // the height of the ad container.        
+            // the height of the ad container.
             _bannerAd = ad as BannerAd;
-            _adLoadingState = _LoadingState.loaded;    
+            _adLoadingState = _LoadingState.loaded;
           });
         },
         onAdFailedToLoad: (ad, error) {
@@ -128,11 +121,12 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
         // },
         // onAdClicked: (ad) {
         //   _log.info('Ad click registered');
-        // },        
-      ), 
+        // },
+      ),
     );
-    // return _bannerAd!.load(); 
-    return _bannerAd?.load(); // I changed it to this following this issue: https://github.com/googleads/googleads-mobile-flutter/issues/78
+    // return _bannerAd!.load();
+    return _bannerAd
+        ?.load(); // I changed it to this following this issue: https://github.com/googleads/googleads-mobile-flutter/issues/78
   }
 
   Future<void> _showPreloadedAd(PreloadedBannerAd ad) async {
@@ -152,14 +146,15 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     setState(() {
       _adLoadingState = _LoadingState.loaded;
     });
-  }  
-
+  }
 
   @override
   Widget build(BuildContext context) {
     return OrientationBuilder(
       builder: (context, orientation) {
-        if (_currentOrientation == orientation && _bannerAd != null && _adLoadingState == _LoadingState.loaded) {
+        if (_currentOrientation == orientation &&
+            _bannerAd != null &&
+            _adLoadingState == _LoadingState.loaded) {
           debugPrint("good to go, show the ad");
           return SizedBox(
             width: _bannerAd!.size.width.toDouble(),
@@ -178,7 +173,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     );
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -189,14 +183,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       _showPreloadedAd(ad);
     } else {
       _loadAd();
-      
     }
-  }  
-
-
-
+  }
 }
-
 
 enum _LoadingState {
   /// The state before we even start loading anything.
@@ -212,4 +201,3 @@ enum _LoadingState {
   /// An ad has been loaded already.
   loaded,
 }
-

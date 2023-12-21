@@ -16,23 +16,24 @@ class RandomLetters extends StatefulWidget {
   State<RandomLetters> createState() => _RandomLettersState();
 }
 
-class _RandomLettersState extends State<RandomLetters> with TickerProviderStateMixin{
+class _RandomLettersState extends State<RandomLetters>
+    with TickerProviderStateMixin {
   late AnimationState _animationState;
 
   // DEFINE THE VARIABLES THAT WILL CONTROL THE ANIMATIONS FOR THE FIRST LETTER AND SECOND LETTER
-    // FIRST LETTER
+  // FIRST LETTER
   late AnimationController _shrinkAnimationController;
   late Animation<double> _shrinkAnimation;
 
-    // HANDLES THE SMALL SLIDE FROM LETTER 2 TO LETTER 1
+  // HANDLES THE SMALL SLIDE FROM LETTER 2 TO LETTER 1
   late AnimationController _slideController;
   late Animation<Offset> _slideAnimation;
 
-    // HANDLES THE TILE GETTING BIGGER
+  // HANDLES THE TILE GETTING BIGGER
   late AnimationController _sizeAnimationController;
   late Animation<double> _sizeAnimation;
 
-    // HANDLES THE FONT GETTING BIGGER
+  // HANDLES THE FONT GETTING BIGGER
   late AnimationController _fontAnimationController;
   late Animation<double> _fontAnimation;
 
@@ -40,12 +41,9 @@ class _RandomLettersState extends State<RandomLetters> with TickerProviderStateM
   late AnimationController _letter2SlideController;
   late Animation<Offset> _letter2Animation;
 
-
-
-    // HANDLES THE FONT GETTING BIGGER
+  // HANDLES THE FONT GETTING BIGGER
   late int secondsLeft;
   late GamePlayState _gamePlayState;
-
 
   // HERE WE GET THE PROVIDER
   @override
@@ -57,17 +55,17 @@ class _RandomLettersState extends State<RandomLetters> with TickerProviderStateM
     _animationState.addListener(_handleAnimationStateChange);
     _gamePlayState.addListener(_handleGamePlayStateChange);
     secondsLeft = GameLogic().getCountdownDuration(_gamePlayState.currentLevel);
-
   }
 
   void _handleGamePlayStateChange() {
     // Check if the level has changed
     if (_gamePlayState.currentLevel != _gamePlayState.previousLevel) {
       setState(() {
-        secondsLeft = GameLogic().getCountdownDuration(_gamePlayState.currentLevel);
+        secondsLeft =
+            GameLogic().getCountdownDuration(_gamePlayState.currentLevel);
       });
     }
-  }  
+  }
 
   void _handleAnimationStateChange() {
     if (_animationState.shouldRunAnimation) {
@@ -75,25 +73,16 @@ class _RandomLettersState extends State<RandomLetters> with TickerProviderStateM
     }
   }
 
-
   // THIS FUNCTION TELLS THE CODE WHAT TO DO
   void initializeAnimations() {
-
-
     _shrinkAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200)
-    );
+        vsync: this, duration: const Duration(milliseconds: 200));
 
     _shrinkAnimation = Tween<double>(
       begin: 1,
       end: 0,
-    ).animate(
-      CurvedAnimation(
-        parent: _shrinkAnimationController, 
-        curve: Curves.easeIn
-      )
-    );    
+    ).animate(CurvedAnimation(
+        parent: _shrinkAnimationController, curve: Curves.easeIn));
 
     // FIRST LETTER
     _slideController = AnimationController(
@@ -107,34 +96,22 @@ class _RandomLettersState extends State<RandomLetters> with TickerProviderStateM
     ).animate(_slideController);
 
     _sizeAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200)
-    );
+        vsync: this, duration: const Duration(milliseconds: 200));
 
     _sizeAnimation = Tween<double>(
       begin: 50,
       end: 100,
-    ).animate(
-      CurvedAnimation(
-        parent: _sizeAnimationController, 
-        curve: Curves.easeIn
-      )
-    );
+    ).animate(CurvedAnimation(
+        parent: _sizeAnimationController, curve: Curves.easeIn));
 
     _fontAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200)
-    );
+        vsync: this, duration: const Duration(milliseconds: 200));
 
     _fontAnimation = Tween<double>(
       begin: 26,
       end: 60,
-    ).animate(
-      CurvedAnimation(
-        parent: _fontAnimationController, 
-        curve: Curves.easeIn
-      )
-    ); 
+    ).animate(CurvedAnimation(
+        parent: _fontAnimationController, curve: Curves.easeIn));
 
     // SECOND LETTER
     _letter2SlideController = AnimationController(
@@ -147,32 +124,28 @@ class _RandomLettersState extends State<RandomLetters> with TickerProviderStateM
       end: Offset.zero,
     ).animate(_letter2SlideController);
 
-
     _slideController.forward();
     _shrinkAnimationController.forward();
     _sizeAnimationController.forward();
     _fontAnimationController.forward();
-    _letter2SlideController.forward();  
-
+    _letter2SlideController.forward();
   }
-
 
   void _runAnimations() {
     _slideController.reset();
     _shrinkAnimationController.reset();
     _sizeAnimationController.reset();
     _fontAnimationController.reset();
-    _letter2SlideController.reset();   
+    _letter2SlideController.reset();
     // _countDownTextSizeController.reset();
 
     _slideController.forward();
     _shrinkAnimationController.forward();
     _sizeAnimationController.forward();
     _fontAnimationController.forward();
-    _letter2SlideController.forward();       
+    _letter2SlideController.forward();
     // _countDownTextSizeController.forward();
   }
-
 
   @override
   void dispose() {
@@ -190,14 +163,13 @@ class _RandomLettersState extends State<RandomLetters> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
-    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette =
+        Provider.of<ColorPalette>(context, listen: false);
 
     return Stack(
       children: [
-
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -208,166 +180,164 @@ class _RandomLettersState extends State<RandomLetters> with TickerProviderStateM
                   width: double.infinity,
                   height: 100,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Stack(
-                          children: [
-                            // CountDownTimer()
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Stack(
+                            children: [
+                              // CountDownTimer()
 
-                            Align(
-                              alignment: Alignment.center,
-                              child: CircularCountDownTimer(
-                                  duration:  GameLogic().getCountdownDuration(gamePlayState.currentLevel), // 5,
-                                  initialDuration: GameLogic().getCountdownDuration(gamePlayState.currentLevel), // 5,
-                                  controller: gamePlayState.countDownController,  
-                                  width: 70, // MediaQuery.of(context).size.width / 3,
-                                  height: 70, // MediaQuery.of(context).size.height / 3,
+                              Align(
+                                alignment: Alignment.center,
+                                child: CircularCountDownTimer(
+                                  duration: GameLogic().getCountdownDuration(
+                                      gamePlayState.currentLevel), // 5,
+                                  initialDuration: GameLogic()
+                                      .getCountdownDuration(
+                                          gamePlayState.currentLevel), // 5,
+                                  controller: gamePlayState.countDownController,
+                                  width:
+                                      70, // MediaQuery.of(context).size.width / 3,
+                                  height:
+                                      70, // MediaQuery.of(context).size.height / 3,
                                   // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
                                   ringColor: palette.tileBgColor,
                                   ringGradient: null,
-                                  fillColor: Colors.purple[500]!,// Colors.purpleAccent[100]!,
+                                  fillColor: Colors.purple[
+                                      500]!, // Colors.purpleAccent[100]!,
                                   fillGradient: null,
                                   // backgroundColor:GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                                  backgroundColor: palette.screenBackgroundColor,
+                                  backgroundColor:
+                                      palette.screenBackgroundColor,
                                   backgroundGradient: null,
                                   strokeWidth: 5.0,
                                   strokeCap: StrokeCap.round,
                                   textStyle: TextStyle(
-                                      fontSize: 33.0, 
+                                      fontSize: 33.0,
                                       // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
-                                      color: palette.tileBgColor
-                                    ),
+                                      color: palette.tileBgColor),
                                   textFormat: CountdownTextFormat.S,
                                   isReverse: true,
                                   isReverseAnimation: false,
                                   isTimerTextShown: true,
                                   autoStart: true,
-                                  onStart: () {
-                                      debugPrint('Countdown Started');
-                                  },
+                                  onStart: () {},
                                   onComplete: () {
                                     if (gamePlayState.isGameStarted) {
-                                      debugPrint('Countdown Ended');
-                                      GameLogic().killTileSpot(gamePlayState, context);                                 
-                                    } else {
-                                      debugPrint("nothing yet");
-                                    }
+                                      GameLogic()
+                                          .killTileSpot(gamePlayState, context);
+                                    } else {}
                                   },
-                                  onChange: (String timeStamp) {
-                                                                                                       
-                                  },
-                                  timeFormatterFunction: (defaultFormatterFunction, duration) {
-                              
+                                  onChange: (String timeStamp) {},
+                                  timeFormatterFunction:
+                                      (defaultFormatterFunction, duration) {
                                     if (duration.inSeconds <= 3) {
-                                      return Function.apply(defaultFormatterFunction, [duration]);
+                                      return Function.apply(
+                                          defaultFormatterFunction, [duration]);
                                     } else {
                                       return "";
                                     }
                                   },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                     
-                      Expanded(
-                        flex: 1,
-                        child: Stack(
-                          children: [
-                
-                          AnimatedBuilder(
-                            animation: _shrinkAnimation ,
-                            builder: (context, child) {
-                              return Center(
-                                child: Container(
-                                  width: 100 * _shrinkAnimation.value,
-                                  height: 100 * _shrinkAnimation.value,                              
-                                  decoration:  const BoxDecoration(
-                                    color:  Color.fromRGBO(202, 176, 228, 1),
-                                    borderRadius: BorderRadius.all(Radius.circular(10))
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      GameLogic().displayRandomLetters(gamePlayState.randomLetterList, 3),
-                                      style: TextStyle(
-                                        fontSize: 60 * _shrinkAnimation.value,
-                                        color: const Color.fromARGB(255, 9, 1, 34),
-                                      ),
-                                    )
-                                  ),
                                 ),
-                              );
-                            },
+                              ),
+                            ],
                           ),
-                
-                
-                          AnimatedBuilder(
-                            animation: _sizeAnimation ,
-                            builder: (context, child) {
-                              return SlideTransition(
-                                position: _slideAnimation,      
-                                child: Center(
-                                  child: Container(
-                                    width: _sizeAnimation.value,
-                                    height: _sizeAnimation.value,                              
-                                    decoration:  const BoxDecoration(
-                                      color:  Color.fromRGBO(202, 176, 228, 1),
-                                      borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Stack(
+                            children: [
+                              AnimatedBuilder(
+                                animation: _shrinkAnimation,
+                                builder: (context, child) {
+                                  return Center(
+                                    child: Container(
+                                      width: 100 * _shrinkAnimation.value,
+                                      height: 100 * _shrinkAnimation.value,
+                                      decoration: const BoxDecoration(
+                                          color:
+                                              Color.fromRGBO(202, 176, 228, 1),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                      child: Center(
+                                          child: Text(
+                                        GameLogic().displayRandomLetters(
+                                            gamePlayState.randomLetterList, 3),
+                                        style: TextStyle(
+                                          fontSize: 60 * _shrinkAnimation.value,
+                                          color: const Color.fromARGB(
+                                              255, 9, 1, 34),
+                                        ),
+                                      )),
                                     ),
+                                  );
+                                },
+                              ),
+                              AnimatedBuilder(
+                                animation: _sizeAnimation,
+                                builder: (context, child) {
+                                  return SlideTransition(
+                                    position: _slideAnimation,
+                                    child: Center(
+                                      child: Container(
+                                        width: _sizeAnimation.value,
+                                        height: _sizeAnimation.value,
+                                        decoration: const BoxDecoration(
+                                            color: Color.fromRGBO(
+                                                202, 176, 228, 1),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: Center(
+                                            child: Text(
+                                          GameLogic().displayRandomLetters(
+                                              gamePlayState.randomLetterList,
+                                              2),
+                                          // widget.letter_1,
+                                          // "A",
+                                          style: TextStyle(
+                                            fontSize: _fontAnimation.value,
+                                            color: const Color.fromARGB(
+                                                255, 9, 1, 34),
+                                          ),
+                                        )),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: SlideTransition(
+                            position: _letter2Animation,
+                            child: Center(
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                        color: Color.fromRGBO(202, 176, 228, 1),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
                                     child: Center(
                                       child: Text(
-                                        GameLogic().displayRandomLetters(gamePlayState.randomLetterList, 2),
-                                        // widget.letter_1,
-                                        // "A",
-                                        style: TextStyle(
-                                          fontSize: _fontAnimation.value,
-                                          color: const Color.fromARGB(255, 9, 1, 34),
+                                        GameLogic().displayRandomLetters(
+                                            gamePlayState.randomLetterList, 1),
+                                        style: const TextStyle(
+                                          fontSize: 26,
+                                          color: Color.fromARGB(255, 9, 1, 34),
                                         ),
-                                      )
-                                    ),
-                                  ),
-                                ),                        
-                              );
-                            },
-                          ),                                              
-                          ],
-                        ),
-                      ),
-                
-                      Expanded(
-                        flex: 1,
-                        child: SlideTransition(
-                          position: _letter2Animation,
-                          child: Center(
-                            child: Container(
-                              width: 50,
-                              height: 50,                              
-                              decoration:  const BoxDecoration(
-                                color:  Color.fromRGBO(202, 176, 228, 1),
-                                borderRadius: BorderRadius.all(Radius.circular(10))
-                              ),                        
-                              child: Center(
-                                child: Text(
-                                  GameLogic().displayRandomLetters(gamePlayState.randomLetterList, 1),
-                                  style: const TextStyle(
-                                    fontSize: 26,
-                                    color: Color.fromARGB(255, 9, 1, 34),
-                                  ),
-                                ),
-                              )
-                            )
+                                      ),
+                                    ))),
                           ),
                         ),
-                      ),
-                                  
-                    ]
-                  ),
+                      ]),
                 );
               },
-            ),            
+            ),
           ],
         )
       ],

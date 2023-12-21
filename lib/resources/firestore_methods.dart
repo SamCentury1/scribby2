@@ -6,32 +6,33 @@ import 'package:flutter/cupertino.dart';
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<Map<String,dynamic>?> getUserData(String uid,) async {
-    late Map<String,dynamic>? res = {};
+  Future<Map<String, dynamic>?> getUserData(
+    String uid,
+  ) async {
+    late Map<String, dynamic>? res = {};
     try {
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final docSnap = await docRef.get();
-      final Map<String, dynamic>? docData = docSnap.data() ;
+      final Map<String, dynamic>? docData = docSnap.data();
       res = docData;
     } catch (e) {
       debugPrint(e.toString());
     }
     return res;
-  } 
-
+  }
 
   // Future<void> saveGameToFirestore(String uid, Map<String,dynamic> gameData) async {
   //   final Map<String,dynamic> data = {
   //     "user" : uid,
   //     "timeStamp" : gameData["timeStamp"] ,
-  //     "duration": gameData["duration"], 
-  //     "points" : gameData["points"], 
-  //     "uniqueWords": gameData["uniqueWords"], 
-  //     "uniqueWordsList": gameData["uniqueWordsList"], 
+  //     "duration": gameData["duration"],
+  //     "points" : gameData["points"],
+  //     "uniqueWords": gameData["uniqueWords"],
+  //     "uniqueWordsList": gameData["uniqueWordsList"],
   //     "longestStreak": gameData["longestStreak"],
   //     "mostWords": gameData["mostWords"],
-  //     "mostPoints": gameData["mostPoints"], 
-  //     "crossWords": gameData["crossWords"], 
+  //     "mostPoints": gameData["mostPoints"],
+  //     "crossWords": gameData["crossWords"],
   //     "level": gameData["level"],
   //     "language": gameData["language"], // TO DO: CHANGE THIS ONCE MORE LANGUAGES ARE ADDED
   //   };
@@ -48,20 +49,28 @@ class FirestoreMethods {
   //   }
   // }
 
-
-  Future<void> saveHighScore(String uid,  Map<String,dynamic> gameData) async {
+  Future<void> saveHighScore(String uid, Map<String, dynamic> gameData) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final docSnap = await docRef.get();
-      final Map<String, dynamic> docData = docSnap.data() as Map<String,dynamic> ;
+      final Map<String, dynamic> docData =
+          docSnap.data() as Map<String, dynamic>;
       String language = docData['parameters']['currentLanguage'];
-      late Map<String,dynamic> userHighScores = docData['highScores'];
-      int currentHighScore = userHighScores[language];
-      if (gameData['points'] > currentHighScore) {
-        userHighScores.update(language, (value) => gameData['points']);
+      late Map<String, dynamic> userHighScores = docData['highScores'];
+      if (userHighScores[language] != null) {
+        int currentHighScore = userHighScores[language];
+        if (gameData['points'] > currentHighScore) {
+          userHighScores.update(language, (value) => gameData['points']);
+          await _firestore.collection("users").doc(uid).update({
+            "highScores": userHighScores,
+          });
+        }
+      } else {
+        // userHighScores.update(language, (value) => gameData['points']);
+        userHighScores[language] = gameData['points'];
         await _firestore.collection("users").doc(uid).update({
-          "highScores" : userHighScores,
-        });         
+          "highScores": userHighScores,
+        });
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -71,7 +80,6 @@ class FirestoreMethods {
   // Future<void> test(String uid, Map<String,dynamic> gameData) async {
 
   //   try {
-
 
   //     final userSnap = _firestore.collection("users").doc(uid);
   //     final documentSnap = await userSnap.get();
@@ -97,20 +105,17 @@ class FirestoreMethods {
   //     });
 
   //     await _firestore.collection("users").doc(uid).update({
-  //       "highScores" : newHighScoresDocument 
-  //     });      
+  //       "highScores" : newHighScoresDocument
+  //     });
 
-      
   //   } catch (e) {
   //     // print(e.toString());
   //   }
 
-  // }  
-
+  // }
 
   // Future<List<Map<String,dynamic>?>> getUserGames(String uid) async {
   //   late List<Map<String,dynamic>> res = [];
-
 
   //   try {
   //     QuerySnapshot qSnap =  await _firestore.collection("games")
@@ -122,7 +127,7 @@ class FirestoreMethods {
   //     for (DocumentSnapshot qDocSnap in qSnap.docs) {
   //       late Map<String,dynamic>? gameData = qDocSnap.data() as Map<String,dynamic>;
   //       res.add(gameData);
-  //     }          
+  //     }
 
   //   } catch (e) {
   //     print(e.toString());
@@ -130,29 +135,30 @@ class FirestoreMethods {
   //   return res;
   // }
 
-  Future<List<Map<String,dynamic>>?> getDataForLeaderboards(String currentLanguage) async {
-    late List<Map<String,dynamic>> res = [];
+  Future<List<Map<String, dynamic>>?> getDataForLeaderboards(
+      String currentLanguage) async {
+    late List<Map<String, dynamic>> res = [];
     try {
-
       // /// We get the document data of the current user and identify the current language
       // final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       // final docSnap = await docRef.get();
       // final Map<String, dynamic> docData = docSnap.data() as Map<String,dynamic> ;
       // final String currentLanguage = docData['parameters']['currentLanguage'];
 
-      QuerySnapshot qSnap =  await _firestore
-        .collection("users")
-        .where("highScores.$currentLanguage", isGreaterThan: 0)
-        .orderBy("highScores.$currentLanguage", descending: true)
-        .limit(50)
-        .get();      
+      QuerySnapshot qSnap = await _firestore
+          .collection("users")
+          .where("highScores.$currentLanguage", isGreaterThan: 0)
+          .orderBy("highScores.$currentLanguage", descending: true)
+          .limit(50)
+          .get();
 
-      late List<Map<String,dynamic>> userList = [];
-      for (DocumentSnapshot qDocSnap in qSnap.docs)  {
-        late Map<String,dynamic> userData = qDocSnap.data() as Map<String,dynamic>;
+      late List<Map<String, dynamic>> userList = [];
+      for (DocumentSnapshot qDocSnap in qSnap.docs) {
+        late Map<String, dynamic> userData =
+            qDocSnap.data() as Map<String, dynamic>;
         userList.add({
           "user": userData['uid'],
-          "username" : userData['username'],
+          "username": userData['username'],
           "points": userData['highScores'][currentLanguage],
         });
       }
@@ -160,9 +166,8 @@ class FirestoreMethods {
     } catch (e) {
       debugPrint(e.toString());
     }
-    return res;    
+    return res;
   }
-
 
   // Future<void> updateLanguageSelection(String uid, List<String> newLanguages) async {
   //   try {
@@ -175,15 +180,10 @@ class FirestoreMethods {
   //     debugPrint(e.toString());
   //   }
 
-    
   // }
-
 
   // Future<Map<String,dynamic>?> getLeaderboards(String uid) async {
   //   late Map<String, dynamic>? res = {};
-
-
-
 
   //   try {
   //     QuerySnapshot qSnap =  await _firestore.collection("users")
@@ -192,9 +192,7 @@ class FirestoreMethods {
   //     // .limit(5)
   //     .get();
 
-
-
-  //     late List<Map<String,dynamic>> userList = [];      
+  //     late List<Map<String,dynamic>> userList = [];
 
   //     for (DocumentSnapshot qDocSnap in qSnap.docs)  {
   //       late Map<String,dynamic>? userData = qDocSnap.data() as Map<String,dynamic>;
@@ -211,8 +209,6 @@ class FirestoreMethods {
   //       }
   //     }
 
-
-
   //     // print(" user list $userList");
 
   //     // pointsList.sort((a,b) => (b.compareTo(a));
@@ -223,10 +219,8 @@ class FirestoreMethods {
   //     userList.sort((a,b) => b['points'].compareTo(a['points']));
   //     late List<Map<String,dynamic>> pointsList = userList;
   //     // print("points ==== ${pointsList}");
-      
-      
-  //     // print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
+  //     // print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
   //     userList.sort((a,b) => b['words'].compareTo(a['words']));
   //     late List<Map<String,dynamic>> wordsList = userList;
@@ -245,7 +239,6 @@ class FirestoreMethods {
 
   //     // print("firestore method : $res");
 
-
   //   } catch (e) {
   //     print(e.toString());
 
@@ -253,60 +246,57 @@ class FirestoreMethods {
   //     return res;
   // }
 
-
   Future<List<dynamic>> getAlphabet(String uid) async {
-
     late List<dynamic> res = [];
 
     try {
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final docSnap = await docRef.get();
-      final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
+      final Map<String, dynamic> docData =
+          docSnap.data() as Map<String, dynamic>;
 
       String language = docData['parameters']['currentLanguage'];
 
+      QuerySnapshot qSnap = await _firestore
+          .collection("alphabets")
+          .where("language", isEqualTo: language)
+          .get();
 
-      QuerySnapshot qSnap =  await _firestore.collection("alphabets")
-      .where("language", isEqualTo: language)
-      .get();
-
-      List<Map<String,dynamic>> documents = [];
+      List<Map<String, dynamic>> documents = [];
 
       for (DocumentSnapshot qDocSnap in qSnap.docs) {
-        late Map<String,dynamic> alphabetData = qDocSnap.data() as Map<String,dynamic>;
+        late Map<String, dynamic> alphabetData =
+            qDocSnap.data() as Map<String, dynamic>;
         documents.add(alphabetData);
-      }   
+      }
 
-      Map<String,dynamic> alphabetDoc = documents.firstWhere((element) => element['language'] == language);
+      Map<String, dynamic> alphabetDoc =
+          documents.firstWhere((element) => element['language'] == language);
 
       res = alphabetDoc['alphabet'];
-
-      
     } catch (e) {
       debugPrint(e.toString());
     }
 
     return res;
-
   }
 
-
-
-  Future<void> selectLanguage(String uid, String currentLanguage, List<String> languages) async {
+  Future<void> selectLanguage(
+      String uid, String currentLanguage, List<String> languages) async {
     try {
       final docRef = _firestore.collection('users').doc(uid);
       final docSnap = await docRef.get();
-      final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
-
+      final Map<String, dynamic> docData =
+          docSnap.data() as Map<String, dynamic>;
 
       Map<String, dynamic> newParams = {
-        "currentLanguage" : currentLanguage,
+        "currentLanguage": currentLanguage,
         "languages": languages,
-        "darkMode" : docData['parameters']['darkMode'],
+        "darkMode": docData['parameters']['darkMode'],
         "muted": docData['parameters']['muted'],
-        "soundOn" : docData['parameters']['soundOn'],
+        "soundOn": docData['parameters']['soundOn'],
       };
-      await docRef.update({"parameters" : newParams});
+      await docRef.update({"parameters": newParams});
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -325,45 +315,42 @@ class FirestoreMethods {
 
   // }
 
-
   Future<void> toggleDarkTheme(String uid, bool value) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final docSnap = await docRef.get();
-      final Map<String, dynamic> docData = docSnap.data() as Map<String,dynamic>;
+      final Map<String, dynamic> docData =
+          docSnap.data() as Map<String, dynamic>;
       Map<String, dynamic> newParams = {
-        "currentLanguage" : docData['parameters']['currentLanguage'],
+        "currentLanguage": docData['parameters']['currentLanguage'],
         "languages": docData['parameters']['languages'],
-        "darkMode" : value,
+        "darkMode": value,
         "muted": docData['parameters']['muted'],
-        "soundOn" : docData['parameters']['soundOn'],
-      };   
+        "soundOn": docData['parameters']['soundOn'],
+      };
 
-      await docRef.update({"parameters" : newParams});   
+      await docRef.update({"parameters": newParams});
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
   // EXECUTES IN THE SETTINGS PAGE - IN THE DROPOWN MENU FOR CHANGING THE CURRENT LANGUAGE
-  Future<void> updateParameters(String uid, String parameter, dynamic updatedValue) async {
+  Future<void> updateParameters(
+      String uid, String parameter, dynamic updatedValue) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final docSnap = await docRef.get();
-      final Map<String, dynamic> docData = docSnap.data() as Map<String,dynamic>;
+      final Map<String, dynamic> docData =
+          docSnap.data() as Map<String, dynamic>;
 
-      Map<String,dynamic> parameters = docData['parameters'];
+      Map<String, dynamic> parameters = docData['parameters'];
 
       parameters.update(parameter, (value) => updatedValue);
 
-      await docRef.update({"parameters" : parameters});   
+      await docRef.update({"parameters": parameters});
     } catch (e) {
       debugPrint(e.toString());
     }
-  }  
-
-
-
-
-
+  }
 }
