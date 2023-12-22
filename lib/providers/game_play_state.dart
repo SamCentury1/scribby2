@@ -10,8 +10,7 @@ import 'package:flutter/material.dart';
 // import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 // import 'package:scribby_flutter_v2/utils/states.dart';
 
-class GamePlayState with ChangeNotifier{
-
+class GamePlayState with ChangeNotifier {
   // provides a log of turns.
   // ex: [{turn: 1, ...data...}, {turn: 2, ...data...},]
   List<Map<String, dynamic>> _gameSummaryLog = [];
@@ -24,17 +23,27 @@ class GamePlayState with ChangeNotifier{
 
   // provides a snapshot of the current state of the game at a given point in time
   // ex: {turns: 12, words: ['hello','world'], longestStreak:0, ...}
-  Map<String,dynamic> _summaryData = {};
-  Map<String,dynamic> get summaryData => _summaryData;
+  Map<String, dynamic> _summaryData = {};
+  Map<String, dynamic> get summaryData => _summaryData;
 
-  void setSummaryData(Map<String,dynamic> value) {
+  void setSummaryData(Map<String, dynamic> value) {
     _summaryData = value;
+    notifyListeners();
+  }
+
+  // provides a snapshot of the current state of the game at a given point in time
+  // ex: {turns: 12, words: ['hello','world'], longestStreak:0, ...}
+  Map<String, dynamic> _endOfGameData = {};
+  Map<String, dynamic> get endOfGameData => _endOfGameData;
+
+  void setEndOfGameData(Map<String, dynamic> value) {
+    _endOfGameData = value;
     notifyListeners();
   }
 
   // provides a VISUAL representation of the board. Meaning that it shows the letters that
   // were in a word temporarily while the animation plays
-  List<Map<String, dynamic>> _visualTileState = [];// startingTileState;  
+  List<Map<String, dynamic>> _visualTileState = []; // startingTileState;
   List<Map<String, dynamic>> get visualTileState => _visualTileState;
 
   void setVisualTileState(List<Map<String, dynamic>> value) {
@@ -44,22 +53,13 @@ class GamePlayState with ChangeNotifier{
 
   // // provides a LOGICAL representation of the board. Meaning that it returns
   // // the board without the letters that were found in a word
-  // List<Map<String, dynamic>> _logicalTileState = [];  
+  // List<Map<String, dynamic>> _logicalTileState = [];
   // List<Map<String, dynamic>> get logicalTileState => _logicalTileState;
 
   // void setLogicalTileState(List<Map<String, dynamic>> value) {
   //   _logicalTileState = value;
   //   notifyListeners();
   // }
-
-
-
-
-
-
-
-
-
 
   /// for the points animation
   int _previousScore = 0;
@@ -68,7 +68,7 @@ class GamePlayState with ChangeNotifier{
   void setPreviousScore(int value) {
     _previousScore = value;
     notifyListeners();
-  } 
+  }
 
   int _currentScore = 0;
   int get currentScore => _currentScore;
@@ -76,7 +76,7 @@ class GamePlayState with ChangeNotifier{
   void setCurrentScore(int value) {
     _currentScore = value;
     notifyListeners();
-  }   
+  }
 
   int _turnScore = 0;
   int get turnScore => _turnScore;
@@ -84,7 +84,7 @@ class GamePlayState with ChangeNotifier{
   void setTurnScore(int value) {
     _turnScore = value;
     notifyListeners();
-  } 
+  }
 
   int _turnWords = 0;
   int get turnWords => _turnWords;
@@ -108,8 +108,7 @@ class GamePlayState with ChangeNotifier{
   void setCurrentTurn(int value) {
     _currentTurn = value;
     notifyListeners();
-  }  
-
+  }
 
   bool _isAnimating = false;
   bool get isAnimating => _isAnimating;
@@ -119,15 +118,13 @@ class GamePlayState with ChangeNotifier{
     notifyListeners();
   }
 
-
-
   bool _displayLevelChange = false;
   bool get displayLevelChange => _displayLevelChange;
 
   void setDisplayLevelChange(bool value) {
     _displayLevelChange = value;
     notifyListeners();
-  }  
+  }
 
   // int _currentTime = 0;
   // int get currentTime => _currentTime;
@@ -137,7 +134,6 @@ class GamePlayState with ChangeNotifier{
   //   notifyListeners();
   // }
 
-
   String _pressedTile = "1_1";
   String get pressedTile => _pressedTile;
 
@@ -146,8 +142,7 @@ class GamePlayState with ChangeNotifier{
     notifyListeners();
   }
 
-
-  List<Map<String,dynamic>> _reserveTiles = [
+  List<Map<String, dynamic>> _reserveTiles = [
     {"id": 0, "body": ""},
     {"id": 1, "body": ""},
     {"id": 2, "body": ""},
@@ -155,27 +150,22 @@ class GamePlayState with ChangeNotifier{
     {"id": 4, "body": ""},
   ];
 
-  List<Map<String,dynamic>> get reserveTiles => _reserveTiles;
+  List<Map<String, dynamic>> get reserveTiles => _reserveTiles;
 
-  void setReserveTiles(List<Map<String,dynamic>> value) {
+  void setReserveTiles(List<Map<String, dynamic>> value) {
     _reserveTiles = value;
     notifyListeners();
   }
 
-  late Map<String,dynamic> _draggedReserveTile = {};
-  Map<String,dynamic> get draggedReserveTile => _draggedReserveTile;
+  late Map<String, dynamic> _draggedReserveTile = {};
+  Map<String, dynamic> get draggedReserveTile => _draggedReserveTile;
 
-  void setDraggedReserveTile(Map<String,dynamic> value) {
+  void setDraggedReserveTile(Map<String, dynamic> value) {
     _draggedReserveTile = value;
     notifyListeners();
   }
 
-
-
-
-
-
-  int _currentLevel = 1; 
+  int _currentLevel = 1;
   int get currentLevel => _currentLevel;
 
   void setCurrentLevel(int value) {
@@ -183,16 +173,13 @@ class GamePlayState with ChangeNotifier{
     notifyListeners();
   }
 
-  int _previousLevel = 1; 
+  int _previousLevel = 1;
   int get previousLevel => _previousLevel;
 
   void setPreviousLevel(int value) {
     _previousLevel = value;
     notifyListeners();
-  }  
-
-
-
+  }
 
   // returns the two initial random letters and updates the bag accordingly
   // Map<String,dynamic> _startingRandomLetterData = {};
@@ -204,36 +191,31 @@ class GamePlayState with ChangeNotifier{
   // }
 
   // a continuous list of randomly generated letters
-  String _currentLanguage = "english";  
+  String _currentLanguage = "english";
   String get currentLanguage => _currentLanguage;
 
   void setCurrentLanguage(String value) {
     _currentLanguage = value;
     notifyListeners();
-  }  
-
-
-  
+  }
 
   // a virtual version of a tile bag
-  List<Map<String,dynamic>> _alphabetState = []; //startingAlphabetState;
-  List<Map<String,dynamic>> get alphabetState => _alphabetState;
+  List<Map<String, dynamic>> _alphabetState = []; //startingAlphabetState;
+  List<Map<String, dynamic>> get alphabetState => _alphabetState;
 
-  void setAlphabetState(List<Map<String,dynamic>> value) {
+  void setAlphabetState(List<Map<String, dynamic>> value) {
     _alphabetState = value;
     notifyListeners();
-  }  
+  }
 
   // a continuous list of randomly generated letters
-  List<String> _randomLetterList = []; // randomLetterListState;  
+  List<String> _randomLetterList = []; // randomLetterListState;
   List<String> get randomLetterList => _randomLetterList;
 
   void setRandomLetterList(List<String> value) {
     _randomLetterList = value;
     notifyListeners();
-  }  
-
-
+  }
 
   void restartGame() {
     // Reset your state variables here
@@ -255,7 +237,6 @@ class GamePlayState with ChangeNotifier{
     _alphabetState = []; // startingAlphabetState;
     _randomLetterList = []; // randomLetterListState;
 
-
     _timer?.cancel();
     _duration = const Duration();
     _pageController.jumpToPage(0);
@@ -265,16 +246,12 @@ class GamePlayState with ChangeNotifier{
     // _visualTileState = GameLogic().generateStartingStates(initialRandomLetterState, initialBoardState, [])['startingTileState'];
     // Notify listeners after resetting the state variables
     // notifyListeners();
-  }  
+  }
 
-
-    // final Map<String,dynamic> startingRandomLetterData = {
-    //   "list" : startingRandomLetterList,
-    //   "state" : alphabetState2
-    // };
-
-
-
+  // final Map<String,dynamic> startingRandomLetterData = {
+  //   "list" : startingRandomLetterList,
+  //   "state" : alphabetState2
+  // };
 
   bool _isGamePaused = true;
   bool get isGamePaused => _isGamePaused;
@@ -290,7 +267,7 @@ class GamePlayState with ChangeNotifier{
       Future.delayed(const Duration(milliseconds: 0), () {
         _pageController.jumpToPage(page);
         _countDownController.pause();
-      });      
+      });
     }
     notifyListeners();
   }
@@ -300,11 +277,12 @@ class GamePlayState with ChangeNotifier{
 
   void setIsGameStarted(bool value) {
     _isGameStarted = value;
-    
+
     if (value == true) {
       _isGamePaused = false;
       startTimer();
       _countDownController.restart();
+      _endOfGameData = {};
     }
 
     notifyListeners();
@@ -318,8 +296,7 @@ class GamePlayState with ChangeNotifier{
     if (value == true) {
       _countDownController.pause();
       _duration = const Duration();
-      _timer?.cancel();      
-
+      _timer?.cancel();
     }
     notifyListeners();
   }
@@ -331,7 +308,6 @@ class GamePlayState with ChangeNotifier{
     _pageController = value;
     notifyListeners();
   }
-
 
   /// ======== COUNT DOWN =========
   // Duration _cdDuration = Duration(seconds: 6);
@@ -351,10 +327,8 @@ class GamePlayState with ChangeNotifier{
   final Duration _countdownDuration = const Duration();
   Duration get countdownDuration => _countdownDuration;
 
-
   // final CountDownController _countDownControllerStart = CountDownController();
   // CountDownController get countDownControllerStart => _countDownControllerStart;
-
 
   final CountDownController _countDownController = CountDownController();
   CountDownController get countDownController => _countDownController;
@@ -362,15 +336,11 @@ class GamePlayState with ChangeNotifier{
   // Timer? _cdTimer;
   // Timer get cdTimer => _cdTimer!;
 
-
-
-
   Duration _duration = const Duration();
   Duration get duration => _duration;
 
   Timer? _timer;
   Timer get timer => _timer!;
-
 
   // bool get isPaused => _isPaused;
 
@@ -385,7 +355,7 @@ class GamePlayState with ChangeNotifier{
   //     _cdDuration = Duration(seconds: seconds);
   //     notifyListeners();
   //   }
-  // }  
+  // }
 
   void addTick() {
     if (!_isGamePaused) {
@@ -410,7 +380,6 @@ class GamePlayState with ChangeNotifier{
   //   notifyListeners();
   // }
 
-
   void stopTimer() {
     _timer?.cancel();
     // _cdTimer?.cancel();
@@ -425,7 +394,7 @@ class GamePlayState with ChangeNotifier{
 
   //   notifyListeners();
 
-  // }  
+  // }
 
   void startTimer() {
     _timer?.cancel();
@@ -450,7 +419,6 @@ class GamePlayState with ChangeNotifier{
   //   _cdDuration = const Duration(seconds: 6);
   // }
 
-
   void pauseTimer() {
     _isGamePaused = true;
   }
@@ -460,10 +428,9 @@ class GamePlayState with ChangeNotifier{
   }
 
   void endGame() {
-
     // _countDownController.pause();
     _currentLevel = 1;
-    _previousLevel = 1;    
+    _previousLevel = 1;
     _isGameEnded = false;
     _isGamePaused = true;
     _isGameStarted = false;
@@ -479,12 +446,12 @@ class GamePlayState with ChangeNotifier{
     _pressedTile = "1_1";
     _alphabetState = []; //startingAlphabetState;
     _randomLetterList = []; //randomLetterListState;
+    // _endOfGameData = {};
 
     _timer?.cancel();
-    
-    _duration = const Duration();
-    notifyListeners();   
 
+    _duration = const Duration();
+    notifyListeners();
   }
 
   @override
@@ -492,6 +459,5 @@ class GamePlayState with ChangeNotifier{
     _timer?.cancel();
     // _cdTimer?.cancel();
     super.dispose();
-  }    
-
+  }
 }

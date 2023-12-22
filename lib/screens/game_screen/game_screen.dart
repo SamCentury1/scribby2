@@ -341,9 +341,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                       return BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: palette
-                            .screenBackgroundColor, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
+                            .bottomNavigationBarColor, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
                         selectedItemColor: palette
-                            .bottomNavigationBarColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                            .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                         unselectedItemColor: palette
                             .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                         items: const <BottomNavigationBarItem>[

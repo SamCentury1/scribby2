@@ -859,6 +859,8 @@ class GameLogic {
     };
     FirestoreMethods()
         .saveHighScore(AuthService().currentUser!.uid, newGameData);
+
+    gamePlayState.setEndOfGameData(newGameData);
     gamePlayState.setIsGameEnded(true);
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.of(context).pushReplacement(
