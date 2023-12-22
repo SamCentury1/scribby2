@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 // import 'package:scribby_flutter_v2/providers/settings_state.dart';
 
@@ -352,5 +353,11 @@ class FirestoreMethods {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<void> updateSettingsState(SettingsState settings, String uid) async {
+    Map<String, dynamic> userData =
+        await getUserData(uid) as Map<String, dynamic>;
+    settings.updateUserData(userData);
   }
 }

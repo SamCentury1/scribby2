@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/ads/interstitial_ad_widget.dart';
+// import 'package:scribby_flutter_v2/ads/interstitial_ad_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/resources/auth_service.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
@@ -89,14 +92,45 @@ class _GameOverScreenState extends State<GameOverScreen> {
         onAdClicked: (ad) {});
   }
 
-  // void showInterstitialAd() {
-  //   _interstitialAd.show();
-  // }
+  int getCurrentHighScore(settings) {
+    final String currentLanguage =
+        settings.userData['parameters']['currentLanguage'];
+    final int currentHighScore =
+        settings.userData['highScores'][currentLanguage] ?? 0;
+    return currentHighScore;
+  }
+
+  Widget getNewHighScore(
+      SettingsState settings, ColorPalette palette, int currentScore) {
+    String currentLanguage = settings.userData['parameters']['currentLanguage'];
+    int currentHighScore = settings.userData['highScores'][currentLanguage];
+
+    if (currentScore > currentHighScore) {
+      return Expanded(
+        flex: 3,
+        child: Center(
+          child: SizedBox(
+            child: Text(
+              "New High Score!!",
+              style: TextStyle(fontSize: 32, color: palette.textColor3),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return const Expanded(
+        flex: 3,
+        child: SizedBox(),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: false);
+    late SettingsState settings =
+        Provider.of<SettingsState>(context, listen: false);
 
     return isLoading
         ? const Center(
@@ -110,11 +144,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
                 padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 18.0),
                 child: Consumer<GamePlayState>(
                   builder: (context, gamePlayState, child) {
-                    print(gamePlayState.summaryData);
                     return SafeArea(
                         child: Column(
                       children: [
-                        const Expanded(flex: 2, child: SizedBox()),
+                        getNewHighScore(settings, palette,
+                            gamePlayState.endOfGameData['points']),
                         Center(
                           child: Text(
                             "Score: ${gamePlayState.endOfGameData['points']}",
@@ -134,7 +168,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                 width: 10,
                               ),
                               Text(
-                                "High Score: 2415",
+                                "High Score: ${getCurrentHighScore(settings)}",
                                 style: TextStyle(
                                     color: palette.textColor3, fontSize: 18),
                               ),
@@ -173,13 +207,6 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                 Icon(Icons.bar_chart_rounded,
                                     size: 26, color: palette.textColor3),
                                 palette),
-                            // rowStatItem(
-                            //     "Unique Words",
-                            //     gamePlayState.endOfGameData['uniqueWords']
-                            //         .toString(),
-                            //     Icon(Icons.read_more,
-                            //         size: 26, color: palette.textColor3),
-                            //     palette),
                             rowStatItem(
                                 "Longest Streak",
                                 gamePlayState.endOfGameData['longestStreak']
@@ -246,7 +273,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                     scrollable: true,
                                     backgroundColor:
                                         palette.optionButtonBgColor,
-                                    content: Container(
+                                    content: SizedBox(
                                       width: MediaQuery.of(context).size.width,
                                       height: MediaQuery.of(context).size.width,
                                       child: SingleChildScrollView(
@@ -323,7 +350,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                           ),
                         ),
                         const Expanded(
-                          flex: 5,
+                          flex: 3,
                           child: SizedBox(),
                         ),
                         ElevatedButton(
@@ -345,6 +372,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
                           ),
                           onPressed: () {
                             gamePlayState.endGame();
+                            FirestoreMethods().updateSettingsState(
+                                settings, AuthService().currentUser!.uid);
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => const MenuScreen()));
