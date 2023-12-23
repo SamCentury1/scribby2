@@ -12,14 +12,16 @@ import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_dialog
 class PauseOverlay extends StatelessWidget {
   const PauseOverlay({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-    late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
+    late AnimationState animationState =
+        Provider.of<AnimationState>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return AnimatedOpacity(
-          opacity: gamePlayState.isGameStarted && gamePlayState.isGamePaused ? 1.0 : 0.0,
+          opacity: gamePlayState.isGameStarted && gamePlayState.isGamePaused
+              ? 1.0
+              : 0.0,
           duration: const Duration(milliseconds: 300),
           child: IgnorePointer(
             ignoring: !gamePlayState.isGamePaused,
@@ -30,7 +32,7 @@ class PauseOverlay extends StatelessWidget {
                     onTap: () {
                       if (gamePlayState.isGamePaused) {
                         if (gamePlayState.isGameStarted) {
-                          gamePlayState.setIsGamePaused(false,0);
+                          gamePlayState.setIsGamePaused(false, 0);
                           GameLogic().executeTimerAnimation(animationState);
                         }
                       }

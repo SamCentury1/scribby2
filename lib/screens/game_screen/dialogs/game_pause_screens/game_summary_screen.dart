@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_settings_screen.dart';
+import 'package:scribby_flutter_v2/styles/palette.dart';
 // import 'package:scribby_flutter_v2/providers/game_state.dart';
 // import 'package:scribby_flutter_v2/styles/buttons.dart';
 
@@ -123,6 +127,11 @@ class _GameSummaryContentState extends State<GameSummaryContent> {
 
   @override
   Widget build(BuildContext context) {
+    late ColorPalette palette =
+        Provider.of<ColorPalette>(context, listen: true);
+
+    late SettingsState settings =
+        Provider.of<SettingsState>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return displayWords
@@ -211,269 +220,322 @@ class _GameSummaryContentState extends State<GameSummaryContent> {
                   ],
                 ),
               )
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: [
-                    /// DURATION
-                    _levelAndTimeItems(
-                        const Icon(Icons.bar_chart),
-                        gamePlayState.currentLevel.toString(),
-                        const Icon(Icons.query_builder, size: 22),
-                        GameLogic().formatTime(
-                            widget.gamePlayState.duration.inSeconds)),
-                    const Expanded(flex: 1, child: SizedBox()),
+            : gameSummaryView(palette, widget.gamePlayState.summaryData,
+                Helpers().getCurrentHighScore(settings));
 
-                    _label("YOUR SCORE"),
+        // : Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        //     child: Column(
+        //       children: [
+        //         /// DURATION
+        //         _levelAndTimeItems(
+        //             Icon(
+        //               Icons.bar_chart,
+        //               color: palette.textColor2,
+        //             ),
+        //             gamePlayState.currentLevel.toString(),
+        //             Icon(Icons.query_builder,
+        //                 size: 22, color: palette.textColor2),
+        //             GameLogic().formatTime(
+        //                 widget.gamePlayState.duration.inSeconds),
+        //             palette),
+        //         const Expanded(flex: 1, child: SizedBox()),
 
-                    /// POINTS
-                    _pointsStatItem(
-                        context,
-                        const Icon(Icons.star, size: 52),
-                        "Points",
-                        widget.gamePlayState.summaryData.isEmpty
-                            ? "0"
-                            : widget.gamePlayState.summaryData['points']
-                                .toString()),
+        //         _label("YOUR SCORE"),
 
-                    const Expanded(flex: 1, child: SizedBox()),
+        //         /// POINTS
+        //         _pointsStatItem(
+        //             context,
+        //             palette,
+        //             Icon(Icons.star, size: 52, color: palette.textColor2),
+        //             "Points",
+        //             widget.gamePlayState.summaryData.isEmpty
+        //                 ? "0"
+        //                 : widget.gamePlayState.summaryData['points']
+        //                     .toString()),
 
-                    // _label("WORDS"),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          displayWords = !displayWords;
-                        });
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "WORDS",
-                            style: TextStyle(
-                              fontSize: 22,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.read_more,
-                            size: 26,
-                          )
-                        ],
-                      ),
-                    ),
+        //         const Expanded(flex: 1, child: SizedBox()),
 
-                    /// UNIQUE WORDS
+        //         // _label("WORDS"),
+        //         InkWell(
+        //           onTap: () {
+        //             setState(() {
+        //               displayWords = !displayWords;
+        //             });
+        //           },
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             crossAxisAlignment: CrossAxisAlignment.end,
+        //             children: [
+        //               Text(
+        //                 "WORDS",
+        //                 style: TextStyle(
+        //                     fontSize: 22,
+        //                     color: palette.optionButtonBgColor2),
+        //               ),
+        //               const SizedBox(
+        //                 width: 10,
+        //               ),
+        //               Icon(Icons.read_more,
+        //                   size: 26, color: palette.optionButtonBgColor2)
+        //             ],
+        //           ),
+        //         ),
 
-                    _wordsStatItem(
-                        context,
-                        const Icon(
-                          Icons.book_rounded,
-                          size: 52,
-                        ),
-                        "Words",
-                        widget.gamePlayState.summaryData.isEmpty
-                            ? "0"
-                            : widget
-                                .gamePlayState.summaryData['uniqueWords'].length
-                                .toString()),
-                    const Expanded(flex: 3, child: SizedBox()),
+        //         /// UNIQUE WORDS
 
-                    // Container(
-                    //   width: double.infinity,
-                    //   height: 40,
-                    //   color: Colors.amber,
-                    //   child: Text(
-                    //     "Instructions"
-                    //   ),
-                    // ),
-                    _navButton(1, "How To Play", gamePlayState,
-                        const Icon(Icons.info)),
-                    const Expanded(flex: 1, child: SizedBox()),
+        //         _wordsStatItem(
+        //             context,
+        //             const Icon(
+        //               Icons.book_rounded,
+        //               size: 52,
+        //             ),
+        //             "Words",
+        //             widget.gamePlayState.summaryData.isEmpty
+        //                 ? "0"
+        //                 : widget
+        //                     .gamePlayState.summaryData['uniqueWords'].length
+        //                     .toString()),
+        //         const Expanded(flex: 3, child: SizedBox()),
 
-                    _navButton(2, "Settings", gamePlayState,
-                        const Icon(Icons.settings)),
-                    const Expanded(flex: 1, child: SizedBox()),
+        //         // Container(
+        //         //   width: double.infinity,
+        //         //   height: 40,
+        //         //   color: Colors.amber,
+        //         //   child: Text(
+        //         //     "Instructions"
+        //         //   ),
+        //         // ),
+        //         _navButton(1, "How To Play", gamePlayState,
+        //             const Icon(Icons.info)),
+        //         const Expanded(flex: 1, child: SizedBox()),
 
-                    _navButton(3, "Quit / Restart", gamePlayState,
-                        const Icon(Icons.exit_to_app)),
-                    const Expanded(flex: 1, child: SizedBox()),
-                  ],
-                ),
-              );
+        //         _navButton(2, "Settings", gamePlayState,
+        //             const Icon(Icons.settings)),
+        //         const Expanded(flex: 1, child: SizedBox()),
+
+        //         _navButton(3, "Quit / Restart", gamePlayState,
+        //             const Icon(Icons.exit_to_app)),
+        //         const Expanded(flex: 1, child: SizedBox()),
+        //       ],
+        //     ),
+        //   );
       },
     );
   }
 }
 
-Widget _levelAndTimeItems(
-    Icon levelIcon, String levelData, Icon timeIcon, String data) {
-  return SizedBox(
-    width: double.infinity,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        levelIcon,
-        const SizedBox(width: 10),
-        Text(
-          "level $levelData",
-          style: const TextStyle(fontSize: 22),
+Widget gameSummaryView(
+  ColorPalette palette,
+  Map<String, dynamic> data,
+  int currentHighScore,
+) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    child: Column(children: [
+      const Expanded(child: SizedBox()),
+      Align(
+        alignment: Alignment.center,
+        child: Text(
+          "Score: ${data['points']}",
+          style: TextStyle(color: palette.textColor2, fontSize: 36),
         ),
-        const Expanded(
-          flex: 1,
-          child: SizedBox(),
-        ),
-        timeIcon,
-        const SizedBox(
-          width: 10,
-        ),
-        Text(
-          data,
-          style: const TextStyle(
-            fontSize: 22,
-          ),
-        )
-      ],
-    ),
-  );
-}
-
-Widget _pointsStatItem(
-    BuildContext context, Icon icon, String body, String data) {
-  return SizedBox(
-    height: 60,
-    // color: Colors.amber,
-    width: MediaQuery.of(context).size.width * 0.66,
-    child: Stack(
-      children: [
-        Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50.0),
-                bottomLeft: Radius.circular(50.0),
-                topRight: Radius.circular(15.0),
-                bottomRight: Radius.circular(15.0),
-              ),
-            ),
-            child: Row(
-              children: [
-                const Expanded(flex: 2, child: SizedBox()),
-                Text(
-                  data,
-                  style: const TextStyle(
-                    fontSize: 42,
-                  ),
-                ),
-                const Expanded(flex: 1, child: SizedBox()),
-              ],
-            )),
-        Positioned(
-            child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: icon))),
-      ],
-    ),
-  );
-}
-
-Widget _navButton(
-    int page, String text, GamePlayState gamePlayState, Icon icon) {
-  return Container(
-      width: double.infinity,
-      height: 40,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        color: Colors.amber,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InkWell(
-          onTap: () {
-            gamePlayState.pageController.jumpToPage(page);
-          },
-          child: Row(
-            children: [
-              icon,
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                text,
-                style: const TextStyle(fontSize: 19),
-              )
-            ],
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.emoji_events,
+            color: palette.textColor2,
+            size: 18,
           ),
-        ),
-      ));
-}
-
-Widget _label(String text) {
-  return Align(
-      alignment: Alignment.center,
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 22,
-        ),
-      ));
-}
-
-Widget _wordsStatItem(
-    BuildContext context, Icon icon, String body, String data) {
-  return SizedBox(
-    height: 60,
-    // color: Colors.amber,
-    width: MediaQuery.of(context).size.width * 0.66,
-    child: Stack(
-      children: [
-        Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50.0),
-                bottomLeft: Radius.circular(50.0),
-                topRight: Radius.circular(15.0),
-                bottomRight: Radius.circular(15.0),
-              ),
+          const SizedBox(
+            width: 10,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              "High Score: ${currentHighScore}",
+              style: TextStyle(color: palette.textColor2, fontSize: 18),
             ),
-            child: Row(
-              children: [
-                const Expanded(flex: 2, child: SizedBox()),
-                Text(
-                  data,
-                  style: const TextStyle(
-                    fontSize: 42,
-                  ),
-                ),
-                const Expanded(flex: 1, child: SizedBox()),
-              ],
-            )),
-        Positioned(
-            child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: icon))),
-      ],
-    ),
+          ),
+        ],
+      ),
+      const Expanded(child: SizedBox()),
+    ]),
   );
 }
+
+// Widget _levelAndTimeItems(Icon levelIcon, String levelData, Icon timeIcon,
+//     String data, ColorPalette palette) {
+//   return SizedBox(
+//     width: double.infinity,
+//     child: Row(
+//       mainAxisAlignment: MainAxisAlignment.end,
+//       children: [
+//         levelIcon,
+//         const SizedBox(width: 10),
+//         Text(
+//           "level $levelData",
+//           style: TextStyle(
+//             fontSize: 22,
+//             color: palette.textColor2,
+//           ),
+//         ),
+//         const Expanded(
+//           flex: 1,
+//           child: SizedBox(),
+//         ),
+//         timeIcon,
+//         const SizedBox(
+//           width: 10,
+//         ),
+//         Text(
+//           data,
+//           style: TextStyle(
+//             fontSize: 22,
+//             color: palette.textColor2,
+//           ),
+//         )
+//       ],
+//     ),
+//   );
+// }
+
+// Widget _pointsStatItem(BuildContext context, ColorPalette palette, Icon icon,
+//     String body, String data) {
+//   return SizedBox(
+//     height: 60,
+//     // color: Colors.amber,
+//     width: MediaQuery.of(context).size.width * 0.66,
+//     child: Stack(
+//       children: [
+//         Container(
+//             width: double.infinity,
+//             height: double.infinity,
+//             decoration: BoxDecoration(
+//                 // color: Colors.green,
+//                 borderRadius: const BorderRadius.only(
+//                   topLeft: Radius.circular(50.0),
+//                   bottomLeft: Radius.circular(50.0),
+//                   topRight: Radius.circular(15.0),
+//                   bottomRight: Radius.circular(15.0),
+//                 ),
+//                 border: Border.all(
+//                   color: palette.tileBgColor,
+//                   width: 2,
+//                 )),
+//             child: Row(
+//               children: [
+//                 const Expanded(flex: 2, child: SizedBox()),
+//                 Text(
+//                   data,
+//                   style: TextStyle(fontSize: 42, color: palette.textColor2),
+//                 ),
+//                 const Expanded(flex: 1, child: SizedBox()),
+//               ],
+//             )),
+//         Positioned(
+//             child: AspectRatio(
+//                 aspectRatio: 1,
+//                 child: Container(
+//                     decoration: const BoxDecoration(
+//                       shape: BoxShape.circle,
+//                       // color: ,
+//                     ),
+//                     child: icon))),
+//       ],
+//     ),
+//   );
+// }
+
+// Widget _navButton(
+//     int page, String text, GamePlayState gamePlayState, Icon icon) {
+//   return Container(
+//       width: double.infinity,
+//       height: 40,
+//       decoration: const BoxDecoration(
+//         borderRadius: BorderRadius.all(Radius.circular(10.0)),
+//         color: Colors.amber,
+//       ),
+//       child: Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: InkWell(
+//           onTap: () {
+//             gamePlayState.pageController.jumpToPage(page);
+//           },
+//           child: Row(
+//             children: [
+//               icon,
+//               const SizedBox(
+//                 width: 10,
+//               ),
+//               Text(
+//                 text,
+//                 style: const TextStyle(fontSize: 19),
+//               )
+//             ],
+//           ),
+//         ),
+//       ));
+// }
+
+// Widget _label(String text) {
+//   return Align(
+//       alignment: Alignment.center,
+//       child: Text(
+//         text,
+//         style: const TextStyle(
+//           fontSize: 22,
+//         ),
+//       ));
+// }
+
+// Widget _wordsStatItem(
+//     BuildContext context, Icon icon, String body, String data) {
+//   return SizedBox(
+//     height: 60,
+//     // color: Colors.amber,
+//     width: MediaQuery.of(context).size.width * 0.66,
+//     child: Stack(
+//       children: [
+//         Container(
+//             width: double.infinity,
+//             height: double.infinity,
+//             decoration: const BoxDecoration(
+//               color: Colors.green,
+//               borderRadius: BorderRadius.only(
+//                 topLeft: Radius.circular(50.0),
+//                 bottomLeft: Radius.circular(50.0),
+//                 topRight: Radius.circular(15.0),
+//                 bottomRight: Radius.circular(15.0),
+//               ),
+//             ),
+//             child: Row(
+//               children: [
+//                 const Expanded(flex: 2, child: SizedBox()),
+//                 Text(
+//                   data,
+//                   style: const TextStyle(
+//                     fontSize: 42,
+//                   ),
+//                 ),
+//                 const Expanded(flex: 1, child: SizedBox()),
+//               ],
+//             )),
+//         Positioned(
+//             child: AspectRatio(
+//                 aspectRatio: 1,
+//                 child: Container(
+//                     decoration: const BoxDecoration(
+//                       shape: BoxShape.circle,
+//                       color: Colors.white,
+//                     ),
+//                     child: icon))),
+//       ],
+//     ),
+//   );
+// }
 
 // Widget _statItem2(Icon icon, String body, String data, double width) {
 //   return Container(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class DialogWidget extends StatelessWidget {
   final String title;
@@ -7,23 +9,26 @@ class DialogWidget extends StatelessWidget {
   // final ButtonStyle button;
   // final VoidCallback? onSelected;
   const DialogWidget(
-    Key? key, 
-    this.title, 
-    this.content, 
+    Key? key,
+    this.title,
+    this.content,
     this.button,
     // {this.onSelected}
-  ): super(key: key);
+  ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-        return Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(
+    final ColorPalette palette =
+        Provider.of<ColorPalette>(context, listen: false);
+
+    return Column(
+      children: [
+        Expanded(
+            flex: 1,
+            child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                color: const Color.fromARGB(216, 141, 227, 233),
+                color: palette.optionButtonBgColor,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Column(
@@ -32,32 +37,28 @@ class DialogWidget extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 32,
+                          color: palette.textColor2,
                         ),
                       ),
-                      const Divider(
-                        color:  Color.fromARGB(255, 90, 90, 90),
-                        height:2,
+                      Divider(
+                        color: palette.textColor2,
+                        height: 2,
                       )
                     ],
                   ),
-                )
-              )
-            ),
-            Expanded(
-              flex: 5,
-              child: Container(
+                ))),
+        Expanded(
+            flex: 5,
+            child: Container(
                 width: double.infinity,
-                color: const Color.fromARGB(216, 141, 227, 233),
+                color: palette.optionButtonBgColor,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: content
-                )
-              )
-            ),
-            button ?? const SizedBox()                         
-          ],
-        );
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: content))),
+        button ?? const SizedBox()
+      ],
+    );
   }
 }

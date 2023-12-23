@@ -1,6 +1,7 @@
 // import 'package:flutter/foundation.dart';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,8 @@ import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
+
+import '../../functions/helpers.dart';
 
 class GameOverScreen extends StatefulWidget {
   const GameOverScreen({super.key});
@@ -92,13 +95,13 @@ class _GameOverScreenState extends State<GameOverScreen> {
         onAdClicked: (ad) {});
   }
 
-  int getCurrentHighScore(settings) {
-    final String currentLanguage =
-        settings.userData['parameters']['currentLanguage'];
-    final int currentHighScore =
-        settings.userData['highScores'][currentLanguage] ?? 0;
-    return currentHighScore;
-  }
+  // int getCurrentHighScore(SettingsState settings) {
+  //   final String currentLanguage =
+  //       settings.userData['parameters']['currentLanguage'];
+  //   final int currentHighScore =
+  //       settings.userData['highScores'][currentLanguage] ?? 0;
+  //   return currentHighScore;
+  // }
 
   Widget getNewHighScore(
       SettingsState settings, ColorPalette palette, int currentScore) {
@@ -168,7 +171,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                 width: 10,
                               ),
                               Text(
-                                "High Score: ${getCurrentHighScore(settings)}",
+                                "High Score: ${Helpers().getCurrentHighScore(settings)}",
                                 style: TextStyle(
                                     color: palette.textColor3, fontSize: 18),
                               ),

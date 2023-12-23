@@ -339,32 +339,35 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                       // final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
 
                       return BottomNavigationBar(
-                        type: BottomNavigationBarType.fixed,
-                        backgroundColor: palette
-                            .bottomNavigationBarColor, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
+                        type: BottomNavigationBarType
+                            .shifting, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
                         selectedItemColor: palette
                             .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                         unselectedItemColor: palette
                             .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        items: const <BottomNavigationBarItem>[
+                        items: <BottomNavigationBarItem>[
                           BottomNavigationBarItem(
                             icon: Icon(Icons.pause),
                             label: 'Pause',
+                            backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.help),
                             label: 'Help',
+                            backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.settings),
                             label: 'Rules',
+                            backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.exit_to_app_rounded),
                             label: 'Quit',
+                            backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                           )
                         ],
