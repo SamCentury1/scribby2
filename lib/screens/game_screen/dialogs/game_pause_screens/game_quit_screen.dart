@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
+import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
@@ -58,48 +59,125 @@ class _GameQuitScreenState extends State<GameQuitScreen>
 
                 TextButton(
                     onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: palette.optionButtonBgColor2,
+                              title: Text(
+                                "Quit Game",
+                                style: TextStyle(color: palette.textColor2),
+                              ),
+                              content: Text(
+                                "Are you sure you want to quit this game?",
+                                style: TextStyle(
+                                    fontSize: 20, color: palette.textColor2),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                    onPressed: () {
+                                      GameLogic().executeGameOver(
+                                          gamePlayState, context);
+                                    },
+                                    child: Text(
+                                      "Yes",
+                                      style:
+                                          TextStyle(color: palette.textColor2),
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "Cancel",
+                                      style:
+                                          TextStyle(color: palette.textColor2),
+                                    )),
+                              ],
+                            );
+                          });
+
                       debugPrint(
                           "Activate 'are you sure you want to quit game?' ");
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: palette.optionButtonBgColor2,
-                      padding: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.fromLTRB(16, 4.0, 16.0, 4.0),
                       textStyle:
                           TextStyle(fontSize: 22, color: palette.textColor2),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         side: BorderSide(
-                            color: Color.fromARGB(255, 245, 245, 245),
+                            color: Color.fromARGB(0, 0, 0, 0),
                             width: 1,
                             style: BorderStyle.solid),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Quit Game",
+                      style: TextStyle(color: palette.textColor2, fontSize: 22),
                     )),
 
                 const Expanded(child: SizedBox()),
 
                 TextButton(
                     onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: palette.optionButtonBgColor2,
+                              title: Text(
+                                "Restart Game",
+                                style: TextStyle(color: palette.textColor2),
+                              ),
+                              content: Text(
+                                "Are you sure you want to restart this game?",
+                                style: TextStyle(
+                                    fontSize: 20, color: palette.textColor2),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                    onPressed: () {
+                                      gamePlayState.restartGame();
+                                    },
+                                    child: Text(
+                                      "Yes",
+                                      style:
+                                          TextStyle(color: palette.textColor2),
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "Cancel",
+                                      style:
+                                          TextStyle(color: palette.textColor2),
+                                    )),
+                              ],
+                            );
+                          });
+
                       debugPrint(
                           "Activate 'are you sure you want restart game?' ");
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: palette.optionButtonBgColor2,
-                      padding: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.fromLTRB(16, 4.0, 16.0, 4.0),
                       textStyle:
                           TextStyle(fontSize: 22, color: palette.textColor2),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         side: BorderSide(
-                            color: Color.fromARGB(255, 245, 245, 245),
+                            color: Color.fromARGB(0, 0, 0, 0),
                             width: 1,
                             style: BorderStyle.solid),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Restart Game",
+                      style: TextStyle(color: palette.textColor2, fontSize: 22),
                     )),
                 const Expanded(flex: 3, child: SizedBox()),
                 // const SizedBox(

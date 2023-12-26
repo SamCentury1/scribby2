@@ -18,7 +18,8 @@ class TimerWidget extends StatefulWidget {
   State<TimerWidget> createState() => _TimerWidgetState();
 }
 
-class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin {
+class _TimerWidgetState extends State<TimerWidget>
+    with TickerProviderStateMixin {
   late AnimationState animationState;
   late AnimationController _timerController;
   late Animation<double> _timerAnimation;
@@ -31,7 +32,6 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
     _timerController.addListener(_animationListener);
     animationState.addListener(_handleAnimationStateChange);
   }
-
 
   void _animationListener() {
     if (_timerController.status == AnimationStatus.completed) {
@@ -49,11 +49,9 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
     _timerController.reset();
 
     _timerController.forward();
-  }    
-
+  }
 
   void initializeAnimations() {
-    
     /// ============== vvvvvvvvvvvvvvvv ======================
     /// ============== TIMER ANIMATION =======================
     _timerController = AnimationController(
@@ -61,19 +59,20 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
       duration: const Duration(seconds: 5),
     );
 
-
     final List<TweenSequenceItem<double>> timerTweenSequence = [
-      TweenSequenceItem<double>(tween: Tween(begin: 0.2, end: 1.0), weight: 0.1 ),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.0, end: 1.0), weight: 0.8 ),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.0, end: 0.2), weight: 0.1 ),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.2, end: 1.0), weight: 0.1),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.0, end: 1.0), weight: 0.8),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.0, end: 0.2), weight: 0.1),
     ];
 
-    _timerAnimation = TweenSequence<double>(
-      timerTweenSequence
-    ).animate(_timerController);
+    _timerAnimation =
+        TweenSequence<double>(timerTweenSequence).animate(_timerController);
 
     /// ============== TIMER ANIMATION =======================
-    /// ============== ^^^^^^^^^^^^^^^^ ======================    
+    /// ============== ^^^^^^^^^^^^^^^^ ======================
   }
 
   @override
@@ -84,21 +83,19 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
     super.dispose();
   }
 
-
   String displayFormattedTime(int seconds) {
     String formattedTime = GameLogic().formatTime(seconds);
     return formattedTime;
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette =
+        Provider.of<ColorPalette>(context, listen: false);
 
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
-      return Row(
+        return Row(
           children: [
             Text(
               "Level ${gamePlayState.currentLevel}",
@@ -107,7 +104,10 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
                 color: palette.textColor1,
               ),
             ),
-            const Expanded(flex: 1,child: SizedBox(),), // Spacer(),
+            const Expanded(
+              flex: 1,
+              child: SizedBox(),
+            ), // Spacer(),
             AnimatedBuilder(
               animation: _timerAnimation,
               builder: (context, child) {
@@ -121,16 +121,17 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
                         Consumer<GamePlayState>(
                           builder: (context, gamePlayState, child) {
                             return Text(
-                              displayFormattedTime(gamePlayState.duration.inSeconds),
+                              displayFormattedTime(
+                                  gamePlayState.duration.inSeconds),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 22,
                                 // color: const Color.fromARGB(255, 224, 224, 224),
                                 color: palette.textColor1,
-                              ),                                                                                    
+                              ),
                             );
                           },
-                        ),                                    
+                        ),
                         // Expanded(flex: 1, child: Center(),),
                         const SizedBox(width: 10),
                         Icon(
@@ -138,7 +139,6 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
                           // color: GameLogic().getColor(widget.darkTheme, widget.palette, "timer_text"),
                           color: palette.textColor1,
                         ),
-                
                       ],
                     ),
                   ),
@@ -146,9 +146,8 @@ class _TimerWidgetState extends State<TimerWidget> with TickerProviderStateMixin
               },
             ),
           ],
-        
         );
       },
-    );     
+    );
   }
 }

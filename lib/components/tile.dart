@@ -130,7 +130,7 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
       TweenSequenceItem<Color?>(
         tween: ColorTween(
           begin:
-              palette.tileTextColor, //const Color.fromRGBO(202, 176, 228, 1),
+              palette.tileBorderColor, //const Color.fromRGBO(202, 176, 228, 1),
           end: const Color.fromARGB(244, 255, 220, 24),
         ),
         weight: 10,
@@ -173,7 +173,8 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
       TweenSequenceItem<Color?>(
         tween: ColorTween(
           begin: const Color.fromARGB(0, 0, 0, 0),
-          end: palette.tileTextColor, //const Color.fromRGBO(202, 176, 228, 1),
+          end:
+              palette.tileBorderColor, //const Color.fromRGBO(202, 176, 228, 1),
         ),
         weight: 40,
       ),
@@ -202,7 +203,7 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
     final List<TweenSequenceItem<Color?>> textColorTweenSequenceItems = [
       TweenSequenceItem<Color?>(
         tween: ColorTween(
-          begin: const Color.fromRGBO(202, 176, 228, 1),
+          begin: palette.tileTextColor,
           end: const Color.fromARGB(244, 255, 220, 24),
         ),
         weight: 10,

@@ -142,260 +142,305 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : Stack(
-            children: [
-              SafeArea(
-                child: Scaffold(
-                  // appBar: const PreferredSize(
-                  //   preferredSize: Size.fromHeight(120),
-                  //   child: BannerAdWidget() ,
-                  // ),
-                  body: Container(
-                    // color: GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                    color: palette.screenBackgroundColor,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            // const SizedBox(height: 20,),
-                            TimerWidget(
-                              darkTheme: settings.darkTheme.value,
-                              palette: palette,
-                            ),
+        : PopScope(
+            canPop: false,
+            onPopInvoked: (details) {
+              _gamePlayState.setIsGamePaused(true, 0);
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Quit Game",
+                        style:
+                            TextStyle(fontSize: 22, color: palette.textColor2),
+                      ),
+                      content: Text(
+                        "Are you sure you want to quit the current game?",
+                        style:
+                            TextStyle(fontSize: 20, color: palette.textColor2),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                            onPressed: () {
+                              GameLogic()
+                                  .executeGameOver(_gamePlayState, context);
+                            },
+                            child: Text(
+                              "Yes",
+                              style: TextStyle(color: palette.textColor2),
+                            )),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: palette.textColor2),
+                            )),
+                      ],
+                    );
+                  });
+            },
+            child: Stack(
+              children: [
+                SafeArea(
+                  child: Scaffold(
+                    // appBar: const PreferredSize(
+                    //   preferredSize: Size.fromHeight(120),
+                    //   child: BannerAdWidget() ,
+                    // ),
+                    body: Container(
+                      // color: GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
+                      color: palette.screenBackgroundColor,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              // const SizedBox(height: 20,),
+                              TimerWidget(
+                                darkTheme: settings.darkTheme.value,
+                                palette: palette,
+                              ),
 
-                            const Scoreboard(),
-                            const BonusScoreElements(),
+                              const Scoreboard(),
+                              const BonusScoreElements(),
 
-                            // RANDOM LETTERS LAYER
-                            const Expanded(flex: 1, child: SizedBox()),
-                            const RandomLetters(),
+                              // RANDOM LETTERS LAYER
+                              const Expanded(flex: 1, child: SizedBox()),
+                              const RandomLetters(),
 
-                            const SizedBox(
-                              height: 10,
-                            ),
+                              const SizedBox(
+                                height: 10,
+                              ),
 
-                            Stack(
-                              children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  // color: Color.fromARGB(255, 240, 91, 91),
-                                  child: Center(
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8, //330,
-                                      child: Column(
-                                        children: [
-                                          for (var i = 0; i < 6; i++)
-                                            Row(children: [
-                                              for (var j = 0; j < 6; j++)
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: GestureDetector(
-                                                      onTapDown: (details) {
-                                                        // print(_alphabetData);
+                              Stack(
+                                children: [
+                                  SizedBox(
+                                    width: double.infinity,
+                                    // color: Color.fromARGB(255, 240, 91, 91),
+                                    child: Center(
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8, //330,
+                                        child: Column(
+                                          children: [
+                                            for (var i = 0; i < 6; i++)
+                                              Row(children: [
+                                                for (var j = 0; j < 6; j++)
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: GestureDetector(
+                                                        onTapDown: (details) {
+                                                          // print(_alphabetData);
 
-                                                        // getSelectedTileKey(i+1, j+1);
-                                                        // pressTile(i+1, j+1);
-                                                        GameLogic().pressTile(
-                                                            context,
-                                                            i + 1,
-                                                            j + 1,
-                                                            _gamePlayState,
-                                                            _audioController);
-                                                      },
-                                                      child: Stack(
-                                                        children: [
-                                                          Tile(
-                                                            row: i + 1,
-                                                            column: j + 1,
-                                                          ),
-                                                          DragTarget(onAccept:
-                                                              (details) {
-                                                            // removeFromReserves(draggedSpot,i+1, j+1);
-                                                            // dropTile(draggedSpot["body"],i+1, j+1);
-                                                            GameLogic().dropTile(
-                                                                context,
-                                                                i + 1,
-                                                                j + 1,
-                                                                _gamePlayState,
-                                                                _audioController);
-                                                          }, builder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  List<dynamic>
-                                                                      accepted,
-                                                                  List<dynamic>
-                                                                      rejected) {
-                                                            return draggedTile(
-                                                                draggedSpot
-                                                                        .isEmpty
-                                                                    ? ""
-                                                                    : "", // draggedSpot["body"],
-                                                                Colors
-                                                                    .transparent);
-                                                          })
-                                                          // draggedTile("", Colors.transparent),
-                                                        ],
-                                                      )),
-                                                ),
-                                            ])
-                                        ],
+                                                          // getSelectedTileKey(i+1, j+1);
+                                                          // pressTile(i+1, j+1);
+                                                          GameLogic().pressTile(
+                                                              context,
+                                                              i + 1,
+                                                              j + 1,
+                                                              _gamePlayState,
+                                                              _audioController);
+                                                        },
+                                                        child: Stack(
+                                                          children: [
+                                                            Tile(
+                                                              row: i + 1,
+                                                              column: j + 1,
+                                                            ),
+                                                            DragTarget(onAccept:
+                                                                (details) {
+                                                              // removeFromReserves(draggedSpot,i+1, j+1);
+                                                              // dropTile(draggedSpot["body"],i+1, j+1);
+                                                              GameLogic().dropTile(
+                                                                  context,
+                                                                  i + 1,
+                                                                  j + 1,
+                                                                  _gamePlayState,
+                                                                  _audioController);
+                                                            }, builder: (BuildContext
+                                                                    context,
+                                                                List<dynamic>
+                                                                    accepted,
+                                                                List<dynamic>
+                                                                    rejected) {
+                                                              return draggedTile(
+                                                                  draggedSpot
+                                                                          .isEmpty
+                                                                      ? ""
+                                                                      : "", // draggedSpot["body"],
+                                                                  Colors
+                                                                      .transparent);
+                                                            })
+                                                            // draggedTile("", Colors.transparent),
+                                                          ],
+                                                        )),
+                                                  ),
+                                              ])
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const NewPointsAnimation()
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Consumer<GamePlayState>(
-                              builder: (context, gamePlayState, child) {
-                                return SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  // height: 100,
-                                  // color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        for (Map<String, dynamic> reserveLetter
-                                            in gamePlayState.reserveTiles)
-                                          Stack(
-                                            children: [
-                                              Draggable(
-                                                data: reserveLetter["body"] ==
-                                                        ""
-                                                    ? const SizedBox()
-                                                    : draggedTile(
-                                                        reserveLetter["body"],
-                                                        Colors
-                                                            .red), // draggedTile(reserveLetter["body"], Colors.red),
-                                                feedback: reserveLetter[
-                                                            "body"] ==
-                                                        ""
-                                                    ? const SizedBox()
-                                                    : DraggableTile(
-                                                        tileState:
-                                                            reserveLetter), // draggedTile(reserveLetter["body"], const Color.fromARGB(255, 73, 54, 244)),
-                                                childWhenDragging:
-                                                    reserveLetter["body"] == ""
-                                                        ? DraggableTile(
-                                                            tileState:
-                                                                reserveLetter)
-                                                        : DraggableTile(
-                                                            tileState: {
-                                                                "id":
-                                                                    reserveLetter[
-                                                                        "id"],
-                                                                "body": ""
-                                                              }),
-                                                child: DraggableTile(
-                                                    tileState:
-                                                        reserveLetter), //draggedTile(reserveLetter["body"], Colors.black),
+                                  const NewPointsAnimation()
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Consumer<GamePlayState>(
+                                builder: (context, gamePlayState, child) {
+                                  return SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    // height: 100,
+                                    // color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          for (Map<String,
+                                                  dynamic> reserveLetter
+                                              in gamePlayState.reserveTiles)
+                                            Stack(
+                                              children: [
+                                                Draggable(
+                                                  data: reserveLetter["body"] ==
+                                                          ""
+                                                      ? const SizedBox()
+                                                      : draggedTile(
+                                                          reserveLetter["body"],
+                                                          Colors
+                                                              .red), // draggedTile(reserveLetter["body"], Colors.red),
+                                                  feedback: reserveLetter[
+                                                              "body"] ==
+                                                          ""
+                                                      ? const SizedBox()
+                                                      : DraggableTile(
+                                                          tileState:
+                                                              reserveLetter), // draggedTile(reserveLetter["body"], const Color.fromARGB(255, 73, 54, 244)),
+                                                  childWhenDragging:
+                                                      reserveLetter["body"] ==
+                                                              ""
+                                                          ? DraggableTile(
+                                                              tileState:
+                                                                  reserveLetter)
+                                                          : DraggableTile(
+                                                              tileState: {
+                                                                  "id":
+                                                                      reserveLetter[
+                                                                          "id"],
+                                                                  "body": ""
+                                                                }),
+                                                  child: DraggableTile(
+                                                      tileState:
+                                                          reserveLetter), //draggedTile(reserveLetter["body"], Colors.black),
 
-                                                onDragStarted: () {
-                                                  if (reserveLetter['body'] ==
-                                                      "") {
-                                                    GameLogic()
-                                                        .placeIntoReserves(
-                                                            context,
-                                                            gamePlayState,
-                                                            reserveLetter);
-                                                  } else {
+                                                  onDragStarted: () {
+                                                    if (reserveLetter['body'] ==
+                                                        "") {
+                                                      GameLogic()
+                                                          .placeIntoReserves(
+                                                              context,
+                                                              gamePlayState,
+                                                              reserveLetter);
+                                                    } else {
+                                                      gamePlayState
+                                                          .setDraggedReserveTile(
+                                                              reserveLetter);
+                                                    }
+                                                  },
+                                                  onDragEnd: (details) {
                                                     gamePlayState
                                                         .setDraggedReserveTile(
-                                                            reserveLetter);
-                                                  }
-                                                },
-                                                onDragEnd: (details) {
-                                                  gamePlayState
-                                                      .setDraggedReserveTile(
-                                                          {});
-                                                },
-                                              ),
-                                              // DraggableTile(tileState: reserveLetter),
-                                            ],
-                                          )
-                                      ],
+                                                            {});
+                                                  },
+                                                ),
+                                                // DraggableTile(tileState: reserveLetter),
+                                              ],
+                                            )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            )
-                          ],
+                                  );
+                                },
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  bottomNavigationBar: Consumer<GamePlayState>(
-                    builder: (context, gamePlayState, child) {
-                      // final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
+                    bottomNavigationBar: Consumer<GamePlayState>(
+                      builder: (context, gamePlayState, child) {
+                        // final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
 
-                      return BottomNavigationBar(
-                        type: BottomNavigationBarType
-                            .shifting, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                        selectedItemColor: palette
-                            .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        unselectedItemColor: palette
-                            .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        items: <BottomNavigationBarItem>[
-                          BottomNavigationBarItem(
-                            icon: const Icon(Icons.pause),
-                            label: 'Pause',
-                            backgroundColor: palette.bottomNavigationBarColor,
-                            // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                          ),
-                          BottomNavigationBarItem(
-                            icon: const Icon(Icons.help),
-                            label: 'Help',
-                            backgroundColor: palette.bottomNavigationBarColor,
-                            // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                          ),
-                          BottomNavigationBarItem(
-                            icon: const Icon(Icons.settings),
-                            label: 'Rules',
-                            backgroundColor: palette.bottomNavigationBarColor,
-                            // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                          ),
-                          BottomNavigationBarItem(
-                            icon: const Icon(Icons.exit_to_app_rounded),
-                            label: 'Quit',
-                            backgroundColor: palette.bottomNavigationBarColor,
-                            // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                          )
-                        ],
-                        onTap: (details) {
-                          gamePlayState.setShouldPauseCountDownAnimation(true);
-                          gamePlayState.setIsGamePaused(true, details);
-                          // if (!gamePlayState.isAnimating) {
-                          //   // animationState.
-                          //   gamePlayState.setShouldPauseCountDownAnimation(true);
-                          //   gamePlayState.setIsGamePaused(true,details);
-                          // }
-                        },
-                      );
-                    },
+                        return BottomNavigationBar(
+                          type: BottomNavigationBarType
+                              .shifting, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
+                          selectedItemColor: palette
+                              .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                          unselectedItemColor: palette
+                              .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                          items: <BottomNavigationBarItem>[
+                            BottomNavigationBarItem(
+                              icon: const Icon(Icons.pause),
+                              label: 'Pause',
+                              backgroundColor: palette.bottomNavigationBarColor,
+                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                            ),
+                            BottomNavigationBarItem(
+                              icon: const Icon(Icons.help),
+                              label: 'Help',
+                              backgroundColor: palette.bottomNavigationBarColor,
+                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                            ),
+                            BottomNavigationBarItem(
+                              icon: const Icon(Icons.settings),
+                              label: 'Rules',
+                              backgroundColor: palette.bottomNavigationBarColor,
+                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                            ),
+                            BottomNavigationBarItem(
+                              icon: const Icon(Icons.exit_to_app_rounded),
+                              label: 'Quit',
+                              backgroundColor: palette.bottomNavigationBarColor,
+                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                            )
+                          ],
+                          onTap: (details) {
+                            gamePlayState
+                                .setShouldPauseCountDownAnimation(true);
+                            gamePlayState.setIsGamePaused(true, details);
+                            // if (!gamePlayState.isAnimating) {
+                            //   // animationState.
+                            //   gamePlayState.setShouldPauseCountDownAnimation(true);
+                            //   gamePlayState.setIsGamePaused(true,details);
+                            // }
+                          },
+                        );
+                      },
+                    ),
+                    // bottomNavigationBar: const BannerAdWidget(),
                   ),
-                  // bottomNavigationBar: const BannerAdWidget(),
                 ),
-              ),
-              // _gamePlayState.isGameStarted && _gamePlayState.isGamePaused ? const PauseOverlay() : const SizedBox(),
-              const PauseOverlay(),
+                // _gamePlayState.isGameStarted && _gamePlayState.isGamePaused ? const PauseOverlay() : const SizedBox(),
+                const PauseOverlay(),
 
-              const GameOverOverlay(),
-              // const GameOverOverlay(),
-              const LevelChangeOverlay(),
+                const GameOverOverlay(),
+                // const GameOverOverlay(),
+                const LevelChangeOverlay(),
 
-              const PreGameOverlay(),
-              // const PreGameOverlay(),
-            ],
+                const PreGameOverlay(),
+                // const PreGameOverlay(),
+              ],
+            ),
           );
   }
 }
