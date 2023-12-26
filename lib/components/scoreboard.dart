@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_sequence_animation/flutter_sequence_animation.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/styles/palette.dart';
 // import 'package:scribby_flutter_v2/providers/game_state.dart';
 // import 'package:scribby_flutter_v2/providers/timer_state.dart';
 
@@ -17,11 +18,10 @@ class Scoreboard extends StatefulWidget {
 }
 
 class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
-  late AnimationState _animationState; 
-
+  late AnimationState _animationState;
 
   // late AnimationController _streakSlideEnterController;
-  // late Animation<Offset> _streakSlideEnterAnimation;    
+  // late Animation<Offset> _streakSlideEnterAnimation;
 
   // late int scorePoints = 0;
 
@@ -29,40 +29,34 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
   late Animation<double> _scoreScaleAnimation;
 
   late AnimationController _scoreTextController;
-  late Animation<Color?> _scoreTextAnimation; 
+  late Animation<Color?> _scoreTextAnimation;
 
   late AnimationController _scoreBorderController;
-  late Animation<Color?> _scoreBorderAnimation;   
+  late Animation<Color?> _scoreBorderAnimation;
 
   late SequenceAnimation sequenceAnimation;
 
+  late ColorPalette palette;
   // late AnimationController _timerController;
   // late Animation<double> _timerAnimation;
 
-
-  late String formattedTime; 
-
-
+  late String formattedTime;
 
   @override
   void initState() {
     super.initState();
     // displayFormattedTime(0);
-    initializeAnimations();
+    palette = Provider.of<ColorPalette>(context, listen: false);
+    initializeAnimations(palette);
 
     // formattedTime = GameLogic().formatTime(timeInSeconds)
-    
+
     _animationState = Provider.of<AnimationState>(context, listen: false);
     _scoreTextController.addListener(_animationListener);
     // _streakSlideEnterController.addListener(_animationListener);
     // _timerAnimation.addListener(_animationListener);
     _animationState.addListener(_handleAnimationStateChange);
-
   }
-
-
-
-
 
   void _handleAnimationStateChange() {
     if (_animationState.shouldRunWordAnimation) {
@@ -83,7 +77,6 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
   }
 
   void _animationListener() {
-
     if (_scoreTextController.status == AnimationStatus.completed) {
       _scoreTextController.reset();
       _scoreScaleController.reset();
@@ -97,8 +90,6 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
     // if (_timerController.status == AnimationStatus.completed) {
     //   _timerController.reset();
     // }
-
-
   }
 
   // void _runStreakAnimation(String status) {
@@ -110,12 +101,10 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
   //   }
   // }
 
-  void _runAnimations()  {
-
+  void _runAnimations() {
     _scoreTextController.reset();
     _scoreScaleController.reset();
     _scoreBorderController.reset();
-
 
     _scoreTextController.forward();
     _scoreScaleController.forward();
@@ -126,12 +115,9 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
   //   _timerController.reset();
 
   //   _timerController.forward();
-  // }  
+  // }
 
-  void initializeAnimations() {
-
-
-
+  void initializeAnimations(ColorPalette palette) {
     // /// ============== vvvvvvvvvvvvvvvv ======================
     // /// ============== STREAK OFFSET ================
     // _streakSlideEnterController = AnimationController(
@@ -143,78 +129,150 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
     //   // streakSlideEnterTweenSequence
     //   begin: Offset(-1.2, 0.0),
     //   end: Offset(0.0, 0.0),
-    // ).animate(_streakSlideEnterController); 
+    // ).animate(_streakSlideEnterController);
     // /// ============== STREAK OFFSET ================
-    // /// ============== ^^^^^^^^^^^^^^^^ ======================       
-
+    // /// ============== ^^^^^^^^^^^^^^^^ ======================
 
     /// ============== vvvvvvvvvvvvvvvv ======================
     /// ============== SCOREBOARD SCALE ================
     _scoreScaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds:1500), // Adjust duration as needed
+      duration: const Duration(milliseconds: 1500), // Adjust duration as needed
     );
     final List<TweenSequenceItem<double>> scoreScaleTweenSequence = [
-      TweenSequenceItem<double>( tween: Tween(begin: 1.0,   end: 1.0,), weight: 0.2 ),
-      TweenSequenceItem<double>( tween: Tween(begin: 1.0,   end: 1.0,), weight: 0.2 ),
-      TweenSequenceItem<double>( tween: Tween(begin: 1.0,   end: 1.0,), weight: 0.2 ),
-      TweenSequenceItem<double>( tween: Tween(begin: 1.1,   end: 1.1,), weight: 0.2 ),
-      TweenSequenceItem<double>( tween: Tween(begin: 1.1,   end: 1.0,), weight: 0.2 ),
+      TweenSequenceItem<double>(
+          tween: Tween(
+            begin: 1.0,
+            end: 1.0,
+          ),
+          weight: 0.2),
+      TweenSequenceItem<double>(
+          tween: Tween(
+            begin: 1.0,
+            end: 1.0,
+          ),
+          weight: 0.2),
+      TweenSequenceItem<double>(
+          tween: Tween(
+            begin: 1.0,
+            end: 1.0,
+          ),
+          weight: 0.2),
+      TweenSequenceItem<double>(
+          tween: Tween(
+            begin: 1.1,
+            end: 1.1,
+          ),
+          weight: 0.2),
+      TweenSequenceItem<double>(
+          tween: Tween(
+            begin: 1.1,
+            end: 1.0,
+          ),
+          weight: 0.2),
     ];
-    _scoreScaleAnimation = TweenSequence<double>(
-      scoreScaleTweenSequence
-    ).animate(
-      CurvedAnimation(
-        parent: _scoreScaleController,
-        curve: Curves.easeInOut,
-      )
-    );
+    _scoreScaleAnimation =
+        TweenSequence<double>(scoreScaleTweenSequence).animate(CurvedAnimation(
+      parent: _scoreScaleController,
+      curve: Curves.easeInOut,
+    ));
+
     /// ============== SCOREBOARD SCALE ================
     /// ============== ^^^^^^^^^^^^^^^^ ======================
-
-
 
     /// ============== vvvvvvvvvvvvvvvv ======================
     /// ============== SCOREBOARD TEXT COLOR ================
     _scoreTextController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds:1500), // Adjust duration as needed
+      duration: const Duration(milliseconds: 1500), // Adjust duration as needed
     );
     final List<TweenSequenceItem<Color?>> scoreTextTweenSequence = [
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(202, 176, 228, 1),   end:  const Color.fromRGBO(202, 176, 228, 1),), weight: 0.4 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(202, 176, 228, 1),   end:  const Color.fromRGBO(0, 0, 0, 0),), weight: 0.1 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(0, 0, 0, 0),   end:  const Color.fromRGBO(0, 0, 0, 0),), weight: 0.2 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(255, 45, 45, 1),   end:  const Color.fromRGBO(255, 251, 10, 1),), weight: 0.1 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(255, 251, 3, 1),   end:  const Color.fromRGBO(255, 45, 45, 1),), weight: 0.1 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(255, 45, 45, 1),   end:  const Color.fromRGBO(202, 176, 228, 1),), weight: 0.2 ),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: palette.tileBgColor,
+            end: palette.tileBgColor,
+          ),
+          weight: 0.4),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: palette.tileBgColor,
+            end: const Color.fromRGBO(0, 0, 0, 0),
+          ),
+          weight: 0.1),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: const Color.fromRGBO(0, 0, 0, 0),
+            end: const Color.fromRGBO(0, 0, 0, 0),
+          ),
+          weight: 0.2),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: const Color.fromRGBO(255, 45, 45, 1),
+            end: const Color.fromRGBO(255, 251, 10, 1),
+          ),
+          weight: 0.1),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: const Color.fromRGBO(255, 251, 3, 1),
+            end: const Color.fromRGBO(255, 45, 45, 1),
+          ),
+          weight: 0.1),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: const Color.fromRGBO(255, 45, 45, 1),
+            end: palette.tileBgColor,
+          ),
+          weight: 0.2),
     ];
-    _scoreTextAnimation = TweenSequence<Color?>(
-      scoreTextTweenSequence
-    ).animate(_scoreTextController); 
+    _scoreTextAnimation = TweenSequence<Color?>(scoreTextTweenSequence)
+        .animate(_scoreTextController);
+
     /// ============== SCOREBOARD TEXT COLOR ================
     /// ============== ^^^^^^^^^^^^^^^^ ======================
-
 
     /// ============== vvvvvvvvvvvvvvvv ======================
     /// ============== SCOREBOARD BORDER COLOR ================
     _scoreBorderController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds:1500), // Adjust duration as needed
+      duration: const Duration(milliseconds: 1500), // Adjust duration as needed
     );
     final List<TweenSequenceItem<Color?>> scoreBorderTweenSequence = [
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(202, 176, 228, 1),   end:  const Color.fromRGBO(202, 176, 228, 1),), weight: 0.3 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(202, 176, 228, 1),   end:  const Color.fromRGBO(202, 176, 228, 1),), weight: 0.3 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(202, 176, 228, 1),   end:  const Color.fromRGBO(255, 251, 10, 1),), weight: 0.1 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(255, 251, 3, 1),   end:  const Color.fromRGBO(255, 45, 45, 1),), weight: 0.1 ),
-      TweenSequenceItem<Color?>( tween: ColorTween(begin: const Color.fromRGBO(255, 45, 45, 1),   end:  const Color.fromRGBO(202, 176, 228, 1),), weight: 0.2 ),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: palette.tileBgColor,
+            end: palette.tileBgColor,
+          ),
+          weight: 0.3),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: palette.tileBgColor,
+            end: palette.tileBgColor,
+          ),
+          weight: 0.3),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: palette.tileBgColor,
+            end: const Color.fromRGBO(255, 251, 10, 1),
+          ),
+          weight: 0.1),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: const Color.fromRGBO(255, 251, 3, 1),
+            end: const Color.fromRGBO(255, 45, 45, 1),
+          ),
+          weight: 0.1),
+      TweenSequenceItem<Color?>(
+          tween: ColorTween(
+            begin: const Color.fromRGBO(255, 45, 45, 1),
+            end: palette.tileBgColor,
+          ),
+          weight: 0.2),
     ];
-    _scoreBorderAnimation = TweenSequence<Color?>(
-      scoreBorderTweenSequence
-    ).animate(_scoreBorderController); 
+    _scoreBorderAnimation = TweenSequence<Color?>(scoreBorderTweenSequence)
+        .animate(_scoreBorderController);
+
     /// ============== SCOREBOARD BORDER COLOR ================
     /// ============== ^^^^^^^^^^^^^^^^ ======================
-
-
 
     // /// ============== vvvvvvvvvvvvvvvv ======================
     // /// ============== TIMER ANIMATION =======================
@@ -222,7 +280,6 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
     //   vsync: this,
     //   duration: const Duration(seconds: 5),
     // );
-
 
     // final List<TweenSequenceItem<double>> timerTweenSequence = [
     //   TweenSequenceItem<double>(tween: Tween(begin: 0.4, end: 1), weight: 0.1 ),
@@ -236,7 +293,6 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
 
     // /// ============== TIMER ANIMATION =======================
     // /// ============== ^^^^^^^^^^^^^^^^ ======================
-
   }
 
   @override
@@ -253,7 +309,6 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
-
         return Column(
           children: [
             Padding(
@@ -271,10 +326,11 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(0, 0, 0, 0),
                             border: Border.all(
-                              color: _scoreBorderAnimation.value ?? const Color.fromRGBO(0, 0, 0, 1),
-                              width: 3
-                            ),
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                color: _scoreBorderAnimation.value ??
+                                    palette.tileBgColor,
+                                width: 3),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -282,22 +338,24 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
                               children: [
                                 Icon(
                                   Icons.star,
-                                  color: _scoreTextAnimation.value ?? const Color.fromRGBO(0, 0, 0, 1),
-                                  ),
+                                  color: _scoreTextAnimation.value ??
+                                      palette.tileBgColor,
+                                ),
                                 // Expanded(flex: 1, child: Center(),),
-                                const SizedBox(width: 15,),
+                                const SizedBox(
+                                  width: 15,
+                                ),
                                 AnimatedDefaultTextStyle(
                                   duration: const Duration(milliseconds: 200),
                                   textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      color:_scoreTextAnimation.value ?? const Color.fromRGBO(0, 0, 0, 1),
-                                    ),
-                                  child: Text(
-                                    // widget.turnScore.toString(),
-                                    gamePlayState.turnScore.toString()
-                                    
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: _scoreTextAnimation.value ??
+                                        palette.tileBgColor,
                                   ),
+                                  child: Text(
+                                      // widget.turnScore.toString(),
+                                      gamePlayState.turnScore.toString()),
                                 )
                               ],
                             ),
@@ -306,9 +364,7 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
                       );
                     },
                   ),
-        
                   const Expanded(flex: 1, child: SizedBox()),
-        
                   AnimatedBuilder(
                     animation: _scoreTextAnimation,
                     builder: (context, child) {
@@ -320,10 +376,11 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(0, 0, 0, 0),
                             border: Border.all(
-                              color: _scoreBorderAnimation.value ?? const Color.fromRGBO(0, 0, 0, 1),
-                              width: 3
-                            ),
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                color: _scoreBorderAnimation.value ??
+                                    palette.tileBgColor,
+                                width: 3),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -331,20 +388,23 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
                               children: [
                                 Icon(
                                   Icons.library_books,
-                                  color: _scoreTextAnimation.value ?? const Color.fromRGBO(0, 0, 0, 1),
+                                  color: _scoreTextAnimation.value ??
+                                      palette.tileBgColor,
                                 ),
-                                const SizedBox(width: 15,),
+                                const SizedBox(
+                                  width: 15,
+                                ),
                                 AnimatedDefaultTextStyle(
                                   duration: const Duration(milliseconds: 200),
                                   textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      color:_scoreTextAnimation.value ?? const Color.fromRGBO(0, 0, 0, 0),
-                                    ),
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: _scoreTextAnimation.value ??
+                                        const Color.fromRGBO(0, 0, 0, 0),
+                                  ),
                                   child: Text(
                                     // widget.turnWords.toString(),
                                     gamePlayState.turnWords.toString(),
-        
                                   ),
                                 )
                               ],
@@ -353,13 +413,11 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
                         ),
                       );
                     },
-                  ),                           
-              
+                  ),
                 ],
               ),
             ),
-          
-          
+
             // Padding(
             //   padding: EdgeInsets.all(8.0),
             //   child: Row(
@@ -399,7 +457,7 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
             //                       child: Text(
             //                         // widget.turnWords.toString(),
             //                         gamePlayState.turnWords.toString(),
-        
+
             //                       ),
             //                     )
             //                   ],
@@ -409,11 +467,11 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
             //           );
             //         },
             //       ),
-                  
+
             //     ],
             //   ),
             // ),
-          
+
             // Padding(
             //   padding: EdgeInsets.all(8.0),
             //   child: Row(
@@ -461,7 +519,7 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
             //                               ),
             //                             );
             //                           },
-          
+
             //                         ),
             //                       ),
             //                     ),
@@ -474,18 +532,13 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
             //           },
             //         )
             //       )
-                  
+
             //     ],
             //   )
-            // )        
-        
+            // )
           ],
         );
       },
-
     );
   }
 }
-
-
-

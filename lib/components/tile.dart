@@ -390,8 +390,8 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
                             // color: widget.tileState["active"] ?  _letterTextColorAnimation.value ?? Color.fromRGBO(0, 0, 0, 1) : Color.fromRGBO(0, 0, 0, 1),
                             color: tileState["active"]
                                 ? _letterTextColorAnimation.value ??
-                                    const Color.fromRGBO(0, 0, 0, 1)
-                                : const Color.fromRGBO(0, 0, 0, 1),
+                                    palette.tileTextColor
+                                : palette.tileTextColor,
                           ),
                           child: Text(
                               //widget.tileState["letter"],

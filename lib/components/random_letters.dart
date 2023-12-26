@@ -76,7 +76,7 @@ class _RandomLettersState extends State<RandomLetters>
   // THIS FUNCTION TELLS THE CODE WHAT TO DO
   void initializeAnimations() {
     _shrinkAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+        vsync: this, duration: const Duration(milliseconds: 500));
 
     _shrinkAnimation = Tween<double>(
       begin: 1,
@@ -87,7 +87,7 @@ class _RandomLettersState extends State<RandomLetters>
     // FIRST LETTER
     _slideController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 500),
     );
 
     _slideAnimation = Tween<Offset>(
@@ -96,7 +96,7 @@ class _RandomLettersState extends State<RandomLetters>
     ).animate(_slideController);
 
     _sizeAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+        vsync: this, duration: const Duration(milliseconds: 500));
 
     _sizeAnimation = Tween<double>(
       begin: 50,
@@ -105,7 +105,7 @@ class _RandomLettersState extends State<RandomLetters>
         parent: _sizeAnimationController, curve: Curves.easeIn));
 
     _fontAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+        vsync: this, duration: const Duration(milliseconds: 500));
 
     _fontAnimation = Tween<double>(
       begin: 26,
@@ -116,7 +116,7 @@ class _RandomLettersState extends State<RandomLetters>
     // SECOND LETTER
     _letter2SlideController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 500),
     );
 
     _letter2Animation = Tween<Offset>(
@@ -205,8 +205,8 @@ class _RandomLettersState extends State<RandomLetters>
                                   // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
                                   ringColor: palette.tileBgColor,
                                   ringGradient: null,
-                                  fillColor: Colors.purple[
-                                      500]!, // Colors.purpleAccent[100]!,
+                                  fillColor: palette
+                                      .tileTextColor, // Colors.purpleAccent[100]!,
                                   fillGradient: null,
                                   // backgroundColor:GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
                                   backgroundColor:
@@ -256,10 +256,9 @@ class _RandomLettersState extends State<RandomLetters>
                                     child: Container(
                                       width: 100 * _shrinkAnimation.value,
                                       height: 100 * _shrinkAnimation.value,
-                                      decoration: const BoxDecoration(
-                                          color:
-                                              Color.fromRGBO(202, 176, 228, 1),
-                                          borderRadius: BorderRadius.all(
+                                      decoration: BoxDecoration(
+                                          color: palette.tileBgColor,
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(10))),
                                       child: Center(
                                           child: Text(
@@ -267,8 +266,7 @@ class _RandomLettersState extends State<RandomLetters>
                                             gamePlayState.randomLetterList, 3),
                                         style: TextStyle(
                                           fontSize: 60 * _shrinkAnimation.value,
-                                          color: const Color.fromARGB(
-                                              255, 9, 1, 34),
+                                          color: palette.tileTextColor,
                                         ),
                                       )),
                                     ),
@@ -284,11 +282,11 @@ class _RandomLettersState extends State<RandomLetters>
                                       child: Container(
                                         width: _sizeAnimation.value,
                                         height: _sizeAnimation.value,
-                                        decoration: const BoxDecoration(
-                                            color: Color.fromRGBO(
-                                                202, 176, 228, 1),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10))),
+                                        decoration: BoxDecoration(
+                                            color: palette.tileBgColor,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10))),
                                         child: Center(
                                             child: Text(
                                           GameLogic().displayRandomLetters(
@@ -298,8 +296,7 @@ class _RandomLettersState extends State<RandomLetters>
                                           // "A",
                                           style: TextStyle(
                                             fontSize: _fontAnimation.value,
-                                            color: const Color.fromARGB(
-                                                255, 9, 1, 34),
+                                            color: palette.tileTextColor,
                                           ),
                                         )),
                                       ),
@@ -318,17 +315,17 @@ class _RandomLettersState extends State<RandomLetters>
                                 child: Container(
                                     width: 50,
                                     height: 50,
-                                    decoration: const BoxDecoration(
-                                        color: Color.fromRGBO(202, 176, 228, 1),
-                                        borderRadius: BorderRadius.all(
+                                    decoration: BoxDecoration(
+                                        color: palette.tileBgColor,
+                                        borderRadius: const BorderRadius.all(
                                             Radius.circular(10))),
                                     child: Center(
                                       child: Text(
                                         GameLogic().displayRandomLetters(
                                             gamePlayState.randomLetterList, 1),
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 26,
-                                          color: Color.fromARGB(255, 9, 1, 34),
+                                          color: palette.tileTextColor,
                                         ),
                                       ),
                                     ))),
