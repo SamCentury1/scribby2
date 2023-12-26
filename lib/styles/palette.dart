@@ -126,7 +126,7 @@ class ColorPalette with ChangeNotifier {
         _optionButtonTextColor = const Color.fromARGB(255, 209, 209, 209);
         _tileBgColor = const Color.fromARGB(255, 249, 181, 255);
         _tileBorderColor = const Color.fromARGB(255, 249, 181, 255);
-        _tileTextColor = const Color.fromARGB(255, 117, 13, 187);
+        _tileTextColor = Color.fromARGB(255, 39, 39, 39);
         _timerTextColor = const Color.fromARGB(255, 230, 228, 228);
         _bottomNavigationBarColor = const Color.fromARGB(255, 15, 8, 54);
         _bottomNavigationBarItemColor =
@@ -146,8 +146,8 @@ class ColorPalette with ChangeNotifier {
         _optionButtonBgColor2 = const Color.fromARGB(255, 228, 227, 227);
         _optionButtonBgColor3 = const Color.fromARGB(255, 209, 209, 209);
         _optionButtonTextColor = const Color.fromARGB(255, 46, 46, 46);
-        _tileBgColor = const Color.fromARGB(255, 68, 79, 231);
-        _tileBorderColor = const Color.fromARGB(255, 68, 79, 231);
+        _tileBgColor = const Color.fromARGB(255, 35, 42, 141);
+        _tileBorderColor = const Color.fromARGB(255, 35, 42, 141);
         _tileTextColor = const Color.fromARGB(255, 235, 235, 235);
         _timerTextColor = const Color.fromARGB(255, 34, 34, 34);
         _bottomNavigationBarColor = const Color.fromARGB(255, 186, 217, 231);
