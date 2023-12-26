@@ -41,10 +41,11 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.65,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                // color: Color.fromARGB(125, 71, 65, 65)
-              ),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                  color: palette.optionButtonBgColor
+                  // color: Color.fromARGB(125, 71, 65, 65)
+                  ),
               child: Column(
                 children: <Widget>[
                   // TextButton(onPressed: changeBackToZero, child: Text("change")),
@@ -87,28 +88,28 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                             Icons.gamepad,
                           ),
                           label: 'Summary',
-                          backgroundColor: palette.optionButtonBgColor,
+                          backgroundColor: palette.optionButtonBgColor2,
                         ),
                         BottomNavigationBarItem(
                           icon: const Icon(
                             Icons.help,
                           ),
                           label: 'Help',
-                          backgroundColor: palette.optionButtonBgColor,
+                          backgroundColor: palette.optionButtonBgColor2,
                         ),
                         BottomNavigationBarItem(
                           icon: const Icon(
                             Icons.settings,
                           ),
                           label: 'Settings',
-                          backgroundColor: palette.optionButtonBgColor,
+                          backgroundColor: palette.optionButtonBgColor2,
                         ),
                         BottomNavigationBarItem(
                           icon: const Icon(
                             Icons.exit_to_app,
                           ),
                           label: 'Quit',
-                          backgroundColor: palette.optionButtonBgColor,
+                          backgroundColor: palette.optionButtonBgColor2,
                         ),
                       ],
                     ),

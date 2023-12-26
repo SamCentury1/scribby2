@@ -212,7 +212,7 @@ class _GameSummaryViewState extends State<GameSummaryView> {
         Align(
           alignment: Alignment.center,
           child: Text(
-            "Score: ${widget.gamePlayState.summaryData['points']}",
+            "Score: ${(widget.gamePlayState.summaryData['points'] ?? 0)}",
             style: TextStyle(color: widget.palette.textColor2, fontSize: 32),
           ),
         ),
@@ -279,53 +279,59 @@ class _GameSummaryViewState extends State<GameSummaryView> {
           children: <TableRow>[
             tableRowItem(
                 "Longest Streak",
-                widget.gamePlayState.summaryData['longestStreak'].toString(),
+                (widget.gamePlayState.summaryData['longestStreak'] ?? 0)
+                    .toString(),
                 Icon(Icons.lock_clock,
                     size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
                 "Cross Words",
-                widget.gamePlayState.summaryData['crosswords'].toString(),
+                (widget.gamePlayState.summaryData['crosswords'] ?? 0)
+                    .toString(),
                 Icon(Icons.bar_chart,
                     size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
                 "Most Points",
-                widget.gamePlayState.summaryData['mostPoints'].toString(),
+                (widget.gamePlayState.summaryData['mostPoints'] ?? 0)
+                    .toString(),
                 Icon(Icons.bar_chart,
                     size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
                 "Most Words",
-                widget.gamePlayState.summaryData['mostWords'].toString(),
+                (widget.gamePlayState.summaryData['mostWords'] ?? 0).toString(),
                 Icon(Icons.bar_chart,
                     size: 22, color: widget.palette.textColor2),
                 widget.palette),
           ],
         ),
         const Expanded(child: SizedBox()),
-        InkWell(
-          onTap: widget.toggleDisplay,
-          child: Text.rich(
-            TextSpan(
-              text: 'View all ',
-              style: TextStyle(
-                  fontSize: 20,
-                  color: widget.palette.textColor3,
-                  fontStyle: FontStyle.italic),
-              children: <TextSpan>[
-                TextSpan(
-                    text: widget.gamePlayState.summaryData['uniqueWords'].length
-                        .toString(),
+        widget.gamePlayState.summaryData.isEmpty
+            ? const SizedBox()
+            : InkWell(
+                onTap: widget.toggleDisplay,
+                child: Text.rich(
+                  TextSpan(
+                    text: 'View all ',
                     style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: widget.palette.textColor3,
-                        decorationThickness: 1.0)),
-                const TextSpan(text: ' words'),
-              ],
-            ),
-          ),
-        ),
+                        fontSize: 20,
+                        color: widget.palette.textColor3,
+                        fontStyle: FontStyle.italic),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: widget
+                              .gamePlayState.summaryData['uniqueWords'].length
+                              .toString(),
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationColor: widget.palette.textColor3,
+                              decorationThickness: 1.0)),
+                      const TextSpan(text: ' words'),
+                    ],
+                  ),
+                ),
+              ),
         const Expanded(child: SizedBox()),
       ]),
     );

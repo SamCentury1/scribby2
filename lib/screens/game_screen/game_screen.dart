@@ -347,25 +347,25 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                             .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                         items: <BottomNavigationBarItem>[
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.pause),
+                            icon: const Icon(Icons.pause),
                             label: 'Pause',
                             backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                           ),
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.help),
+                            icon: const Icon(Icons.help),
                             label: 'Help',
                             backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                           ),
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.settings),
+                            icon: const Icon(Icons.settings),
                             label: 'Rules',
                             backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
                           ),
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.exit_to_app_rounded),
+                            icon: const Icon(Icons.exit_to_app_rounded),
                             label: 'Quit',
                             backgroundColor: palette.bottomNavigationBarColor,
                             // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
