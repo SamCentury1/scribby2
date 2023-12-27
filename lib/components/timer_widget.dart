@@ -75,13 +75,13 @@ class _TimerWidgetState extends State<TimerWidget>
     /// ============== ^^^^^^^^^^^^^^^^ ======================
   }
 
-  @override
-  void dispose() {
-    // _timerAnimation.removeListener(_handleAnimationStateChange);
-    _timerController.dispose();
-    // animationState.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // _timerAnimation.removeListener(_handleAnimationStateChange);
+  //   // _timerController.dispose();
+  //   // animationState.dispose();
+  //   super.dispose();
+  // }
 
   String displayFormattedTime(int seconds) {
     String formattedTime = GameLogic().formatTime(seconds);

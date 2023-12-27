@@ -186,11 +186,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
                             flex: 1,
                             child: SizedBox(),
                           ),
-                          Text(
-                            "Details",
-                            style: TextStyle(
-                                fontSize: 20, color: palette.textColor3),
-                          ),
+                          // Text(
+                          //   "Details",
+                          //   style: TextStyle(
+                          //       fontSize: 20, color: palette.textColor3),
+                          // ),
                           Table(
                             // border: TableBorder.all(),
                             columnWidths: const <int, TableColumnWidth>{
@@ -205,7 +205,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                   "Duration",
                                   GameLogic().formatTime(
                                       gamePlayState.endOfGameData['duration']),
-                                  Icon(Icons.timelapse,
+                                  Icon(Icons.timer,
                                       size: 26, color: palette.textColor3),
                                   palette),
                               rowStatItem(
@@ -226,27 +226,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                   "Cross Words",
                                   gamePlayState.endOfGameData['crossWords']
                                       .toString(),
-                                  Icon(Icons.remove_circle_sharp,
+                                  Icon(Icons.close,
                                       size: 26, color: palette.textColor3),
                                   palette),
-                            ],
-                          ),
-                          const Expanded(child: SizedBox()),
-                          Text(
-                            "Biggest Turns",
-                            style: TextStyle(
-                                fontSize: 20, color: palette.textColor3),
-                          ),
-                          Table(
-                            // border: TableBorder.all(),
-                            columnWidths: const <int, TableColumnWidth>{
-                              0: FlexColumnWidth(1),
-                              1: FlexColumnWidth(3),
-                              2: FlexColumnWidth(2),
-                            },
-                            defaultVerticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            children: <TableRow>[
                               rowStatItem(
                                   "Most Points",
                                   gamePlayState.endOfGameData['mostPoints']
@@ -258,11 +240,43 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                   "Most Words",
                                   gamePlayState.endOfGameData['mostWords']
                                       .toString(),
-                                  Icon(Icons.bookmark,
+                                  Icon(Icons.my_library_books_sharp,
                                       size: 26, color: palette.textColor3),
                                   palette),
                             ],
                           ),
+                          const Expanded(child: SizedBox()),
+                          // Text(
+                          //   "Biggest Turns",
+                          //   style: TextStyle(
+                          //       fontSize: 20, color: palette.textColor3),
+                          // ),
+                          // Table(
+                          //   // border: TableBorder.all(),
+                          //   columnWidths: const <int, TableColumnWidth>{
+                          //     0: FlexColumnWidth(1),
+                          //     1: FlexColumnWidth(3),
+                          //     2: FlexColumnWidth(2),
+                          //   },
+                          //   defaultVerticalAlignment:
+                          //       TableCellVerticalAlignment.middle,
+                          //   children: <TableRow>[
+                          //     rowStatItem(
+                          //         "Most Points",
+                          //         gamePlayState.endOfGameData['mostPoints']
+                          //             .toString(),
+                          //         Icon(Icons.star,
+                          //             size: 26, color: palette.textColor3),
+                          //         palette),
+                          //     rowStatItem(
+                          //         "Most Words",
+                          //         gamePlayState.endOfGameData['mostWords']
+                          //             .toString(),
+                          //         Icon(Icons.my_library_books_sharp,
+                          //             size: 26, color: palette.textColor3),
+                          //         palette),
+                          //   ],
+                          // ),
                           const Expanded(
                             flex: 1,
                             child: SizedBox(),

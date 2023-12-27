@@ -294,9 +294,9 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Map<String, dynamic> findTileState(state) {
+  Map<String, dynamic> findTileState(GamePlayState gamePlayState) {
     Map<String, dynamic> tileState = {};
-    tileState = GameLogic().getTileState(state.visualTileState,
+    tileState = GameLogic().getTileState(gamePlayState.visualTileState,
         "${(widget.row).toString()}_${(widget.column).toString()}");
     return tileState;
   }

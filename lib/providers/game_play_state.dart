@@ -236,6 +236,7 @@ class GamePlayState with ChangeNotifier {
     _pressedTile = "1_1";
     _alphabetState = []; // startingAlphabetState;
     _randomLetterList = []; // randomLetterListState;
+    _reserveTiles = [];
 
     _timer?.cancel();
     _duration = const Duration();
@@ -446,6 +447,7 @@ class GamePlayState with ChangeNotifier {
     _pressedTile = "1_1";
     _alphabetState = []; //startingAlphabetState;
     _randomLetterList = []; //randomLetterListState;
+    _reserveTiles = [];
     // _endOfGameData = {};
 
     _timer?.cancel();

@@ -121,12 +121,6 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                   child: SizedBox(
                     width: double.infinity,
                     child: Table(
-                      border: const TableBorder(
-                        horizontalInside: BorderSide(
-                            width: 1,
-                            color: Colors.grey,
-                            style: BorderStyle.solid),
-                      ),
                       columnWidths: const {
                         0: FixedColumnWidth(1),
                         1: FixedColumnWidth(200),
@@ -140,7 +134,7 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                           TableRow(children: [
                             TableCell(
                                 child: Text(
-                              (i + 1).toString(),
+                              "${(i + 1).toString()}.",
                               style: TextStyle(
                                 fontSize: 22,
                                 color: widget.palette.textColor2,
@@ -209,39 +203,39 @@ class _GameSummaryViewState extends State<GameSummaryView> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(children: [
         const Expanded(child: SizedBox()),
-        Align(
-          alignment: Alignment.center,
-          child: Text(
-            "Score: ${(widget.gamePlayState.summaryData['points'] ?? 0)}",
-            style: TextStyle(color: widget.palette.textColor2, fontSize: 32),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.emoji_events,
-              color: widget.palette.textColor2,
-              size: 18,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                "High Score: ${widget.curentHighscore}",
-                style:
-                    TextStyle(color: widget.palette.textColor2, fontSize: 18),
-              ),
-            ),
-          ],
-        ),
+        // Align(
+        //   alignment: Alignment.center,
+        //   child: Text(
+        //     "Score: ${(widget.gamePlayState.summaryData['points'] ?? 0)}",
+        //     style: TextStyle(color: widget.palette.textColor2, fontSize: 32),
+        //   ),
+        // ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Icon(
+        //       Icons.emoji_events,
+        //       color: widget.palette.textColor2,
+        //       size: 18,
+        //     ),
+        //     const SizedBox(
+        //       width: 10,
+        //     ),
+        //     Align(
+        //       alignment: Alignment.center,
+        //       child: Text(
+        //         "High Score: ${widget.curentHighscore}",
+        //         style:
+        //             TextStyle(color: widget.palette.textColor2, fontSize: 18),
+        //       ),
+        //     ),
+        //   ],
+        // ),
         const Expanded(child: SizedBox()),
-        Text(
-          "Details",
-          style: TextStyle(color: widget.palette.textColor2, fontSize: 24),
-        ),
+        // Text(
+        //   "Details",
+        //   style: TextStyle(color: widget.palette.textColor2, fontSize: 24),
+        // ),
         Table(
           columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(1),
@@ -251,10 +245,16 @@ class _GameSummaryViewState extends State<GameSummaryView> {
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: <TableRow>[
             tableRowItem(
+                "Score",
+                // widget.gamePlayState.currentLevel.toString(),
+                (widget.gamePlayState.summaryData['points'] ?? 0).toString(),
+                Icon(Icons.emoji_events,
+                    size: 22, color: widget.palette.textColor2),
+                widget.palette),
+            tableRowItem(
                 "Duration",
                 GameLogic().formatTime(widget.gamePlayState.duration.inSeconds),
-                Icon(Icons.lock_clock,
-                    size: 22, color: widget.palette.textColor2),
+                Icon(Icons.timer, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
                 "Level",
@@ -281,27 +281,24 @@ class _GameSummaryViewState extends State<GameSummaryView> {
                 "Longest Streak",
                 (widget.gamePlayState.summaryData['longestStreak'] ?? 0)
                     .toString(),
-                Icon(Icons.lock_clock,
-                    size: 22, color: widget.palette.textColor2),
+                Icon(Icons.bolt, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
                 "Cross Words",
                 (widget.gamePlayState.summaryData['crosswords'] ?? 0)
                     .toString(),
-                Icon(Icons.bar_chart,
-                    size: 22, color: widget.palette.textColor2),
+                Icon(Icons.close, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
                 "Most Points",
                 (widget.gamePlayState.summaryData['mostPoints'] ?? 0)
                     .toString(),
-                Icon(Icons.bar_chart,
-                    size: 22, color: widget.palette.textColor2),
+                Icon(Icons.star, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
                 "Most Words",
                 (widget.gamePlayState.summaryData['mostWords'] ?? 0).toString(),
-                Icon(Icons.bar_chart,
+                Icon(Icons.my_library_books,
                     size: 22, color: widget.palette.textColor2),
                 widget.palette),
           ],

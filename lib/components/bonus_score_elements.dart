@@ -132,13 +132,13 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
     final List<TweenSequenceItem<Color?>> streakTextTweenSequence = [
       TweenSequenceItem<Color?>(
           tween: ColorTween(
-            begin: const Color.fromRGBO(202, 176, 228, 1),
-            end: const Color.fromRGBO(202, 176, 228, 1),
+            begin: palette.tileBgColor,
+            end: palette.tileBgColor,
           ),
           weight: 0.4),
       TweenSequenceItem<Color?>(
           tween: ColorTween(
-            begin: const Color.fromRGBO(202, 176, 228, 1),
+            begin: palette.tileBgColor,
             end: const Color.fromRGBO(0, 0, 0, 0),
           ),
           weight: 0.1),
@@ -163,7 +163,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
       TweenSequenceItem<Color?>(
           tween: ColorTween(
             begin: const Color.fromRGBO(255, 45, 45, 1),
-            end: const Color.fromRGBO(202, 176, 228, 1),
+            end: palette.tileBgColor,
           ),
           weight: 0.2),
     ];
@@ -220,13 +220,13 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
       TweenSequenceItem<Color?>(
           tween: ColorTween(
             begin: const Color.fromRGBO(0, 0, 0, 0),
-            end: const Color.fromRGBO(202, 176, 228, 1),
+            end: palette.tileBgColor,
           ),
           weight: 0.4),
       TweenSequenceItem<Color?>(
           tween: ColorTween(
-            begin: const Color.fromRGBO(202, 176, 228, 1),
-            end: const Color.fromRGBO(202, 176, 228, 1),
+            begin: palette.tileBgColor,
+            end: palette.tileBgColor,
           ),
           weight: 0.1),
       TweenSequenceItem<Color?>(
@@ -309,13 +309,13 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
       TweenSequenceItem<Color?>(
           tween: ColorTween(
             begin: const Color.fromRGBO(0, 0, 0, 0),
-            end: const Color.fromRGBO(202, 176, 228, 1),
+            end: palette.tileBgColor,
           ),
           weight: 0.4),
       TweenSequenceItem<Color?>(
           tween: ColorTween(
-            begin: const Color.fromRGBO(202, 176, 228, 1),
-            end: const Color.fromRGBO(202, 176, 228, 1),
+            begin: palette.tileBgColor,
+            end: palette.tileBgColor,
           ),
           weight: 0.1),
       TweenSequenceItem<Color?>(
@@ -412,8 +412,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                                   Icons.electric_bolt,
                                                   color: _streakTextAnimation
                                                           .value ??
-                                                      const Color.fromRGBO(
-                                                          206, 0, 0, 1),
+                                                      palette.tileBgColor,
                                                 ),
                                                 const Expanded(
                                                   flex: 1,
@@ -427,8 +426,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                                     fontSize: 22,
                                                     color: _streakTextAnimation
                                                             .value ??
-                                                        const Color.fromRGBO(
-                                                            82, 31, 31, 1),
+                                                        palette.tileBgColor,
                                                   ),
                                                 ),
                                               ],
@@ -474,8 +472,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                                   Icons.bookmarks_outlined,
                                                   color: _multiTextAnimation
                                                           .value ??
-                                                      const Color.fromRGBO(
-                                                          206, 0, 0, 1),
+                                                      palette.tileBgColor,
                                                 ),
                                                 const Expanded(
                                                   flex: 1,
@@ -484,13 +481,12 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                                 Text(
                                                   "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['count'].toString()}x",
                                                   style: TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                    fontSize: 22,
-                                                    color: _multiTextAnimation
-                                                            .value ??
-                                                        const Color.fromRGBO(
-                                                            211, 211, 211, 1),
-                                                  ),
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontSize: 22,
+                                                      color: _multiTextAnimation
+                                                              .value ??
+                                                          palette.tileBgColor),
                                                 ),
                                               ],
                                             ),
@@ -538,8 +534,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                                   Icons.close,
                                                   color:
                                                       _cwTextAnimation.value ??
-                                                          const Color.fromRGBO(
-                                                              206, 0, 0, 1),
+                                                          palette.tileBgColor,
                                                 ),
                                                 const Expanded(
                                                   flex: 1,
@@ -553,8 +548,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                                     fontSize: 22,
                                                     color: _cwTextAnimation
                                                             .value ??
-                                                        const Color.fromRGBO(
-                                                            211, 211, 211, 1),
+                                                        palette.tileBgColor,
                                                   ),
                                                 ),
                                               ],
