@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 // import 'package:scribby_flutter_v2/providers/settings_state.dart';
 
@@ -280,6 +281,38 @@ class FirestoreMethods {
     }
 
     return res;
+  }
+
+  Future<void> saveAlphabetToLocalStorage(
+      String uid, SettingsController settings) async {
+    try {
+      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+      final docSnap = await docRef.get();
+      final Map<String, dynamic> docData =
+          docSnap.data() as Map<String, dynamic>;
+
+      String language = docData['parameters']['currentLanguage'];
+
+      QuerySnapshot qSnap = await _firestore
+          .collection("alphabets")
+          .where("language", isEqualTo: language)
+          .get();
+
+      List<Map<String, dynamic>> documents = [];
+
+      for (DocumentSnapshot qDocSnap in qSnap.docs) {
+        late Map<String, dynamic> alphabetData =
+            qDocSnap.data() as Map<String, dynamic>;
+        documents.add(alphabetData);
+      }
+
+      Map<String, dynamic> alphabetDoc =
+          documents.firstWhere((element) => element['language'] == language);
+
+      settings.setAlphabet(alphabetDoc);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<void> selectLanguage(

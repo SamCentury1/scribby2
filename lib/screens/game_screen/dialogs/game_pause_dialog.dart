@@ -73,11 +73,13 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                     child: BottomNavigationBar(
                       currentIndex: currentPage,
                       onTap: (index) {
-                        gamePlayState.pageController.animateToPage(
-                          index,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease,
-                        );
+                        if (gamePlayState.pageController.hasClients) {
+                          gamePlayState.pageController.animateToPage(
+                            index,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.ease,
+                          );
+                        }
                       },
                       type: BottomNavigationBarType.shifting,
                       selectedItemColor: palette.tileBgColor,

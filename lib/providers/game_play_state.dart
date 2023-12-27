@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/resources/auth_service.dart';
 // import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
@@ -240,7 +241,9 @@ class GamePlayState with ChangeNotifier {
 
     _timer?.cancel();
     _duration = const Duration();
-    _pageController.jumpToPage(0);
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage(0);
+    }
 
     notifyListeners();
 
@@ -257,16 +260,40 @@ class GamePlayState with ChangeNotifier {
   bool _isGamePaused = true;
   bool get isGamePaused => _isGamePaused;
 
+  // void setIsGamePaused(bool value, int page) {
+  //   _isGamePaused = value;
+  //   if (value != true) {
+  //     Future.delayed(const Duration(milliseconds: 300), () {
+  //       if (_pageController.hasClients) {
+  //         _pageController.jumpToPage(0);
+  //       }
+  //       _countDownController.resume();
+  //     });
+  //   } else {
+  //     Future.delayed(const Duration(milliseconds: 0), () {
+  //       if (_pageController.hasClients) {
+  //         _pageController.jumpToPage(page);
+  //       }
+  //       _countDownController.pause();
+  //     });
+  //   }
+  //   notifyListeners();
+  // }
+
   void setIsGamePaused(bool value, int page) {
     _isGamePaused = value;
     if (value != true) {
       Future.delayed(const Duration(milliseconds: 300), () {
-        _pageController.jumpToPage(0);
+        // if (_pageController.hasClients) {
+        //   _pageController.jumpToPage(0);
+        // }
         _countDownController.resume();
       });
     } else {
       Future.delayed(const Duration(milliseconds: 0), () {
-        _pageController.jumpToPage(page);
+        // if (_pageController.hasClients) {
+        //   _pageController.jumpToPage(page);
+        // }
         _countDownController.pause();
       });
     }
@@ -437,7 +464,7 @@ class GamePlayState with ChangeNotifier {
     _isGameStarted = false;
     _gameSummaryLog = [];
     _summaryData = {};
-    _visualTileState = []; //startingTileState;
+    _visualTileState = initialBoardState; //[]; //startingTileState;
     _previousScore = 0;
     _currentScore = 0;
     _turnScore = 0;
@@ -446,19 +473,30 @@ class GamePlayState with ChangeNotifier {
     _currentTurn = 0;
     _pressedTile = "1_1";
     _alphabetState = []; //startingAlphabetState;
-    _randomLetterList = []; //randomLetterListState;
-    _reserveTiles = [];
+    _randomLetterList = ["", "", ""];
+    _reserveTiles = [
+      {"id": 0, "body": ""},
+      {"id": 1, "body": ""},
+      {"id": 2, "body": ""},
+      {"id": 3, "body": ""},
+      {"id": 4, "body": ""},
+    ];
     // _endOfGameData = {};
 
     _timer?.cancel();
 
     _duration = const Duration();
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage(0);
+    }
+
     notifyListeners();
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _pageController.dispose();
     // _cdTimer?.cancel();
     super.dispose();
   }

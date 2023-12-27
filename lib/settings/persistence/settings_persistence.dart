@@ -3,8 +3,6 @@
 /// Implementations can range from simple in-memory storage through
 /// local preferences to cloud-based solutions.
 abstract class SettingsPersistence {
-
-
   /// ========== GET THE DATA ===================
   Future<bool> getSoundsOn();
 
@@ -14,7 +12,9 @@ abstract class SettingsPersistence {
 
   Future<bool> getDarkTheme();
 
-  
+  Future<Object> getUserData();
+
+  Future<Object> getAlphabet();
 
   /// ========== SAVE THE DATA ===================
   Future<void> saveSoundsOn(bool value);
@@ -22,6 +22,10 @@ abstract class SettingsPersistence {
   Future<void> saveMuted(bool value);
 
   Future<void> saveUser(String value);
-  
+
   Future<void> saveDarkTheme(bool value);
+
+  Future<void> saveUserData(Object value);
+
+  Future<void> saveAlphabet(Object value);
 }

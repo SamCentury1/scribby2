@@ -39,6 +39,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   // late GameState _gameState;
   late AudioController _audioController;
   late GamePlayState _gamePlayState;
+  late SettingsController _settings;
   // late AnimationState _animationState;
   late bool isAnimating = false;
   late bool isDragging = false;
@@ -60,8 +61,13 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     // _gameState = Provider.of<GameState>(context, listen: false);
     _gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     // _animationState = Provider.of<AnimationState>(context, listen: false);
+    _settings = Provider.of<SettingsController>(context, listen: false);
 
-    getStatesFromDatabase(_gamePlayState);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   getStates(_gamePlayState, _settings);
+    // });
+
+    // getStatesFromDatabase(_gamePlayState, _settings);
 
     // List<Map<String,dynamic>> startingAlphabetState = GameLogic().generateStartingStates(_alphabetData, initialBoardState, [],_gamePlayState)['startingAlphabet'];
     // _gamePlayState.setAlphabetState(startingAlphabetState);
@@ -77,45 +83,68 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     // GameLogic().removeStartGameOverlay(_gamePlayState);
   }
 
-  Future<void> getStatesFromDatabase(GamePlayState gamePlayState) async {
-    setState(() {
-      isLoading = true;
-    });
+  // Future<void> getStatesFromDatabase(
+  //     GamePlayState gamePlayState, SettingsController settings) async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
 
-    final List<dynamic> alphabet =
-        await FirestoreMethods().getAlphabet(AuthService().currentUser!.uid);
-    if (alphabet.isNotEmpty) {
-      late List<Map<String, dynamic>> startingAlphabetState = GameLogic()
-          .generateStartingStates(
-              alphabet, initialBoardState, [])['startingAlphabet'];
-      late List<String> randomLetterListState = GameLogic()
-          .generateStartingStates(
-              alphabet, initialBoardState, [])['startingRandomLetterList'];
-      late List<Map<String, dynamic>> startingTileState = GameLogic()
-          .generateStartingStates(
-              alphabet, initialBoardState, [])['startingTileState'];
+  //   // final List<dynamic> alphabet = await FirestoreMethods().getAlphabet(AuthService().currentUser!.uid);
+  //   final Map<String, dynamic> alphabetDocumnet =
+  //       (settings.alphabet.value as Map<String, dynamic>);
+  //   final List<dynamic> alphabet = alphabetDocumnet['alphabet'];
 
-      gamePlayState.setAlphabetState(startingAlphabetState);
-      gamePlayState.setRandomLetterList(randomLetterListState);
-      gamePlayState.setVisualTileState(startingTileState);
+  //   if (alphabet.isNotEmpty) {
+  //     late List<Map<String, dynamic>> startingAlphabetState = GameLogic()
+  //         .generateStartingStates(
+  //             alphabet, initialBoardState, [])['startingAlphabet'];
+  //     late List<String> randomLetterListState = GameLogic()
+  //         .generateStartingStates(
+  //             alphabet, initialBoardState, [])['startingRandomLetterList'];
+  //     late List<Map<String, dynamic>> startingTileState = GameLogic()
+  //         .generateStartingStates(
+  //             alphabet, initialBoardState, [])['startingTileState'];
 
-      setState(() {
-        // _alphabetData = alphabet;
+  //     gamePlayState.setAlphabetState(startingAlphabetState);
+  //     gamePlayState.setRandomLetterList(randomLetterListState);
+  //     gamePlayState.setVisualTileState(startingTileState);
 
-        // _startingAlphabetState = startingAlphabetState;
-        // _randomLetterListState = randomLetterListState;
-        // _startingTileState =  startingTileState;
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } else {
+  //     debugPrint(
+  //         "something went wrong retrieving the alphabet from the database");
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
 
-        isLoading = false;
-      });
-    } else {
-      debugPrint(
-          "something went wrong retrieving the alphabet from the database");
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
+  // void getStates(GamePlayState gamePlayState, SettingsController settings) {
+  //   final Map<String, dynamic> alphabetDocumnet =
+  //       (settings.alphabet.value as Map<String, dynamic>);
+  //   final List<dynamic> alphabet = alphabetDocumnet['alphabet'];
+
+  //   if (alphabet.isNotEmpty) {
+  //     late List<Map<String, dynamic>> startingAlphabetState = GameLogic()
+  //         .generateStartingStates(
+  //             alphabet, initialBoardState, [])['startingAlphabet'];
+  //     late List<String> randomLetterListState = GameLogic()
+  //         .generateStartingStates(
+  //             alphabet, initialBoardState, [])['startingRandomLetterList'];
+  //     late List<Map<String, dynamic>> startingTileState = GameLogic()
+  //         .generateStartingStates(
+  //             alphabet, initialBoardState, [])['startingTileState'];
+
+  //     gamePlayState.setAlphabetState(startingAlphabetState);
+  //     gamePlayState.setRandomLetterList(randomLetterListState);
+  //     gamePlayState.setVisualTileState(startingTileState);
+
+  //   } else {
+  //     debugPrint("something went wrong retrieving the alphabet from storage");
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -380,51 +409,56 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                     bottomNavigationBar: Consumer<GamePlayState>(
                       builder: (context, gamePlayState, child) {
                         // final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
-
-                        return BottomNavigationBar(
-                          type: BottomNavigationBarType
-                              .shifting, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                          selectedItemColor: palette
-                              .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                          unselectedItemColor: palette
-                              .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                          items: <BottomNavigationBarItem>[
-                            BottomNavigationBarItem(
-                              icon: const Icon(Icons.pause),
-                              label: 'Pause',
-                              backgroundColor: palette.bottomNavigationBarColor,
-                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                            ),
-                            BottomNavigationBarItem(
-                              icon: const Icon(Icons.help),
-                              label: 'Help',
-                              backgroundColor: palette.bottomNavigationBarColor,
-                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                            ),
-                            BottomNavigationBarItem(
-                              icon: const Icon(Icons.settings),
-                              label: 'Rules',
-                              backgroundColor: palette.bottomNavigationBarColor,
-                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                            ),
-                            BottomNavigationBarItem(
-                              icon: const Icon(Icons.exit_to_app_rounded),
-                              label: 'Quit',
-                              backgroundColor: palette.bottomNavigationBarColor,
-                              // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                            )
-                          ],
-                          onTap: (details) {
-                            gamePlayState
-                                .setShouldPauseCountDownAnimation(true);
-                            gamePlayState.setIsGamePaused(true, details);
-                            // if (!gamePlayState.isAnimating) {
-                            //   // animationState.
-                            //   gamePlayState.setShouldPauseCountDownAnimation(true);
-                            //   gamePlayState.setIsGamePaused(true,details);
-                            // }
-                          },
-                        );
+                        return IconButton(
+                            onPressed: () {
+                              print("pause that bitch!");
+                              gamePlayState.setIsGamePaused(true, 0);
+                            },
+                            icon: const Icon(Icons.pause));
+                        // return BottomNavigationBar(
+                        //   type: BottomNavigationBarType
+                        //       .shifting, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
+                        //   selectedItemColor: palette
+                        //       .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                        //   unselectedItemColor: palette
+                        //       .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                        //   items: <BottomNavigationBarItem>[
+                        //     BottomNavigationBarItem(
+                        //       icon: const Icon(Icons.pause),
+                        //       label: 'Pause',
+                        //       backgroundColor: palette.bottomNavigationBarColor,
+                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                        //     ),
+                        //     BottomNavigationBarItem(
+                        //       icon: const Icon(Icons.help),
+                        //       label: 'Help',
+                        //       backgroundColor: palette.bottomNavigationBarColor,
+                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                        //     ),
+                        //     BottomNavigationBarItem(
+                        //       icon: const Icon(Icons.settings),
+                        //       label: 'Rules',
+                        //       backgroundColor: palette.bottomNavigationBarColor,
+                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                        //     ),
+                        //     BottomNavigationBarItem(
+                        //       icon: const Icon(Icons.exit_to_app_rounded),
+                        //       label: 'Quit',
+                        //       backgroundColor: palette.bottomNavigationBarColor,
+                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
+                        //     )
+                        //   ],
+                        //   onTap: (details) {
+                        //     gamePlayState
+                        //         .setShouldPauseCountDownAnimation(true);
+                        //     gamePlayState.setIsGamePaused(true, details);
+                        //     // if (!gamePlayState.isAnimating) {
+                        //     //   // animationState.
+                        //     //   gamePlayState.setShouldPauseCountDownAnimation(true);
+                        //     //   gamePlayState.setIsGamePaused(true,details);
+                        //     // }
+                        //   },
+                        // );
                       },
                     ),
                     // bottomNavigationBar: const BannerAdWidget(),

@@ -28,13 +28,6 @@ class GameSettings extends StatelessWidget {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  // Align(
-                  //   alignment: Alignment.centerLeft,
-                  //   child: Text(
-                  //     "Parameters",
-                  //     style: TextStyle(fontSize: 22, color: palette.textColor2),
-                  //   ),
-                  // ),
                   textHeading(palette, "Parameters"),
                   Padding(
                     padding: const EdgeInsets.all(0.0),
@@ -79,42 +72,11 @@ class GameSettings extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   textHeading(palette, "Scoring"),
-                  // const Align(
-                  //   alignment: Alignment.centerLeft,
-                  //   child: Text(
-                  //     "Scoring",
-                  //     style: TextStyle(fontSize: 22),
-                  //   ),
-                  // ),
                   textSubHeading(palette, "Letter Values"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Text(
-                  //       "Letter Values",
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
-                  //     ),
-                  //   ),
-                  // ),
                   textContainer(palette,
                       "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Text(
-                  //       "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"),
-                  // ),
                   textContainer(palette,
                       "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Text(
-                  //       "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"),
-                  // ),
-
-                  // LetterValuesTable(letters: widget.letters),
-                  // const LetterValuesTable(),
-
                   Wrap(
                     direction: Axis.horizontal,
                     children: [
@@ -131,24 +93,8 @@ class GameSettings extends StatelessWidget {
                     ],
                   ),
                   textSubHeading(palette, "Multipliers - Word Lengths"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Text(
-                  //       "Multipliers - Word Lengths",
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
-                  //     ),
-                  //   ),
-                  // ),
                   textContainer(palette,
                       "To arrive to a total score for the turn, first, each word is multiplied by the Word Length Multiplier."),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Text(
-                  //       "To arrive to a total score for the turn, first, each word is multiplied by the Word Length Multiplier."),
-                  // ),
-
                   const SizedBox(
                     height: 15,
                   ),
@@ -236,77 +182,23 @@ class GameSettings extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-
                   textSubHeading(palette, "Multipliers - Streaks"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Text(
-                  //       "Multipliers - Streaks",
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
-                  //     ),
-                  //   ),
-                  // ),
                   textContainer(palette,
                       "The streak is defined by the number of consecutive turns where at least one word was found"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Text(
-                  //       "The streak is defined by the number of consecutive turns where at least one word was found"),
-                  // ),
-
                   const SizedBox(
                     height: 20,
                   ),
                   textSubHeading(palette, "Multipliers - Crosswords"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Text(
-                  //       "Multipliers - Crosswords",
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
-                  //     ),
-                  //   ),
-                  // ),
                   textContainer(palette,
                       "If multiple words are found, at least one in a row, and one in a column - then a crossword as been found. "),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Text(
-                  //       "If multiple words are found, at least one in a row, and one in a column - then a crossword as been found. "),
-                  // ),
                   textContainer(palette,
                       "The multiplier for crosswords will always be 2x"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Text(
-                  //       "The multiplier for crosswords will always be 2x"),
-                  // ),
-
                   const SizedBox(
                     height: 20,
                   ),
-
                   textSubHeading(palette, "Multipliers - Word Count"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Text(
-                  //       "Multipliers - Word Count",
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
-                  //     ),
-                  //   ),
-                  // ),
                   textContainer(palette,
                       "The final score is multiplied by the number of words that were found"),
-                  // Container(
-                  //   margin: const EdgeInsets.all(4.0),
-                  //   child: const Text(
-                  //       "The final score is multiplied by the number of words that were found"),
-                  // ),
                 ],
               ),
             ),
