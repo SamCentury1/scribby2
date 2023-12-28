@@ -33,6 +33,11 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
   late AnimationController _cwTextController;
   late Animation<Color?> _cwTextAnimation;
 
+  late AnimationController _newLevelPositionController;
+  late Animation<Offset> _newLevelPositionAnimation;
+
+  // late AnimationController _newLevelOpacity
+
   late ColorPalette palette;
 
   @override
@@ -106,6 +111,12 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
     _multiTextController.forward();
     _multiSlideController.forward();
+  }
+
+  void _runNewLevelAnimation() {
+    _newLevelPositionController.reset();
+
+    _newLevelPositionController.forward();
   }
 
   void initializeAnimations(ColorPalette palette) {
@@ -348,6 +359,14 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
     /// ============== SCOREBOARD TEXT COLOR ================
     /// ============== ^^^^^^^^^^^^^^^^ ======================
+
+    /// ============== NEW LEVEL ANIMATION ================
+    /// ============== vvvvvvvvvvvvvvvvvvv  ======================
+    _newLevelPositionController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1500));
+
+    /// ============== NEW LEVEL ANIMATION ================
+    /// ============== ^^^^^^^^^^^^^^^^ ======================
   }
 
   void _animationListener() {
@@ -380,191 +399,220 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
   @override
   Widget build(BuildContext context) {
     return Consumer<GamePlayState>(builder: (context, gamePlayState, child) {
-      return Row(
+      return Stack(
         children: [
-          gamePlayState.gameSummaryLog.isEmpty
-              ? const SizedBox()
-              : gamePlayState.gameSummaryLog[
-                          gamePlayState.gameSummaryLog.length - 1]['streak'] >
-                      1
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          AnimatedBuilder(
-                            animation: _streakSlideEnterAnimation,
-                            builder: (context, child) {
-                              return SlideTransition(
-                                position: _streakSlideEnterAnimation,
-                                // child: Expanded(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 75,
-                                      child: AnimatedBuilder(
-                                        animation: _streakTextAnimation,
-                                        builder: (context, child) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.electric_bolt,
-                                                  color: _streakTextAnimation
-                                                          .value ??
-                                                      palette.tileBgColor,
+          Row(
+            children: [
+              gamePlayState.gameSummaryLog.isEmpty
+                  ? const SizedBox()
+                  : gamePlayState.gameSummaryLog[
+                                  gamePlayState.gameSummaryLog.length - 1]
+                              ['streak'] >
+                          1
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              AnimatedBuilder(
+                                animation: _streakSlideEnterAnimation,
+                                builder: (context, child) {
+                                  return SlideTransition(
+                                    position: _streakSlideEnterAnimation,
+                                    // child: Expanded(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 75,
+                                          child: AnimatedBuilder(
+                                            animation: _streakTextAnimation,
+                                            builder: (context, child) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.electric_bolt,
+                                                      color:
+                                                          _streakTextAnimation
+                                                                  .value ??
+                                                              palette
+                                                                  .tileBgColor,
+                                                    ),
+                                                    const Expanded(
+                                                      flex: 1,
+                                                      child: Center(),
+                                                    ),
+                                                    Text(
+                                                      // "${widget.activeStreak.toString()}x",
+                                                      "${gamePlayState.activeStreak.toString()}x",
+                                                      style: TextStyle(
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        fontSize: 22,
+                                                        color:
+                                                            _streakTextAnimation
+                                                                    .value ??
+                                                                palette
+                                                                    .tileBgColor,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                const Expanded(
-                                                  flex: 1,
-                                                  child: Center(),
-                                                ),
-                                                Text(
-                                                  // "${widget.activeStreak.toString()}x",
-                                                  "${gamePlayState.activeStreak.toString()}x",
-                                                  style: TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                    fontSize: 22,
-                                                    color: _streakTextAnimation
-                                                            .value ??
-                                                        palette.tileBgColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            },
-                          )
-                        ],
-                      ))
-                  : const SizedBox(),
-          gamePlayState.gameSummaryLog.isEmpty
-              ? const SizedBox()
-              : gamePlayState.gameSummaryLog[
-                          gamePlayState.gameSummaryLog.length - 1]['count'] >
-                      0
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          AnimatedBuilder(
-                            animation: _multiSlideAnimation,
-                            builder: (context, child) {
-                              return SlideTransition(
-                                position: _multiSlideAnimation,
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 75,
-                                      child: AnimatedBuilder(
-                                        animation: _multiTextAnimation,
-                                        builder: (context, child) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.bookmarks_outlined,
-                                                  color: _multiTextAnimation
-                                                          .value ??
-                                                      palette.tileBgColor,
-                                                ),
-                                                const Expanded(
-                                                  flex: 1,
-                                                  child: Center(),
-                                                ),
-                                                Text(
-                                                  "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['count'].toString()}x",
-                                                  style: TextStyle(
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      fontSize: 22,
+                                  );
+                                },
+                              )
+                            ],
+                          ))
+                      : const SizedBox(),
+              gamePlayState.gameSummaryLog.isEmpty
+                  ? const SizedBox()
+                  : gamePlayState.gameSummaryLog[
+                                  gamePlayState.gameSummaryLog.length - 1]
+                              ['count'] >
+                          0
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              AnimatedBuilder(
+                                animation: _multiSlideAnimation,
+                                builder: (context, child) {
+                                  return SlideTransition(
+                                    position: _multiSlideAnimation,
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 75,
+                                          child: AnimatedBuilder(
+                                            animation: _multiTextAnimation,
+                                            builder: (context, child) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.bookmarks_outlined,
                                                       color: _multiTextAnimation
                                                               .value ??
-                                                          palette.tileBgColor),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    // Expanded(flex:1, child: Center())
-                                  ],
-                                ),
-                              );
-                            },
-                          )
-                        ],
-                      ))
-                  : const SizedBox(),
-          gamePlayState.gameSummaryLog.isEmpty
-              ? const SizedBox()
-              : gamePlayState.gameSummaryLog[
-                              gamePlayState.gameSummaryLog.length - 1]
-                          ['crossword'] >
-                      1
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          AnimatedBuilder(
-                            animation: _cwSlideAnimation,
-                            builder: (context, child) {
-                              return SlideTransition(
-                                position: _cwSlideAnimation,
-                                // child: Expanded(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 75,
-                                      child: AnimatedBuilder(
-                                        animation: _cwTextAnimation,
-                                        builder: (context, child) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.close,
-                                                  color:
-                                                      _cwTextAnimation.value ??
                                                           palette.tileBgColor,
+                                                    ),
+                                                    const Expanded(
+                                                      flex: 1,
+                                                      child: Center(),
+                                                    ),
+                                                    Text(
+                                                      "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['count'].toString()}x",
+                                                      style: TextStyle(
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontSize: 22,
+                                                          color: _multiTextAnimation
+                                                                  .value ??
+                                                              palette
+                                                                  .tileBgColor),
+                                                    ),
+                                                  ],
                                                 ),
-                                                const Expanded(
-                                                  flex: 1,
-                                                  child: Center(),
-                                                ),
-                                                Text(
-                                                  // "${widget.activeStreak.toString()}x",
-                                                  "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'].toString()}x",
-                                                  style: TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                    fontSize: 22,
-                                                    color: _cwTextAnimation
-                                                            .value ??
-                                                        palette.tileBgColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        // Expanded(flex:1, child: Center())
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            },
-                          )
-                        ],
-                      ))
-                  : const SizedBox(),
+                                  );
+                                },
+                              )
+                            ],
+                          ))
+                      : const SizedBox(),
+              gamePlayState.gameSummaryLog.isEmpty
+                  ? const SizedBox()
+                  : gamePlayState.gameSummaryLog[
+                                  gamePlayState.gameSummaryLog.length - 1]
+                              ['crossword'] >
+                          1
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              AnimatedBuilder(
+                                animation: _cwSlideAnimation,
+                                builder: (context, child) {
+                                  return SlideTransition(
+                                    position: _cwSlideAnimation,
+                                    // child: Expanded(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 75,
+                                          child: AnimatedBuilder(
+                                            animation: _cwTextAnimation,
+                                            builder: (context, child) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.close,
+                                                      color: _cwTextAnimation
+                                                              .value ??
+                                                          palette.tileBgColor,
+                                                    ),
+                                                    const Expanded(
+                                                      flex: 1,
+                                                      child: Center(),
+                                                    ),
+                                                    Text(
+                                                      // "${widget.activeStreak.toString()}x",
+                                                      "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'].toString()}x",
+                                                      style: TextStyle(
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        fontSize: 22,
+                                                        color: _cwTextAnimation
+                                                                .value ??
+                                                            palette.tileBgColor,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ))
+                      : const SizedBox(),
+            ],
+          ),
+          gamePlayState.displayLevelChange == false
+              ? const SizedBox()
+              : SizedBox(
+                  width: double.infinity,
+                  // color: Colors.pink,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Level ${gamePlayState.currentLevel.toString()}",
+                      style: const TextStyle(fontSize: 42, color: Colors.blue),
+                    ),
+                  ),
+                )
         ],
       );
     });

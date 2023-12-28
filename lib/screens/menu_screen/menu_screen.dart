@@ -97,7 +97,7 @@ import 'package:scribby_flutter_v2/screens/welcome_user/choose_language.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
-import 'package:scribby_flutter_v2/styles/buttons.dart';
+// import 'package:scribby_flutter_v2/styles/buttons.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 // import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -117,7 +117,7 @@ class _MenuScreenState extends State<MenuScreen> {
   late bool isLoading = false;
 
   // late String _userName;
-  late Map<String, dynamic>? _userData = {};
+  // late Map<String, dynamic>? _userData = {};
 
   late GamePlayState _gamePlayState;
   late ColorPalette _palette;
@@ -181,7 +181,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
       _palette.getThemeColors(userData['parameters']['darkMode']);
       setState(() {
-        _userData = userData;
+        // _userData = userData;
         isLoading = false;
         language = userData['parameters']['currentLanguage'];
       });

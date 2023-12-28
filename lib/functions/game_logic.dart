@@ -1238,32 +1238,43 @@ class GameLogic {
       // _gamePlayState.countDownController.restart(duration: GameLogic().getCountdownDuration(_gamePlayState.currentLevel));
       gamePlayState.countDownController.pause();
       late Map<String, dynamic> levelUpData = shouldChangeLevels(gamePlayState);
-
+      if (levelUpData.isNotEmpty) {
+        gamePlayState.setPreviousLevel(levelUpData['previous']);
+        gamePlayState.setCurrentLevel(levelUpData['upcoming']);
+        gamePlayState.setDisplayLevelChange(true);
+      }
       // print(levelUp);
 
       Future.delayed(const Duration(milliseconds: 1500), () {
         gamePlayState.setVisualTileState(updateNewBoardState);
 
-        if (levelUpData.isNotEmpty) {
-          // changeLevels(_gamePlayState);
-          gamePlayState.setPreviousLevel(levelUpData['previous']);
-          gamePlayState.setCurrentLevel(levelUpData['upcoming']);
-          gamePlayState.setDisplayLevelChange(true);
-          Future.delayed(const Duration(milliseconds: 800), () {
-            // _gamePlayState.countDownController.resume();
-            gamePlayState.countDownController.restart(
-                duration: GameLogic()
-                    .getCountdownDuration(gamePlayState.currentLevel));
-            gamePlayState.setDisplayLevelChange(false);
-          });
-        } else {
-          gamePlayState.countDownController.restart(
-              duration:
-                  GameLogic().getCountdownDuration(gamePlayState.currentLevel));
-          // ensures that in the event that a user pauses the game while animating - the countdown doesn't keep going
-          if (gamePlayState.isGamePaused) {
-            gamePlayState.countDownController.pause();
-          }
+        // if (levelUpData.isNotEmpty) {
+        // //   // changeLevels(_gamePlayState);
+        //   gamePlayState.setPreviousLevel(levelUpData['previous']);
+        //   gamePlayState.setCurrentLevel(levelUpData['upcoming']);
+        // gamePlayState.setDisplayLevelChange(true);
+        //   // Future.delayed(const Duration(milliseconds: 800), () {
+        //     // _gamePlayState.countDownController.resume();
+        //     gamePlayState.countDownController.restart(
+        //         duration: GameLogic()
+        //             .getCountdownDuration(gamePlayState.currentLevel));
+        //     gamePlayState.setDisplayLevelChange(false);
+        //   // });
+        // } else {
+        //   gamePlayState.countDownController.restart(
+        //       duration:
+        //           GameLogic().getCountdownDuration(gamePlayState.currentLevel));
+        //   // ensures that in the event that a user pauses the game while animating - the countdown doesn't keep going
+        //   if (gamePlayState.isGamePaused) {
+        //     gamePlayState.countDownController.pause();
+        //   }
+        // }
+        gamePlayState.countDownController.restart(
+            duration:
+                GameLogic().getCountdownDuration(gamePlayState.currentLevel));
+        gamePlayState.setDisplayLevelChange(false);
+        if (gamePlayState.isGamePaused) {
+          gamePlayState.countDownController.pause();
         }
 
         gamePlayState.setIsAnimating(false);
@@ -1305,15 +1316,17 @@ class GameLogic {
   List<Map<String, dynamic>> removeFromReserves(
       List<Map<String, dynamic>> reserveTiles,
       Map<String, dynamic> spotToRemove) {
-    List<Map<String, dynamic>> newSpots = [];
+    // List<Map<String, dynamic>> newSpots = [];
     for (Map<String, dynamic> reserveSpot in reserveTiles) {
       if (spotToRemove["id"] == reserveSpot["id"]) {
-        newSpots.add({"id": spotToRemove["id"], "body": ""});
-      } else {
-        newSpots.add(reserveSpot);
-      }
+        // newSpots.add({"id": spotToRemove["id"], "body": ""});
+        reserveSpot.update("body", (value) => "");
+      } // else {
+      //   newSpots.add(reserveSpot);
+      // }
     }
-    return newSpots;
+    return reserveTiles;
+    // return newSpots;
   }
 
   void placeIntoReserves(BuildContext context, GamePlayState gamePlayState,

@@ -10,7 +10,6 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 // import 'package:scribby_flutter_v2/providers/game_state.dart';
 
 class LevelChangeOverlay extends StatefulWidget {
-
   const LevelChangeOverlay({
     super.key,
   });
@@ -19,62 +18,50 @@ class LevelChangeOverlay extends StatefulWidget {
   State<LevelChangeOverlay> createState() => _LevelChangeOverlayState();
 }
 
-class _LevelChangeOverlayState extends State<LevelChangeOverlay>  with TickerProviderStateMixin{
-
-
-
-
+class _LevelChangeOverlayState extends State<LevelChangeOverlay>
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
-
         return AnimatedOpacity(
           opacity: gamePlayState.displayLevelChange ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 150),
-        
-        
-            child: IgnorePointer(
-              ignoring: gamePlayState.isGameStarted,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: GestureDetector(
-              
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                        child: Container(
-                          color: Colors.black.withOpacity(0.35),
+          child: IgnorePointer(
+            ignoring: gamePlayState.isGameStarted,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: GestureDetector(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      child: Container(
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Center(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        "Level ${gamePlayState.currentLevel}",
+                        style: const TextStyle(
+                          fontSize: 42,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: Center(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Text(
-                          "Level ${gamePlayState.currentLevel}",
-                          style: const TextStyle(
-                            fontSize: 42,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
+                ),
+              ],
             ),
-        
+          ),
         );
       },
     );
-
   }
 }

@@ -237,13 +237,19 @@ class GamePlayState with ChangeNotifier {
     _pressedTile = "1_1";
     _alphabetState = []; // startingAlphabetState;
     _randomLetterList = []; // randomLetterListState;
-    _reserveTiles = [];
+    _reserveTiles = [
+      {"id": 0, "body": ""},
+      {"id": 1, "body": ""},
+      {"id": 2, "body": ""},
+      {"id": 3, "body": ""},
+      {"id": 4, "body": ""},
+    ];
 
     _timer?.cancel();
     _duration = const Duration();
-    if (_pageController.hasClients) {
-      _pageController.jumpToPage(0);
-    }
+    // if (_pageController.hasClients) {
+    //   _pageController.jumpToPage(0);
+    // }
 
     notifyListeners();
 
@@ -329,13 +335,13 @@ class GamePlayState with ChangeNotifier {
     notifyListeners();
   }
 
-  late PageController _pageController = PageController();
-  PageController get pageController => _pageController;
+  // late PageController _pageController = PageController();
+  // PageController get pageController => _pageController;
 
-  void setPageController(PageController value) {
-    _pageController = value;
-    notifyListeners();
-  }
+  // void setPageController(PageController value) {
+  //   _pageController = value;
+  //   notifyListeners();
+  // }
 
   /// ======== COUNT DOWN =========
   // Duration _cdDuration = Duration(seconds: 6);
@@ -481,14 +487,10 @@ class GamePlayState with ChangeNotifier {
       {"id": 3, "body": ""},
       {"id": 4, "body": ""},
     ];
-    // _endOfGameData = {};
 
     _timer?.cancel();
 
     _duration = const Duration();
-    if (_pageController.hasClients) {
-      _pageController.jumpToPage(0);
-    }
 
     notifyListeners();
   }
@@ -496,8 +498,6 @@ class GamePlayState with ChangeNotifier {
   @override
   void dispose() {
     _timer?.cancel();
-    _pageController.dispose();
-    // _cdTimer?.cancel();
     super.dispose();
   }
 }

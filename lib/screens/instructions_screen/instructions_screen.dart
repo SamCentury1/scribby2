@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/player_progress/persistence/local_storage_player_progress_persistence.dart';
 // import 'package:scribby_flutter_v2/player_progress/persistence/player_progress_persistence.dart';
-import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
-import 'package:scribby_flutter_v2/resources/auth_service.dart';
-import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+// import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
+// import 'package:scribby_flutter_v2/resources/auth_service.dart';
+// import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -21,7 +21,7 @@ class InstructionsScreen extends StatefulWidget {
 class _InstructionsScreenState extends State<InstructionsScreen> {
   late bool isLoading = false;
   late bool isLoading2 = false;
-  late Map<String, dynamic> _userData = {};
+  // late Map<String, dynamic> _userData = {};
   late ColorPalette palette;
   late List<dynamic> _alphabet = [];
   late Map<String, dynamic> _userFromStorage = {};

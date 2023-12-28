@@ -22,7 +22,15 @@ class GamePauseDialog extends StatefulWidget {
 }
 
 class _GamePauseDialogState extends State<GamePauseDialog> {
+  final PageController _controller = PageController();
   int currentPage = 0;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorPalette palette =
@@ -51,7 +59,8 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                   // TextButton(onPressed: changeBackToZero, child: Text("change")),
                   Expanded(
                     child: PageView(
-                      controller: gamePlayState.pageController,
+                      // controller: gamePlayState.pageController,
+                      controller: _controller,
                       onPageChanged: (index) {
                         setState(() {
                           currentPage = index;
@@ -73,15 +82,27 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                     child: BottomNavigationBar(
                       currentIndex: currentPage,
                       onTap: (index) {
-                        if (gamePlayState.pageController.hasClients) {
-                          gamePlayState.pageController.animateToPage(
+                        setState(() {
+                          // currentPage = index;
+                          _controller.animateToPage(
                             index,
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.ease,
                           );
-                        }
+                        });
+                        // gamePlayState.pageController.jumpToPage(
+                        //   index,
+                        // );
+                        // if (gamePlayState.pageController.hasClients) {
+                        //   gamePlayState.pageController.jumpTo(
+                        //     index.toDouble(),
+                        //     // duration: const Duration(milliseconds: 300),
+                        //     // curve: Curves.ease,
+                        //   );
+                        // }
                       },
                       type: BottomNavigationBarType.shifting,
+                      // type: BottomNavigationBarType.fixed,
                       selectedItemColor: palette.tileBgColor,
                       unselectedItemColor: palette.optionButtonTextColor,
                       items: [

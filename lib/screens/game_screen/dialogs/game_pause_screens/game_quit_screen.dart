@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/providers/game_state.dart';
 // import 'package:scribby_flutter_v2/screens/game_over_screen/game_over_screen.dart';
 // import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
@@ -46,6 +48,9 @@ class _GameQuitScreenState extends State<GameQuitScreen>
 
     late ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: false);
+
+    late SettingsController settings =
+        Provider.of<SettingsController>(context, listen: false);
     // late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     // late gamePlayState gameState = Provider.of<GameState>(context, listen: false);
     return Consumer<GamePlayState>(
@@ -140,6 +145,9 @@ class _GameQuitScreenState extends State<GameQuitScreen>
                                 TextButton(
                                     onPressed: () {
                                       gamePlayState.restartGame();
+                                      Helpers()
+                                          .getStates(gamePlayState, settings);
+                                      Navigator.of(context).pop();
                                     },
                                     child: Text(
                                       "Yes",

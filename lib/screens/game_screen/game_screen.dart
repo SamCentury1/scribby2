@@ -1,8 +1,8 @@
-import 'dart:async';
+// import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/ads/ads_controller.dart';
-import 'package:scribby_flutter_v2/ads/banner_ad_widget.dart';
+// import 'package:scribby_flutter_v2/ads/banner_ad_widget.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 // import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/components/bonus_score_elements.dart';
@@ -20,12 +20,12 @@ import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 // import 'package:scribby_flutter_v2/providers/game_state.dart';
-import 'package:scribby_flutter_v2/resources/auth_service.dart';
-import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+// import 'package:scribby_flutter_v2/resources/auth_service.dart';
+// import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 // import 'package:scribby_flutter_v2/utils/dictionary.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
+// import 'package:scribby_flutter_v2/utils/states.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -39,7 +39,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   // late GameState _gameState;
   late AudioController _audioController;
   late GamePlayState _gamePlayState;
-  late SettingsController _settings;
+  // late SettingsController _settings;
   // late AnimationState _animationState;
   late bool isAnimating = false;
   late bool isDragging = false;
@@ -61,7 +61,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     // _gameState = Provider.of<GameState>(context, listen: false);
     _gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     // _animationState = Provider.of<AnimationState>(context, listen: false);
-    _settings = Provider.of<SettingsController>(context, listen: false);
+    // _settings = Provider.of<SettingsController>(context, listen: false);
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   getStates(_gamePlayState, _settings);
@@ -148,6 +148,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    // _gamePlayState.pageController.dispose();
     // _animationState.dispose();
     // _audioController.dispose();
     // _gameState.dispose();
@@ -409,56 +410,18 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                     bottomNavigationBar: Consumer<GamePlayState>(
                       builder: (context, gamePlayState, child) {
                         // final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
-                        return IconButton(
+                        return Container(
+                          width: double.infinity,
+                          color: palette.screenBackgroundColor,
+                          child: IconButton(
                             onPressed: () {
-                              print("pause that bitch!");
                               gamePlayState.setIsGamePaused(true, 0);
                             },
-                            icon: const Icon(Icons.pause));
-                        // return BottomNavigationBar(
-                        //   type: BottomNavigationBarType
-                        //       .shifting, //GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                        //   selectedItemColor: palette
-                        //       .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        //   unselectedItemColor: palette
-                        //       .bottomNavigationBarItemColor, //GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        //   items: <BottomNavigationBarItem>[
-                        //     BottomNavigationBarItem(
-                        //       icon: const Icon(Icons.pause),
-                        //       label: 'Pause',
-                        //       backgroundColor: palette.bottomNavigationBarColor,
-                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        //     ),
-                        //     BottomNavigationBarItem(
-                        //       icon: const Icon(Icons.help),
-                        //       label: 'Help',
-                        //       backgroundColor: palette.bottomNavigationBarColor,
-                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        //     ),
-                        //     BottomNavigationBarItem(
-                        //       icon: const Icon(Icons.settings),
-                        //       label: 'Rules',
-                        //       backgroundColor: palette.bottomNavigationBarColor,
-                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        //     ),
-                        //     BottomNavigationBarItem(
-                        //       icon: const Icon(Icons.exit_to_app_rounded),
-                        //       label: 'Quit',
-                        //       backgroundColor: palette.bottomNavigationBarColor,
-                        //       // backgroundColor: GameLogic().getColor(settings.darkTheme.value, palette, "bottom_navigation_item"),
-                        //     )
-                        //   ],
-                        //   onTap: (details) {
-                        //     gamePlayState
-                        //         .setShouldPauseCountDownAnimation(true);
-                        //     gamePlayState.setIsGamePaused(true, details);
-                        //     // if (!gamePlayState.isAnimating) {
-                        //     //   // animationState.
-                        //     //   gamePlayState.setShouldPauseCountDownAnimation(true);
-                        //     //   gamePlayState.setIsGamePaused(true,details);
-                        //     // }
-                        //   },
-                        // );
+                            icon: const Icon(Icons.pause_circle_outline),
+                            color: palette.tileBgColor,
+                            iconSize: 36,
+                          ),
+                        );
                       },
                     ),
                     // bottomNavigationBar: const BannerAdWidget(),
@@ -469,7 +432,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
                 const GameOverOverlay(),
                 // const GameOverOverlay(),
-                const LevelChangeOverlay(),
+                // const LevelChangeOverlay(),
 
                 const PreGameOverlay(),
                 // const PreGameOverlay(),

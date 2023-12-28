@@ -1,7 +1,7 @@
 // import 'package:flutter/foundation.dart';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -53,9 +53,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
             onAdLoaded: (InterstitialAd ad) {
               debugPrint("ad loaded");
 
-              setState(() {
-                isLoading = false;
-              });
+              // setState(() {
+              //   isLoading = false;
+              // });
 
               setFullScreenContentCallback(ad);
 
@@ -78,7 +78,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
   void setFullScreenContentCallback(InterstitialAd ad) {
     ad.fullScreenContentCallback = FullScreenContentCallback(
         // Called when the ad showed the full screen content.
-        onAdShowedFullScreenContent: (ad) {},
+        onAdShowedFullScreenContent: (ad) {
+          setState(() {
+            isLoading = false;
+          });
+        },
         // Called when an impression occurs on the ad.
         onAdImpression: (ad) {},
         // Called when the ad failed to show full screen content.
