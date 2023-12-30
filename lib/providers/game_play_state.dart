@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/resources/auth_service.dart';
@@ -247,6 +248,8 @@ class GamePlayState with ChangeNotifier {
 
     _timer?.cancel();
     _duration = const Duration();
+    _countDownController.restart(duration: GameLogic().getCountdownDuration(1));
+    _countDownController.pause();
     // if (_pageController.hasClients) {
     //   _pageController.jumpToPage(0);
     // }

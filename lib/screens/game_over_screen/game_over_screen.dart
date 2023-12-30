@@ -12,9 +12,11 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
+import 'package:scribby_flutter_v2/styles/confetti.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
-import '../../functions/helpers.dart';
+// import '../../functions/helpers.dart';
 
 class GameOverScreen extends StatefulWidget {
   const GameOverScreen({super.key});
@@ -26,6 +28,7 @@ class GameOverScreen extends StatefulWidget {
 class _GameOverScreenState extends State<GameOverScreen> {
   // late final InterstitialAd _interstitialAd;
   late bool isLoading = false;
+  late bool _duringCelebration = false;
 
   final adUnitId = Platform.isAndroid
       ? 'ca-app-pub-3940256099942544/1033173712'
@@ -57,9 +60,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
               //   isLoading = false;
               // });
 
+              ad.show();
               setFullScreenContentCallback(ad);
 
-              ad.show();
               debugPrint('$ad loaded.');
             },
             // Called when an ad request failed.
@@ -94,9 +97,38 @@ class _GameOverScreenState extends State<GameOverScreen> {
         onAdDismissedFullScreenContent: (ad) {
           // Dispose the ad here to free resources.
           ad.dispose();
+          validateHighScore();
         },
         // Called when a click is recorded for an ad.
         onAdClicked: (ad) {});
+  }
+
+  void validateHighScore() {
+    // SettingsState settings, ColorPalette palette, int currentScore
+    final settings = context.read<SettingsController>();
+    // final palette = context.read<ColorPalette>();
+    final gamePlayState = context.read<GamePlayState>();
+    final int currentScore = gamePlayState.endOfGameData['points'];
+    final Map<String, dynamic> userData =
+        (settings.userData.value as Map<String, dynamic>);
+
+    String currentLanguage = userData['parameters']['currentLanguage'];
+    late int currentHighScore = 0;
+    if (userData['highScores'][currentLanguage] != null) {
+      currentHighScore = userData['highScores'][currentLanguage];
+    }
+
+    if (currentScore > currentHighScore) {
+      setState(() {
+        _duringCelebration = true;
+      });
+
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        setState(() {
+          _duringCelebration = false;
+        });
+      });
+    }
   }
 
   // int getCurrentHighScore(SettingsState settings) {
@@ -107,7 +139,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
   //   return currentHighScore;
   // }
 
-  Widget getNewHighScore(
+  Widget displayScores(
       SettingsState settings, ColorPalette palette, int currentScore) {
     String currentLanguage = settings.userData['parameters']['currentLanguage'];
 
@@ -117,21 +149,61 @@ class _GameOverScreenState extends State<GameOverScreen> {
     }
 
     if (currentScore > currentHighScore) {
-      return Expanded(
-        flex: 3,
-        child: Center(
-          child: SizedBox(
-            child: Text(
-              "New High Score!!",
-              style: TextStyle(fontSize: 32, color: palette.textColor3),
+      return Column(
+        children: [
+          Center(
+            child: SizedBox(
+              child: Text(
+                "New High Score:",
+                style: TextStyle(fontSize: 32, color: palette.textColor3),
+              ),
             ),
           ),
-        ),
+          Center(
+            child: Text(
+              currentScore.toString(),
+              style: TextStyle(color: palette.textColor3, fontSize: 42),
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Center(
+            child: Text(
+              "Previous High Score: $currentHighScore",
+              style: TextStyle(color: palette.textColor3, fontSize: 24),
+            ),
+          ),
+        ],
       );
     } else {
-      return const Expanded(
-        flex: 3,
-        child: SizedBox(),
+      return Column(
+        children: [
+          Center(
+            child: Text(
+              "Score: ${currentScore.toString()}}",
+              style: TextStyle(color: palette.textColor3, fontSize: 42),
+            ),
+          ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.emoji_events,
+                  color: palette.textColor3,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "High Score: $currentHighScore",
+                  style: TextStyle(color: palette.textColor3, fontSize: 18),
+                ),
+              ],
+            ),
+          ),
+        ],
       );
     }
   }
@@ -152,254 +224,242 @@ class _GameOverScreenState extends State<GameOverScreen> {
               debugPrint("navigate back to main menu");
             },
             child: Scaffold(
-              body: Container(
-                width: double.infinity,
-                color: palette.screenBackgroundColor,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 18.0),
-                  child: Consumer<GamePlayState>(
-                    builder: (context, gamePlayState, child) {
-                      return SafeArea(
-                          child: Column(
-                        children: [
-                          getNewHighScore(settings, palette,
-                              gamePlayState.endOfGameData['points']),
-                          Center(
-                            child: Text(
-                              "Score: ${gamePlayState.endOfGameData['points']}",
-                              style: TextStyle(
-                                  color: palette.textColor3, fontSize: 42),
+              body: Stack(children: [
+                Container(
+                  width: double.infinity,
+                  color: palette.screenBackgroundColor,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 18.0),
+                    child: Consumer<GamePlayState>(
+                      builder: (context, gamePlayState, child) {
+                        return SafeArea(
+                            child: Column(
+                          children: [
+                            const Expanded(
+                              flex: 2,
+                              child: SizedBox(),
                             ),
-                          ),
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.emoji_events,
-                                  color: palette.textColor3,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "High Score: ${Helpers().getCurrentHighScore(settings)}",
-                                  style: TextStyle(
-                                      color: palette.textColor3, fontSize: 18),
-                                ),
-                              ],
+                            displayScores(settings, palette,
+                                gamePlayState.endOfGameData['points']),
+                            const Expanded(
+                              flex: 1,
+                              child: SizedBox(),
                             ),
-                          ),
-                          const Expanded(
-                            flex: 1,
-                            child: SizedBox(),
-                          ),
-                          // Text(
-                          //   "Details",
-                          //   style: TextStyle(
-                          //       fontSize: 20, color: palette.textColor3),
-                          // ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(16.0, 4.0, 26.0, 4.0),
-                            child: Table(
-                              // border: TableBorder.all(),
-                              columnWidths: const <int, TableColumnWidth>{
-                                0: FlexColumnWidth(1),
-                                1: FlexColumnWidth(3),
-                                2: FlexColumnWidth(2),
-                              },
-                              defaultVerticalAlignment:
-                                  TableCellVerticalAlignment.middle,
-                              children: <TableRow>[
-                                rowStatItem(
-                                    "Duration",
-                                    GameLogic().formatTime(gamePlayState
-                                        .endOfGameData['duration']),
-                                    Icon(Icons.timer,
-                                        size: 26, color: palette.textColor3),
-                                    palette),
-                                rowStatItem(
-                                    "Level",
-                                    gamePlayState.endOfGameData['level']
-                                        .toString(),
-                                    Icon(Icons.bar_chart_rounded,
-                                        size: 26, color: palette.textColor3),
-                                    palette),
-                                rowStatItem(
-                                    "Longest Streak",
-                                    gamePlayState.endOfGameData['longestStreak']
-                                        .toString(),
-                                    Icon(Icons.electric_bolt,
-                                        size: 26, color: palette.textColor3),
-                                    palette),
-                                rowStatItem(
-                                    "Cross Words",
-                                    gamePlayState.endOfGameData['crossWords']
-                                        .toString(),
-                                    Icon(Icons.close,
-                                        size: 26, color: palette.textColor3),
-                                    palette),
-                                rowStatItem(
-                                    "Most Points",
-                                    gamePlayState.endOfGameData['mostPoints']
-                                        .toString(),
-                                    Icon(Icons.star,
-                                        size: 26, color: palette.textColor3),
-                                    palette),
-                                rowStatItem(
-                                    "Most Words",
-                                    gamePlayState.endOfGameData['mostWords']
-                                        .toString(),
-                                    Icon(Icons.my_library_books_sharp,
-                                        size: 26, color: palette.textColor3),
-                                    palette),
-                              ],
-                            ),
-                          ),
-                          const Expanded(child: SizedBox()),
-
-                          const Expanded(
-                            flex: 1,
-                            child: SizedBox(),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        "All Words",
-                                        style: TextStyle(
-                                            color: palette.textColor3),
-                                      ),
-                                      scrollable: true,
-                                      backgroundColor:
-                                          palette.optionButtonBgColor,
-                                      content: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height:
-                                            MediaQuery.of(context).size.width,
-                                        child: SingleChildScrollView(
-                                          child: Table(
-                                            // border: TableBorder.all(),
-                                            columnWidths: const <int,
-                                                TableColumnWidth>{
-                                              0: FlexColumnWidth(1),
-                                              1: FlexColumnWidth(3),
-                                            },
-                                            defaultVerticalAlignment:
-                                                TableCellVerticalAlignment
-                                                    .middle,
-                                            children: <TableRow>[
-                                              for (int i = 0;
-                                                  i <
-                                                      gamePlayState
-                                                              .endOfGameData[
-                                                          'uniqueWords'];
-                                                  i++)
-                                                TableRow(children: [
-                                                  Text(
-                                                    (i + 1).toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        color:
-                                                            palette.textColor3),
-                                                  ),
-                                                  Text(
-                                                    gamePlayState.endOfGameData[
-                                                        'uniqueWordsList'][i],
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        color:
-                                                            palette.textColor3),
-                                                  )
-                                                ])
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        InkWell(
-                                          child: Text(
-                                            'Close',
-                                            style: TextStyle(
-                                                color: palette.textColor3),
-                                          ),
-                                          onTap: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            },
-                            child: Text.rich(
-                              TextSpan(
-                                text: 'View all ',
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: palette.textColor3,
-                                    fontStyle: FontStyle.italic),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: gamePlayState
-                                          .endOfGameData['uniqueWords']
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  16.0, 4.0, 26.0, 4.0),
+                              child: Table(
+                                // border: TableBorder.all(),
+                                columnWidths: const <int, TableColumnWidth>{
+                                  0: FlexColumnWidth(1),
+                                  1: FlexColumnWidth(3),
+                                  2: FlexColumnWidth(2),
+                                },
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                children: <TableRow>[
+                                  rowStatItem(
+                                      "Duration",
+                                      GameLogic().formatTime(gamePlayState
+                                          .endOfGameData['duration']),
+                                      Icon(Icons.timer,
+                                          size: 26, color: palette.textColor3),
+                                      palette),
+                                  rowStatItem(
+                                      "Level",
+                                      gamePlayState.endOfGameData['level']
                                           .toString(),
-                                      style: TextStyle(
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: palette.textColor3,
-                                          decorationThickness: 1.0)),
-                                  const TextSpan(text: ' words'),
+                                      Icon(Icons.bar_chart_rounded,
+                                          size: 26, color: palette.textColor3),
+                                      palette),
+                                  rowStatItem(
+                                      "Longest Streak",
+                                      gamePlayState
+                                          .endOfGameData['longestStreak']
+                                          .toString(),
+                                      Icon(Icons.electric_bolt,
+                                          size: 26, color: palette.textColor3),
+                                      palette),
+                                  rowStatItem(
+                                      "Cross Words",
+                                      gamePlayState.endOfGameData['crossWords']
+                                          .toString(),
+                                      Icon(Icons.close,
+                                          size: 26, color: palette.textColor3),
+                                      palette),
+                                  rowStatItem(
+                                      "Most Points",
+                                      gamePlayState.endOfGameData['mostPoints']
+                                          .toString(),
+                                      Icon(Icons.star,
+                                          size: 26, color: palette.textColor3),
+                                      palette),
+                                  rowStatItem(
+                                      "Most Words",
+                                      gamePlayState.endOfGameData['mostWords']
+                                          .toString(),
+                                      Icon(Icons.my_library_books_sharp,
+                                          size: 26, color: palette.textColor3),
+                                      palette),
                                 ],
                               ),
                             ),
-                          ),
-                          const Expanded(
-                            flex: 3,
-                            child: SizedBox(),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: palette.optionButtonBgColor,
-                              foregroundColor: palette.textColor1,
-                              shadowColor:
-                                  const Color.fromRGBO(123, 123, 123, 0.7),
-                              elevation: 3.0,
-                              minimumSize: const Size(double.infinity, 50),
-                              padding: const EdgeInsets.all(4.0),
-                              textStyle: const TextStyle(
-                                fontSize: 22,
-                              ),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                            const Expanded(child: SizedBox()),
+                            const Expanded(
+                              flex: 1,
+                              child: SizedBox(),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          "All Words",
+                                          style: TextStyle(
+                                              color: palette.textColor3),
+                                        ),
+                                        scrollable: true,
+                                        backgroundColor:
+                                            palette.optionButtonBgColor,
+                                        content: SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height:
+                                              MediaQuery.of(context).size.width,
+                                          child: SingleChildScrollView(
+                                            child: Table(
+                                              // border: TableBorder.all(),
+                                              columnWidths: const <int,
+                                                  TableColumnWidth>{
+                                                0: FlexColumnWidth(1),
+                                                1: FlexColumnWidth(3),
+                                              },
+                                              defaultVerticalAlignment:
+                                                  TableCellVerticalAlignment
+                                                      .middle,
+                                              children: <TableRow>[
+                                                for (int i = 0;
+                                                    i <
+                                                        gamePlayState
+                                                                .endOfGameData[
+                                                            'uniqueWords'];
+                                                    i++)
+                                                  TableRow(children: [
+                                                    Text(
+                                                      (i + 1).toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: palette
+                                                              .textColor3),
+                                                    ),
+                                                    Text(
+                                                      gamePlayState
+                                                              .endOfGameData[
+                                                          'uniqueWordsList'][i],
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: palette
+                                                              .textColor3),
+                                                    )
+                                                  ])
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          InkWell(
+                                            child: Text(
+                                              'Close',
+                                              style: TextStyle(
+                                                  color: palette.textColor3),
+                                            ),
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              child: Text.rich(
+                                TextSpan(
+                                  text: 'View all ',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: palette.textColor3,
+                                      fontStyle: FontStyle.italic),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: gamePlayState
+                                            .endOfGameData['uniqueWords']
+                                            .toString(),
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            decorationColor: palette.textColor3,
+                                            decorationThickness: 1.0)),
+                                    const TextSpan(text: ' words'),
+                                  ],
+                                ),
                               ),
                             ),
-                            onPressed: () {
-                              gamePlayState.endGame();
-                              FirestoreMethods().updateSettingsState(
-                                  settings, AuthService().currentUser!.uid);
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MenuScreen()));
-                            },
-                            child: Text(
-                              "Main Menu",
-                              style: TextStyle(
-                                color: palette.textColor3,
+                            const Expanded(
+                              flex: 3,
+                              child: SizedBox(),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: palette.optionButtonBgColor,
+                                foregroundColor: palette.textColor1,
+                                shadowColor:
+                                    const Color.fromRGBO(123, 123, 123, 0.7),
+                                elevation: 3.0,
+                                minimumSize: const Size(double.infinity, 50),
+                                padding: const EdgeInsets.all(4.0),
+                                textStyle: const TextStyle(
+                                  fontSize: 22,
+                                ),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                              ),
+                              onPressed: () {
+                                gamePlayState.endGame();
+                                FirestoreMethods().updateSettingsState(
+                                    settings, AuthService().currentUser!.uid);
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MenuScreen()));
+                              },
+                              child: Text(
+                                "Main Menu",
+                                style: TextStyle(
+                                  color: palette.textColor3,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ));
-                    },
+                          ],
+                        ));
+                      },
+                    ),
                   ),
                 ),
-              ),
+                SizedBox.expand(
+                  child: Visibility(
+                    visible: _duringCelebration,
+                    child: IgnorePointer(
+                      child: Confetti(
+                        palette: palette,
+                        isStopped: !_duringCelebration,
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
             ),
           );
   }

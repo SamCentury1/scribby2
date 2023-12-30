@@ -1237,42 +1237,23 @@ class GameLogic {
 
       // _gamePlayState.countDownController.restart(duration: GameLogic().getCountdownDuration(_gamePlayState.currentLevel));
       gamePlayState.countDownController.pause();
+
       late Map<String, dynamic> levelUpData = shouldChangeLevels(gamePlayState);
       if (levelUpData.isNotEmpty) {
         gamePlayState.setPreviousLevel(levelUpData['previous']);
         gamePlayState.setCurrentLevel(levelUpData['upcoming']);
-        gamePlayState.setDisplayLevelChange(true);
+        // gamePlayState.setDisplayLevelChange(true);
+        animationState.setShouldRunNewLevelAnimation(true);
       }
       // print(levelUp);
 
       Future.delayed(const Duration(milliseconds: 1500), () {
         gamePlayState.setVisualTileState(updateNewBoardState);
 
-        // if (levelUpData.isNotEmpty) {
-        // //   // changeLevels(_gamePlayState);
-        //   gamePlayState.setPreviousLevel(levelUpData['previous']);
-        //   gamePlayState.setCurrentLevel(levelUpData['upcoming']);
-        // gamePlayState.setDisplayLevelChange(true);
-        //   // Future.delayed(const Duration(milliseconds: 800), () {
-        //     // _gamePlayState.countDownController.resume();
-        //     gamePlayState.countDownController.restart(
-        //         duration: GameLogic()
-        //             .getCountdownDuration(gamePlayState.currentLevel));
-        //     gamePlayState.setDisplayLevelChange(false);
-        //   // });
-        // } else {
-        //   gamePlayState.countDownController.restart(
-        //       duration:
-        //           GameLogic().getCountdownDuration(gamePlayState.currentLevel));
-        //   // ensures that in the event that a user pauses the game while animating - the countdown doesn't keep going
-        //   if (gamePlayState.isGamePaused) {
-        //     gamePlayState.countDownController.pause();
-        //   }
-        // }
         gamePlayState.countDownController.restart(
             duration:
                 GameLogic().getCountdownDuration(gamePlayState.currentLevel));
-        gamePlayState.setDisplayLevelChange(false);
+        // gamePlayState.setDisplayLevelChange(false);
         if (gamePlayState.isGamePaused) {
           gamePlayState.countDownController.pause();
         }
@@ -1285,6 +1266,7 @@ class GameLogic {
       animationState.setShouldRunAnimation(false);
       animationState.setShouldRunMultiWordAnimation(false);
       animationState.setShouldRunCrossWordAnimation(false);
+      animationState.setShouldRunNewLevelAnimation(false);
     } else {
       gamePlayState.countDownController.restart(
           duration:
@@ -1366,6 +1348,8 @@ class GameLogic {
       gamePlayState.countDownController.restart(
           duration:
               GameLogic().getCountdownDuration(gamePlayState.currentLevel));
+
+      animationState.setShouldRunAnimation(false);
     }
   }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AnimationState with ChangeNotifier {
-
-
   bool _shouldRunAnimation = false;
 
   bool get shouldRunAnimation => _shouldRunAnimation;
@@ -11,7 +9,6 @@ class AnimationState with ChangeNotifier {
     _shouldRunAnimation = value;
     notifyListeners();
   }
-
 
   bool _shouldRunWordAnimation = false;
 
@@ -29,7 +26,7 @@ class AnimationState with ChangeNotifier {
   void setShouldRunMultiWordAnimation(bool value) {
     _shouldRunMultiWordAnimation = value;
     notifyListeners();
-  }  
+  }
 
   bool _shouldRunCrossWordAnimation = false;
 
@@ -38,8 +35,7 @@ class AnimationState with ChangeNotifier {
   void setShouldRunCrossWordAnimation(bool value) {
     _shouldRunCrossWordAnimation = value;
     notifyListeners();
-  }  
-
+  }
 
   bool _shouldRunPointsAnimation = false;
 
@@ -66,8 +62,7 @@ class AnimationState with ChangeNotifier {
   void setShouldRunStreaksExitAnimation(bool value) {
     _shouldRunStreaksExitAnimation = value;
     notifyListeners();
-  }    
-
+  }
 
   /// FOR THE MODAL TO APPEAR OR DISAPPEAR WHEN PRESSING PAUSE OR CLICKING THE BLUR AROUND THE MODAL
   bool _shouldRunPauseAnimation = false;
@@ -86,7 +81,6 @@ class AnimationState with ChangeNotifier {
     notifyListeners();
   }
 
-
   bool _shouldRunTimerAnimation = false;
   bool get shouldRunTimerAnimation => _shouldRunTimerAnimation;
 
@@ -95,22 +89,31 @@ class AnimationState with ChangeNotifier {
     notifyListeners();
   }
 
-
   bool _shouldRunLanguageSelectedAnimation = false;
-  bool get shouldRunLanguageSelectedAnimation => _shouldRunLanguageSelectedAnimation;
+  bool get shouldRunLanguageSelectedAnimation =>
+      _shouldRunLanguageSelectedAnimation;
 
   void setShouldRunLanguageSelectedAnimation(bool value) {
     _shouldRunLanguageSelectedAnimation = value;
     notifyListeners();
-  }  
+  }
 
   bool _shouldRunLanguageUnSelectedAnimation = false;
-  bool get shouldRunLanguageUnSelectedAnimation => _shouldRunLanguageUnSelectedAnimation;
+  bool get shouldRunLanguageUnSelectedAnimation =>
+      _shouldRunLanguageUnSelectedAnimation;
 
   void setShouldRunLanguageUnSelectedAnimation(bool value) {
     _shouldRunLanguageUnSelectedAnimation = value;
     notifyListeners();
-  }    
+  }
+
+  bool _shouldRunNewLevelAnimation = false;
+  bool get shouldRunNewLevelAnimation => _shouldRunNewLevelAnimation;
+
+  void setShouldRunNewLevelAnimation(bool value) {
+    _shouldRunNewLevelAnimation = value;
+    notifyListeners();
+  }
 
   // bool _shouldPauseCountDownAnimation = false;
   // bool get shouldPauseCountDownAnimation => _shouldPauseCountDownAnimation;
@@ -119,10 +122,4 @@ class AnimationState with ChangeNotifier {
   //   _shouldPauseCountDownAnimation = value;
   //   notifyListeners();
   // }
-
-
-
 }
-
-
-

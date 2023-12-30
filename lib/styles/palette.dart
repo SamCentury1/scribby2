@@ -116,6 +116,18 @@ class ColorPalette with ChangeNotifier {
   late Color _appBarColor = Colors.transparent;
   Color get appBarColor => _appBarColor;
 
+  late Color _confettiColor1 = Colors.transparent;
+  Color get confettiColor1 => _confettiColor1;
+
+  late Color _confettiColor2 = Colors.transparent;
+  Color get confettiColor2 => _confettiColor2;
+
+  late Color _confettiColor3 = Colors.transparent;
+  Color get confettiColor3 => _confettiColor3;
+
+  late Color _confettiColor4 = Colors.transparent;
+  Color get confettiColor4 => _confettiColor4;
+
   void getThemeColors(bool isDarkTheme) {
     switch (isDarkTheme) {
       case true:
@@ -139,6 +151,11 @@ class ColorPalette with ChangeNotifier {
         _textColor2 = const Color.fromARGB(255, 211, 211, 211);
         _textColor3 = const Color.fromARGB(255, 185, 184, 184);
         _appBarColor = const Color.fromARGB(255, 39, 39, 39);
+
+        _confettiColor1 = const Color.fromARGB(255, 243, 104, 248);
+        _confettiColor2 = const Color.fromARGB(255, 165, 242, 255);
+        _confettiColor3 = const Color.fromARGB(255, 64, 52, 233);
+        _confettiColor4 = const Color.fromARGB(255, 161, 59, 245);
         break;
       case false:
         _screenBackgroundColor = const Color.fromARGB(255, 186, 217, 231);
@@ -160,6 +177,11 @@ class ColorPalette with ChangeNotifier {
         _textColor2 = const Color.fromARGB(255, 71, 71, 71);
         _textColor3 = const Color.fromARGB(255, 88, 88, 88);
         _appBarColor = const Color.fromARGB(255, 165, 165, 165);
+
+        _confettiColor1 = const Color.fromARGB(255, 41, 125, 252);
+        _confettiColor2 = const Color.fromARGB(255, 100, 10, 10);
+        _confettiColor3 = const Color.fromARGB(255, 43, 11, 102);
+        _confettiColor4 = const Color.fromARGB(255, 120, 151, 207);
         break;
     }
     notifyListeners();

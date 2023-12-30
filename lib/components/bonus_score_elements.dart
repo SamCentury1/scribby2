@@ -36,6 +36,9 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
   late AnimationController _newLevelPositionController;
   late Animation<Offset> _newLevelPositionAnimation;
 
+  late AnimationController _newLevelOpacityController;
+  late Animation<double> _newLevelOpacityAnimation;
+
   // late AnimationController _newLevelOpacity
 
   late ColorPalette palette;
@@ -54,6 +57,8 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
     _streakSlideEnterController.addListener(_animationListener);
     _multiSlideController.addListener(_animationListener);
     _multiTextController.addListener(_animationListener);
+    _newLevelPositionController.addListener(_animationListener);
+    _newLevelOpacityController.addListener(_animationListener);
     _animationState.addListener(_handleAnimationStateChange);
   }
 
@@ -82,6 +87,10 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
     if (_animationState.shouldRunStreaksExitAnimation) {
       _runStreakAnimation('exit');
+    }
+
+    if (_animationState.shouldRunNewLevelAnimation) {
+      _runNewLevelAnimation();
     }
   }
 
@@ -115,8 +124,10 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
   void _runNewLevelAnimation() {
     _newLevelPositionController.reset();
+    _newLevelOpacityController.reset();
 
     _newLevelPositionController.forward();
+    _newLevelOpacityController.forward();
   }
 
   void initializeAnimations(ColorPalette palette) {
@@ -362,8 +373,74 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
     /// ============== NEW LEVEL ANIMATION ================
     /// ============== vvvvvvvvvvvvvvvvvvv  ======================
+
+    /// POSITION
     _newLevelPositionController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1500));
+        vsync: this, duration: const Duration(milliseconds: 4500));
+
+    final List<TweenSequenceItem<Offset>> newLevelPositionSequence = [
+      TweenSequenceItem<Offset>(
+          tween: Tween<Offset>(
+            begin: const Offset(0.0, 0.0),
+            end: const Offset(0.0, 0.0),
+          ),
+          weight: 0.5),
+      TweenSequenceItem<Offset>(
+          tween: Tween<Offset>(
+            begin: const Offset(0.0, 0.0),
+            end: Offset.zero,
+          ),
+          weight: 0.05),
+      TweenSequenceItem<Offset>(
+          tween: Tween<Offset>(
+            begin: Offset.zero,
+            end: Offset.zero,
+          ),
+          weight: 0.4),
+      TweenSequenceItem<Offset>(
+          tween: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(0.0, -1.0),
+          ),
+          weight: 0.05),
+    ];
+
+    _newLevelPositionAnimation = TweenSequence<Offset>(newLevelPositionSequence)
+        .animate(_newLevelPositionController);
+
+    /// OPACITY
+    _newLevelOpacityController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 4500));
+
+    final List<TweenSequenceItem<double>> newLevelOpacitySequence = [
+      TweenSequenceItem<double>(
+          tween: Tween<double>(
+            begin: 0.0,
+            end: 0.0,
+          ),
+          weight: 0.5),
+      TweenSequenceItem<double>(
+          tween: Tween<double>(
+            begin: 0.0,
+            end: 1.0,
+          ),
+          weight: 0.05),
+      TweenSequenceItem<double>(
+          tween: Tween<double>(
+            begin: 1.0,
+            end: 1.0,
+          ),
+          weight: 0.4),
+      TweenSequenceItem<double>(
+          tween: Tween<double>(
+            begin: 1.0,
+            end: 0.0,
+          ),
+          weight: 0.05),
+    ];
+
+    _newLevelOpacityAnimation = TweenSequence<double>(newLevelOpacitySequence)
+        .animate(_newLevelOpacityController);
 
     /// ============== NEW LEVEL ANIMATION ================
     /// ============== ^^^^^^^^^^^^^^^^ ======================
@@ -381,6 +458,9 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
     if (_cwSlideAnimation.status == AnimationStatus.completed) {}
     if (_cwTextController.status == AnimationStatus.completed) {}
+
+    if (_newLevelPositionController.status == AnimationStatus.completed) {}
+    if (_newLevelOpacityController.status == AnimationStatus.completed) {}
   }
 
   @override
@@ -392,6 +472,8 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
     _multiTextController.dispose();
     _cwSlideController.dispose();
     _cwTextController.dispose();
+    _newLevelPositionController.dispose();
+    _newLevelOpacityController.dispose();
 
     super.dispose();
   }
@@ -600,19 +682,29 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                       : const SizedBox(),
             ],
           ),
-          gamePlayState.displayLevelChange == false
-              ? const SizedBox()
-              : SizedBox(
+          // gamePlayState.displayLevelChange == false ? const SizedBox() :
+          AnimatedBuilder(
+            animation: _newLevelPositionAnimation,
+            builder: (context, child) {
+              return SlideTransition(
+                position: _newLevelPositionAnimation,
+                child: SizedBox(
                   width: double.infinity,
                   // color: Colors.pink,
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
                       "Level ${gamePlayState.currentLevel.toString()}",
-                      style: const TextStyle(fontSize: 42, color: Colors.blue),
+                      style: TextStyle(
+                          fontSize: 42,
+                          color: Color.fromRGBO(
+                              226, 249, 253, _newLevelOpacityAnimation.value)),
                     ),
                   ),
-                )
+                ),
+              );
+            },
+          )
         ],
       );
     });
