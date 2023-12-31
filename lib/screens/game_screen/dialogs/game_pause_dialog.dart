@@ -23,7 +23,15 @@ class GamePauseDialog extends StatefulWidget {
 
 class _GamePauseDialogState extends State<GamePauseDialog> {
   final PageController _controller = PageController();
+  // late GamePlayState gamePlayState;
   int currentPage = 0;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+  //   // gamePlayState.pageController.jumpToPage(0);
+  // }
 
   @override
   void dispose() {
@@ -83,12 +91,17 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                       currentIndex: currentPage,
                       onTap: (index) {
                         setState(() {
-                          // currentPage = index;
+                          currentPage = index;
                           _controller.animateToPage(
                             index,
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.ease,
                           );
+                          // gamePlayState.pageController.animateToPage(
+                          //   index,
+                          //   duration: const Duration(milliseconds: 300),
+                          //   curve: Curves.ease,
+                          // );
                         });
                         // gamePlayState.pageController.jumpToPage(
                         //   index,

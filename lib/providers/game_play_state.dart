@@ -183,6 +183,14 @@ class GamePlayState with ChangeNotifier {
     notifyListeners();
   }
 
+  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
+
+  void setCurrentIndex(int value) {
+    _currentIndex = value;
+    notifyListeners();
+  }
+
   // returns the two initial random letters and updates the bag accordingly
   // Map<String,dynamic> _startingRandomLetterData = {};
   // Map<String,dynamic> get startingRandomLetterData => _startingRandomLetterData;
@@ -338,13 +346,13 @@ class GamePlayState with ChangeNotifier {
     notifyListeners();
   }
 
-  // late PageController _pageController = PageController();
-  // PageController get pageController => _pageController;
+  late PageController _pageController = PageController();
+  PageController get pageController => _pageController;
 
-  // void setPageController(PageController value) {
-  //   _pageController = value;
-  //   notifyListeners();
-  // }
+  void setPageController(PageController value) {
+    _pageController = value;
+    notifyListeners();
+  }
 
   /// ======== COUNT DOWN =========
   // Duration _cdDuration = Duration(seconds: 6);
@@ -501,6 +509,7 @@ class GamePlayState with ChangeNotifier {
   @override
   void dispose() {
     _timer?.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 }

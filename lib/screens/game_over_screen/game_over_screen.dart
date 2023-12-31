@@ -60,8 +60,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
               //   isLoading = false;
               // });
 
-              ad.show();
               setFullScreenContentCallback(ad);
+              ad.show();
 
               debugPrint('$ad loaded.');
             },
@@ -181,7 +181,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
         children: [
           Center(
             child: Text(
-              "Score: ${currentScore.toString()}}",
+              "Score: ${currentScore.toString()}",
               style: TextStyle(color: palette.textColor3, fontSize: 42),
             ),
           ),

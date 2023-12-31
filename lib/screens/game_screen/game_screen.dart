@@ -180,6 +180,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
+                      backgroundColor: palette.optionButtonBgColor,
                       title: Text(
                         "Quit Game",
                         style:
@@ -416,6 +417,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                           child: IconButton(
                             onPressed: () {
                               gamePlayState.setIsGamePaused(true, 0);
+                              setState(() {
+                                gamePlayState.pageController.jumpToPage(0);
+                              });
                             },
                             icon: const Icon(Icons.pause_circle_outline),
                             color: palette.tileBgColor,

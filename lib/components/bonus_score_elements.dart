@@ -446,6 +446,11 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
     /// ============== ^^^^^^^^^^^^^^^^ ======================
   }
 
+  Color getLevelUpWidgetColor(ColorPalette palette, double opacity) {
+    return Color.fromRGBO(palette.textColor2.red, palette.textColor2.green,
+        palette.textColor2.blue, opacity);
+  }
+
   void _animationListener() {
     if (_streakTextController.status == AnimationStatus.completed) {
       // _streakTextController.reset();
@@ -694,12 +699,30 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "Level ${gamePlayState.currentLevel.toString()}",
-                      style: TextStyle(
-                          fontSize: 42,
-                          color: Color.fromRGBO(
-                              226, 249, 253, _newLevelOpacityAnimation.value)),
-                    ),
+                        "Level ${gamePlayState.currentLevel.toString()}",
+                        style: TextStyle(
+                            fontSize: 42,
+                            color: getLevelUpWidgetColor(
+                                palette, _newLevelOpacityAnimation.value)
+                            // color: Color.fromRGBO(
+                            //     224, 224, 224, _newLevelOpacityAnimation.value),
+                            )),
+                    // child: AnimatedBuilder(
+                    //   animation: _newLevelOpacityAnimation,
+                    //   builder: (context, child) {
+                    //     return AnimatedOpacity(
+
+                    //       opacity: _newLevelOpacityAnimation.value,
+                    //       duration: const Duration(milliseconds: 4500),
+                    //       child: Text(
+                    //           "Level ${gamePlayState.currentLevel.toString()}",
+                    //           style: TextStyle(
+                    //             fontSize: 42,
+                    //             color: palette.textColor2,
+                    //           )),
+                    //     );
+                    //   },
+                    // ),
                   ),
                 ),
               );
