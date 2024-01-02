@@ -346,13 +346,13 @@ class GamePlayState with ChangeNotifier {
     notifyListeners();
   }
 
-  late PageController _pageController = PageController();
-  PageController get pageController => _pageController;
+  // late PageController _pageController = PageController();
+  // PageController get pageController => _pageController;
 
-  void setPageController(PageController value) {
-    _pageController = value;
-    notifyListeners();
-  }
+  // void setPageController(PageController value) {
+  //   _pageController = value;
+  //   notifyListeners();
+  // }
 
   /// ======== COUNT DOWN =========
   // Duration _cdDuration = Duration(seconds: 6);
@@ -509,7 +509,7 @@ class GamePlayState with ChangeNotifier {
   @override
   void dispose() {
     _timer?.cancel();
-    _pageController.dispose();
+    // _pageController.dispose();
     super.dispose();
   }
 }

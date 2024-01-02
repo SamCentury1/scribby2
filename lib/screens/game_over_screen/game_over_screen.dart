@@ -40,6 +40,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
   void initState() {
     // TO DO: implement initState
     super.initState();
+
     loadAd();
   }
 
@@ -214,6 +215,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
         Provider.of<ColorPalette>(context, listen: false);
     late SettingsState settings =
         Provider.of<SettingsState>(context, listen: false);
+    late GamePlayState _gamePlayState =
+        Provider.of<GamePlayState>(context, listen: false);
 
     return isLoading
         ? const Center(
@@ -221,7 +224,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
           )
         : PopScope(
             onPopInvoked: (details) {
-              debugPrint("navigate back to main menu");
+              _gamePlayState.endGame();
+              FirestoreMethods().updateSettingsState(
+                  settings, AuthService().currentUser!.uid);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const MenuScreen()));
             },
             child: Scaffold(
               body: Stack(children: [

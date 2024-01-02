@@ -203,39 +203,6 @@ class _GameSummaryViewState extends State<GameSummaryView> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(children: [
         const Expanded(child: SizedBox()),
-        // Align(
-        //   alignment: Alignment.center,
-        //   child: Text(
-        //     "Score: ${(widget.gamePlayState.summaryData['points'] ?? 0)}",
-        //     style: TextStyle(color: widget.palette.textColor2, fontSize: 32),
-        //   ),
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Icon(
-        //       Icons.emoji_events,
-        //       color: widget.palette.textColor2,
-        //       size: 18,
-        //     ),
-        //     const SizedBox(
-        //       width: 10,
-        //     ),
-        //     Align(
-        //       alignment: Alignment.center,
-        //       child: Text(
-        //         "High Score: ${widget.curentHighscore}",
-        //         style:
-        //             TextStyle(color: widget.palette.textColor2, fontSize: 18),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        const Expanded(child: SizedBox()),
-        // Text(
-        //   "Details",
-        //   style: TextStyle(color: widget.palette.textColor2, fontSize: 24),
-        // ),
         Table(
           columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(1),

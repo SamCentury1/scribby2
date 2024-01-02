@@ -844,28 +844,33 @@ class GameLogic {
   }
 
   void executeGameOver(GamePlayState gamePlayState, BuildContext context) {
-    late Map<String, dynamic> newGameData = {
-      "timeStamp": DateTime.now().toIso8601String(),
-      "duration": gamePlayState.duration.inSeconds,
-      "points": gamePlayState.summaryData['points'],
-      "uniqueWords": gamePlayState.summaryData['uniqueWords'].length,
-      "uniqueWordsList": gamePlayState.summaryData['uniqueWords'],
-      "longestStreak": gamePlayState.summaryData['longestStreak'],
-      "mostPoints": gamePlayState.summaryData['mostPoints'],
-      "mostWords": gamePlayState.summaryData["mostWords"],
-      "crossWords": gamePlayState.summaryData['crosswords'],
-      "level": gamePlayState.currentLevel,
-      "language": gamePlayState.currentLanguage,
-    };
-    FirestoreMethods()
-        .saveHighScore(AuthService().currentUser!.uid, newGameData);
+    if (gamePlayState.summaryData.isEmpty ||
+        gamePlayState.summaryData['uniqueWords'].isEmpty) {
+      return;
+    } else {
+      late Map<String, dynamic> newGameData = {
+        "timeStamp": DateTime.now().toIso8601String(),
+        "duration": gamePlayState.duration.inSeconds,
+        "points": gamePlayState.summaryData['points'],
+        "uniqueWords": gamePlayState.summaryData['uniqueWords'].length,
+        "uniqueWordsList": gamePlayState.summaryData['uniqueWords'],
+        "longestStreak": gamePlayState.summaryData['longestStreak'],
+        "mostPoints": gamePlayState.summaryData['mostPoints'],
+        "mostWords": gamePlayState.summaryData["mostWords"],
+        "crossWords": gamePlayState.summaryData['crosswords'],
+        "level": gamePlayState.currentLevel,
+        "language": gamePlayState.currentLanguage,
+      };
+      FirestoreMethods()
+          .saveHighScore(AuthService().currentUser!.uid, newGameData);
 
-    gamePlayState.setEndOfGameData(newGameData);
-    gamePlayState.setIsGameEnded(true);
-    Future.delayed(const Duration(seconds: 1), () {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const GameOverScreen()));
-    });
+      gamePlayState.setEndOfGameData(newGameData);
+      gamePlayState.setIsGameEnded(true);
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const GameOverScreen()));
+      });
+    }
   }
 
   // Color getColor(bool darkTheme, Palette palette, String element) {

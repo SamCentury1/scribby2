@@ -266,6 +266,7 @@ class _MenuScreenState extends State<MenuScreen> {
             builder: (context, palette, child) {
               return Scaffold(
                   appBar: AppBar(
+                    leading: const SizedBox(),
                     title: Text(
                       'Home',
                       style: TextStyle(color: palette.textColor1),
