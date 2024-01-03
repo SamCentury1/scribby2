@@ -122,4 +122,26 @@ class AnimationState with ChangeNotifier {
   //   _shouldPauseCountDownAnimation = value;
   //   notifyListeners();
   // }
+
+  /// =================================================================
+  ///                          TUTORIAL
+  /// =================================================================
+
+  bool _shouldRunTutorialTimerdAnimation = false;
+  bool get shouldRunTutorialTimerdAnimation =>
+      _shouldRunTutorialTimerdAnimation;
+
+  void setShouldRunTutorialTimerdAnimation(bool value) {
+    _shouldRunTutorialTimerdAnimation = value;
+    notifyListeners();
+  }
+
+  bool _shouldRunTutorialScoreboardAnimation = false;
+  bool get shouldRunTutorialScoreboardAnimation =>
+      _shouldRunTutorialScoreboardAnimation;
+
+  void setShouldRunTutorialScoreboardAnimation(bool value) {
+    _shouldRunTutorialScoreboardAnimation = value;
+    notifyListeners();
+  }
 }

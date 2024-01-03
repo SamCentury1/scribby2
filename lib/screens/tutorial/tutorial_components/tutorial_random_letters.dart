@@ -1,0 +1,337 @@
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/game_logic.dart';
+import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
+import 'package:scribby_flutter_v2/styles/palette.dart';
+
+class TutorialRandomLetters extends StatefulWidget {
+  const TutorialRandomLetters({super.key});
+
+  @override
+  State<TutorialRandomLetters> createState() => _TutorialRandomLettersState();
+}
+
+class _TutorialRandomLettersState extends State<TutorialRandomLetters>
+    with TickerProviderStateMixin {
+  late AnimationState _animationState;
+
+  // DEFINE THE VARIABLES THAT WILL CONTROL THE ANIMATIONS FOR THE FIRST LETTER AND SECOND LETTER
+  // FIRST LETTER
+  late AnimationController _shrinkAnimationController;
+  late Animation<double> _shrinkAnimation;
+
+  // HANDLES THE SMALL SLIDE FROM LETTER 2 TO LETTER 1
+  late AnimationController _slideController;
+  late Animation<Offset> _slideAnimation;
+
+  // HANDLES THE TILE GETTING BIGGER
+  late AnimationController _sizeAnimationController;
+  late Animation<double> _sizeAnimation;
+
+  // HANDLES THE FONT GETTING BIGGER
+  late AnimationController _fontAnimationController;
+  late Animation<double> _fontAnimation;
+
+  // HANDLES LETTER 2 SLIDING DOWN FROM THE TOP
+  late AnimationController _letter2SlideController;
+  late Animation<Offset> _letter2Animation;
+
+  // HANDLES THE FONT GETTING BIGGER
+  late int secondsLeft;
+  late TutorialState _tutorialState;
+
+  // HERE WE GET THE PROVIDER
+  @override
+  void initState() {
+    super.initState();
+    initializeAnimations();
+    _animationState = Provider.of<AnimationState>(context, listen: false);
+    _tutorialState = Provider.of<TutorialState>(context, listen: false);
+    _animationState.addListener(_handleAnimationStateChange);
+    // _tutorialState.addListener(_handleGamePlayStateChange);
+  }
+
+  // void _handleGamePlayStateChange() {
+  //   // Check if the level has changed
+  //   if (_gamePlayState.currentLevel != _gamePlayState.previousLevel) {
+  //     setState(() {
+  //       secondsLeft =
+  //           GameLogic().getCountdownDuration(_gamePlayState.currentLevel);
+  //     });
+  //   }
+  // }
+
+  void _handleAnimationStateChange() {
+    if (_animationState.shouldRunAnimation) {
+      _runAnimations();
+    }
+  }
+
+  // THIS FUNCTION TELLS THE CODE WHAT TO DO
+  void initializeAnimations() {
+    _shrinkAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+
+    _shrinkAnimation = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(CurvedAnimation(
+        parent: _shrinkAnimationController, curve: Curves.easeIn));
+
+    // FIRST LETTER
+    _slideController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    ).animate(_slideController);
+
+    _sizeAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+
+    _sizeAnimation = Tween<double>(
+      begin: 50,
+      end: 100,
+    ).animate(CurvedAnimation(
+        parent: _sizeAnimationController, curve: Curves.easeIn));
+
+    _fontAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+
+    _fontAnimation = Tween<double>(
+      begin: 26,
+      end: 60,
+    ).animate(CurvedAnimation(
+        parent: _fontAnimationController, curve: Curves.easeIn));
+
+    // SECOND LETTER
+    _letter2SlideController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _letter2Animation = Tween<Offset>(
+      begin: const Offset(0.0, -1.0),
+      end: Offset.zero,
+    ).animate(_letter2SlideController);
+
+    _slideController.forward();
+    _shrinkAnimationController.forward();
+    _sizeAnimationController.forward();
+    _fontAnimationController.forward();
+    _letter2SlideController.forward();
+  }
+
+  void _runAnimations() {
+    _slideController.reset();
+    _shrinkAnimationController.reset();
+    _sizeAnimationController.reset();
+    _fontAnimationController.reset();
+    _letter2SlideController.reset();
+    // _countDownTextSizeController.reset();
+
+    _slideController.forward();
+    _shrinkAnimationController.forward();
+    _sizeAnimationController.forward();
+    _fontAnimationController.forward();
+    _letter2SlideController.forward();
+    // _countDownTextSizeController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationState.removeListener(_handleAnimationStateChange);
+    _slideController.dispose();
+    _shrinkAnimationController.dispose();
+    _sizeAnimationController.dispose();
+    _fontAnimationController.dispose();
+    _letter2SlideController.dispose();
+    // _countDownTextSizeController.dispose();
+
+    // _gamePlayState.removeListener(_handleGamePlayStateChange);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
+    // final Palette palette = Provider.of<Palette>(context, listen: false);
+    final ColorPalette palette =
+        Provider.of<ColorPalette>(context, listen: false);
+
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Consumer<TutorialState>(
+              builder: (context, tutorialState, child) {
+                return SizedBox(
+                  // color: Color.fromARGB(255, 220, 171, 230),
+                  width: double.infinity,
+                  height: 100,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Stack(
+                            children: [
+                              // CountDownTimer()
+
+                              Align(
+                                alignment: Alignment.center,
+                                child: CircularCountDownTimer(
+                                  duration: 10,
+                                  initialDuration: 10,
+                                  controller:
+                                      tutorialState.tutorialCountDownController,
+                                  width:
+                                      70, // MediaQuery.of(context).size.width / 3,
+                                  height:
+                                      70, // MediaQuery.of(context).size.height / 3,
+                                  // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
+                                  ringColor: palette.tileBgColor,
+                                  ringGradient: null,
+                                  fillColor: palette
+                                      .tileTextColor, // Colors.purpleAccent[100]!,
+                                  fillGradient: null,
+                                  // backgroundColor:GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
+                                  backgroundColor:
+                                      palette.screenBackgroundColor,
+                                  backgroundGradient: null,
+                                  strokeWidth: 5.0,
+                                  strokeCap: StrokeCap.round,
+                                  textStyle: TextStyle(
+                                      fontSize: 33.0,
+                                      // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
+                                      color: palette.tileBgColor),
+                                  textFormat: CountdownTextFormat.S,
+                                  isReverse: true,
+                                  isReverseAnimation: false,
+                                  isTimerTextShown: true,
+                                  autoStart: false,
+                                  onStart: () {},
+                                  onComplete: () {},
+                                  onChange: (String timeStamp) {},
+                                  timeFormatterFunction:
+                                      (defaultFormatterFunction, duration) {
+                                    if (duration.inSeconds <= 3) {
+                                      return Function.apply(
+                                          defaultFormatterFunction, [duration]);
+                                    } else {
+                                      return "";
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Stack(
+                            children: [
+                              AnimatedBuilder(
+                                animation: _shrinkAnimation,
+                                builder: (context, child) {
+                                  return Center(
+                                    child: Container(
+                                      width: 100 * _shrinkAnimation.value,
+                                      height: 100 * _shrinkAnimation.value,
+                                      decoration: BoxDecoration(
+                                          color: palette.tileBgColor,
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10))),
+                                      child: Center(
+                                          child: Text(
+                                        GameLogic().displayRandomLetters(
+                                            tutorialState
+                                                .tutorialRandomLetterList,
+                                            3),
+                                        style: TextStyle(
+                                          fontSize: 60 * _shrinkAnimation.value,
+                                          color: palette.tileTextColor,
+                                        ),
+                                      )),
+                                    ),
+                                  );
+                                },
+                              ),
+                              AnimatedBuilder(
+                                animation: _sizeAnimation,
+                                builder: (context, child) {
+                                  return SlideTransition(
+                                    position: _slideAnimation,
+                                    child: Center(
+                                      child: Container(
+                                        width: _sizeAnimation.value,
+                                        height: _sizeAnimation.value,
+                                        decoration: BoxDecoration(
+                                            color: palette.tileBgColor,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10))),
+                                        child: Center(
+                                            child: Text(
+                                          GameLogic().displayRandomLetters(
+                                              tutorialState
+                                                  .tutorialRandomLetterList,
+                                              2),
+                                          // widget.letter_1,
+                                          // "A",
+                                          style: TextStyle(
+                                            fontSize: _fontAnimation.value,
+                                            color: palette.tileTextColor,
+                                          ),
+                                        )),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: SlideTransition(
+                            position: _letter2Animation,
+                            child: Center(
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: palette.tileBgColor,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Center(
+                                      child: Text(
+                                        GameLogic().displayRandomLetters(
+                                            tutorialState
+                                                .tutorialRandomLetterList,
+                                            1),
+                                        style: TextStyle(
+                                          fontSize: 26,
+                                          color: palette.tileTextColor,
+                                        ),
+                                      ),
+                                    ))),
+                          ),
+                        ),
+                      ]),
+                );
+              },
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}

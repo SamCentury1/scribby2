@@ -13,6 +13,7 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/game_over_screen.dart';
+import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 // import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/utils/dictionary.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
@@ -846,7 +847,11 @@ class GameLogic {
   void executeGameOver(GamePlayState gamePlayState, BuildContext context) {
     if (gamePlayState.summaryData.isEmpty ||
         gamePlayState.summaryData['uniqueWords'].isEmpty) {
-      return;
+      gamePlayState.setIsGameEnded(true);
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const MenuScreen()));
+      });
     } else {
       late Map<String, dynamic> newGameData = {
         "timeStamp": DateTime.now().toIso8601String(),

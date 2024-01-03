@@ -319,18 +319,25 @@ class FirestoreMethods {
       String uid, String currentLanguage, List<String> languages) async {
     try {
       final docRef = _firestore.collection('users').doc(uid);
-      final docSnap = await docRef.get();
-      final Map<String, dynamic> docData =
-          docSnap.data() as Map<String, dynamic>;
+      // final docSnap = await docRef.get();
+      // final Map<String, dynamic> docData =
+      //     docSnap.data() as Map<String, dynamic>;
 
-      Map<String, dynamic> newParams = {
-        "currentLanguage": currentLanguage,
-        "languages": languages,
-        "darkMode": docData['parameters']['darkMode'],
-        "muted": docData['parameters']['muted'],
-        "soundOn": docData['parameters']['soundOn'],
-      };
-      await docRef.update({"parameters": newParams});
+      // Map<String, dynamic> newParams = {
+      //   "currentLanguage": currentLanguage,
+      //   "languages": languages,
+      //   "darkMode": docData['parameters']['darkMode'],
+      //   "muted": docData['parameters']['muted'],
+      //   "soundOn": docData['parameters']['soundOn'],
+      // };
+      // await docRef.update({"parameters": newParams});
+
+      // late Map<String, dynamic> params = docData['parameters'];
+      // params.update("currentLanguage", (value) => currentLanguage);
+      // params.update("languages", (value) => languages);
+
+      await docRef.update({"parameters.currentLanguage": currentLanguage});
+      await docRef.update({"parameters.languages": languages});
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -349,25 +356,25 @@ class FirestoreMethods {
 
   // }
 
-  Future<void> toggleDarkTheme(String uid, bool value) async {
-    try {
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-      final docSnap = await docRef.get();
-      final Map<String, dynamic> docData =
-          docSnap.data() as Map<String, dynamic>;
-      Map<String, dynamic> newParams = {
-        "currentLanguage": docData['parameters']['currentLanguage'],
-        "languages": docData['parameters']['languages'],
-        "darkMode": value,
-        "muted": docData['parameters']['muted'],
-        "soundOn": docData['parameters']['soundOn'],
-      };
+  // Future<void> toggleDarkTheme(String uid, bool value) async {
+  //   try {
+  //     final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+  //     final docSnap = await docRef.get();
+  //     final Map<String, dynamic> docData =
+  //         docSnap.data() as Map<String, dynamic>;
+  //     Map<String, dynamic> newParams = {
+  //       "currentLanguage": docData['parameters']['currentLanguage'],
+  //       "languages": docData['parameters']['languages'],
+  //       "darkMode": value,
+  //       "muted": docData['parameters']['muted'],
+  //       "soundOn": docData['parameters']['soundOn'],
+  //     };
 
-      await docRef.update({"parameters": newParams});
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
+  //     await docRef.update({"parameters": newParams});
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //   }
+  // }
 
   // EXECUTES IN THE SETTINGS PAGE - IN THE DROPOWN MENU FOR CHANGING THE CURRENT LANGUAGE
   Future<void> updateParameters(

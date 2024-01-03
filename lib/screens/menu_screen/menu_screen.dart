@@ -92,6 +92,7 @@ import 'package:scribby_flutter_v2/screens/instructions_screen/instructions_scre
 import 'package:scribby_flutter_v2/screens/leaderboards_screen/leaderboards_screen.dart';
 // import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/settings_screen/settings_screen.dart';
+import 'package:scribby_flutter_v2/screens/tutorial/tutorial_screen_1.dart';
 // import 'package:scribby_flutter_v2/screens/stats_screen/stats_screen.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/choose_language.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
@@ -201,6 +202,11 @@ class _MenuScreenState extends State<MenuScreen> {
         MaterialPageRoute(builder: (context) => const ChooseLanguage()));
   }
 
+  void navigateToTutorial() {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const TutorialScreen1()));
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -293,12 +299,22 @@ class _MenuScreenState extends State<MenuScreen> {
                             onPressed: () {
                               _audioController.playSfx(SfxType.optionSelected);
 
-                              Helpers().getStates(_gamePlayState, _settings);
+                              print(_settings.userData.value
+                                  as Map<String, dynamic>);
 
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const GameScreen()),
-                              );
+                              if ((_settings.userData.value
+                                          as Map<String, dynamic>)['parameters']
+                                      ['hasSeenTutorial'] ==
+                                  false) {
+                                navigateToTutorial();
+                              } else {
+                                Helpers().getStates(_gamePlayState, _settings);
+
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const GameScreen()),
+                                );
+                              }
                             },
                             child: menuButton(
                               palette,

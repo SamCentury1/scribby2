@@ -21,6 +21,7 @@ class AuthService {
           "languages": [],
           "muted": false,
           "soundOn": true,
+          "hasSeenTutorial": false,
         },
         "highScores": {}
       });

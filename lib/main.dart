@@ -15,6 +15,7 @@ import 'package:scribby_flutter_v2/player_progress/persistence/player_progress_p
 import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 // import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
@@ -92,6 +93,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => GamePlayState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TutorialState(),
         ),
         ChangeNotifierProvider(
           create: (context) => ColorPalette(),
