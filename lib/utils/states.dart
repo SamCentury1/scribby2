@@ -1115,7 +1115,7 @@ List<Map<String, dynamic>> frenchAlphabet = [
   {"letter": "Z", "type": "consonant", "points": 10, "count": 3, "inPlay": 0},
 ];
 
-List<Map<String, dynamic>> tutorial_board_1 = [
+List<Map<String, dynamic>> tutorialBoard_1 = [
   // // Random Letters
   // {"tileId" : "0_0", "row":0 , "column":0 , "letter" : "E", "active": false},
   // {"tileId" : "0_1", "row":0 , "column":1 , "letter" : "N", "active": false},
@@ -1410,7 +1410,40 @@ List<Map<String, dynamic>> tutorial_board_1 = [
     "tileId": "6_6",
     "row": 6,
     "column": 6,
-    "letter": "O",
+    "letter": "",
     "active": false
   },
+];
+
+/// This list goes through the steps of the tutoial walkthrough
+List<Map<String, dynamic>> tutorialDetails = [
+  {
+    "step": 0,
+    "text":
+        "Welcome to Scribby! This tutorial will show you how to play the game"
+  },
+  {
+    "step": 1,
+    "text":
+        "To skip the tutorial at any step, click on 'Skip Tutorial' at the top"
+  },
+  {
+    "step": 2,
+    "text": "Use the controls to go back or forward throughout the tutorial"
+  },
+  {"step": 3, "text": "Place the letter 'H' in the glowing tile", "target": 7},
+  {"step": 4, "text": "Place the letter 'E' in the glowing tile", "target": 8},
+  {"step": 5, "text": "Place the letter 'L' in the glowing tile", "target": 9},
+  {"step": 6, "text": "Now place the letter in the glowing tile", "target": 10},
+  {"step": 7, "text": "Now place the letter in the glowing tile", "target": 12},
+  {"step": 8, "text": "Now place the letter in the glowing tile", "target": 15},
+  {"step": 9, "text": "Now place the letter in the glowing tile", "target": 33},
+  {
+    "step": 10,
+    "text": "Now place the letter in the glowing tile",
+    "target": 14
+  },
+  {"step": 11, "text": "Now place the letter in the glowing tile", "target": 6},
+  {"step": 12, "text": "Now place the letter in the glowing tile", "target": 2},
+  {"step": 13, "text": "Now place the letter in the glowing tile", "target": 5},
 ];

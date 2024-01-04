@@ -128,6 +128,9 @@ class ColorPalette with ChangeNotifier {
   late Color _confettiColor4 = Colors.transparent;
   Color get confettiColor4 => _confettiColor4;
 
+  late Color _focusedTutorialTile = Colors.transparent;
+  Color get focusedTutorialTile => _focusedTutorialTile;
+
   void getThemeColors(bool isDarkTheme) {
     switch (isDarkTheme) {
       case true:
@@ -156,6 +159,8 @@ class ColorPalette with ChangeNotifier {
         _confettiColor2 = const Color.fromARGB(255, 165, 242, 255);
         _confettiColor3 = const Color.fromARGB(255, 64, 52, 233);
         _confettiColor4 = const Color.fromARGB(255, 161, 59, 245);
+
+        _focusedTutorialTile = Color.fromARGB(255, 226, 226, 226);
         break;
       case false:
         _screenBackgroundColor = const Color.fromARGB(255, 186, 217, 231);
@@ -182,6 +187,8 @@ class ColorPalette with ChangeNotifier {
         _confettiColor2 = const Color.fromARGB(255, 100, 10, 10);
         _confettiColor3 = const Color.fromARGB(255, 43, 11, 102);
         _confettiColor4 = const Color.fromARGB(255, 120, 151, 207);
+
+        _focusedTutorialTile = Color.fromARGB(255, 130, 224, 118);
         break;
     }
     notifyListeners();
