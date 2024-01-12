@@ -283,29 +283,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                                               row: i + 1,
                                                               column: j + 1,
                                                             ),
-                                                            DragTarget(onAccept:
-                                                                (details) {
-                                                              // removeFromReserves(draggedSpot,i+1, j+1);
-                                                              // dropTile(draggedSpot["body"],i+1, j+1);
-                                                              GameLogic().dropTile(
-                                                                  context,
-                                                                  i + 1,
-                                                                  j + 1,
-                                                                  _gamePlayState,
-                                                                  _audioController);
-                                                            }, builder: (BuildContext
-                                                                    context,
-                                                                List<dynamic>
-                                                                    accepted,
-                                                                List<dynamic>
-                                                                    rejected) {
-                                                              return draggedTile(
-                                                                  draggedSpot
-                                                                          .isEmpty
-                                                                      ? ""
-                                                                      : "", // draggedSpot["body"],
-                                                                  Colors
-                                                                      .transparent);
+                                                            DragTarget(
+                                                              onAccept: (details) {
+                                                                GameLogic().dropTile(context,i + 1,j + 1,_gamePlayState,_audioController);
+                                                              }, 
+                                                              builder: (BuildContext context, List<dynamic> accepted, List<dynamic> rejected) {
+                                                                return draggedTile(draggedSpot.isEmpty ? "" : "", Colors.transparent);
                                                             })
                                                             // draggedTile("", Colors.transparent),
                                                           ],
@@ -326,71 +309,35 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                               Consumer<GamePlayState>(
                                 builder: (context, gamePlayState, child) {
                                   return SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
+                                    width: MediaQuery.of(context).size.width * 0.8,
                                     // height: 100,
                                     // color: Colors.white,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          for (Map<String,
-                                                  dynamic> reserveLetter
-                                              in gamePlayState.reserveTiles)
+                                          for (Map<String, dynamic> reserveLetter in gamePlayState.reserveTiles)
                                             Stack(
                                               children: [
                                                 Draggable(
-                                                  data: reserveLetter["body"] ==
-                                                          ""
-                                                      ? const SizedBox()
-                                                      : draggedTile(
-                                                          reserveLetter["body"],
-                                                          Colors
-                                                              .red), // draggedTile(reserveLetter["body"], Colors.red),
-                                                  feedback: reserveLetter[
-                                                              "body"] ==
-                                                          ""
-                                                      ? const SizedBox()
-                                                      : DraggableTile(
-                                                          tileState:
-                                                              reserveLetter), // draggedTile(reserveLetter["body"], const Color.fromARGB(255, 73, 54, 244)),
+                                                  data: reserveLetter["body"] == "" ? const SizedBox() : draggedTile(reserveLetter["body"],Colors.red), // draggedTile(reserveLetter["body"], Colors.red),
+                                                  feedback: reserveLetter["body"] =="" ? const SizedBox() : DraggableTile(tileState:reserveLetter), // draggedTile(reserveLetter["body"], const Color.fromARGB(255, 73, 54, 244)),
                                                   childWhenDragging:
-                                                      reserveLetter["body"] ==
-                                                              ""
-                                                          ? DraggableTile(
-                                                              tileState:
-                                                                  reserveLetter)
-                                                          : DraggableTile(
-                                                              tileState: {
-                                                                  "id":
-                                                                      reserveLetter[
-                                                                          "id"],
-                                                                  "body": ""
-                                                                }),
-                                                  child: DraggableTile(
-                                                      tileState:
-                                                          reserveLetter), //draggedTile(reserveLetter["body"], Colors.black),
+                                                      reserveLetter["body"] == ""
+                                                          ? DraggableTile(tileState:reserveLetter)
+                                                          : DraggableTile(tileState: {"id":reserveLetter["id"],"body": ""}),
+                                                  child: DraggableTile(tileState:reserveLetter), //draggedTile(reserveLetter["body"], Colors.black),
 
                                                   onDragStarted: () {
-                                                    if (reserveLetter['body'] ==
-                                                        "") {
-                                                      GameLogic()
-                                                          .placeIntoReserves(
-                                                              context,
-                                                              gamePlayState,
-                                                              reserveLetter);
+                                                    if (reserveLetter['body'] =="") {
+                                                      GameLogic().placeIntoReserves(context,gamePlayState,reserveLetter);
                                                     } else {
-                                                      gamePlayState
-                                                          .setDraggedReserveTile(
-                                                              reserveLetter);
+                                                      gamePlayState.setDraggedReserveTile(reserveLetter);
                                                     }
                                                   },
                                                   onDragEnd: (details) {
-                                                    gamePlayState
-                                                        .setDraggedReserveTile(
-                                                            {});
+                                                    gamePlayState.setDraggedReserveTile({});
                                                   },
                                                 ),
                                                 // DraggableTile(tileState: reserveLetter),

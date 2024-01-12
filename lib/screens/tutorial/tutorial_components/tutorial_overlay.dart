@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
+import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
 
@@ -214,8 +215,8 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
 // }
 
 Widget textWidget(ColorPalette palette, TutorialState tutorialState) {
-  late Map<String, dynamic> sequenceObject = tutorialDetails
-      .firstWhere((elem) => elem['step'] == tutorialState.sequenceStep);
+  // late Map<String, dynamic> sequenceObject = tutorialDetails.firstWhere((elem) => elem['step'] == tutorialState.sequenceStep);
+  final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
 
   return Column(
     children: [
@@ -226,15 +227,16 @@ Widget textWidget(ColorPalette palette, TutorialState tutorialState) {
           children: [
             DefaultTextStyle(
               style: TextStyle(fontSize: 22, color: palette.textColor2),
-              child: Text(sequenceObject['text']),
+              child: Text(currentStep['text']),
             ),
             Row(
               children: [
                 const Expanded(child: SizedBox()),
                 TextButton(
                     onPressed: () {
-                      tutorialState
-                          .setSequenceStep(tutorialState.sequenceStep + 1);
+                      // TutorialHelpers().saveStateHistory(tutorialState, tutorial)
+
+                      tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
                     },
                     child: Text(
                       "Okay Got it",

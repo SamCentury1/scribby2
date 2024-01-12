@@ -514,17 +514,12 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                             animation: _streakTextAnimation,
                                             builder: (context, child) {
                                               return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
                                                     Icon(
                                                       Icons.electric_bolt,
-                                                      color:
-                                                          _streakTextAnimation
-                                                                  .value ??
-                                                              palette
-                                                                  .tileBgColor,
+                                                      color: _streakTextAnimation.value ?? palette.tileBgColor,
                                                     ),
                                                     const Expanded(
                                                       flex: 1,
@@ -534,14 +529,9 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                                                       // "${widget.activeStreak.toString()}x",
                                                       "${gamePlayState.activeStreak.toString()}x",
                                                       style: TextStyle(
-                                                        fontStyle:
-                                                            FontStyle.italic,
+                                                        fontStyle:FontStyle.italic,
                                                         fontSize: 22,
-                                                        color:
-                                                            _streakTextAnimation
-                                                                    .value ??
-                                                                palette
-                                                                    .tileBgColor,
+                                                        color: _streakTextAnimation.value ?? palette.tileBgColor,
                                                       ),
                                                     ),
                                                   ],
@@ -623,11 +613,8 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                       : const SizedBox(),
               gamePlayState.gameSummaryLog.isEmpty
                   ? const SizedBox()
-                  : gamePlayState.gameSummaryLog[
-                                  gamePlayState.gameSummaryLog.length - 1]
-                              ['crossword'] >
-                          1
-                      ? Padding(
+                  : gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'] > 1 ? 
+                    Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
@@ -704,25 +691,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                             fontSize: 42,
                             color: getLevelUpWidgetColor(
                                 palette, _newLevelOpacityAnimation.value)
-                            // color: Color.fromRGBO(
-                            //     224, 224, 224, _newLevelOpacityAnimation.value),
                             )),
-                    // child: AnimatedBuilder(
-                    //   animation: _newLevelOpacityAnimation,
-                    //   builder: (context, child) {
-                    //     return AnimatedOpacity(
-
-                    //       opacity: _newLevelOpacityAnimation.value,
-                    //       duration: const Duration(milliseconds: 4500),
-                    //       child: Text(
-                    //           "Level ${gamePlayState.currentLevel.toString()}",
-                    //           style: TextStyle(
-                    //             fontSize: 42,
-                    //             color: palette.textColor2,
-                    //           )),
-                    //     );
-                    //   },
-                    // ),
                   ),
                 ),
               );

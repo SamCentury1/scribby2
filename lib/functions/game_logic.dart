@@ -1279,8 +1279,8 @@ class GameLogic {
       animationState.setShouldRunNewLevelAnimation(false);
     } else {
       gamePlayState.countDownController.restart(
-          duration:
-              GameLogic().getCountdownDuration(gamePlayState.currentLevel));
+          duration:GameLogic().getCountdownDuration(gamePlayState.currentLevel)
+        );
       audioController.playSfx(SfxType.tilePress);
       // animations
       animationState.setShouldRunStreaksEnterAnimation(false);

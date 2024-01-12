@@ -2,299 +2,47 @@
 
 List<Map<String, dynamic>> initialBoardState = [
   // ROW 1
-  {
-    "tileId": "1_1",
-    "row": 1,
-    "column": 1,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "1_2",
-    "row": 1,
-    "column": 2,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "1_3",
-    "row": 1,
-    "column": 3,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "1_4",
-    "row": 1,
-    "column": 4,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "1_5",
-    "row": 1,
-    "column": 5,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "1_6",
-    "row": 1,
-    "column": 6,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
+  {"tileId": "1_1","row": 1,"column": 1,"letter": "","active": false,"alive": true},
+  {"tileId": "1_2","row": 1,"column": 2,"letter": "","active": false,"alive": true},
+  {"tileId": "1_3","row": 1,"column": 3,"letter": "","active": false,"alive": true},
+  {"tileId": "1_4","row": 1,"column": 4,"letter": "","active": false,"alive": true},
+  {"tileId": "1_5","row": 1,"column": 5,"letter": "","active": false,"alive": true},
+  {"tileId": "1_6","row": 1,"column": 6,"letter": "","active": false,"alive": true},
   // ROW 2
-  {
-    "tileId": "2_1",
-    "row": 2,
-    "column": 1,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "2_2",
-    "row": 2,
-    "column": 2,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "2_3",
-    "row": 2,
-    "column": 3,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "2_4",
-    "row": 2,
-    "column": 4,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "2_5",
-    "row": 2,
-    "column": 5,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "2_6",
-    "row": 2,
-    "column": 6,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
+  {"tileId": "2_1","row": 2,"column": 1,"letter": "","active": false,"alive": true},
+  {"tileId": "2_2","row": 2,"column": 2,"letter": "","active": false,"alive": true},
+  {"tileId": "2_3","row": 2,"column": 3,"letter": "","active": false,"alive": true},
+  {"tileId": "2_4","row": 2,"column": 4,"letter": "","active": false,"alive": true},
+  {"tileId": "2_5","row": 2,"column": 5,"letter": "","active": false,"alive": true},
+  {"tileId": "2_6","row": 2,"column": 6,"letter": "","active": false,"alive": true},
   // ROW 3
-  {
-    "tileId": "3_1",
-    "row": 3,
-    "column": 1,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "3_2",
-    "row": 3,
-    "column": 2,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "3_3",
-    "row": 3,
-    "column": 3,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "3_4",
-    "row": 3,
-    "column": 4,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "3_5",
-    "row": 3,
-    "column": 5,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "3_6",
-    "row": 3,
-    "column": 6,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
+  {"tileId": "3_1","row": 3,"column": 1,"letter": "","active": false,"alive": true},
+  {"tileId": "3_2","row": 3,"column": 2,"letter": "","active": false,"alive": true},
+  {"tileId": "3_3","row": 3,"column": 3,"letter": "","active": false,"alive": true},
+  {"tileId": "3_4","row": 3,"column": 4,"letter": "","active": false,"alive": true},
+  {"tileId": "3_5","row": 3,"column": 5,"letter": "","active": false,"alive": true},
+  {"tileId": "3_6","row": 3,"column": 6,"letter": "","active": false,"alive": true},
   // ROW 4
-  {
-    "tileId": "4_1",
-    "row": 4,
-    "column": 1,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "4_2",
-    "row": 4,
-    "column": 2,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "4_3",
-    "row": 4,
-    "column": 3,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "4_4",
-    "row": 4,
-    "column": 4,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "4_5",
-    "row": 4,
-    "column": 5,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "4_6",
-    "row": 4,
-    "column": 6,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
+  {"tileId": "4_1","row": 4,"column": 1,"letter": "","active": false,"alive": true},
+  {"tileId": "4_2","row": 4,"column": 2,"letter": "","active": false,"alive": true},
+  {"tileId": "4_3","row": 4,"column": 3,"letter": "","active": false,"alive": true},
+  {"tileId": "4_4","row": 4,"column": 4,"letter": "","active": false,"alive": true},
+  {"tileId": "4_5","row": 4,"column": 5,"letter": "","active": false,"alive": true},
+  {"tileId": "4_6","row": 4,"column": 6,"letter": "","active": false,"alive": true},
   // ROW 5
-  {
-    "tileId": "5_1",
-    "row": 5,
-    "column": 1,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "5_2",
-    "row": 5,
-    "column": 2,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "5_3",
-    "row": 5,
-    "column": 3,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "5_4",
-    "row": 5,
-    "column": 4,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "5_5",
-    "row": 5,
-    "column": 5,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "5_6",
-    "row": 5,
-    "column": 6,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
+  {"tileId": "5_1","row": 5,"column": 1,"letter": "","active": false,"alive": true},
+  {"tileId": "5_2","row": 5,"column": 2,"letter": "","active": false,"alive": true},
+  {"tileId": "5_3","row": 5,"column": 3,"letter": "","active": false,"alive": true},
+  {"tileId": "5_4","row": 5,"column": 4,"letter": "","active": false,"alive": true},
+  {"tileId": "5_5","row": 5,"column": 5,"letter": "","active": false,"alive": true},
+  {"tileId": "5_6","row": 5,"column": 6,"letter": "","active": false,"alive": true},
   // ROW 6
-  {
-    "tileId": "6_1",
-    "row": 6,
-    "column": 1,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "6_2",
-    "row": 6,
-    "column": 2,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "6_3",
-    "row": 6,
-    "column": 3,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "6_4",
-    "row": 6,
-    "column": 4,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "6_5",
-    "row": 6,
-    "column": 5,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
-  {
-    "tileId": "6_6",
-    "row": 6,
-    "column": 6,
-    "letter": "",
-    "active": false,
-    "alive": true
-  },
+  {"tileId": "6_1","row": 6,"column": 1,"letter": "","active": false,"alive": true},
+  {"tileId": "6_2","row": 6,"column": 2,"letter": "","active": false,"alive": true},
+  {"tileId": "6_3","row": 6,"column": 3,"letter": "","active": false,"alive": true},
+  {"tileId": "6_4","row": 6,"column": 4,"letter": "","active": false,"alive": true},
+  {"tileId": "6_5","row": 6,"column": 5,"letter": "","active": false,"alive": true},
+  {"tileId": "6_6","row": 6,"column": 6,"letter": "","active": false,"alive": true},
 ];
 
 List<Map<String, dynamic>> alphabets = [
@@ -347,606 +95,126 @@ List<Map<String, dynamic>> alphabets = [
 List<Map<String, dynamic>> turnSummaryState = [];
 
 List<Map<String, dynamic>> stringCombinations = [
-  {
-    'len': 3,
-    'arr': ['1_1', '1_2', '1_3'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['1_2', '1_3', '1_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['1_3', '1_4', '1_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['1_4', '1_5', '1_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['2_1', '2_2', '2_3'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['2_2', '2_3', '2_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['2_3', '2_4', '2_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['2_4', '2_5', '2_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['3_1', '3_2', '3_3'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['3_2', '3_3', '3_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['3_3', '3_4', '3_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['3_4', '3_5', '3_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['4_1', '4_2', '4_3'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['4_2', '4_3', '4_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['4_3', '4_4', '4_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['4_4', '4_5', '4_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['5_1', '5_2', '5_3'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['5_2', '5_3', '5_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['5_3', '5_4', '5_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['5_4', '5_5', '5_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['6_1', '6_2', '6_3'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['6_2', '6_3', '6_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['6_3', '6_4', '6_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['6_4', '6_5', '6_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['1_1', '1_2', '1_3', '1_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['1_2', '1_3', '1_4', '1_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['1_3', '1_4', '1_5', '1_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['2_1', '2_2', '2_3', '2_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['2_2', '2_3', '2_4', '2_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['2_3', '2_4', '2_5', '2_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['3_1', '3_2', '3_3', '3_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['3_2', '3_3', '3_4', '3_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['3_3', '3_4', '3_5', '3_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['4_1', '4_2', '4_3', '4_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['4_2', '4_3', '4_4', '4_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['4_3', '4_4', '4_5', '4_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['5_1', '5_2', '5_3', '5_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['5_2', '5_3', '5_4', '5_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['5_3', '5_4', '5_5', '5_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['6_1', '6_2', '6_3', '6_4'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['6_2', '6_3', '6_4', '6_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 4,
-    'arr': ['6_3', '6_4', '6_5', '6_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['1_1', '1_2', '1_3', '1_4', '1_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['1_2', '1_3', '1_4', '1_5', '1_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['2_1', '2_2', '2_3', '2_4', '2_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['2_2', '2_3', '2_4', '2_5', '2_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['3_1', '3_2', '3_3', '3_4', '3_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['3_2', '3_3', '3_4', '3_5', '3_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['4_1', '4_2', '4_3', '4_4', '4_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['4_2', '4_3', '4_4', '4_5', '4_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['5_1', '5_2', '5_3', '5_4', '5_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['5_2', '5_3', '5_4', '5_5', '5_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['6_1', '6_2', '6_3', '6_4', '6_5'],
-    'axis': 'row'
-  },
-  {
-    'len': 5,
-    'arr': ['6_2', '6_3', '6_4', '6_5', '6_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 6,
-    'arr': ['1_1', '1_2', '1_3', '1_4', '1_5', '1_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 6,
-    'arr': ['2_1', '2_2', '2_3', '2_4', '2_5', '2_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 6,
-    'arr': ['3_1', '3_2', '3_3', '3_4', '3_5', '3_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 6,
-    'arr': ['4_1', '4_2', '4_3', '4_4', '4_5', '4_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 6,
-    'arr': ['5_1', '5_2', '5_3', '5_4', '5_5', '5_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 6,
-    'arr': ['6_1', '6_2', '6_3', '6_4', '6_5', '6_6'],
-    'axis': 'row'
-  },
-  {
-    'len': 3,
-    'arr': ['1_1', '2_1', '3_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['1_2', '2_2', '3_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['1_3', '2_3', '3_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['1_4', '2_4', '3_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['1_5', '2_5', '3_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['1_6', '2_6', '3_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['2_1', '3_1', '4_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['2_2', '3_2', '4_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['2_3', '3_3', '4_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['2_4', '3_4', '4_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['2_5', '3_5', '4_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['2_6', '3_6', '4_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['3_1', '4_1', '5_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['3_2', '4_2', '5_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['3_3', '4_3', '5_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['3_4', '4_4', '5_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['3_5', '4_5', '5_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['3_6', '4_6', '5_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['4_1', '5_1', '6_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['4_2', '5_2', '6_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['4_3', '5_3', '6_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['4_4', '5_4', '6_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['4_5', '5_5', '6_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 3,
-    'arr': ['4_6', '5_6', '6_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['1_1', '2_1', '3_1', '4_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['1_2', '2_2', '3_2', '4_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['1_3', '2_3', '3_3', '4_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['1_4', '2_4', '3_4', '4_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['1_5', '2_5', '3_5', '4_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['1_6', '2_6', '3_6', '4_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['2_1', '3_1', '4_1', '5_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['2_2', '3_2', '4_2', '5_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['2_3', '3_3', '4_3', '5_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['2_4', '3_4', '4_4', '5_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['2_5', '3_5', '4_5', '5_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['2_6', '3_6', '4_6', '5_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['3_1', '4_1', '5_1', '6_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['3_2', '4_2', '5_2', '6_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['3_3', '4_3', '5_3', '6_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['3_4', '4_4', '5_4', '6_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['3_5', '4_5', '5_5', '6_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 4,
-    'arr': ['3_6', '4_6', '5_6', '6_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['1_1', '2_1', '3_1', '4_1', '5_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['1_2', '2_2', '3_2', '4_2', '5_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['1_3', '2_3', '3_3', '4_3', '5_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['1_4', '2_4', '3_4', '4_4', '5_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['1_5', '2_5', '3_5', '4_5', '5_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['1_6', '2_6', '3_6', '4_6', '5_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['2_1', '3_1', '4_1', '5_1', '6_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['2_2', '3_2', '4_2', '5_2', '6_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['2_3', '3_3', '4_3', '5_3', '6_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['2_4', '3_4', '4_4', '5_4', '6_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['2_5', '3_5', '4_5', '5_5', '6_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 5,
-    'arr': ['2_6', '3_6', '4_6', '5_6', '6_6'],
-    'axis': 'column'
-  },
-  {
-    'len': 6,
-    'arr': ['1_1', '2_1', '3_1', '4_1', '5_1', '6_1'],
-    'axis': 'column'
-  },
-  {
-    'len': 6,
-    'arr': ['1_2', '2_2', '3_2', '4_2', '5_2', '6_2'],
-    'axis': 'column'
-  },
-  {
-    'len': 6,
-    'arr': ['1_3', '2_3', '3_3', '4_3', '5_3', '6_3'],
-    'axis': 'column'
-  },
-  {
-    'len': 6,
-    'arr': ['1_4', '2_4', '3_4', '4_4', '5_4', '6_4'],
-    'axis': 'column'
-  },
-  {
-    'len': 6,
-    'arr': ['1_5', '2_5', '3_5', '4_5', '5_5', '6_5'],
-    'axis': 'column'
-  },
-  {
-    'len': 6,
-    'arr': ['1_6', '2_6', '3_6', '4_6', '5_6', '6_6'],
-    'axis': 'column'
-  },
+  {'len': 3,'arr': ['1_1', '1_2', '1_3'],'axis': 'row'  },
+  {'len': 3,'arr': ['1_2', '1_3', '1_4'],'axis': 'row'  },
+  {'len': 3,'arr': ['1_3', '1_4', '1_5'],'axis': 'row'  },
+  {'len': 3,'arr': ['1_4', '1_5', '1_6'],'axis': 'row'  },
+  {'len': 3,'arr': ['2_1', '2_2', '2_3'],'axis': 'row'  },
+  {'len': 3,'arr': ['2_2', '2_3', '2_4'],'axis': 'row'  },
+  {'len': 3,'arr': ['2_3', '2_4', '2_5'],'axis': 'row'  },
+  {'len': 3,'arr': ['2_4', '2_5', '2_6'],'axis': 'row'  },
+  {'len': 3,'arr': ['3_1', '3_2', '3_3'],'axis': 'row'  },
+  {'len': 3,'arr': ['3_2', '3_3', '3_4'],'axis': 'row'  },
+  {'len': 3,'arr': ['3_3', '3_4', '3_5'],'axis': 'row'  },
+  {'len': 3,'arr': ['3_4', '3_5', '3_6'],'axis': 'row'  },
+  {'len': 3,'arr': ['4_1', '4_2', '4_3'],'axis': 'row'  },
+  {'len': 3,'arr': ['4_2', '4_3', '4_4'],'axis': 'row'  },
+  {'len': 3,'arr': ['4_3', '4_4', '4_5'],'axis': 'row'  },
+  {'len': 3,'arr': ['4_4', '4_5', '4_6'],'axis': 'row'  },
+  {'len': 3,'arr': ['5_1', '5_2', '5_3'],'axis': 'row'  },
+  {'len': 3,'arr': ['5_2', '5_3', '5_4'],'axis': 'row'  },
+  {'len': 3,'arr': ['5_3', '5_4', '5_5'],'axis': 'row'  },
+  {'len': 3,'arr': ['5_4', '5_5', '5_6'],'axis': 'row'  },
+  {'len': 3,'arr': ['6_1', '6_2', '6_3'],'axis': 'row'  },
+  {'len': 3,'arr': ['6_2', '6_3', '6_4'],'axis': 'row'  },
+  {'len': 3,'arr': ['6_3', '6_4', '6_5'],'axis': 'row'  },
+  {'len': 3,'arr': ['6_4', '6_5', '6_6'],'axis': 'row'  },
+  {'len': 4,'arr': ['1_1', '1_2', '1_3', '1_4'],'axis': 'row'  },
+  {'len': 4,'arr': ['1_2', '1_3', '1_4', '1_5'],'axis': 'row'  },
+  {'len': 4,'arr': ['1_3', '1_4', '1_5', '1_6'],'axis': 'row'  },
+  {'len': 4,'arr': ['2_1', '2_2', '2_3', '2_4'],'axis': 'row'  },
+  {'len': 4,'arr': ['2_2', '2_3', '2_4', '2_5'],'axis': 'row'  },
+  {'len': 4,'arr': ['2_3', '2_4', '2_5', '2_6'],'axis': 'row'  },
+  {'len': 4,'arr': ['3_1', '3_2', '3_3', '3_4'],'axis': 'row'  },
+  {'len': 4,'arr': ['3_2', '3_3', '3_4', '3_5'],'axis': 'row'  },
+  {'len': 4,'arr': ['3_3', '3_4', '3_5', '3_6'],'axis': 'row'  },
+  {'len': 4,'arr': ['4_1', '4_2', '4_3', '4_4'],'axis': 'row'  },
+  {'len': 4,'arr': ['4_2', '4_3', '4_4', '4_5'],'axis': 'row'  },
+  {'len': 4,'arr': ['4_3', '4_4', '4_5', '4_6'],'axis': 'row'  },
+  {'len': 4,'arr': ['5_1', '5_2', '5_3', '5_4'],'axis': 'row'  },
+  {'len': 4,'arr': ['5_2', '5_3', '5_4', '5_5'],'axis': 'row'  },
+  {'len': 4,'arr': ['5_3', '5_4', '5_5', '5_6'],'axis': 'row'  },
+  {'len': 4,'arr': ['6_1', '6_2', '6_3', '6_4'],'axis': 'row'  },
+  {'len': 4,'arr': ['6_2', '6_3', '6_4', '6_5'],'axis': 'row'  },
+  {'len': 4,'arr': ['6_3', '6_4', '6_5', '6_6'],'axis': 'row'  },
+  {'len': 5,'arr': ['1_1', '1_2', '1_3', '1_4', '1_5'],'axis': 'row'  },
+  {'len': 5,'arr': ['1_2', '1_3', '1_4', '1_5', '1_6'],'axis': 'row'  },
+  {'len': 5,'arr': ['2_1', '2_2', '2_3', '2_4', '2_5'],'axis': 'row'  },
+  {'len': 5,'arr': ['2_2', '2_3', '2_4', '2_5', '2_6'],'axis': 'row'  },
+  {'len': 5,'arr': ['3_1', '3_2', '3_3', '3_4', '3_5'],'axis': 'row'  },
+  {'len': 5,'arr': ['3_2', '3_3', '3_4', '3_5', '3_6'],'axis': 'row'  },
+  {'len': 5,'arr': ['4_1', '4_2', '4_3', '4_4', '4_5'],'axis': 'row'  },
+  {'len': 5,'arr': ['4_2', '4_3', '4_4', '4_5', '4_6'],'axis': 'row'  },
+  {'len': 5,'arr': ['5_1', '5_2', '5_3', '5_4', '5_5'],'axis': 'row'  },
+  {'len': 5,'arr': ['5_2', '5_3', '5_4', '5_5', '5_6'],'axis': 'row'  },
+  {'len': 5,'arr': ['6_1', '6_2', '6_3', '6_4', '6_5'],'axis': 'row'  },
+  {'len': 5,'arr': ['6_2', '6_3', '6_4', '6_5', '6_6'],'axis': 'row'  },
+  {'len': 6,'arr': ['1_1', '1_2', '1_3', '1_4', '1_5', '1_6'],'axis': 'row'  },
+  {'len': 6,'arr': ['2_1', '2_2', '2_3', '2_4', '2_5', '2_6'],'axis': 'row'  },
+  {'len': 6,'arr': ['3_1', '3_2', '3_3', '3_4', '3_5', '3_6'],'axis': 'row'  },
+  {'len': 6,'arr': ['4_1', '4_2', '4_3', '4_4', '4_5', '4_6'],'axis': 'row'  },
+  {'len': 6,'arr': ['5_1', '5_2', '5_3', '5_4', '5_5', '5_6'],'axis': 'row'  },
+  {'len': 6,'arr': ['6_1', '6_2', '6_3', '6_4', '6_5', '6_6'],'axis': 'row'  },
+  {'len': 3,'arr': ['1_1', '2_1', '3_1'],'axis': 'column'  },
+  {'len': 3,'arr': ['1_2', '2_2', '3_2'],'axis': 'column'  },
+  {'len': 3,'arr': ['1_3', '2_3', '3_3'],'axis': 'column'  },
+  {'len': 3,'arr': ['1_4', '2_4', '3_4'],'axis': 'column'  },
+  {'len': 3,'arr': ['1_5', '2_5', '3_5'],'axis': 'column'  },
+  {'len': 3,'arr': ['1_6', '2_6', '3_6'],'axis': 'column'  },
+  {'len': 3,'arr': ['2_1', '3_1', '4_1'],'axis': 'column'  },
+  {'len': 3,'arr': ['2_2', '3_2', '4_2'],'axis': 'column'  },
+  {'len': 3,'arr': ['2_3', '3_3', '4_3'],'axis': 'column'  },
+  {'len': 3,'arr': ['2_4', '3_4', '4_4'],'axis': 'column'  },
+  {'len': 3,'arr': ['2_5', '3_5', '4_5'],'axis': 'column'  },
+  {'len': 3,'arr': ['2_6', '3_6', '4_6'],'axis': 'column'  },
+  {'len': 3,'arr': ['3_1', '4_1', '5_1'],'axis': 'column'  },
+  {'len': 3,'arr': ['3_2', '4_2', '5_2'],'axis': 'column'  },
+  {'len': 3,'arr': ['3_3', '4_3', '5_3'],'axis': 'column'  },
+  {'len': 3,'arr': ['3_4', '4_4', '5_4'],'axis': 'column'  },
+  {'len': 3,'arr': ['3_5', '4_5', '5_5'],'axis': 'column'  },
+  {'len': 3,'arr': ['3_6', '4_6', '5_6'],'axis': 'column'  },
+  {'len': 3,'arr': ['4_1', '5_1', '6_1'],'axis': 'column'  },
+  {'len': 3,'arr': ['4_2', '5_2', '6_2'],'axis': 'column'  },
+  {'len': 3,'arr': ['4_3', '5_3', '6_3'],'axis': 'column'  },
+  {'len': 3,'arr': ['4_4', '5_4', '6_4'],'axis': 'column'  },
+  {'len': 3,'arr': ['4_5', '5_5', '6_5'],'axis': 'column'  },
+  {'len': 3,'arr': ['4_6', '5_6', '6_6'],'axis': 'column'  },
+  {'len': 4,'arr': ['1_1', '2_1', '3_1', '4_1'],'axis': 'column'  },
+  {'len': 4,'arr': ['1_2', '2_2', '3_2', '4_2'],'axis': 'column'  },
+  {'len': 4,'arr': ['1_3', '2_3', '3_3', '4_3'],'axis': 'column'  },
+  {'len': 4,'arr': ['1_4', '2_4', '3_4', '4_4'],'axis': 'column'  },
+  {'len': 4,'arr': ['1_5', '2_5', '3_5', '4_5'],'axis': 'column'  },
+  {'len': 4,'arr': ['1_6', '2_6', '3_6', '4_6'],'axis': 'column'  },
+  {'len': 4,'arr': ['2_1', '3_1', '4_1', '5_1'],'axis': 'column'  },
+  {'len': 4,'arr': ['2_2', '3_2', '4_2', '5_2'],'axis': 'column'  },
+  {'len': 4,'arr': ['2_3', '3_3', '4_3', '5_3'],'axis': 'column'  },
+  {'len': 4,'arr': ['2_4', '3_4', '4_4', '5_4'],'axis': 'column'  },
+  {'len': 4,'arr': ['2_5', '3_5', '4_5', '5_5'],'axis': 'column'  },
+  {'len': 4,'arr': ['2_6', '3_6', '4_6', '5_6'],'axis': 'column'  },
+  {'len': 4,'arr': ['3_1', '4_1', '5_1', '6_1'],'axis': 'column'  },
+  {'len': 4,'arr': ['3_2', '4_2', '5_2', '6_2'],'axis': 'column'  },
+  {'len': 4,'arr': ['3_3', '4_3', '5_3', '6_3'],'axis': 'column'  },
+  {'len': 4,'arr': ['3_4', '4_4', '5_4', '6_4'],'axis': 'column'  },
+  {'len': 4,'arr': ['3_5', '4_5', '5_5', '6_5'],'axis': 'column'  },
+  {'len': 4,'arr': ['3_6', '4_6', '5_6', '6_6'],'axis': 'column'  },
+  {'len': 5,'arr': ['1_1', '2_1', '3_1', '4_1', '5_1'],'axis': 'column'  },
+  {'len': 5,'arr': ['1_2', '2_2', '3_2', '4_2', '5_2'],'axis': 'column'  },
+  {'len': 5,'arr': ['1_3', '2_3', '3_3', '4_3', '5_3'],'axis': 'column'  },
+  {'len': 5,'arr': ['1_4', '2_4', '3_4', '4_4', '5_4'],'axis': 'column'  },
+  {'len': 5,'arr': ['1_5', '2_5', '3_5', '4_5', '5_5'],'axis': 'column'  },
+  {'len': 5,'arr': ['1_6', '2_6', '3_6', '4_6', '5_6'],'axis': 'column'  },
+  {'len': 5,'arr': ['2_1', '3_1', '4_1', '5_1', '6_1'],'axis': 'column'  },
+  {'len': 5,'arr': ['2_2', '3_2', '4_2', '5_2', '6_2'],'axis': 'column'  },
+  {'len': 5,'arr': ['2_3', '3_3', '4_3', '5_3', '6_3'],'axis': 'column'  },
+  {'len': 5,'arr': ['2_4', '3_4', '4_4', '5_4', '6_4'],'axis': 'column'  },
+  {'len': 5,'arr': ['2_5', '3_5', '4_5', '5_5', '6_5'],'axis': 'column'  },
+  {'len': 5,'arr': ['2_6', '3_6', '4_6', '5_6', '6_6'],'axis': 'column'  },
+  {'len': 6,'arr': ['1_1', '2_1', '3_1', '4_1', '5_1', '6_1'],'axis': 'column'  },
+  {'len': 6,'arr': ['1_2', '2_2', '3_2', '4_2', '5_2', '6_2'],'axis': 'column'  },
+  {'len': 6,'arr': ['1_3', '2_3', '3_3', '4_3', '5_3', '6_3'],'axis': 'column'  },
+  {'len': 6,'arr': ['1_4', '2_4', '3_4', '4_4', '5_4', '6_4'],'axis': 'column'  },
+  {'len': 6,'arr': ['1_5', '2_5', '3_5', '4_5', '5_5', '6_5'],'axis': 'column'  },
+  {'len': 6,'arr': ['1_6', '2_6', '3_6', '4_6', '5_6', '6_6'],'axis': 'column'  },
 ];
 
 List<Map<String, dynamic>> demoBoardState_1 = [
@@ -1120,330 +388,331 @@ List<Map<String, dynamic>> tutorialBoard_1 = [
   // {"tileId" : "0_0", "row":0 , "column":0 , "letter" : "E", "active": false},
   // {"tileId" : "0_1", "row":0 , "column":1 , "letter" : "N", "active": false},
   // Board
-  {
-    "index": 0,
-    "tileId": "1_1",
-    "row": 1,
-    "column": 1,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 1,
-    "tileId": "1_2",
-    "row": 1,
-    "column": 2,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 2,
-    "tileId": "1_3",
-    "row": 1,
-    "column": 3,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 3,
-    "tileId": "1_4",
-    "row": 1,
-    "column": 4,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 4,
-    "tileId": "1_5",
-    "row": 1,
-    "column": 5,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 5,
-    "tileId": "1_6",
-    "row": 1,
-    "column": 6,
-    "letter": "",
-    "active": false
-  },
+  {"index": 0,"tileId": "1_1","row": 1,"column": 1,"letter": "","active": false, "alive": true  },
+  {"index": 1,"tileId": "1_2","row": 1,"column": 2,"letter": "","active": false, "alive": true  },
+  {"index": 2,"tileId": "1_3","row": 1,"column": 3,"letter": "","active": false, "alive": true  },
+  {"index": 3,"tileId": "1_4","row": 1,"column": 4,"letter": "","active": false, "alive": true  },
+  {"index": 4,"tileId": "1_5","row": 1,"column": 5,"letter": "","active": false, "alive": true  },
+  {"index": 5,"tileId": "1_6","row": 1,"column": 6,"letter": "","active": false, "alive": true  },
 
-  {
-    "index": 6,
-    "tileId": "2_1",
-    "row": 2,
-    "column": 1,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 7,
-    "tileId": "2_2",
-    "row": 2,
-    "column": 2,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 8,
-    "tileId": "2_3",
-    "row": 2,
-    "column": 3,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 9,
-    "tileId": "2_4",
-    "row": 2,
-    "column": 4,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 10,
-    "tileId": "2_5",
-    "row": 2,
-    "column": 5,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 11,
-    "tileId": "2_6",
-    "row": 2,
-    "column": 6,
-    "letter": "",
-    "active": false
-  },
+  {"index": 6,"tileId": "2_1","row": 2,"column": 1,"letter": "","active": false, "alive": true  },
+  {"index": 7,"tileId": "2_2","row": 2,"column": 2,"letter": "","active": false, "alive": true  },
+  {"index": 8,"tileId": "2_3","row": 2,"column": 3,"letter": "","active": false, "alive": true  },
+  {"index": 9,"tileId": "2_4","row": 2,"column": 4,"letter": "","active": false, "alive": true  },
+  {"index": 10,"tileId": "2_5","row": 2,"column": 5,"letter": "","active": false, "alive": true  },
+  {"index": 11,"tileId": "2_6","row": 2,"column": 6,"letter": "","active": false, "alive": true  },
 
-  {
-    "index": 12,
-    "tileId": "3_1",
-    "row": 3,
-    "column": 1,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 13,
-    "tileId": "3_2",
-    "row": 3,
-    "column": 2,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 14,
-    "tileId": "3_3",
-    "row": 3,
-    "column": 3,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 15,
-    "tileId": "3_4",
-    "row": 3,
-    "column": 4,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 16,
-    "tileId": "3_5",
-    "row": 3,
-    "column": 5,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 17,
-    "tileId": "3_6",
-    "row": 3,
-    "column": 6,
-    "letter": "",
-    "active": false
-  },
+  {"index": 12,"tileId": "3_1","row": 3,"column": 1,"letter": "","active": false, "alive": true  },
+  {"index": 13,"tileId": "3_2","row": 3,"column": 2,"letter": "","active": false, "alive": true  },
+  {"index": 14,"tileId": "3_3","row": 3,"column": 3,"letter": "","active": false, "alive": true  },
+  {"index": 15,"tileId": "3_4","row": 3,"column": 4,"letter": "","active": false, "alive": true  },
+  {"index": 16,"tileId": "3_5","row": 3,"column": 5,"letter": "","active": false, "alive": true  },
+  {"index": 17,"tileId": "3_6","row": 3,"column": 6,"letter": "","active": false, "alive": true  },
 
-  {
-    "index": 18,
-    "tileId": "4_1",
-    "row": 4,
-    "column": 1,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 19,
-    "tileId": "4_2",
-    "row": 4,
-    "column": 2,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 20,
-    "tileId": "4_3",
-    "row": 4,
-    "column": 3,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 21,
-    "tileId": "4_4",
-    "row": 4,
-    "column": 4,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 22,
-    "tileId": "4_5",
-    "row": 4,
-    "column": 5,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 23,
-    "tileId": "4_6",
-    "row": 4,
-    "column": 6,
-    "letter": "",
-    "active": false
-  },
+  {"index": 18,"tileId": "4_1","row": 4,"column": 1,"letter": "","active": false, "alive": true  },
+  {"index": 19,"tileId": "4_2","row": 4,"column": 2,"letter": "","active": false, "alive": true  },
+  {"index": 20,"tileId": "4_3","row": 4,"column": 3,"letter": "","active": false, "alive": true  },
+  {"index": 21,"tileId": "4_4","row": 4,"column": 4,"letter": "","active": false, "alive": true  },
+  {"index": 22,"tileId": "4_5","row": 4,"column": 5,"letter": "","active": false, "alive": true  },
+  {"index": 23,"tileId": "4_6","row": 4,"column": 6,"letter": "","active": false, "alive": true  },
 
-  {
-    "index": 24,
-    "tileId": "5_1",
-    "row": 5,
-    "column": 1,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 25,
-    "tileId": "5_2",
-    "row": 5,
-    "column": 2,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 26,
-    "tileId": "5_3",
-    "row": 5,
-    "column": 3,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 27,
-    "tileId": "5_4",
-    "row": 5,
-    "column": 4,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 28,
-    "tileId": "5_5",
-    "row": 5,
-    "column": 5,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 29,
-    "tileId": "5_6",
-    "row": 5,
-    "column": 6,
-    "letter": "",
-    "active": false
-  },
+  {"index": 24,"tileId": "5_1","row": 5,"column": 1,"letter": "","active": false, "alive": true  },
+  {"index": 25,"tileId": "5_2","row": 5,"column": 2,"letter": "","active": false, "alive": true  },
+  {"index": 26,"tileId": "5_3","row": 5,"column": 3,"letter": "","active": false, "alive": true  },
+  {"index": 27,"tileId": "5_4","row": 5,"column": 4,"letter": "","active": false, "alive": true  },
+  {"index": 28,"tileId": "5_5","row": 5,"column": 5,"letter": "","active": false, "alive": true  },
+  {"index": 29,"tileId": "5_6","row": 5,"column": 6,"letter": "","active": false, "alive": true  },
 
-  {
-    "index": 30,
-    "tileId": "6_1",
-    "row": 6,
-    "column": 1,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 31,
-    "tileId": "6_2",
-    "row": 6,
-    "column": 2,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 32,
-    "tileId": "6_3",
-    "row": 6,
-    "column": 3,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 33,
-    "tileId": "6_4",
-    "row": 6,
-    "column": 4,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 34,
-    "tileId": "6_5",
-    "row": 6,
-    "column": 5,
-    "letter": "",
-    "active": false
-  },
-  {
-    "index": 35,
-    "tileId": "6_6",
-    "row": 6,
-    "column": 6,
-    "letter": "",
-    "active": false
-  },
+  {"index": 30,"tileId": "6_1","row": 6,"column": 1,"letter": "","active": false, "alive": true  },
+  {"index": 31,"tileId": "6_2","row": 6,"column": 2,"letter": "","active": false, "alive": true  },
+  {"index": 32,"tileId": "6_3","row": 6,"column": 3,"letter": "","active": false, "alive": true  },
+  {"index": 33,"tileId": "6_4","row": 6,"column": 4,"letter": "","active": false, "alive": true  },
+  {"index": 34,"tileId": "6_5","row": 6,"column": 5,"letter": "","active": false, "alive": true  },
+  {"index": 35,"tileId": "6_6","row": 6,"column": 6,"letter": "","active": false, "alive": true  },
 ];
 
 /// This list goes through the steps of the tutoial walkthrough
 List<Map<String, dynamic>> tutorialDetails = [
+  // {"step": 0,"text":"Welcome to Scribby! This tutorial will show you how to play the game", "targets": []},
+  // {"step": 1,"text": "To skip the tutorial at any step, click on 'Skip Tutorial' at the top", "targets": ['skip_tutorial']},
+  // {"step": 2, "text": "To go back one step, tap the circular arrow icon at the top", "targets": ['back_step']},
+
+
   {
-    "step": 0,
-    "text":
-        "Welcome to Scribby! This tutorial will show you how to play the game"
+    "step" :      0,
+    "text" :      "Welcome to Scribby! This tutorial will show you how to play the game",
+    "targets" :   [],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,
+
   },
+
   {
-    "step": 1,
-    "text":
-        "To skip the tutorial at any step, click on 'Skip Tutorial' at the top"
+    "step" :      1,
+    "text" :      "To skip the tutorial at any step, click on 'Skip Tutorial' at the top",
+    "targets" :   ["skip_tutorial"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,
   },
+
   {
-    "step": 2,
-    "text": "Use the controls to go back or forward throughout the tutorial"
-  },
-  {"step": 3, "text": "Place the letter 'H' in the glowing tile", "target": 7},
-  {"step": 4, "text": "Place the letter 'E' in the glowing tile", "target": 8},
-  {"step": 5, "text": "Place the letter 'L' in the glowing tile", "target": 9},
-  {"step": 6, "text": "Now place the letter in the glowing tile", "target": 10},
-  {"step": 7, "text": "Now place the letter in the glowing tile", "target": 12},
-  {"step": 8, "text": "Now place the letter in the glowing tile", "target": 15},
-  {"step": 9, "text": "Now place the letter in the glowing tile", "target": 33},
+    "step" :      2,
+    "text" :      "To go back one step, tap the circular arrow icon at the top",
+    "targets" :   ["back_step"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,
+  },      
+
+
   {
-    "step": 10,
-    "text": "Now place the letter in the glowing tile",
-    "target": 14
+    "step" :      3,
+    "text" :      "The objective is to score as many points as possible by spelling words",
+    "targets" :   ["points"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,
   },
-  {"step": 11, "text": "Now place the letter in the glowing tile", "target": 6},
-  {"step": 12, "text": "Now place the letter in the glowing tile", "target": 2},
-  {"step": 13, "text": "Now place the letter in the glowing tile", "target": 5},
+
+  {
+    "step" :      4,
+    "text" :      "Every turn, you place the upcoming letter",
+    "targets" :   ["random_letter_1"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,
+  },  
+
+  {
+    "step" :      5,
+    "text" :      "Tap the glowing tile to play the upcoming letter",
+    "targets" :   [9],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   false,
+    "autoPlace":  true,
+    "input":      'tile_9',
+    "inputType":  'tap',
+  },
+
+  {
+    "step" :      6,
+    "text" :      "A new letter is randomly generated",
+    "targets" :   ["random_letter_2"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,    
+  },
+
+  {
+    "step" :      7,
+    "text" :      "You have a limited amount of time to make a move",
+    "targets" :   ["countdown"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   false,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,    
+  },
+
+  {
+    "step" :      8,
+    "text" :      "You have a limited amount of time to make a move",
+    "targets" :   ["countdown"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  false,
+    "input":      null,
+    "inputType":  null,    
+  },     
+
+  {
+    "step" :      9,
+    "text" :      "If the timer runs out, a random spot on the board will be locked for the rest of the game!",
+    "targets" :   [35, "countdown_end"],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   true,
+    "autoPlace":  true,
+    "input":      'tile_35',
+    "inputType":  'auto',    
+  },        
+
+  {
+    "step" :      10,
+    "text" :      "Tap the glowing tile to place letter 'A' on the board",
+    "targets" :   [8],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     1,
+    "crossword":  0,
+    "complete":   false,
+    "autoPlace":  true,
+    "input":      'tile_8',
+    "inputType":  'tap',    
+  },  
+
+
+  {
+    "step" :      11,
+    "text" :      "Tap the glowing tile to place letter 'A' on the board",
+    "targets" :   [7,'streak'],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     2,
+    "crossword":  0,
+    "complete":   false,
+    "autoPlace":  true,
+    "input":      'tile_7',
+    "inputType":  'tap',     
+  },  
+
+
+  {
+    "step" :      12,
+    "text" :      "Tap the glowing tile to place letter 'A' on the board",
+    "targets" :   [12,'multi_word'],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   3,
+    "streak":     3,
+    "crossword":  2,
+    "complete":   false,
+    "autoPlace":  true,
+    "input":      'tile_12',
+    "inputType":  'tap',     
+  },  
+
+  {
+    "step" :      13,
+    "text" :      "Tap the glowing tile to place letter 'A' on the board",
+    "targets" :   [22,'cross_word'],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   false,
+    "autoPlace":  true,
+    "input":      'tile_22',
+    "inputType":  'tap',     
+  },   
+
+
+  {
+    "step" :      14,
+    "text" :      "Tap the glowing tile to place letter 'A' on the board",
+    "targets" :   [25,],
+    "points":     0,
+    "words":      0,
+    "newPoints":  0,
+    "newWords":   0,
+    "streak":     0,
+    "crossword":  0,
+    "complete":   false,
+    "autoPlace":  true,
+    "input":      'tile_25',
+    "inputType":  'tap',     
+  },          
+
+
+
+
+
+
+  // {
+  //   "step" :      0,
+  //   "text" :      "",
+  //   "targets" :   [],
+  //   "points":     0,
+  //   "words":      0,
+  //   "newPoints":  0,
+  //   "newWords":   0,
+  //   "streak":     0,
+  //   "crossword":  0,
+  //   "complete":   true,
+  // },    
+
+
+
+
+  // {"step": 3, "text": "Place the letter 'H' in the glowing tile", "targets": [7]},
+  // {"step": 4, "text": "Place the letter 'E' in the glowing tile", "targets": [8]},
+  // {"step": 5, "text": "Place the letter 'L' in the glowing tile", "targets": [9,'streak']},
+  // {"step": 6, "text": "Now place the letter in the glowing tile", "targets": [10]},
+  // {"step": 7, "text": "Now place the letter in the glowing tile", "targets": [12]},
+  // {"step": 8, "text": "Now place the letter in the glowing tile", "targets": [15]},
+  // {"step": 9, "text": "Now place the letter in the glowing tile", "targets": [33]},
+  // {"step": 10,"text": "Now place the letter in the glowing tile","targets": [14]},
+  // {"step": 11, "text": "Now place the letter in the glowing tile", "targets": [6]},
+  // {"step": 12, "text": "Now place the letter in the glowing tile", "targets": [2]},
+  // {"step": 13, "text": "Now place the letter in the glowing tile", "targets": [5]},
 ];

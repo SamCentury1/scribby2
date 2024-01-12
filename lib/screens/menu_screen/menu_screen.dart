@@ -85,6 +85,7 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
@@ -92,6 +93,7 @@ import 'package:scribby_flutter_v2/screens/instructions_screen/instructions_scre
 import 'package:scribby_flutter_v2/screens/leaderboards_screen/leaderboards_screen.dart';
 // import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/settings_screen/settings_screen.dart';
+import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_screen_1.dart';
 // import 'package:scribby_flutter_v2/screens/stats_screen/stats_screen.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/choose_language.dart';
@@ -100,6 +102,7 @@ import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/styles/buttons.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
+import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
@@ -203,8 +206,15 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   void navigateToTutorial() {
+    late TutorialState tutorialState = context.read<TutorialState>();
+    // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
+    TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
+    
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const TutorialScreen1()));
+      MaterialPageRoute(
+        builder: (context) => const TutorialScreen1()
+      )
+    );
   }
 
   @override
@@ -302,10 +312,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               print(_settings.userData.value
                                   as Map<String, dynamic>);
 
-                              if ((_settings.userData.value
-                                          as Map<String, dynamic>)['parameters']
-                                      ['hasSeenTutorial'] ==
-                                  false) {
+                              if ((_settings.userData.value as Map<String, dynamic>)['parameters']['hasSeenTutorial'] ==false) {
                                 navigateToTutorial();
                               } else {
                                 Helpers().getStates(_gamePlayState, _settings);
@@ -316,10 +323,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                 );
                               }
                             },
-                            child: menuButton(
-                              palette,
-                              translate("New Game", language),
-                            )),
+                            child: menuButton( palette, translate("New Game", language),)),
 
                         TextButton(
                             onPressed: () {

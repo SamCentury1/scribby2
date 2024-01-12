@@ -4,10 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
+import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
+import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TutorialRandomLetters extends StatefulWidget {
-  const TutorialRandomLetters({super.key});
+  final Animation animation;
+  const TutorialRandomLetters({
+    super.key,
+    required this.animation,
+  });
 
   @override
   State<TutorialRandomLetters> createState() => _TutorialRandomLettersState();
@@ -51,6 +57,9 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
     _tutorialState = Provider.of<TutorialState>(context, listen: false);
     _animationState.addListener(_handleAnimationStateChange);
     // _tutorialState.addListener(_handleGamePlayStateChange);
+    // _tutorialState.tutorialCountDownController.pause();
+
+
   }
 
   // void _handleGamePlayStateChange() {
@@ -71,6 +80,10 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
 
   // THIS FUNCTION TELLS THE CODE WHAT TO DO
   void initializeAnimations() {
+
+    // final double width = MediaQuery.of(context).size.width *0.6;
+    // final double side = width/3;
+
     _shrinkAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
 
@@ -95,8 +108,8 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
         vsync: this, duration: const Duration(milliseconds: 500));
 
     _sizeAnimation = Tween<double>(
-      begin: 50,
-      end: 100,
+      begin: 40, // 50,
+      end: 80 // 100,
     ).animate(CurvedAnimation(
         parent: _sizeAnimationController, curve: Curves.easeIn));
 
@@ -104,8 +117,8 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
         vsync: this, duration: const Duration(milliseconds: 500));
 
     _fontAnimation = Tween<double>(
-      begin: 26,
-      end: 60,
+      begin: 22,
+      end: 42,
     ).animate(CurvedAnimation(
         parent: _fontAnimationController, curve: Curves.easeIn));
 
@@ -157,12 +170,30 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
     super.dispose();
   }
 
+
+Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
+  final bool active = currentStep['targets'].contains(widgetId);
+  late Color res = Colors.transparent;
+  if (active) {
+    res = Color.fromRGBO(
+      palette.textColor2.red,
+      palette.textColor2.green,
+      palette.textColor2.blue,
+      animation.value  
+    );
+  }
+  return res;
+}
+
   @override
   Widget build(BuildContext context) {
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
     final ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: false);
+
+    final double width = MediaQuery.of(context).size.width *0.6;
+    final double side = width/3;
 
     return Stack(
       children: [
@@ -171,158 +202,235 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
           children: [
             Consumer<TutorialState>(
               builder: (context, tutorialState, child) {
+
+                // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep,);
+                final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
+
+                if (currentStep['targets'].contains('countdown')) {
+                  late Map<String,dynamic> tile35 = tutorialState.tutorialTileState.firstWhere((element) => element['index'] == 35);
+
+                  if (tile35['alive']) {
+                    tutorialState.tutorialCountDownController.restart(
+                      duration: 5,
+                    );
+                  }
+                }                
+
                 return SizedBox(
                   // color: Color.fromARGB(255, 220, 171, 230),
-                  width: double.infinity,
-                  height: 100,
+                  // width: double.infinity,
+                  // height: 100,
+                  width: MediaQuery.of(context).size.width*0.8,
+                  height: side*1.2,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           flex: 1,
-                          child: Stack(
-                            children: [
-                              // CountDownTimer()
+                          child: AnimatedBuilder(
+                            animation: widget.animation,
+                            builder: (context, child) {                              
+                              return Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    // color: Colors.white,
+                                    color: getColor(palette,widget.animation, currentStep,'countdown'),
+                                    width: 3
+                                  ),
+                                  borderRadius: const BorderRadius.all(Radius.circular(100.0))
+                                ),                                
+                                child: Stack(
+                                  children: [
+                                    // CountDownTimer()
+                                
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: CircularCountDownTimer(
+                                        duration: 0,
+                                        initialDuration: 0,
+                                        controller: tutorialState.tutorialCountDownController,
+                                        width: side*0.8,
+                                            // 70, // MediaQuery.of(context).size.width / 3,
+                                        height: side*0.8,
+                                            // 70, // MediaQuery.of(context).size.height / 3,
+                                        // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
+                                        ringColor: palette.tileBgColor,
+                                        ringGradient: null,
+                                        fillColor: palette
+                                            .tileTextColor, // Colors.purpleAccent[100]!,
+                                        fillGradient: null,
+                                        // backgroundColor:GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
+                                        backgroundColor:
+                                            palette.screenBackgroundColor,
+                                        backgroundGradient: null,
+                                        strokeWidth: 5.0,
+                                        strokeCap: StrokeCap.round,
+                                        textStyle: TextStyle(
+                                            fontSize: 33.0,
+                                            // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
+                                            color: palette.tileBgColor),
+                                        textFormat: CountdownTextFormat.S,
+                                        isReverse: true,
+                                        isReverseAnimation: false,
+                                        isTimerTextShown: true,
+                                        autoStart: true,
+                                        onStart: () {
+                                          // tutorialState.tutorialCountDownController.pause();
+                                          // if (currentStep['targets'].contains('countdown')) {
+                                          //   print('start countdowm');
+                                          //   // tutorialState.tutorialCountDownController.start();
+                                          //   tutorialState.tutorialCountDownController.restart(
+                                          //     duration: 10
+                                          //   );
+                                          // }
+                                        },
+                                        onComplete: () {
+                                          if (currentStep['targets'].contains('countdown')) {
+                                            TutorialHelpers().killSpot(tutorialState, 35);
 
-                              Align(
-                                alignment: Alignment.center,
-                                child: CircularCountDownTimer(
-                                  duration: 10,
-                                  initialDuration: 10,
-                                  controller:
-                                      tutorialState.tutorialCountDownController,
-                                  width:
-                                      70, // MediaQuery.of(context).size.width / 3,
-                                  height:
-                                      70, // MediaQuery.of(context).size.height / 3,
-                                  // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
-                                  ringColor: palette.tileBgColor,
-                                  ringGradient: null,
-                                  fillColor: palette
-                                      .tileTextColor, // Colors.purpleAccent[100]!,
-                                  fillGradient: null,
-                                  // backgroundColor:GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                                  backgroundColor:
-                                      palette.screenBackgroundColor,
-                                  backgroundGradient: null,
-                                  strokeWidth: 5.0,
-                                  strokeCap: StrokeCap.round,
-                                  textStyle: TextStyle(
-                                      fontSize: 33.0,
-                                      // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
-                                      color: palette.tileBgColor),
-                                  textFormat: CountdownTextFormat.S,
-                                  isReverse: true,
-                                  isReverseAnimation: false,
-                                  isTimerTextShown: true,
-                                  autoStart: false,
-                                  onStart: () {},
-                                  onComplete: () {},
-                                  onChange: (String timeStamp) {},
-                                  timeFormatterFunction:
-                                      (defaultFormatterFunction, duration) {
-                                    if (duration.inSeconds <= 3) {
-                                      return Function.apply(
-                                          defaultFormatterFunction, [duration]);
-                                    } else {
-                                      return "";
-                                    }
-                                  },
+                                          }
+                                          // tutorialState.tutorialCountDownController.restart()
+                                        },
+                                        onChange: (String timeStamp) {},
+                                        timeFormatterFunction:
+                                            (defaultFormatterFunction, duration) {
+                                          if (duration.inSeconds <= 3 && duration.inSeconds > 0) {
+                                            return Function.apply(
+                                                defaultFormatterFunction, [duration]);
+                                          } else {
+                                            return "";
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              );
+                            },
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: Stack(
-                            children: [
-                              AnimatedBuilder(
-                                animation: _shrinkAnimation,
-                                builder: (context, child) {
-                                  return Center(
-                                    child: Container(
-                                      width: 100 * _shrinkAnimation.value,
-                                      height: 100 * _shrinkAnimation.value,
-                                      decoration: BoxDecoration(
-                                          color: palette.tileBgColor,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Center(
-                                          child: Text(
-                                        GameLogic().displayRandomLetters(
-                                            tutorialState
-                                                .tutorialRandomLetterList,
-                                            3),
-                                        style: TextStyle(
-                                          fontSize: 60 * _shrinkAnimation.value,
-                                          color: palette.tileTextColor,
-                                        ),
-                                      )),
-                                    ),
-                                  );
-                                },
-                              ),
-                              AnimatedBuilder(
-                                animation: _sizeAnimation,
-                                builder: (context, child) {
-                                  return SlideTransition(
-                                    position: _slideAnimation,
-                                    child: Center(
-                                      child: Container(
-                                        width: _sizeAnimation.value,
-                                        height: _sizeAnimation.value,
-                                        decoration: BoxDecoration(
-                                            color: palette.tileBgColor,
-                                            borderRadius:
-                                                const BorderRadius.all(
+                          child: AnimatedBuilder(
+                            animation: widget.animation,
+                            builder: (context, child) {                           
+                              return Container(
+                                // color: Colors.blue,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: getColor(palette,widget.animation, currentStep,'random_letter_1'),
+                                    width: 3
+                                  ),
+                                  borderRadius: const BorderRadius.all(Radius.circular(10.0))
+                                ),
+                                child: Stack(
+                                  children: [
+                                    AnimatedBuilder(
+                                      animation: _shrinkAnimation,
+                                      builder: (context, child) {
+                                        return Center(
+                                          child: Container(
+                                            width: (side*0.8) * _shrinkAnimation.value,
+                                            height: (side*0.8) * _shrinkAnimation.value,
+                                            decoration: BoxDecoration(
+                                                color: palette.tileBgColor,
+                                                borderRadius: const BorderRadius.all(
                                                     Radius.circular(10))),
-                                        child: Center(
-                                            child: Text(
-                                          GameLogic().displayRandomLetters(
-                                              tutorialState
-                                                  .tutorialRandomLetterList,
-                                              2),
-                                          // widget.letter_1,
-                                          // "A",
-                                          style: TextStyle(
-                                            fontSize: _fontAnimation.value,
-                                            color: palette.tileTextColor,
+                                            child: Center(
+                                                child: Text(
+                                              GameLogic().displayRandomLetters(
+                                                  tutorialState
+                                                      .tutorialRandomLetterList,
+                                                  3),
+                                              style: TextStyle(
+                                                fontSize: 44 * _shrinkAnimation.value,
+                                                color: palette.tileTextColor,
+                                              ),
+                                            )),
                                           ),
-                                        )),
-                                      ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            ],
+                                    AnimatedBuilder(
+                                      animation: _sizeAnimation,
+                                      builder: (context, child) {
+                                        return SlideTransition(
+                                          position: _slideAnimation,
+                                          child: Center(
+                                            child: Container(
+                                              width: _sizeAnimation.value,
+                                              height: _sizeAnimation.value,
+                                              decoration: BoxDecoration(
+                                                  color: palette.tileBgColor,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10))),
+                                              child: Center(
+                                                  child: Text(
+                                                GameLogic().displayRandomLetters(
+                                                    tutorialState
+                                                        .tutorialRandomLetterList,
+                                                    2),
+                                                // widget.letter_1,
+                                                // "A",
+                                                style: TextStyle(
+                                                  fontSize: _fontAnimation.value,
+                                                  color: palette.tileTextColor,
+                                                ),
+                                              )),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: SlideTransition(
-                            position: _letter2Animation,
-                            child: Center(
-                                child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        color: palette.tileBgColor,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: Center(
-                                      child: Text(
-                                        GameLogic().displayRandomLetters(
-                                            tutorialState
-                                                .tutorialRandomLetterList,
-                                            1),
-                                        style: TextStyle(
-                                          fontSize: 26,
-                                          color: palette.tileTextColor,
+                          child: AnimatedBuilder(
+                            animation: widget.animation,
+                            builder: (context, child) {
+                              return SlideTransition(
+                                position: _letter2Animation,
+                                child: Center(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: getColor(palette,widget.animation, currentStep,'random_letter_2'),
+                                          width: 3
                                         ),
+                                        borderRadius: const BorderRadius.all(Radius.circular(10.0))
+                                      ),                                         
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: side *0.6, // 50,
+                                            height: side *0.6, // 50,
+                                            decoration: BoxDecoration(
+                                                color: palette.tileBgColor,
+                                                borderRadius: const BorderRadius.all(
+                                                    Radius.circular(10))),
+                                            child: Center(
+                                              child: Text(
+                                                GameLogic().displayRandomLetters(
+                                                    tutorialState
+                                                        .tutorialRandomLetterList,
+                                                    1),
+                                                style: TextStyle(
+                                                  fontSize: 26,
+                                                  color: palette.tileTextColor,
+                                                ),
+                                              ),
+                                            )),
                                       ),
-                                    ))),
+                                    )),
+                              );
+                            },
                           ),
                         ),
                       ]),

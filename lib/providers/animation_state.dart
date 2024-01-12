@@ -144,4 +144,84 @@ class AnimationState with ChangeNotifier {
     _shouldRunTutorialScoreboardAnimation = value;
     notifyListeners();
   }
+
+
+  /// STREAK
+  bool _shouldRunTutorialStreakEnterAnimation = false;
+  bool get shouldRunTutorialStreakEnterAnimation =>
+      _shouldRunTutorialStreakEnterAnimation;
+
+  void setShouldRunTutorialStreakEnterAnimation(bool value) {
+    _shouldRunTutorialStreakEnterAnimation = value;
+    notifyListeners();
+  }  
+
+  bool _shouldRunTutorialStreakExitAnimation = false;
+  bool get shouldRunTutorialStreakExitAnimation =>
+      _shouldRunTutorialStreakExitAnimation;
+
+  void setShouldRunTutorialStreakExitAnimation(bool value) {
+    _shouldRunTutorialStreakExitAnimation = value;
+    notifyListeners();
+  } 
+
+
+  /// MULTI WORD
+  bool _shouldRunTutorialMultiWordEnterAnimation = false;
+  bool get shouldRunTutorialMultiWordEnterAnimation =>
+      _shouldRunTutorialMultiWordEnterAnimation;
+
+  void setShouldRunTutorialMultiWordEnterAnimation(bool value) {
+    _shouldRunTutorialMultiWordEnterAnimation = value;
+    notifyListeners();
+  }  
+
+  bool _shouldRunTutorialMultiWordExitAnimation = false;
+  bool get shouldRunTutorialMultiWordExitAnimation =>
+      _shouldRunTutorialMultiWordExitAnimation;
+
+  void setShouldRunTutorialMultiWordExitAnimation(bool value) {
+    _shouldRunTutorialMultiWordExitAnimation = value;
+    notifyListeners();
+  } 
+
+  /// CROSS WORD
+  bool _shouldRunTutorialCrosswordEnterAnimation = false;
+  bool get shouldRunTutorialCrosswordEnterAnimation =>
+      _shouldRunTutorialCrosswordEnterAnimation;
+
+  void setShouldRunTutorialCrosswordEnterAnimation(bool value) {
+    _shouldRunTutorialCrosswordEnterAnimation = value;
+    notifyListeners();
+  }  
+
+  bool _shouldRunTutorialCrosswordExitAnimation = false;
+  bool get shouldRunTutorialCrosswordExitAnimation =>
+      _shouldRunTutorialCrosswordExitAnimation;
+
+  void setShouldRunTutorialCrosswordExitAnimation(bool value) {
+    _shouldRunTutorialCrosswordExitAnimation = value;
+    notifyListeners();
+  }
+
+
+  bool _shouldRunTutorialNextStepAnimation = false;
+  bool get shouldRunTutorialNextStepAnimation =>
+      _shouldRunTutorialNextStepAnimation;
+
+  void setShouldRunTutorialNextStepAnimation(bool value) {
+    _shouldRunTutorialNextStepAnimation = value;
+    notifyListeners();
+  }  
+
+  bool _shouldRunTutorialPreviousStepAnimation = false;
+  bool get shouldRunTutorialPreviousStepAnimation =>
+      _shouldRunTutorialPreviousStepAnimation;
+
+  void setShouldRunTutorialPreviousStepAnimation(bool value) {
+    _shouldRunTutorialPreviousStepAnimation = value;
+    notifyListeners();
+  }    
+
+
 }
