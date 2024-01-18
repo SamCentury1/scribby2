@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/providers/animation_state.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
@@ -19,11 +20,13 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
   // late int view = 0;
   late ColorPalette palette;
   late TutorialState tutorialState;
+  late double opacity  = 0.0;
   @override
   void initState() {
     super.initState();
     palette = Provider.of<ColorPalette>(context, listen: false);
     tutorialState = Provider.of<TutorialState>(context, listen: false);
+    getOpacity(tutorialState);
   }
 
   // void nextItem() {
@@ -48,6 +51,18 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
   //   }
   // }
 
+  double getOpacity(TutorialState tutorialState) {
+    late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+    double res = 0.0;
+    if (!currentStep['isGameStarted']) {
+      res = 1.0;
+    }
+    if (currentStep['isGameEnded']) {
+      res = 1.0;
+    }
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) {
     // late AnimationState animationState =
@@ -58,9 +73,14 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
 
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
+
+        // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+        
+
         return AnimatedOpacity(
           // opacity: !tutorialState.isStep1Complete ? 1.0 : 0.0,
-          opacity: tutorialState.sequenceStep > 2 ? 0.0 : 1.0,
+          // opacity: tutorialState.sequenceStep > 2 ? 0.0 : 1.0,
+          opacity: getOpacity(tutorialState),
           duration: const Duration(milliseconds: 300),
           child: IgnorePointer(
             ignoring: tutorialState.isStep1Complete,
@@ -79,12 +99,19 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
                     ),
                   ),
                 ),
-                tutorialState.sequenceStep > 2
-                    ? const SizedBox()
-                    : Container(
-                        // child: selectView(tutorialState),
-                        child: textWidget(palette, tutorialState),
-                      )
+                displayCorrectTextWidget(palette, tutorialState, context)
+                // getOpacity(tutorialState) < 1 
+                //     ? const SizedBox()
+                //     : Container(
+                //         // child: selectView(tutorialState),
+                //         child: textWidget(palette, tutorialState, context),
+                //       )
+                // tutorialState.sequenceStep > 2
+                //     ? const SizedBox()
+                //     : Container(
+                //         // child: selectView(tutorialState),
+                //         child: textWidget(palette, tutorialState),
+                //       )
               ],
             ),
           ),
@@ -94,129 +121,26 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
   }
 }
 
-// Widget welcomeText(ColorPalette palette, TutorialState tutorialState) {
-//   return Column(
-//     children: [
-//       const Expanded(flex: 1, child: SizedBox()),
-//       Padding(
-//         padding: const EdgeInsets.all(18.0),
-//         child: Column(
-//           children: [
-//             DefaultTextStyle(
-//               style: TextStyle(fontSize: 22, color: palette.textColor2),
-//               child: const Text(
-//                 "Welcome to Scribby! This tutorial will show you how to play the game",
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//       // Padding(
-//       //   padding: const EdgeInsets.all(18.0),
-//       //   child: Column(
-//       //     children: [
-//       //       DefaultTextStyle(
-//       //         style: TextStyle(fontSize: 22, color: palette.textColor2),
-//       //         child: const Text(
-//       //           "This tutorial will show you how to play the game",
-//       //         ),
-//       //       ),
-//       //     ],
-//       //   ),
-//       // ),
-//       Row(
-//         children: [
-//           const Expanded(child: SizedBox()),
-//           TextButton(
-//               onPressed: () {
-//                 tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
-//               },
-//               child: Text(
-//                 "Okay Got it",
-//                 style: TextStyle(fontSize: 22, color: palette.textColor1),
-//               ))
-//         ],
-//       ),
-//       const Expanded(flex: 1, child: SizedBox()),
-//     ],
-//   );
-// }
+Widget displayCorrectTextWidget(ColorPalette palette, TutorialState tutorialState, BuildContext context) {
 
-// Widget skipTutorialButton(ColorPalette palette, TutorialState tutorialState) {
-//   return Column(
-//     children: [
-//       const Expanded(flex: 1, child: SizedBox()),
-//       Padding(
-//         padding: const EdgeInsets.all(18.0),
-//         child: Column(
-//           children: [
-//             DefaultTextStyle(
-//               style: TextStyle(fontSize: 22, color: palette.textColor2),
-//               child: const Text(
-//                 "To skip the tutorial at any step, click on 'Skip Tutorial' at the top",
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//       Row(
-//         children: [
-//           const Expanded(child: SizedBox()),
-//           TextButton(
-//               onPressed: () {
-//                 tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
-//               },
-//               child: Text(
-//                 "Okay Got it",
-//                 style: TextStyle(fontSize: 22, color: palette.textColor1),
-//               ))
-//         ],
-//       ),
-//       const Expanded(flex: 3, child: SizedBox()),
-//     ],
-//   );
-// }
+  final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
 
-// Widget navButtonsText(ColorPalette palette, TutorialState tutorialState) {
-//   return Column(
-//     children: [
-//       const Expanded(flex: 1, child: SizedBox()),
-//       Padding(
-//         padding: const EdgeInsets.all(18.0),
-//         child: Column(
-//           children: [
-//             DefaultTextStyle(
-//               style: TextStyle(fontSize: 22, color: palette.textColor2),
-//               child: const Text(
-//                 "Use the controls to go back or forward throughout the tutorial",
-//               ),
-//             ),
-//             Row(
-//               children: [
-//                 const Expanded(child: SizedBox()),
-//                 TextButton(
-//                     onPressed: () {
-//                       tutorialState.setIsStep1Complete(true);
-//                       tutorialState
-//                           .setSequenceStep(tutorialState.sequenceStep + 1);
-//                     },
-//                     child: Text(
-//                       "Okay Got it",
-//                       style: TextStyle(fontSize: 22, color: palette.textColor1),
-//                     ))
-//               ],
-//             )
-//           ],
-//         ),
-//       ),
-//       const Expanded(flex: 3, child: SizedBox()),
-//     ],
-//   );
-// }
+  Widget res = const SizedBox();
+  if (currentStep['isGameStarted']) {
+    if (currentStep['isGameEnded']) {
+      finalTextWidget(palette, tutorialState,);
+    }
+  } else {
+    res = textWidget(palette, tutorialState, context);
+  }
+  return res;  
 
-Widget textWidget(ColorPalette palette, TutorialState tutorialState) {
+}
+
+Widget textWidget(ColorPalette palette, TutorialState tutorialState,  BuildContext context) {
   // late Map<String, dynamic> sequenceObject = tutorialDetails.firstWhere((elem) => elem['step'] == tutorialState.sequenceStep);
-  final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
+  final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+  late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
 
   return Column(
     children: [
@@ -236,7 +160,9 @@ Widget textWidget(ColorPalette palette, TutorialState tutorialState) {
                     onPressed: () {
                       // TutorialHelpers().saveStateHistory(tutorialState, tutorial)
 
+                      // animationState.setShouldRunTutorialNextStepAnimation(true);
                       tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+                      // animationState.setShouldRunTutorialNextStepAnimation(false);
                     },
                     child: Text(
                       "Okay Got it",
@@ -250,4 +176,53 @@ Widget textWidget(ColorPalette palette, TutorialState tutorialState) {
       const Expanded(flex: 3, child: SizedBox()),
     ],
   );
+}
+
+
+Widget finalTextWidget(ColorPalette palette, TutorialState tutorialState, ) {
+  final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+
+
+  return Column(
+    children: [
+      const Expanded(flex: 1, child: SizedBox()),
+      Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Column(
+          children: [
+            DefaultTextStyle(
+              style: TextStyle(fontSize: 22, color: palette.textColor2,),
+              textAlign: TextAlign.center,
+              child: Text(currentStep['text']),
+            ),
+            Row(
+              children: [
+                const Expanded(child: SizedBox()),
+                TextButton(
+                  onPressed: () {
+                    tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+                  },
+                  child: Text(
+                    "Start Game",
+                    style: TextStyle(fontSize: 22, color: palette.textColor1),
+                  )
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    tutorialState.setSequenceStep(0);
+                  },
+                  child: Text(
+                    "Restart Tutorial",
+                    style: TextStyle(fontSize: 22, color: palette.textColor1),
+                  )
+                ),                
+              ],
+            )
+          ],
+        ),
+      ),
+      const Expanded(flex: 3, child: SizedBox()),
+    ],
+  );  
 }

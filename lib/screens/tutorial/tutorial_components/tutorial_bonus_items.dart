@@ -194,7 +194,7 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
 
   Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, String stat) {
     final bool glowing = currentStep['targets'].contains(widgetId);
-    final bool active = currentStep[stat] > 1;
+    final bool active = widgetId == 'streak' ? currentStep[stat] >= 1 : currentStep[stat] > 1;
     late Color res = Colors.transparent;
     if (active) {
       if (glowing) {
@@ -221,7 +221,8 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
       builder:(context, tutorialState, child) {
 
 
-        final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
+        // final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
+        final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
         // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep); 
 
         return Container(
@@ -246,12 +247,14 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
                               Icons.bolt, 
                               size: 30,
                               color: getColor(palette, widget.animation, currentStep, 'streak', 'streak'),
+                              shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'streak', widget.animation),
                             ),
                             Text(
                               "${currentStep['streak'].toString()}x",
                               style: TextStyle(
                                 fontSize: 22,
-                                color: getColor(palette, widget.animation, currentStep, 'streak', 'streak'),
+                                color:  getColor(palette, widget.animation, currentStep, 'streak', 'streak'),
+                                shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'streak', widget.animation),
                               ),
                             )
                           ],
@@ -277,12 +280,14 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
                               Icons.book, 
                               size: 30, 
                               color: getColor(palette, widget.animation, currentStep, 'multi_word', 'newWords'),
+                              shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'multi_word', widget.animation),
                             ),
                             Text(
                               "${currentStep['newWords'].toString()}x",
                               style: TextStyle(
                                 fontSize: 22,
                                 color: getColor(palette, widget.animation, currentStep, 'multi_word', 'newWords'),
+                                shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'multi_word', widget.animation),
                               ),
                             )
                           ],
@@ -308,12 +313,14 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
                               Icons.close, 
                               size: 30,
                               color: getColor(palette, widget.animation, currentStep, 'cross_word', 'crossword'),
+                              shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'cross_word', widget.animation),
                             ),
                             Text(
                               "${currentStep['crossword'].toString()}x",
                               style: TextStyle(
                                 fontSize: 22,
                                 color: getColor(palette, widget.animation, currentStep, 'cross_word', 'crossword'),
+                                shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'cross_word', widget.animation),
                               ),
                             )
                           ],

@@ -208,7 +208,8 @@ class _MenuScreenState extends State<MenuScreen> {
   void navigateToTutorial() {
     late TutorialState tutorialState = context.read<TutorialState>();
     // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
-    TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
+    TutorialHelpers().getFullTutorialStates2(tutorialState, tutorialDetails);
+    // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
     
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

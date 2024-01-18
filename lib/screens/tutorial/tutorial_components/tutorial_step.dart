@@ -105,12 +105,30 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
   }
 
   void goToNextStep(TutorialState tutorialState, AnimationState animationState) {
-    tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
-    animationState.setShouldRunTutorialNextStepAnimation(true);
-    // animationState.setShouldRunTutorialNextStepExitAnimation(true);
 
-    animationState.setShouldRunTutorialNextStepAnimation(false);
-    // animationState.setShouldRunTutorialNextStepExitAnimation(false);    
+    late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+    if (currentStep['isGameStarted']) {
+
+      if (currentStep['isGameEnded']) {
+        tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+
+      } else {
+
+        tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+        animationState.setShouldRunTutorialNextStepAnimation(true);
+        animationState.setShouldRunTutorialNextStepAnimation(false);    
+      }
+    } else {
+      tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+    }
+
+    // tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+    // print(tutorialState.sequenceStep);
+    // animationState.setShouldRunTutorialNextStepAnimation(true);
+    // // animationState.setShouldRunTutorialNextStepExitAnimation(true);
+
+    // animationState.setShouldRunTutorialNextStepAnimation(false);
+    // // animationState.setShouldRunTutorialNextStepExitAnimation(false);    
   }
 
 
@@ -131,82 +149,86 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
       // Map<String,dynamic> currentStep = getStepDetails(tutorialState, 0);
       // Map<String,dynamic> previousStep = getStepDetails(tutorialState, -1);
 
-      Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
-      Map<String,dynamic> previousStep = TutorialHelpers().getPreviousStep(tutorialState);      
-        return SizedBox(
+      Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+      Map<String,dynamic> previousStep = TutorialHelpers().getPreviousStep2(tutorialState);      
+        return Container(
           width: double.infinity,
           height: 100,
+          color: palette.screenBackgroundColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Divider(),
-              tutorialState.sequenceStep < 3 ? const SizedBox() :
+              // const Divider(),
+              // tutorialState.sequenceStep < 3 ? const SizedBox() :
               Expanded(
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Stack(
-                        children: [
-                          AnimatedBuilder(
-                            animation: _slideEnterAnimation,
-                            builder: (context, child) {
-                              return SlideTransition(
-                                position: _slideEnterAnimation,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: Text(
-                                    currentStep['text'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: palette.textColor2
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Stack(
+                          children: [
+                            AnimatedBuilder(
+                              animation: _slideEnterAnimation,
+                              builder: (context, child) {
+                                return SlideTransition(
+                                  position: _slideEnterAnimation,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 4.0),
+                                    child: Text(
+                                      currentStep['text'],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: palette.textColor2
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                          AnimatedBuilder(
-                            animation: _slideExitAnimation,
-                            builder: (context, child) {
-                              return SlideTransition(
-                                position: _slideExitAnimation,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: Text(
-                                    previousStep['text'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: palette.textColor2
+                                );
+                              },
+                            ),
+                            AnimatedBuilder(
+                              animation: _slideExitAnimation,
+                              builder: (context, child) {
+                                return SlideTransition(
+                                  position: _slideExitAnimation,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 4.0),
+                                    child: Text(
+                                      previousStep['text'],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: palette.textColor2
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    Align(
-                      alignment: Alignment.center,
-                      child: !currentStep['complete'] ? const SizedBox() :
-                      TextButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: palette.optionButtonBgColor,
-                        ),
-                        onPressed: () {
-                          goToNextStep(tutorialState, _animationState);
-                        },
-                        child: Text(
-                          "next",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: palette.textColor2
-                          ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  ] 
+                      const SizedBox(width: 20,),
+                      Align(
+                        alignment: Alignment.center,
+                        child: !currentStep['complete'] ? const SizedBox() :
+                        TextButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: palette.optionButtonBgColor,
+                          ),
+                          onPressed: () {
+                            goToNextStep(tutorialState, _animationState);
+                          },
+                          child: Text(
+                            "next",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: palette.textColor2
+                            ),
+                          ),
+                        ),
+                      )
+                    ] 
+                  ),
                 ),
               ),
         

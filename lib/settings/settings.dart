@@ -27,10 +27,11 @@ class SettingsController {
 
   /// Asynchronously loads values from the injected persistence store.
   Future<void> loadStateFromPerisitence() async {
-    await Future.wait([
+    await Future.wait([ // await
       _persistence
           .getMuted(defaultValue: kIsWeb)
           .then((value) => muted.value = value),
+          // .then((value) => muted.value = value ?? false),
       _persistence.getSoundsOn().then((value) => soundsOn.value = value),
       _persistence.getUser().then((value) => user.value = value),
       _persistence.getDarkTheme().then((value) => darkTheme.value = value),

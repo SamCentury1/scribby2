@@ -302,8 +302,7 @@ class _GameSummaryViewState extends State<GameSummaryView> {
   }
 }
 
-TableRow tableRowItem(
-    String textBody, String data, Icon icon, ColorPalette palette) {
+TableRow tableRowItem( String textBody, String data, Icon icon, ColorPalette palette) {
   return TableRow(children: [
     Center(
       child: icon,

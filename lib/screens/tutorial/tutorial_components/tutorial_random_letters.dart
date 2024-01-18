@@ -204,7 +204,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
               builder: (context, tutorialState, child) {
 
                 // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep,);
-                final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
+                final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
 
                 if (currentStep['targets'].contains('countdown')) {
                   late Map<String,dynamic> tile35 = tutorialState.tutorialTileState.firstWhere((element) => element['index'] == 35);
@@ -233,12 +233,16 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                             builder: (context, child) {                              
                               return Container(
                                 decoration: BoxDecoration(
+                                  color: palette.screenBackgroundColor,
                                   border: Border.all(
                                     // color: Colors.white,
                                     color: getColor(palette,widget.animation, currentStep,'countdown'),
                                     width: 3
                                   ),
-                                  borderRadius: const BorderRadius.all(Radius.circular(100.0))
+                                  borderRadius: const BorderRadius.all(Radius.circular(100.0)),
+                                  boxShadow: [
+                                    TutorialHelpers().getBoxShadow(currentStep, palette, 'countdown', widget.animation)
+                                  ] 
                                 ),                                
                                 child: Stack(
                                   children: [
@@ -287,17 +291,23 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                         },
                                         onComplete: () {
                                           if (currentStep['targets'].contains('countdown')) {
-                                            TutorialHelpers().killSpot(tutorialState, 35);
+                                            // TutorialHelpers().killSpot(tutorialState, 35);
+                                            tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
+                                            _animationState.setShouldRunAnimation(true);
+                                            _animationState.setShouldRunAnimation(false);
 
                                           }
                                           // tutorialState.tutorialCountDownController.restart()
                                         },
                                         onChange: (String timeStamp) {},
-                                        timeFormatterFunction:
-                                            (defaultFormatterFunction, duration) {
-                                          if (duration.inSeconds <= 3 && duration.inSeconds > 0) {
-                                            return Function.apply(
-                                                defaultFormatterFunction, [duration]);
+                                        timeFormatterFunction: (defaultFormatterFunction, duration) {
+                                          
+                                          if (duration.inSeconds > 0) {
+                                            String durationString = Function.apply(defaultFormatterFunction, [duration]);
+                                            int parsedDuration = int.parse(durationString);
+                                            String finalDuration = (parsedDuration+1).toString();
+                                            return finalDuration;
+                                            // return Function.apply(defaultFormatterFunction, [duration]);
                                           } else {
                                             return "";
                                           }
@@ -318,11 +328,15 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                               return Container(
                                 // color: Colors.blue,
                                 decoration: BoxDecoration(
+                                  color: palette.screenBackgroundColor,
                                   border: Border.all(
                                     color: getColor(palette,widget.animation, currentStep,'random_letter_1'),
                                     width: 3
                                   ),
-                                  borderRadius: const BorderRadius.all(Radius.circular(10.0))
+                                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                  boxShadow: [
+                                    TutorialHelpers().getBoxShadow(currentStep, palette, 'random_letter_1', widget.animation)
+                                  ]                                  
                                 ),
                                 child: Stack(
                                   children: [
@@ -339,10 +353,8 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                                     Radius.circular(10))),
                                             child: Center(
                                                 child: Text(
-                                              GameLogic().displayRandomLetters(
-                                                  tutorialState
-                                                      .tutorialRandomLetterList,
-                                                  3),
+                                                // GameLogic().displayRandomLetters(tutorialState.tutorialRandomLetterList,3),
+                                                currentStep['random_letter_3'],
                                               style: TextStyle(
                                                 fontSize: 44 * _shrinkAnimation.value,
                                                 color: palette.tileTextColor,
@@ -362,23 +374,16 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                               width: _sizeAnimation.value,
                                               height: _sizeAnimation.value,
                                               decoration: BoxDecoration(
-                                                  color: palette.tileBgColor,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(10))),
-                                              child: Center(
-                                                  child: Text(
-                                                GameLogic().displayRandomLetters(
-                                                    tutorialState
-                                                        .tutorialRandomLetterList,
-                                                    2),
-                                                // widget.letter_1,
-                                                // "A",
-                                                style: TextStyle(
-                                                  fontSize: _fontAnimation.value,
-                                                  color: palette.tileTextColor,
-                                                ),
-                                              )),
+                                                color: palette.tileBgColor,
+                                                borderRadius: const BorderRadius.all(Radius.circular(10))),
+                                                child: Center(
+                                                  child: Text(currentStep['random_letter_2'],
+                                                  style: TextStyle(
+                                                    fontSize: _fontAnimation.value,
+                                                    color: palette.tileTextColor,
+                                                  ),
+                                                )
+                                              ),
                                             ),
                                           ),
                                         );
@@ -398,37 +403,40 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                               return SlideTransition(
                                 position: _letter2Animation,
                                 child: Center(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: getColor(palette,widget.animation, currentStep,'random_letter_2'),
-                                          width: 3
-                                        ),
-                                        borderRadius: const BorderRadius.all(Radius.circular(10.0))
-                                      ),                                         
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                            width: side *0.6, // 50,
-                                            height: side *0.6, // 50,
-                                            decoration: BoxDecoration(
-                                                color: palette.tileBgColor,
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(10))),
-                                            child: Center(
-                                              child: Text(
-                                                GameLogic().displayRandomLetters(
-                                                    tutorialState
-                                                        .tutorialRandomLetterList,
-                                                    1),
-                                                style: TextStyle(
-                                                  fontSize: 26,
-                                                  color: palette.tileTextColor,
-                                                ),
-                                              ),
-                                            )),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: palette.screenBackgroundColor,
+                                      border: Border.all(
+                                        color: getColor(palette,widget.animation, currentStep,'random_letter_2'),
+                                        width: 3
                                       ),
-                                    )),
+                                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                      boxShadow: [
+                                        TutorialHelpers().getBoxShadow(currentStep, palette, 'random_letter_2', widget.animation)
+                                      ]
+                                    ),                                         
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: side *0.6, // 50,
+                                        height: side *0.6, // 50,
+                                        decoration: BoxDecoration(
+                                            color: palette.tileBgColor,
+                                            borderRadius: const BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: Center(
+                                          child: Text(
+                                            currentStep['random_letter_1'],
+                                            style: TextStyle(
+                                              fontSize: 26,
+                                              color: palette.tileTextColor,
+                                            ),
+                                          ),
+                                        )
+                                      ),
+                                    ),
+                                  )
+                                ),
                               );
                             },
                           ),

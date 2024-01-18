@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
@@ -34,9 +36,15 @@ class _TutorialBoardState extends State<TutorialBoard> {
     late double boardWidth = MediaQuery.of(context).size.width * 0.7;
     late double tileSide = boardWidth / 6;
 
+    
+
     // late ColorPalette palette = Provider.of(context, listen: false);
 
     return Consumer<TutorialState>(builder: (context, tutorialState, child) {
+      final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+      late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
+      late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+
       return Column(
         children: [
           SizedBox(
@@ -74,27 +82,45 @@ class _TutorialBoardState extends State<TutorialBoard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    for (Map<String, dynamic> reserve in tutorialState.reserveTiles)
+                    for (Map<String, dynamic> reserve in currentStep['reserves'])
                       Stack(
                         children: [
                           Draggable(
                             data: reserve["body"] == "" ? const SizedBox() : draggedTile(reserve["body"],Colors.red, tileSide), // draggedTile(reserve["body"], Colors.red),
-                            feedback: reserve["body"] =="" ? const SizedBox() : TutorialDraggableTile(tileState:reserve,tileSide:tileSide), // draggedTile(reserve["body"], const Color.fromARGB(255, 73, 54, 244)),
+                            feedback: reserve["body"] =="" ? const SizedBox() : TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation,), // draggedTile(reserve["body"], const Color.fromARGB(255, 73, 54, 244)),
                             childWhenDragging:
                                 reserve["body"] == ""
-                                    ? TutorialDraggableTile(tileState:reserve,tileSide:tileSide)
-                                    : TutorialDraggableTile(tileState: {"id":reserve["id"],"body": ""},tileSide:tileSide),
-                            child: TutorialDraggableTile(tileState:reserve,tileSide:tileSide), //draggedTile(reserve["body"], Colors.black),
+                                    ? TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation)
+                                    : emptyTile(tileSide, palette),//TutorialDraggableTile(tileState: {"id":reserve["id"],"body": ""},tileSide:tileSide, animation: widget.animation),
+                            child: TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation), //draggedTile(reserve["body"], Colors.black),
                 
                             onDragStarted: () {
                               if (reserve['body'] =="") {
-                                TutorialHelpers().placeIntoReserves(context,tutorialState,reserve,tutorialDetails);
+                                
+                                if (currentStep['callbackTarget'] == "reserve_${reserve['id']}") {
+                                  // reactToInput(tutorialState, animationState);
+                                  TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
+                                } else {}                                
+                                // TutorialHelpers().placeIntoReserves(context,tutorialState,reserve,tutorialDetails);
                               } else {
-                                tutorialState.setDraggedReserveTile(reserve);
+
+                                if (currentStep['targets'].contains("reserve_${reserve['id']}")) {
+  
+
+                                } else {
+
+                                }
+                                // tutorialState.setDraggedReserveTile(reserve);
                               }
                             },
                             onDragEnd: (details) {
-                              tutorialState.setDraggedReserveTile({});
+                                if (currentStep['dragSource'] == "reserve_${reserve['id']}") {
+                                  // print('drop me ');
+                                  // TutorialHelpers()
+                                  
+                                  // reactToInput(tutorialState, animationState);
+                                  TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
+                                } else {}     
                             },
                           ),
                         ],
@@ -123,6 +149,28 @@ Widget draggedTile(String letter, Color color, double tileSide) {
         ),
       ),
     ),
+  );
+}
+
+Widget emptyTile(double tileSide, ColorPalette palette) {
+  return Container(
+      width: tileSide,
+      height: tileSide,
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        border: Border.all(
+            color:Color.fromRGBO(
+              palette.textColor3.red,
+              palette.textColor3.green,
+              palette.textColor3.blue,
+              0.5 
+            ),
+            // color: colorTileBorder(tileObject,currentStep,palette, animation ),
+            width: 3,
+        ), // colorTileBorder(tileObject, palette), width: 3),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: SizedBox()
   );
 }
 
@@ -184,8 +232,9 @@ class _TutorialTileState extends State<TutorialTile>
   }
 
   void reactToInput(TutorialState tutorialState, AnimationState animationState) {
+    tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
     // late Map<String, dynamic> stepDetails = tutorialDetails.firstWhere((elem) => elem['step'] == tutorialState.sequenceStep);
-    TutorialHelpers().updateTutorialTileState(tutorialState, widget.index, animationState, tutorialDetails);
+    // TutorialHelpers().updateTutorialTileState(tutorialState, widget.index, animationState, tutorialDetails);
 
   }
 
@@ -205,33 +254,52 @@ class _TutorialTileState extends State<TutorialTile>
         int blue = palette.tileBgColor.blue;
         res = Color.fromRGBO(red, green, blue, 0.5);
       } else {
-        res = palette.tileBgColor;
+        if (!tileObject['alive']) {
+          res = Colors.transparent;
+        } else {
+          res = palette.tileBgColor;
+        }
       }
     }
     return res;
   }
 
-  Color getBoxShadow(Map<String, dynamic> tileObject,TutorialState tutorialState, ColorPalette palette, ) {
-    Map<String, dynamic> stepDetails = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-    Color res = Colors.transparent;
+  // Color getBoxShadow(Map<String, dynamic> tileObject,TutorialState tutorialState, ColorPalette palette, ) {
+  //   // Map<String, dynamic> stepDetails = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+  //   Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+  //   Color res = Colors.transparent;
 
-    // print(stepDetails);
-    if (stepDetails['targets'].contains(tileObject['index'])) {
-      if (tileObject['letter'] == "") {
-        res = Color.fromRGBO(
-          palette.focusedTutorialTile.red,
-          palette.focusedTutorialTile.green,
-          palette.focusedTutorialTile.blue,
-          0.3
-        );
-      } else {
-        res = Colors.transparent;
-      }
-    } else {
-      res = Colors.transparent;
-    }
-    return res;
-  }
+  //   // print(stepDetails);
+  //   if (stepDetails['targets'].contains(tileObject['index'])) {
+  //     // if (tileObject['letter'] == "") {
+  //       res = Color.fromRGBO(
+  //         palette.focusedTutorialTile.red,
+  //         palette.focusedTutorialTile.green,
+  //         palette.focusedTutorialTile.blue,
+  //         0.3);
+  //       // );
+  //     // } else {
+  //     //   res = Colors.transparent;
+  //     // }
+  //   } else {
+  //     res = Colors.transparent;
+  //   }
+  //   return res;
+  // }
+
+  // Color getTextColor(Map<String, dynamic> tileObject,ColorPalette palette, ) {
+  //   Color res = palette.tileBgColor;
+  //   if (!tileObject['alive']) {
+  //     res = Colors.transparent;
+  //     // res = Color.fromRGBO(
+  //     //   palette.focusedTutorialTile.red,
+  //     //   palette.focusedTutorialTile.green,
+  //     //   palette.focusedTutorialTile.blue,
+  //     //   1.0
+  //     // );      
+  //   }
+  //   return res;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -239,18 +307,29 @@ class _TutorialTileState extends State<TutorialTile>
 
     late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
 
-    late Map<String, dynamic> tileState = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
+    // late Map<String, dynamic> tileState = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
+    // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+    final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+
+    // log("current step ${currentStep}");
+
+    // late Map<String, dynamic> tileState = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
+    late Map<String, dynamic> tileState = currentStep['tileState'].firstWhere((element) => element['index'] == widget.index);
+
+    // log("full state history ${tutorialState.tutorialStateHistory2}");
+
 
     late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
 
     // late Map<String, dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-    final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
+    // final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
     // late Map<String,dynamic> currentTile = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
 
     return GestureDetector(
       onTapUp: (details) {
-        if (currentStep['targets'].contains(widget.index)) {
-          reactToInput(tutorialState, animationState);
+        if (currentStep['callbackTarget'] == widget.index && currentStep['dragSource'] == null) {
+          // reactToInput(tutorialState, animationState);
+          TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
         } else {}
       },
       child: Padding(
@@ -263,29 +342,53 @@ class _TutorialTileState extends State<TutorialTile>
                 Container(
                   // color: Colors.blueAccent,
                   decoration: BoxDecoration(
-                      color: tileState['alive'] ? palette.screenBackgroundColor : const Color.fromARGB(255, 87, 87, 87),
+                      // color: tileState['alive'] ? palette.screenBackgroundColor : const Color.fromARGB(255, 87, 87, 87),
+                      color: colorTileBg(tileState, palette),
                       // color:Color.fromARGB(167, 56, 56, 56) ,
                       border: Border.all(
                         width: 3,
-                        color: colorTileBorder(tileState, tutorialState, palette, widget.animation),
+                        // color: colorTileBorder(tileState, tutorialState, palette, widget.animation),
+                        color: getBorderColor(tileState, palette, widget.animation, currentStep)
                       ),
                       boxShadow: [
-                        BoxShadow(
-                          color: getBoxShadow(tileState, tutorialState, palette),
-                          spreadRadius: 4,
-                          blurRadius: 7,
-                        ),
+                        getBoxShadow(tutorialState, palette, widget.index, widget.animation)
+                        // BoxShadow(
+                        //   color: getBoxShadow(tileState, tutorialState, palette),
+                        //   spreadRadius: 4,
+                        //   blurRadius: 7,
+                        // ),
                       ],
                       borderRadius: const BorderRadius.all(Radius.circular(10.0))),
-                  child: Center(
-                      child: Text(
-                    tileState['letter'],
-                    style: TextStyle(fontSize: 26, color: palette.tileBgColor),
-                  )),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Container(
+                        // color: Colors.orange,
+                        decoration: getInnerTileBoxDecoration(tutorialState, palette, widget.index, widget.animation),
+                        child: Center(
+                          child: AnimatedBuilder(
+                            animation: widget.animation,
+                            builder: (context, child) {
+                              return Text(
+                                tileState['letter'],
+                                style: TextStyle(
+                                  fontSize: 22, 
+                                  color: getTextColor(tileState,palette, widget.animation),
+                                  shadows: getTextShadow(tileState,palette, widget.animation),
+                                  // color: palette.tileBgColor
+                                ),
+                              );
+                            },
+                          )
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 DragTarget(
                   onAccept: (details) {
-                    TutorialHelpers().dropTile(context,widget.index, tutorialState, tutorialDetails);
+                    // TutorialHelpers().dropTile(context,widget.index, tutorialState, tutorialDetails);
                   }, 
                   builder: (BuildContext context, List<dynamic> accepted, List<dynamic> rejected) {
                     return draggedTile("", Colors.transparent, widget.tileSide);
@@ -300,3 +403,173 @@ class _TutorialTileState extends State<TutorialTile>
 }
 
 
+BoxDecoration getInnerTileBoxDecoration(TutorialState tutorialState, ColorPalette palette, int widgetId, Animation animation) {
+  final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+  final Map<String,dynamic> tileObject = stepDetails['tileState'].firstWhere((element) => element['index'] == widgetId);
+  BoxDecoration res = BoxDecoration(
+    color: palette.screenBackgroundColor
+  );
+  if (stepDetails['targets'].contains(widgetId)) {
+    if (tileObject['letter'] != "") {
+      if (tileObject['alive']) {
+        if (tileObject['active']) {
+          res = BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+            color: palette.screenBackgroundColor,
+            boxShadow: [
+              BoxShadow(
+                color: palette.screenBackgroundColor, blurRadius: 2, spreadRadius: 2,
+              )
+            ]
+          );          
+        } else {
+          res = BoxDecoration(
+            color: palette.tileBgColor
+          );
+        }
+      } else {
+        res = BoxDecoration(
+          color: palette.optionButtonBgColor2
+        );        
+      }
+    } else {
+      res = BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+        color: palette.screenBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: palette.screenBackgroundColor, blurRadius: 2, spreadRadius: 2,
+          )
+        ]
+      );
+    }   
+  } else {
+      if (tileObject['alive']) {
+        if (tileObject['letter'] != "") {
+          res = BoxDecoration(
+            color: palette.tileBgColor
+          );
+        } else {
+          res = BoxDecoration(
+            color: palette.screenBackgroundColor
+          );
+        }   
+      } else {
+        res = BoxDecoration(
+          color: palette.optionButtonBgColor2
+        );        
+      }    
+    // if (tileObject['letter'] != "") {
+    //   res = BoxDecoration(
+    //     color: palette.tileBgColor
+    //   );
+    // } 
+  }
+  return res;
+}
+BoxShadow getBoxShadow(TutorialState tutorialState, ColorPalette palette, int widgetId, Animation animation) {
+  final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+  BoxShadow res = const BoxShadow(color: Colors.transparent, blurRadius: 0, spreadRadius: 0);
+  if (stepDetails['targets'].contains(widgetId)) {
+    res = BoxShadow(
+      color: Color.fromRGBO(
+        palette.textColor2.red,
+        palette.textColor2.green,
+        palette.textColor2.blue,
+        (animation.value*0.5)
+      ),
+      blurRadius: 4.0 * (animation.value*0.6),
+      spreadRadius: 4.0 * (animation.value*0.6),
+    );
+    
+  }
+  return res;
+}
+Color colorTileBg(Map<String, dynamic> tileObject, ColorPalette palette,) {
+  late Color color = const Color.fromRGBO(0, 0, 0, 0);
+  if (tileObject["letter"] == "") {
+    color = Colors.transparent;
+  } else {
+    if (!tileObject['alive']) {
+      color = palette.optionButtonBgColor2;
+    } else {
+      if (tileObject['active']) {
+        color = Colors.transparent;
+      } else {
+        color = palette.tileBgColor;
+      }
+    }
+  }
+  return color;
+}
+
+
+Color getBorderColor(Map<String, dynamic> tileObject, ColorPalette palette, Animation animation, Map<String,dynamic> currentStep) {
+  // final String reserveId = "reserve_${tileObject['id']}";
+  // final Map<String,dynamic> tileObject = stepDetails['tileState'].firstWhere((element) => element['index'] == widgetId);
+  final bool active = currentStep['targets'].contains(tileObject['index']);
+  late Color res = Colors.transparent;
+  if (active) {
+    // if (tileObject['alive']) {
+      res = Color.fromRGBO(
+        palette.textColor2.red,
+        palette.textColor2.green,
+        palette.textColor2.blue,
+        animation.value  
+      );
+    // }
+    // } else {
+    //   res = Color.fromRGBO(
+    //     palette.textColor2.red,
+    //     palette.textColor2.green,
+    //     palette.textColor2.blue,
+    //     animation.value  
+    //   );      
+    // }
+  } else {
+    if (tileObject["letter"] == "") {
+      res = Color.fromRGBO(
+        palette.tileBgColor.red,
+        palette.tileBgColor.green,
+        palette.tileBgColor.blue,
+        0.5 
+      );
+    } else {
+      res = const Color.fromRGBO(0, 0, 0, 0);
+    }      
+  }
+  return res;
+}
+Color getTextColor(Map<String, dynamic> tileObject,ColorPalette palette, Animation animation ) {
+  Color res = palette.optionButtonBgColor3;
+  if (!tileObject['alive']) {
+      res = Colors.transparent;
+  } else {
+    if (tileObject['active']) {
+      res = Color.fromRGBO(
+        palette.textColor2.red,
+        palette.textColor2.green,
+        palette.textColor2.blue,
+        animation.value  
+      );      
+    } 
+  }
+  return res;
+}
+
+List<Shadow> getTextShadow(Map<String, dynamic> tileObject,ColorPalette palette, Animation animation ) {
+  late List<Shadow> res = const  [Shadow(offset: Offset.zero, blurRadius: 0, color: Colors.transparent)];
+
+  if (tileObject['active']) {
+    Color color = Color.fromRGBO(
+      palette.textColor2.red,
+      palette.textColor2.green,
+      palette.textColor2.blue,
+      animation.value*1
+    );
+    res = <Shadow>[
+      Shadow(offset: const Offset(0.0,0.0), blurRadius: 10, color: color),
+    ];
+  }
+  return res;
+}

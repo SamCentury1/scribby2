@@ -34,7 +34,7 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
       builder: (context, tutorialState, child) { 
         
         // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-        final Map<String,dynamic> currentStep =  TutorialHelpers().getCurrentStep(tutorialState);
+        final Map<String,dynamic> currentStep =  TutorialHelpers().getCurrentStep2(tutorialState);
 
         return Column(
           children: [
@@ -48,7 +48,22 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
                       return scoreWidget(palette, widget.animation, currentStep, 'points');
                     },
                   ),
+
+                  AnimatedBuilder(
+                    animation: widget.animation,
+                    builder: (context, child) {
+                      return newPointsWidget(palette, widget.animation, currentStep, 'new_points');
+                    },
+                  ),
                   const Expanded(flex: 1, child: SizedBox()),
+
+                  AnimatedBuilder(
+                    animation: widget.animation,
+                    builder: (context, child) {
+                      return newWordsWidget(palette, widget.animation, currentStep, 'new_words');
+                    },
+                  ),
+
                   AnimatedBuilder(
                     animation: widget.animation,
                     builder: (context, child) {
@@ -76,20 +91,46 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
       palette.tileBgColor.blue,
       animation.value  
     );
+  } else {
+    if (widgetId == 'new_points' || widgetId == 'new_words') {
+      res = Colors.transparent;
+    }
   }
   return res;
 }
+
+// BoxShadow getBoxShadow(TutorialState tutorialState, ColorPalette palette, int widgetId, Animation animation) {
+//   final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+//   BoxShadow res = const BoxShadow(color: Colors.transparent, blurRadius: 0, spreadRadius: 0);
+//   if (stepDetails['targets'].contains(widgetId)) {
+//     res = BoxShadow(
+//       color: Color.fromRGBO(
+//         palette.textColor2.red,
+//         palette.textColor2.green,
+//         palette.textColor2.blue,
+//         (animation.value*0.5)
+//       ),
+//       blurRadius: 4.0 * (animation.value*0.6),
+//       spreadRadius: 4.0 * (animation.value*0.6),
+//     );
+    
+//   }
+//   return res;
+// }
 
 Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
   return Container(
     // height: 30,
     decoration: BoxDecoration(
-      color: const Color.fromRGBO(0, 0, 0, 0),
+      color: palette.screenBackgroundColor,
       border: Border.all(
         color: getColor(palette, animation, currentStep, widgetId),
         width: 3
       ),
       borderRadius: const BorderRadius.all(Radius.circular(10)),
+      boxShadow: [
+        TutorialHelpers().getBoxShadow(currentStep, palette, 'points', animation)
+      ]
     ),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -98,6 +139,7 @@ Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic
           Icon(
             Icons.star,
             color: getColor(palette, animation, currentStep, widgetId),
+            shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
           ),
           // Expanded(flex: 1, child: Center(),),
           const SizedBox(
@@ -109,8 +151,9 @@ Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic
             style: TextStyle(
               fontSize: 22,
               color: getColor(palette, animation, currentStep, widgetId),
+              shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
             ),
-            child: const Text("0"),
+            child: Text(currentStep['points'].toString()),
           )
         ],
       ),
@@ -118,16 +161,57 @@ Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic
   );
 }
 
+
+Widget newPointsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
+  return Container(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child:AnimatedDefaultTextStyle(
+        duration: const Duration(milliseconds: 200),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 22,
+          color: getColor(palette, animation, currentStep, widgetId),
+          shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
+        ),
+        child: Text("+${currentStep['newPoints']}"),
+      ),
+    ),
+  );
+}
+Widget newWordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
+  return Container(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child:AnimatedDefaultTextStyle(
+        duration: const Duration(milliseconds: 200),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 22,
+          color: getColor(palette, animation, currentStep, widgetId),
+          shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
+        ),
+        child: Text("+${currentStep['newWords']}"),
+      ),
+    ),
+  );
+}
+
+
 Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
   return Container(
     // height: 30,
     decoration: BoxDecoration(
-      color: const Color.fromRGBO(0, 0, 0, 0),
+      color: palette.screenBackgroundColor,
+      // color: const Color.fromRGBO(0, 0, 0, 0),
       border: Border.all(
         color: getColor(palette, animation, currentStep, widgetId),
         width: 3
       ),
       borderRadius: const BorderRadius.all(Radius.circular(10)),
+      boxShadow: [
+        TutorialHelpers().getBoxShadow(currentStep, palette, 'words', animation)
+      ]      
     ),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -136,6 +220,7 @@ Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic
           Icon(
             Icons.library_books,
             color: getColor(palette, animation, currentStep, widgetId),
+            shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
           ),
           const SizedBox(
             width: 15,
@@ -146,8 +231,9 @@ Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic
             style: TextStyle(
               fontSize: 22,
               color: getColor(palette, animation, currentStep, widgetId),
+              shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
             ),
-            child: const Text("0"),
+            child: Text(currentStep['words'].toString()),
           )
         ],
       ),
