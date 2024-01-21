@@ -4,8 +4,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_board.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_bonus_items.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_ended_overlay.dart';
@@ -27,35 +31,39 @@ class TutorialScreen1 extends StatefulWidget {
   State<TutorialScreen1> createState() => _TutorialScreen1State();
 }
 
-class _TutorialScreen1State extends State<TutorialScreen1> with TickerProviderStateMixin {
+class _TutorialScreen1State extends State<TutorialScreen1>
+    with TickerProviderStateMixin {
   late AnimationState _animationState;
   late AnimationController _textGlowController;
   late Animation<double> _textGlowAnimation;
+  late SettingsController settings;
+  late GamePlayState gamePlayState;
 
   late ColorPalette palette;
   late TutorialState tutorialState;
+  late bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _animationState = Provider.of<AnimationState>(context, listen: false);
     tutorialState = Provider.of<TutorialState>(context, listen: false);
+    settings = Provider.of<SettingsController>(context, listen: false);
     palette = Provider.of<ColorPalette>(context, listen: false);
+    gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     initializeAnimations(palette);
 
-
     print(tutorialState.sequenceStep);
-    
+
     // print(tutorialState.tutorialStateHistory);
-    // _animationState.addListener(_handleAnimationStateChange);        
-  } 
+    // _animationState.addListener(_handleAnimationStateChange);
+  }
 
-  void initializeAnimations(ColorPalette palette,) {
-
+  void initializeAnimations(
+    ColorPalette palette,
+  ) {
     _textGlowController = AnimationController(
-      vsync: this, 
-      duration: const Duration(milliseconds: 1500)
-    );
+        vsync: this, duration: const Duration(milliseconds: 1500));
 
     final List<TweenSequenceItem<double>> glowSequence = [
       TweenSequenceItem<double>(
@@ -71,7 +79,8 @@ class _TutorialScreen1State extends State<TutorialScreen1> with TickerProviderSt
           ),
           weight: 0.5),
     ];
-    _textGlowAnimation = TweenSequence<double>(glowSequence).animate(_textGlowController);
+    _textGlowAnimation =
+        TweenSequence<double>(glowSequence).animate(_textGlowController);
 
     _textGlowController.forward();
     _textGlowController.addListener(() {
@@ -79,10 +88,6 @@ class _TutorialScreen1State extends State<TutorialScreen1> with TickerProviderSt
         _textGlowController.repeat();
       }
     });
-
-    
-
-
   }
 
   @override
@@ -91,21 +96,37 @@ class _TutorialScreen1State extends State<TutorialScreen1> with TickerProviderSt
     super.dispose();
   }
 
-
-Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
-  final bool active = currentStep['targets'].contains(widgetId);
-  late Color res = palette.textColor2;
-  if (active) {
-    res = Color.fromRGBO(
-      palette.textColor2.red,
-      palette.textColor2.green,
-      palette.textColor2.blue,
-      animation.value  
-    );
+  Color getColor(ColorPalette palette, Animation animation,
+      Map<String, dynamic> currentStep, String widgetId) {
+    final bool active = currentStep['targets'].contains(widgetId);
+    late Color res = palette.textColor2;
+    if (active) {
+      res = Color.fromRGBO(palette.textColor2.red, palette.textColor2.green,
+          palette.textColor2.blue, animation.value);
+    }
+    return res;
   }
-  return res;
-}
 
+  // void getUserFromStorage(SettingsController settings) {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   try {
+  //     final Map<String, dynamic> userDataFromStorage =
+  //         (settings.userData.value as Map<String, dynamic>);
+  //     setState(() {
+  //       _userFromStorage = userDataFromStorage;
+
+  //       isLoading = false;
+  //     });
+  //     // _palette.
+  //   } catch (error) {
+  //     debugPrint(error.toString());
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,146 +134,195 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
     // final TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
-    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette =
+        Provider.of<ColorPalette>(context, listen: false);
+    final AnimationState animationState =
+        Provider.of<AnimationState>(context, listen: false);
     // tutorialState.setTutorialTextGlowOpacity(_textGlowAnimation.value);
     return Consumer<TutorialState>(
-      builder: (context, tutorialState, child) {        
-
+      builder: (context, tutorialState, child) {
         // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
         // currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep)
         // final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-        final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+        final Map<String, dynamic> currentStep =
+            TutorialHelpers().getCurrentStep2(tutorialState);
 
-        
         return SafeArea(
-          child: Stack(
-            children: [
-              Scaffold(
-                appBar: AppBar(
-                  backgroundColor: palette.optionButtonBgColor,
-                  title: Text(
-                    'Tutorial',
-                    style: TextStyle(color: palette.textColor2),
+            child: Stack(
+          children: [
+            Scaffold(
+              appBar: AppBar(
+                backgroundColor: palette.optionButtonBgColor,
+                title: Text(
+                  'Tutorial',
+                  style: TextStyle(color: palette.textColor2),
+                ),
+                actions: <Widget>[
+                  AnimatedBuilder(
+                    animation: _textGlowAnimation,
+                    builder: (context, child) {
+                      return TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Skip Tutorial"),
+                                content: Text(
+                                    'Are you sure you want to skip the tutorial?'),
+                                actions: <TextButton>[
+                                  TextButton(
+                                      onPressed: () {
+                                        FirestoreMethods().updateParameters(
+                                            (settings.userData.value
+                                                as Map<String, dynamic>)['uid'],
+                                            'hasSeenTutorial',
+                                            true);
+
+                                        Helpers()
+                                            .getStates(gamePlayState, settings);
+
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const GameScreen()),
+                                        );
+                                      },
+                                      child: Text("Yes")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("No"))
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          'Skip Tutorial',
+                          style: TextStyle(
+                              color: getColor(palette, _textGlowAnimation,
+                                  currentStep, 'skip_tutorial')),
+                        ),
+                      );
+                    },
                   ),
-                  actions: <Widget>[
-                    AnimatedBuilder(
-                      animation: _textGlowAnimation,
-                      builder: (context, child) {
-                        return TextButton(
-                          onPressed: () {
-                            debugPrint('skip this tutorial');
-                          },
-                          child: Text(
-                            'Skip Tutorial',
-                            style: TextStyle(
-                              color: getColor(palette, _textGlowAnimation, currentStep, 'skip_tutorial')
+                  AnimatedBuilder(
+                    animation: _textGlowAnimation,
+                    builder: (context, child) {
+                      return IconButton(
+                        color: palette.optionButtonBgColor,
+                        onPressed: () {
+                          debugPrint("Go back ");
+                          TutorialHelpers().executePreviousStep(
+                              tutorialState, animationState);
+                        },
+                        icon: Icon(Icons.replay_circle_filled_sharp,
+                            color: getColor(palette, _textGlowAnimation,
+                                currentStep, 'back_step')),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              body: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: palette.screenBackgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+                      child: Column(
+                        children: [
+                          // Column(
+                          //   children: [
+                          const TutorialTimerWidget(),
+                          TutorialScoreboard(animation: _textGlowAnimation),
+                          TutorialBonusItems(animation: _textGlowAnimation),
+                          const Expanded(child: SizedBox()),
+                          TutorialRandomLetters(animation: _textGlowAnimation),
+                          const Expanded(child: SizedBox()),
+                          TutorialBoard(animation: _textGlowAnimation),
+                          const Expanded(child: SizedBox()),
+                          Container(
+                            color: palette.screenBackgroundColor,
+                            child: AnimatedBuilder(
+                              animation: _textGlowAnimation,
+                              builder: (context, child) {
+                                return InkWell(
+                                  child: Icon(
+                                    Icons.pause_circle,
+                                    shadows: TutorialHelpers().getTextShadow(
+                                        currentStep,
+                                        palette,
+                                        'pause',
+                                        _textGlowAnimation),
+                                    size: 26,
+                                    color: getColor(
+                                        palette,
+                                        _textGlowAnimation,
+                                        currentStep,
+                                        'pause'), //palette.textColor2,
+                                  ),
+                                  onTap: () {
+                                    if (currentStep['callbackTarget'] ==
+                                        'pause') {
+                                      tutorialState.setSequenceStep(
+                                          tutorialState.sequenceStep + 1);
+                                    }
+                                    debugPrint('pause');
+                                  },
+                                );
+                              },
                             ),
                           ),
-                        );
-                      },
-                    ),
-                    AnimatedBuilder(
-                      animation: _textGlowAnimation,
-                      builder: (context, child) {  
-                        return IconButton(
-                          color: palette.optionButtonBgColor,
-                          onPressed: () {
-                            debugPrint("Go back ");
-                            TutorialHelpers().executePreviousStep(tutorialState, context);
-                          },
-                          icon: Icon(
-                            Icons.replay_circle_filled_sharp, 
-                            color: getColor(palette, _textGlowAnimation, currentStep, 'back_step')
-                          ),
-                        );
-                      },
-                    ),            
-                  ],
-                ),
-                body: Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      color: palette.screenBackgroundColor,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-                        child: Column(
-                          children: [
-                            // Column(
-                            //   children: [
-                                const TutorialTimerWidget(),
-                                TutorialScoreboard(animation: _textGlowAnimation),
-                                TutorialBonusItems(animation: _textGlowAnimation),
-                                const Expanded(child: SizedBox()),
-                                TutorialRandomLetters(animation: _textGlowAnimation),
-                                const Expanded(child: SizedBox()),
-                                TutorialBoard(animation: _textGlowAnimation),
-                                const Expanded(child: SizedBox()),
-                                Container(
-                                  color: palette.screenBackgroundColor,
-                                  child: AnimatedBuilder(
-                                    animation: _textGlowAnimation,
-                                    builder: (context, child) {
-                                      return InkWell(
-                                        child: Icon(
-                                          Icons.pause_circle,
-                                          shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'pause', _textGlowAnimation),
-                                          size: 26,
-                                          color: getColor(palette, _textGlowAnimation, currentStep, 'pause'), //palette.textColor2,                                  
-                                        ),
-                                        onTap: () {
-              
-                                          if (currentStep['callbackTarget'] == 'pause') {
-                                            tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
-                                          }
-                                          debugPrint('pause');
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                                // spaceForSteps(currentStep),
-                                // tutorialState.sequenceStep  >2  ? const SizedBox() : const SizedBox(height: 100,),
-                                // currentStep['isGameStarted']  !currentStep['isGameEnded'] ? const SizedBox(height: 100,) : const SizedBox(),
-                            //   ],
-                            // ),
-                            // TutorialPauseOverlay(),
-                            // const TutorialStep(),                    
-                          ],
-                        ),
+                          // spaceForSteps(currentStep),
+                          // tutorialState.sequenceStep  >2  ? const SizedBox() : const SizedBox(height: 100,),
+                          // currentStep['isGameStarted']  !currentStep['isGameEnded'] ? const SizedBox(height: 100,) : const SizedBox(),
+                          //   ],
+                          // ),
+                          // TutorialPauseOverlay(),
+                          // const TutorialStep(),
+                        ],
                       ),
                     ),
-                    TutorialPauseOverlay(animation: _textGlowAnimation,),
-                    // const TutorialOverlay(),
-                  ],
-                ),
-                // bottomNavigationBar:   currentStep['isGameStarted'] && !currentStep['isGameEnded'] ? const SizedBox() : const TutorialStep(), 
-                bottomNavigationBar: TutorialStep(),// displayTextBox(currentStep),
-                
-                // const TutorialStep() :  
-                // bottomNavigationBar: NavigationBar(destinations: const []),
-              
-                ),
-                const TutorialEndedOverlay()
-            ],
-          )
-        );
+                  ),
+                  TutorialPauseOverlay(
+                    animation: _textGlowAnimation,
+                  ),
+                  // const TutorialOverlay(),
+                ],
+              ),
+              // bottomNavigationBar:   currentStep['isGameStarted'] && !currentStep['isGameEnded'] ? const SizedBox() : const TutorialStep(),
+              bottomNavigationBar:
+                  TutorialStep(), // displayTextBox(currentStep),
+
+              // const TutorialStep() :
+              // bottomNavigationBar: NavigationBar(destinations: const []),
+            ),
+            const TutorialEndedOverlay()
+          ],
+        ));
       },
     );
   }
 }
 
-Widget spaceForSteps(Map<String,dynamic> currentStep) {
+Widget spaceForSteps(Map<String, dynamic> currentStep) {
   Widget res = const SizedBox();
   if (currentStep['isGameStarted']) {
-
     if (currentStep['isGameEnded']) {
-      res = const SizedBox(height: 100,);
+      res = const SizedBox(
+        height: 100,
+      );
     } else {
       res = const SizedBox();
     }
   } else {
-    res = const SizedBox(height: 100,);
+    res = const SizedBox(
+      height: 100,
+    );
   }
   return res;
 }
@@ -270,7 +340,7 @@ Widget spaceForSteps(Map<String,dynamic> currentStep) {
 //   } else {
 //     res = const SizedBox();
 //   }
-//   return res;  
+//   return res;
 // }
 
 class GameSummaryScreen extends StatelessWidget {
@@ -318,7 +388,6 @@ class _TutorialSummaryContentState extends State<TutorialSummaryContent> {
   Widget build(BuildContext context) {
     late ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: true);
-
 
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
@@ -384,7 +453,6 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                   1: FixedColumnWidth(200),
                 },
                 children: [
-                  
                   // for (int i = 0;i <widget.gamePlayState.summaryData['uniqueWords'].length;i++)
                   //   TableRow(children: [
                   //     TableCell(
@@ -440,26 +508,24 @@ class TutorialSummaryView extends StatefulWidget {
   final TutorialState tutorialState;
   // final int curentHighscore;
   final VoidCallback toggleDisplay;
-  const TutorialSummaryView({
-      super.key,
+  const TutorialSummaryView(
+      {super.key,
       required this.palette,
       required this.tutorialState,
       // required this.curentHighscore,
-      required this.toggleDisplay
-    });
+      required this.toggleDisplay});
 
   @override
   State<TutorialSummaryView> createState() => _TutorialSummaryViewState();
 }
 
 class _TutorialSummaryViewState extends State<TutorialSummaryView> {
-
-
   @override
   Widget build(BuildContext context) {
-
-    late TutorialState tutorialState = Provider.of<TutorialState>(context, listen:  false);
-    final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+    late TutorialState tutorialState =
+        Provider.of<TutorialState>(context, listen: false);
+    final Map<String, dynamic> currentStep =
+        TutorialHelpers().getCurrentStep2(tutorialState);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -532,28 +598,27 @@ class _TutorialSummaryViewState extends State<TutorialSummaryView> {
         const Expanded(child: SizedBox()),
         // widget.gamePlayState.summaryData.isEmpty
         //     ? const SizedBox()
-            InkWell(
-                onTap: widget.toggleDisplay,
-                child: Text( 
-                  "View points summary"
-                  // TextSpan(
-                  //   text: 'View all ',
-                  //   style: TextStyle(
-                  //       fontSize: 20,
-                  //       color: widget.palette.textColor3,
-                  //       fontStyle: FontStyle.italic),
-                  //   children: <TextSpan>[
-                  //     TextSpan(
-                  //         text: widget.gamePlayState.summaryData['uniqueWords'].length.toString(),
-                  //         style: TextStyle(
-                  //             decoration: TextDecoration.underline,
-                  //             decorationColor: widget.palette.textColor3,
-                  //             decorationThickness: 1.0)),
-                  //     const TextSpan(text: ' words'),
-                  //   ],
-                  // ),
-                ),
+        InkWell(
+          onTap: widget.toggleDisplay,
+          child: Text("View points summary"
+              // TextSpan(
+              //   text: 'View all ',
+              //   style: TextStyle(
+              //       fontSize: 20,
+              //       color: widget.palette.textColor3,
+              //       fontStyle: FontStyle.italic),
+              //   children: <TextSpan>[
+              //     TextSpan(
+              //         text: widget.gamePlayState.summaryData['uniqueWords'].length.toString(),
+              //         style: TextStyle(
+              //             decoration: TextDecoration.underline,
+              //             decorationColor: widget.palette.textColor3,
+              //             decorationThickness: 1.0)),
+              //     const TextSpan(text: ' words'),
+              //   ],
+              // ),
               ),
+        ),
         const Expanded(child: SizedBox()),
       ]),
     );
@@ -580,4 +645,3 @@ TableRow tableRowItem(
     ),
   ]);
 }
-

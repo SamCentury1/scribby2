@@ -400,4 +400,10 @@ class FirestoreMethods {
         await getUserData(uid) as Map<String, dynamic>;
     settings.updateUserData(userData);
   }
+
+  // Future<void> executeEndTutorial(String uid) async {
+  //   final docRef = _firestore.collection('users').doc(uid);
+  //   await docRef.update({"hasSeenTutorial": true});
+  //   debugPrint("successfully updated skip tutorial");
+  // }
 }

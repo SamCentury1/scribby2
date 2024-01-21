@@ -14,33 +14,25 @@ class TutorialStep extends StatefulWidget {
   State<TutorialStep> createState() => _TutorialStepState();
 }
 
-class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMixin {
-
+class _TutorialStepState extends State<TutorialStep>
+    with TickerProviderStateMixin {
   late AnimationState _animationState;
-  late ColorPalette palette; 
+  late ColorPalette palette;
 
-
-  late Animation<Offset> _slideEnterAnimation;  
+  late Animation<Offset> _slideEnterAnimation;
   late AnimationController _slideEnterController;
 
-  late Animation<Offset> _slideExitAnimation;  
+  late Animation<Offset> _slideExitAnimation;
   late AnimationController _slideExitController;
-
-
 
   @override
   void initState() {
     super.initState();
-    palette = Provider.of<ColorPalette>(context, listen:false);
+    palette = Provider.of<ColorPalette>(context, listen: false);
     _animationState = Provider.of<AnimationState>(context, listen: false);
     _animationState.addListener(_handleAnimationStateChange);
     initializeAnimations();
   }
-
-
-
-
-
 
   void _handleAnimationStateChange() {
     if (_animationState.shouldRunTutorialNextStepAnimation) {
@@ -50,7 +42,7 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
     if (_animationState.shouldRunTutorialPreviousStepAnimation) {
       _runReverseAnimations();
     }
-  }  
+  }
 
   void _runSlideAnimations() {
     _slideEnterController.reset();
@@ -63,7 +55,7 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
   void _runReverseAnimations() {
     _slideEnterController.reverse();
     _slideExitController.reverse();
-  }  
+  }
 
   void initializeAnimations() {
     _slideEnterController = AnimationController(
@@ -73,16 +65,13 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
 
     _slideEnterAnimation = Tween<Offset>(
       begin: const Offset(2.0, 0.0),
-      end: Offset.zero, 
+      end: Offset.zero,
     ).animate(_slideEnterController);
 
     _slideEnterController.forward();
 
-
     _slideExitController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300)
-    );
+        vsync: this, duration: const Duration(milliseconds: 300));
 
     _slideExitAnimation = Tween<Offset>(
       begin: Offset.zero,
@@ -90,37 +79,39 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
     ).animate(_slideExitController);
 
     _slideExitController.forward();
-
   }
 
-
-  Map<String,dynamic> getStepDetails(TutorialState tutorialState, int position) {
-    late Map<String,dynamic> stepDetails = {};
+  Map<String, dynamic> getStepDetails(
+      TutorialState tutorialState, int position) {
+    late Map<String, dynamic> stepDetails = {};
     if (tutorialState.sequenceStep + position < 0) {
-      stepDetails = tutorialDetails.firstWhere((element) => element['step'] == (tutorialState.sequenceStep));
+      stepDetails = tutorialDetails.firstWhere(
+          (element) => element['step'] == (tutorialState.sequenceStep));
     } else {
-      stepDetails = tutorialDetails.firstWhere((element) => element['step'] == (tutorialState.sequenceStep + position));
+      stepDetails = tutorialDetails.firstWhere((element) =>
+          element['step'] == (tutorialState.sequenceStep + position));
     }
     return stepDetails;
   }
 
-  void goToNextStep(TutorialState tutorialState, AnimationState animationState) {
+  void goToNextStep(
+      TutorialState tutorialState, AnimationState animationState) {
+    late Map<String, dynamic> currentStep =
+        TutorialHelpers().getCurrentStep2(tutorialState);
+    // if (currentStep['isGameStarted']) {
 
-    late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
-    if (currentStep['isGameStarted']) {
+    //   if (currentStep['isGameEnded']) {
+    //     tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
 
-      if (currentStep['isGameEnded']) {
-        tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+    //   } else {
 
-      } else {
-
-        tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
-        animationState.setShouldRunTutorialNextStepAnimation(true);
-        animationState.setShouldRunTutorialNextStepAnimation(false);    
-      }
-    } else {
-      tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
-    }
+    tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+    animationState.setShouldRunTutorialNextStepAnimation(true);
+    animationState.setShouldRunTutorialNextStepAnimation(false);
+    //   }
+    // } else {
+    //   tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+    // }
 
     // tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
     // print(tutorialState.sequenceStep);
@@ -128,10 +119,8 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
     // // animationState.setShouldRunTutorialNextStepExitAnimation(true);
 
     // animationState.setShouldRunTutorialNextStepAnimation(false);
-    // // animationState.setShouldRunTutorialNextStepExitAnimation(false);    
+    // // animationState.setShouldRunTutorialNextStepExitAnimation(false);
   }
-
-
 
   @override
   void dispose() {
@@ -142,15 +131,15 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<TutorialState>(
-      builder:(context, tutorialState, child) { 
+      builder: (context, tutorialState, child) {
+        // Map<String,dynamic> currentStep = getStepDetails(tutorialState, 0);
+        // Map<String,dynamic> previousStep = getStepDetails(tutorialState, -1);
 
-      // Map<String,dynamic> currentStep = getStepDetails(tutorialState, 0);
-      // Map<String,dynamic> previousStep = getStepDetails(tutorialState, -1);
-
-      Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
-      Map<String,dynamic> previousStep = TutorialHelpers().getPreviousStep2(tutorialState);      
+        Map<String, dynamic> currentStep =
+            TutorialHelpers().getCurrentStep2(tutorialState);
+        Map<String, dynamic> previousStep =
+            TutorialHelpers().getPreviousStep2(tutorialState);
         return Container(
           width: double.infinity,
           height: 100,
@@ -163,75 +152,71 @@ class _TutorialStepState extends State<TutorialStep> with TickerProviderStateMix
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Stack(
-                          children: [
-                            AnimatedBuilder(
-                              animation: _slideEnterAnimation,
-                              builder: (context, child) {
-                                return SlideTransition(
-                                  position: _slideEnterAnimation,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 4.0),
-                                    child: Text(
-                                      currentStep['text'],
-                                      style: TextStyle(
+                  child: Row(children: [
+                    Flexible(
+                      child: Stack(
+                        children: [
+                          AnimatedBuilder(
+                            animation: _slideEnterAnimation,
+                            builder: (context, child) {
+                              return SlideTransition(
+                                position: _slideEnterAnimation,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Text(
+                                    currentStep['text'],
+                                    style: TextStyle(
                                         fontSize: 18,
-                                        color: palette.textColor2
-                                      ),
-                                    ),
+                                        color: palette.textColor2),
                                   ),
-                                );
-                              },
-                            ),
-                            AnimatedBuilder(
-                              animation: _slideExitAnimation,
-                              builder: (context, child) {
-                                return SlideTransition(
-                                  position: _slideExitAnimation,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 4.0),
-                                    child: Text(
-                                      previousStep['text'],
-                                      style: TextStyle(
+                                ),
+                              );
+                            },
+                          ),
+                          AnimatedBuilder(
+                            animation: _slideExitAnimation,
+                            builder: (context, child) {
+                              return SlideTransition(
+                                position: _slideExitAnimation,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Text(
+                                    currentStep['text'],
+                                    style: TextStyle(
                                         fontSize: 18,
-                                        color: palette.textColor2
-                                      ),
-                                    ),
+                                        color: palette.textColor2),
                                   ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 20,),
-                      Align(
-                        alignment: Alignment.center,
-                        child: !currentStep['complete'] ? const SizedBox() :
-                        TextButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: palette.optionButtonBgColor,
-                          ),
-                          onPressed: () {
-                            goToNextStep(tutorialState, _animationState);
-                          },
-                          child: Text(
-                            "next",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: palette.textColor2
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: !currentStep['complete']
+                          ? const SizedBox()
+                          : TextButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: palette.optionButtonBgColor,
+                              ),
+                              onPressed: () {
+                                goToNextStep(tutorialState, _animationState);
+                              },
+                              child: Text(
+                                "next",
+                                style: TextStyle(
+                                    fontSize: 18, color: palette.textColor2),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                    ] 
-                  ),
+                    )
+                  ]),
                 ),
               ),
-        
             ],
           ),
         );

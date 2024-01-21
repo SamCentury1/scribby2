@@ -6,9 +6,6 @@ import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
-// import 'package:scribby_flutter_v2/providers/animation_state.dart';
-// import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_dialog.dart';
-// import 'package:scribby_flutter_v2/providers/game_state.dart';
 
 class PreGameOverlay extends StatefulWidget {
   const PreGameOverlay({super.key});
@@ -18,24 +15,19 @@ class PreGameOverlay extends StatefulWidget {
 }
 
 class _PreGameOverlayState extends State<PreGameOverlay> {
-
-
   @override
   Widget build(BuildContext context) {
-
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
-
         return AnimatedOpacity(
           opacity: !gamePlayState.isGameStarted ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 300),
-            child: IgnorePointer(
-              ignoring: gamePlayState.isGameStarted,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: GestureDetector(
-              
+          child: IgnorePointer(
+            ignoring: gamePlayState.isGameStarted,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: GestureDetector(
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 9, sigmaY: 9),
                         child: Container(
@@ -45,28 +37,24 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                       onTap: () {
                         // print("start game");
                         gamePlayState.setIsGameStarted(true);
-                      }
-                    ),
-                  ),
-                  const Center(
-                    child: DefaultTextStyle(
-                      style: TextStyle(
+                      }),
+                ),
+                const Center(
+                  child: DefaultTextStyle(
+                    style: TextStyle(
                         fontSize: 32,
                         color: Colors.white,
-                        fontStyle: FontStyle.italic
-                      ),
-                      child: Text(
-                        "Tap To Start",
-                      ),
+                        fontStyle: FontStyle.italic),
+                    child: Text(
+                      "Tap To Start",
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-        
+          ),
         );
       },
     );
-
   }
 }
