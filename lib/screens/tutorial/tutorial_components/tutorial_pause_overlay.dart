@@ -390,7 +390,7 @@ class _TutorialDisplayScoreSummaryState extends State<TutorialDisplayScoreSummar
               ]
             ),
             for (int i=0; i<gameSummary['summary'].length; i++)
-            scoreSummaryTableRow(palette,gameSummary['summary'][i]),
+            scoreSummaryTableRow(i,palette,gameSummary['summary'][i]),
           ]
         ),
         const Expanded(child: SizedBox(),),        
@@ -454,14 +454,14 @@ Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette) {
   );
 }
 
-TableRow scoreSummaryTableRow(ColorPalette palette, Map<String,dynamic> data) {
+TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data) {
 
   Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
 
   return TableRow(children: [
     Center(
       child: Text(
-        data['index'].toString(),
+        (index+1).toString(),
         style: TextStyle(
           color: textColor,
           fontSize: 20

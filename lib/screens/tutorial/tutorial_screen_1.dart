@@ -134,10 +134,8 @@ class _TutorialScreen1State extends State<TutorialScreen1>
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
     // final TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
-    final AnimationState animationState =
-        Provider.of<AnimationState>(context, listen: false);
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     // tutorialState.setTutorialTextGlowOpacity(_textGlowAnimation.value);
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
@@ -301,7 +299,7 @@ class _TutorialScreen1State extends State<TutorialScreen1>
               // const TutorialStep() :
               // bottomNavigationBar: NavigationBar(destinations: const []),
             ),
-            const TutorialEndedOverlay()
+            TutorialEndedOverlay()
           ],
         ));
       },

@@ -2,15 +2,26 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TutorialOverlay extends StatefulWidget {
-  const TutorialOverlay({super.key});
+  final GamePlayState gamePlayState;
+  final SettingsController settings;
+  const TutorialOverlay({
+    super.key,
+    required this.gamePlayState,
+    required this.settings,
+  });
 
   @override
   State<TutorialOverlay> createState() => _TutorialOverlayState();
@@ -99,7 +110,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
                     ),
                   ),
                 ),
-                displayCorrectTextWidget(palette, tutorialState, context)
+                displayCorrectTextWidget(palette, tutorialState, context, widget.gamePlayState, widget.settings)
                 // getOpacity(tutorialState) < 1 
                 //     ? const SizedBox()
                 //     : Container(
@@ -121,14 +132,15 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
   }
 }
 
-Widget displayCorrectTextWidget(ColorPalette palette, TutorialState tutorialState, BuildContext context) {
+Widget displayCorrectTextWidget(ColorPalette palette, TutorialState tutorialState, BuildContext context, GamePlayState gamePlayState, SettingsController settings) {
 
   final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
 
   Widget res = const SizedBox();
   if (currentStep['isGameStarted']) {
     if (currentStep['isGameEnded']) {
-      finalTextWidget(palette, tutorialState,);
+      String uid = (settings.userData.value as Map<String, dynamic>)['uid'];
+      finalTextWidget(palette, tutorialState, uid, gamePlayState, settings, context);
     }
   } else {
     res = textWidget(palette, tutorialState, context);
@@ -179,7 +191,14 @@ Widget textWidget(ColorPalette palette, TutorialState tutorialState,  BuildConte
 }
 
 
-Widget finalTextWidget(ColorPalette palette, TutorialState tutorialState, ) {
+Widget finalTextWidget(
+  ColorPalette palette, 
+  TutorialState tutorialState, 
+  String uid, 
+  GamePlayState gamePlayState, 
+  SettingsController settings, 
+  BuildContext context)  {
+
   final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
 
 
@@ -200,7 +219,15 @@ Widget finalTextWidget(ColorPalette palette, TutorialState tutorialState, ) {
                 const Expanded(child: SizedBox()),
                 TextButton(
                   onPressed: () {
-                    tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+                    FirestoreMethods().updateParameters(uid,'hasSeenTutorial',true);
+
+                    Helpers().getStates(gamePlayState, settings);
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => const GameScreen()
+                      ),
+                    );
                   },
                   child: Text(
                     "Start Game",

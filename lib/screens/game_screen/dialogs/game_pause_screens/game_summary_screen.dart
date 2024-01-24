@@ -66,7 +66,7 @@ class _GameSummaryContentState extends State<GameSummaryContent> {
         return displayWords
             ? ShowWordsView(
                 palette: palette,
-                gamePlayState: gamePlayState,
+                // gamePlayState: gamePlayState,
                 toggleDisplay: toggleDisplay,
               )
             : GameSummaryView(
@@ -81,13 +81,13 @@ class _GameSummaryContentState extends State<GameSummaryContent> {
 
 class ShowWordsView extends StatefulWidget {
   final ColorPalette palette;
-  final GamePlayState gamePlayState;
+  // final GamePlayState gamePlayState;
   final VoidCallback toggleDisplay;
 
   const ShowWordsView(
       {super.key,
       required this.palette,
-      required this.gamePlayState,
+      // required this.gamePlayState,
       required this.toggleDisplay});
 
   @override
@@ -97,88 +97,265 @@ class ShowWordsView extends StatefulWidget {
 class _ShowWordsViewState extends State<ShowWordsView> {
   // late bool displayWords;
 
+
+  
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return Consumer<GamePlayState>(
+      builder:(context, gamePlayState, child) {
+        late List<Map<String,dynamic>> summary = GameLogic().getPointsSummary(gamePlayState);
+        return SingleChildScrollView(
+          child: Column(
             children: [
-              Text(
-                "All ${widget.gamePlayState.summaryData['uniqueWords'].length} Unique Words",
-                style: const TextStyle(fontSize: 24),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          widget.gamePlayState.summaryData.isEmpty
-              ? const Text("No words found yet...")
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Table(
-                      columnWidths: const {
-                        0: FixedColumnWidth(1),
-                        1: FixedColumnWidth(200),
-                      },
-                      children: [
-                        for (int i = 0;
-                            i <
-                                widget.gamePlayState.summaryData['uniqueWords']
-                                    .length;
-                            i++)
-                          TableRow(children: [
-                            TableCell(
-                                child: Text(
-                              "${(i + 1).toString()}.",
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: widget.palette.textColor2,
-                              ),
-                            )),
-                            TableCell(
-                                child: Text(
-                              widget.gamePlayState.summaryData['uniqueWords']
-                                  [i],
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: widget.palette.textColor2,
-                              ),
-                            )),
-                          ])
-                      ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "All ${gamePlayState.summaryData['uniqueWords'].length} Unique Words",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: widget.palette.textColor2,
                     ),
                   ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              gamePlayState.summaryData.isEmpty
+                  ? const Text("No words found yet...")
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        // child: Table(
+                        //   columnWidths: const {
+                        //     0: FixedColumnWidth(1),
+                        //     1: FixedColumnWidth(200),
+                        //   },
+                        //   children: [
+                        //     for (int i = 0;
+                        //         i <
+                        //             widget.gamePlayState.summaryData['uniqueWords']
+                        //                 .length;
+                        //         i++)
+                        //       TableRow(children: [
+                        //         TableCell(
+                        //             child: Text(
+                        //           "${(i + 1).toString()}.",
+                        //           style: TextStyle(
+                        //             fontSize: 22,
+                        //             color: widget.palette.textColor2,
+                        //           ),
+                        //         )),
+                        //         TableCell(
+                        //             child: Text(
+                        //           widget.gamePlayState.summaryData['uniqueWords']
+                        //               [i],
+                        //           style: TextStyle(
+                        //             fontSize: 22,
+                        //             color: widget.palette.textColor2,
+                        //           ),
+                        //         )),
+                        //       ])
+                        //   ],
+                        // ),
+                        child: Table(
+                          columnWidths: const <int, TableColumnWidth>{
+                            0: FlexColumnWidth(1),
+                            1: FlexColumnWidth(5),
+                            2: FlexColumnWidth(2),
+                          },
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                          children: <TableRow>[
+                            TableRow(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    "#",
+                                    style: TextStyle(color: widget.palette.textColor2, fontSize: 20),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Word",
+                                    style: TextStyle(color: widget.palette.textColor2, fontSize: 20),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "Points",
+                                    style: TextStyle(color: widget.palette.textColor2, fontSize: 20),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ]
+                            ),
+                            for (int i=0; i<summary.length; i++)
+                            scoreSummaryTableRow(i, widget.palette,summary[i], context),
+                          ]
+                        ),                    
+                      ),
+                    ),
+              InkWell(
+                onTap: widget.toggleDisplay,
+                child: Row(
+                  children: [
+                    const Expanded(flex: 1, child: SizedBox()),
+                    Icon(Icons.arrow_upward,
+                        size: 20, color: widget.palette.textColor2),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Hide",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: widget.palette.textColor2,
+                      ),
+                    )
+                  ],
                 ),
-          InkWell(
-            onTap: widget.toggleDisplay,
-            child: Row(
-              children: [
-                const Expanded(flex: 1, child: SizedBox()),
-                Icon(Icons.arrow_upward,
-                    size: 20, color: widget.palette.textColor2),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Hide",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: widget.palette.textColor2,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
+Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette) {
+
+  Color textColor = turn.isEven ? palette.textColor1 : palette.textColor3;
+  late IconData iconItem;
+  if (stat == 'count') {
+    iconItem = Icons.bookmark;
+  } else if (stat == 'crosswords') {
+    iconItem = Icons.close;
+  } else if (stat == 'streak') {
+    iconItem = Icons.bolt;
+  }
+
+  return SizedBox(
+    width: 35,
+    child: Stack(
+      children: [
+        Icon(
+          iconItem,
+          size: 16,
+          color: textColor,
+        ),
+        Positioned(
+          left: 14.0,
+          top:-3,
+          child: Text.rich(
+            TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                    text:"x",
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: textColor
+                    )
+                ),
+                TextSpan(
+                  text: data.toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: textColor
+                  )
+                ),
+              ],
+            ),
+          ),          
+        )
+    
+      ],
+    ),
+  );
+}
+
+TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context) {
+
+  Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
+
+  return TableRow(children: [
+    Center(
+      child: Text(
+        (index+1).toString(),
+        style: TextStyle(
+          color: textColor,
+          fontSize: 20
+        ),
+      ),
+    ),
+    Row(
+      children: [
+        GestureDetector(
+          child: Text(
+            data['word'],
+            style: TextStyle(
+              color: textColor,
+              fontSize: 20,
+            ),
+          ),
+          onTap: () {
+            showDialog(
+              context: context, 
+              builder:(context) {
+                return FutureBuilder<String>(
+                  future: GameLogic().fetchDefinition(data["word"]),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return AlertDialog(
+                        title: Text(data["word"]),
+                        content: Text("Fetching definition..."),
+                      );
+                    } else if (snapshot.hasError) {
+                      return AlertDialog(
+                        title: Text(data["word"]),
+                        content: Text("Error fetching definition"),
+                      );
+                    } else {
+                      return AlertDialog(
+                        title: Text(data["word"]),
+                        content: Text(snapshot.data ?? "No definition available"),
+                      );
+                    }                    
+                  },
+                  // child: AlertDialog(
+                  //   title: Text(data["word"]),
+                  //   content: Text(
+                  //     // GameLogic().getWordDefinition(data["word"])
+                      
+                  //   ),
+                  // ),
+                );
+              },
+            );
+          },
+        ),
+        SizedBox(width: 10,),
+        Expanded(child: SizedBox()),
+        data['count'] > 1 ? multiplierIcon('count',data['turn'], data['count'], palette) : const SizedBox(),
+        data['crosswords'] > 1 ? multiplierIcon('crosswords',data['turn'], data['crosswords'], palette) : const SizedBox(),
+        data['streak'] > 1 ? multiplierIcon('streak',data['turn'], data['streak'], palette) : const SizedBox(),
+      ],
+    ),
+    Align(
+      alignment: Alignment.centerRight,
+      child: Text(
+        data['points'].toString(),
+        style: TextStyle(color: textColor, fontSize: 20),
+        textAlign: TextAlign.right,
+      ),
+    ),
+  ]);
+}
+
 
 class GameSummaryView extends StatefulWidget {
   final ColorPalette palette;

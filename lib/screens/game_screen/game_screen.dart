@@ -363,6 +363,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                           color: palette.screenBackgroundColor,
                           child: IconButton(
                             onPressed: () {
+                              // GameLogic().getDefs();
+                              // GameLogic().getPointsSummary(gamePlayState);
                               gamePlayState.setIsGamePaused(true, 0);
                             },
                             icon: const Icon(Icons.pause_circle_outline),

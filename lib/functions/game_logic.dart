@@ -1,8 +1,10 @@
 // import 'dart:ffi';
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
@@ -14,6 +16,8 @@ import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/game_over_screen.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
+import 'package:scribby_flutter_v2/utils/definitions.dart';
+import 'package:scribby_flutter_v2/utils/defs.dart';
 // import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/utils/dictionary.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
@@ -197,13 +201,13 @@ class GameLogic {
     List<Map<String, dynamic>> validStringObjects = [];
 
     for (Map<String, dynamic> stringCombo in stringCombinations) {
+
       List<Map<String, dynamic>> contents = [];
       List<String> letters = [];
       final List<String> string = stringCombo["arr"];
 
       for (String tileId in string) {
-        Map<String, dynamic> correspondingTile =
-            boardState.firstWhere((element) => element["tileId"] == tileId);
+        Map<String, dynamic> correspondingTile = boardState.firstWhere((element) => element["tileId"] == tileId);
         String correspondingTileContents = correspondingTile["letter"];
         if (correspondingTileContents == "") {
           contents.add({"tileId": tileId, "content": "-"});
@@ -243,8 +247,7 @@ class GameLogic {
 
         for (Map<String, dynamic> stringContent in stringContents) {
           String contentLetter = stringContent["content"];
-          Map<String, dynamic> correspondingAlphabetObject = randomLetterState
-              .firstWhere((element) => element["letter"] == contentLetter);
+          Map<String, dynamic> correspondingAlphabetObject = randomLetterState.firstWhere((element) => element["letter"] == contentLetter);
           wordPoints = wordPoints + correspondingAlphabetObject["points"];
           if (!uniqueIds.contains(stringContent["tileId"])) {
             uniqueIds.add(stringContent["tileId"]);
@@ -281,10 +284,7 @@ class GameLogic {
       crossWordMultiplier = 1;
     }
 
-    num finalTurnPoints = totalPoints *
-        (activeStreak + 1) *
-        crossWordMultiplier *
-        (wordsList.length);
+    num finalTurnPoints = totalPoints * (activeStreak + 1) * crossWordMultiplier * (wordsList.length);
 
     List<Map<String, dynamic>> newTurnSummaryState = summaryState;
     Map<String, dynamic> pointSummary = {};
@@ -342,8 +342,10 @@ class GameLogic {
   }
 
   // this returns data to be displayed in the pause menu or game over view
-  Map<String, dynamic> getGameSummaryData(
-      List<Map<String, dynamic>> turnSummaryData) {
+  Map<String, dynamic> getGameSummaryData( List<Map<String, dynamic>> turnSummaryData) {
+
+    print("turn summary data = ${turnSummaryData.length}");
+
     int turns = turnSummaryData.length;
     int points = getTotalPoints(turnSummaryData);
     List<String> uniqueWords = getUniqueWords(turnSummaryData);
@@ -1188,8 +1190,7 @@ class GameLogic {
             gamePlayState.currentTurn,
             gamePlayState.activeStreak);
     // now check if words were found
-    if (newTurnSummaryState[newTurnSummaryState.length - 1]["words"].length >
-        0) {
+    if (newTurnSummaryState[newTurnSummaryState.length - 1]["words"].length >0) {
       audioController.playSfx(SfxType.wordFound);
 
       gamePlayState.setIsAnimating(true);
@@ -1215,8 +1216,7 @@ class GameLogic {
         animationState.setShouldRunStreaksEnterAnimation(true);
       }
 
-      if (newTurnSummaryState[newTurnSummaryState.length - 1]["crossword"] ==
-          2) {
+      if (newTurnSummaryState[newTurnSummaryState.length - 1]["crossword"] == 2) {
         animationState.setShouldRunCrossWordAnimation(true);
       }
 
@@ -1230,18 +1230,15 @@ class GameLogic {
       gamePlayState.setSummaryData(summary);
 
       // add the score to the tally
-      gamePlayState
-          .setTurnScore(GameLogic().getPreviousPoints(newTurnSummaryState));
+      gamePlayState.setTurnScore(GameLogic().getPreviousPoints(newTurnSummaryState));
 
       // Execute Animations for found words and new points
       animationState.setShouldRunWordAnimation(true);
       animationState.setShouldRunPointsAnimation(true);
 
       Future.delayed(const Duration(milliseconds: 1000), () {
-        gamePlayState
-            .setTurnScore(GameLogic().getTotalPoints(newTurnSummaryState));
-        gamePlayState
-            .setTurnWords(GameLogic().getTotalWords(newTurnSummaryState));
+        gamePlayState.setTurnScore(GameLogic().getTotalPoints(newTurnSummaryState));
+        gamePlayState.setTurnWords(GameLogic().getTotalWords(newTurnSummaryState));
         gamePlayState.setActiveStreak(newStreak);
       });
 
@@ -1361,5 +1358,78 @@ class GameLogic {
 
       animationState.setShouldRunAnimation(false);
     }
+
+
   }
+
+  List<Map<String,dynamic>> getPointsSummary(GamePlayState gamePlayState) {
+    late List<Map<String,dynamic>> log = gamePlayState.gameSummaryLog;
+    final filteredLog = log.where((element) => element['points'] > 0).toList() ;
+
+    
+    List<Map<String,dynamic>> res = [];
+    
+    for (int i=0; i<filteredLog.length; i++) {
+      final Map<String,dynamic> item = filteredLog[i];
+      final List<Map<String,dynamic>> words = item['words'];
+
+      for (int j=0; j<words.length; j++) {
+        late Map<String,dynamic> word = words[j];
+        int wordScore = word['points'] * item['crossword'] * item['streak'] * item['count'] ;
+
+        res.add({
+          "turn" : i, 
+          "word": word['word'], 
+          "points": wordScore, 
+          "crosswords": item['crossword'] , 
+          "streak": item['streak'] , 
+          "count":item['count']
+        });
+      }
+    }
+
+    return res;
+
+  }
+
+  String getWordDefinition(String word) {
+    List<Map<String,dynamic>> allDefs = defs+definitions;
+    List<String> wordsWithDefs = List.generate(allDefs.length, (index) => allDefs[index]['word']);
+    debugPrint(wordsWithDefs.toString());
+    String res = "";
+
+    if (wordsWithDefs.contains(word)) {
+      Map<String,dynamic>? wordObject = allDefs.firstWhere((element) => element['word'] == word ) ;
+      res = wordObject['data'][0]['meanings'][0]['definitions'][0];
+
+    } else {
+      res = "no definition at this time";
+    }
+
+    print(res);
+
+    return res;
+  }
+
+  Future<String> fetchDefinition(String word) async {
+    final response = await http.get(Uri.parse("https://api.dictionaryapi.dev/api/v2/entries/en/$word"));
+    String res = "";
+    if (response.statusCode == 200) {
+      dynamic jsonResponse = json.decode(response.body);
+      // res = response[0]
+      // late String sss = response.body[0].; // ['meanings'][0]['definitions'];
+      print(jsonResponse[0]['meanings'][0]['definitions'][0]['definition']);
+      res = jsonResponse[0]['meanings'][0]['definitions'][0]['definition'];
+    } else {
+      res = "no definition available";
+    }
+    return res;
+  }
+
+
+  // void getDefs() {
+  //   Map<String,dynamic> def = defs.firstWhere((element) => element['word'] == 'ROOT');
+  //   print(def);
+  // }
+
 }

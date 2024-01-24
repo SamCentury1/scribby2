@@ -102,6 +102,7 @@ import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/styles/buttons.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
+import 'package:scribby_flutter_v2/utils/definitions.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -308,10 +309,12 @@ class _MenuScreenState extends State<MenuScreen> {
 
                         TextButton(
                             onPressed: () {
+
+                              print(definitions.length);
+
                               _audioController.playSfx(SfxType.optionSelected);
 
-                              print(_settings.userData.value
-                                  as Map<String, dynamic>);
+                              print(_settings.userData.value as Map<String, dynamic>);
 
                               if ((_settings.userData.value as Map<String, dynamic>)['parameters']['hasSeenTutorial'] ==false) {
                                 navigateToTutorial();
