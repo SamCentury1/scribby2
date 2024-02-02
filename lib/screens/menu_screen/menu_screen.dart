@@ -75,6 +75,8 @@
 // import 'dart:math';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -88,6 +90,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
 import 'package:scribby_flutter_v2/screens/instructions_screen/instructions_screen.dart';
 import 'package:scribby_flutter_v2/screens/leaderboards_screen/leaderboards_screen.dart';
@@ -102,7 +105,6 @@ import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/styles/buttons.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-import 'package:scribby_flutter_v2/utils/definitions.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -130,22 +132,6 @@ class _MenuScreenState extends State<MenuScreen> {
   late SettingsController _settings;
   late AudioController _audioController;
 
-  // Future<void> readPrefs() async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   final String userName = (prefs.getString('user') ?? "");
-
-  //   // if (userName == "") {
-  //   //   Navigator.of(context).pushAndRemoveUntil(
-  //   //     MaterialPageRoute(
-  //   //       builder: (context) => SettingsSc
-  //   //     ),
-  //   //     ModalRoute.withName('/'),
-  //   //   );
-  //   // }
-  // }
-
-  // late SharedPreferences _prefs;
-  // bool _hasUsername = false;
 
   late String language = "";
 
@@ -168,11 +154,11 @@ class _MenuScreenState extends State<MenuScreen> {
     setState(() {
       isLoading = true;
     });
-    final Map<String, dynamic>? userData =
-        await FirestoreMethods().getUserData(uid);
+    final Map<String, dynamic>? userData = await FirestoreMethods().getUserData(uid);
     if (userData!.isNotEmpty) {
-      gamePlayState
-          .setCurrentLanguage(userData['parameters']['currentLanguage']);
+
+
+      gamePlayState.setCurrentLanguage(userData['parameters']['currentLanguage']);
 
       // saving a copy of the user data in firebase to a Provider class
       _settingsState.updateUserData(userData);
@@ -185,10 +171,19 @@ class _MenuScreenState extends State<MenuScreen> {
       _settings.setUserData(userData);
 
       _palette.getThemeColors(userData['parameters']['darkMode']);
+
+      String currentLanguage = userData['parameters']['currentLanguage'];
+
+      List<String> listOfWords = await StorageMethods().downloadWordList(currentLanguage);
+
+      gamePlayState.setDictionary(listOfWords);
+
+      // log(listOfWords[4142].toString());
+
       setState(() {
         // _userData = userData;
         isLoading = false;
-        language = userData['parameters']['currentLanguage'];
+        language = currentLanguage;
       });
       if (userData['username'] == "") {
         navigateToChooseLanguage();
@@ -206,66 +201,62 @@ class _MenuScreenState extends State<MenuScreen> {
         MaterialPageRoute(builder: (context) => const ChooseLanguage()));
   }
 
-  void navigateToTutorial() {
-    late TutorialState tutorialState = context.read<TutorialState>();
-    // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
-    TutorialHelpers().getFullTutorialStates2(tutorialState, tutorialDetails);
-    // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
+  // void navigateToTutorial() {
+  //   late TutorialState tutorialState = context.read<TutorialState>();
+  //   // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
+  //   TutorialHelpers().getFullTutorialStates2(tutorialState, tutorialDetails);
+  //   // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
     
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const TutorialScreen1()
-      )
-    );
-  }
+  //   Navigator.of(context).pushReplacement(
+  //     MaterialPageRoute(
+  //       builder: (context) => const TutorialScreen1()
+  //     )
+  //   );
+  // }
 
   @override
   void dispose() {
     super.dispose();
   }
 
-  final List<Map<String, dynamic>> translation = [
-    {
-      "phrase": "New Game",
-      "english": "New Game",
-      "french": "Nouvelle Partie",
-      "spanish": "Nuevo Juego",
-    },
-    {
-      "phrase": "Leaderboards",
-      "english": "Leaderboards",
-      "french": "Classement",
-      "spanish": "Tabla de clasificación",
-    },
-    {
-      "phrase": "Instructions",
-      "english": "Instructions",
-      "french": "Instructions",
-      "spanish": "Instrucciones",
-    },
-    {
-      "phrase": "Settings",
-      "english": "Settings",
-      "french": "Paramètres",
-      "spanish": "Ajustes",
-    },
-  ];
+  // final List<Map<String, dynamic>> translation = [
+  //   {
+  //     "phrase": "New Game",
+  //     "english": "New Game",
+  //     "french": "Nouvelle Partie",
+  //     "spanish": "Nuevo Juego",
+  //   },
+  //   {
+  //     "phrase": "Leaderboards",
+  //     "english": "Leaderboards",
+  //     "french": "Classement",
+  //     "spanish": "Tabla de clasificación",
+  //   },
+  //   {
+  //     "phrase": "Instructions",
+  //     "english": "Instructions",
+  //     "french": "Instructions",
+  //     "spanish": "Instrucciones",
+  //   },
+  //   {
+  //     "phrase": "Settings",
+  //     "english": "Settings",
+  //     "french": "Paramètres",
+  //     "spanish": "Ajustes",
+  //   },
+  // ];
 
-  String translate(String source, String targetLanguage) {
-    late String match = translation
-        .firstWhere((element) => element['phrase'] == source)[targetLanguage];
-    return match;
-  }
+  // String translate(String source, String targetLanguage) {
+  //   late String match = translation
+  //       .firstWhere((element) => element['phrase'] == source)[targetLanguage];
+  //   return match;
+  // }
 
   @override
   Widget build(BuildContext context) {
     // final settings = context.watch<SettingsController>();
 
-    return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        :
+    return isLoading ? const Center(child: CircularProgressIndicator(),):
         // ValueListenableBuilder(
         //   valueListenable: settings.darkTheme,
         //   builder: (context,darkTheme,child) {
@@ -309,25 +300,29 @@ class _MenuScreenState extends State<MenuScreen> {
 
                         TextButton(
                             onPressed: () {
-
-                              print(definitions.length);
+                              setState(() {
+                                isLoading = true;
+                              });
 
                               _audioController.playSfx(SfxType.optionSelected);
 
-                              print(_settings.userData.value as Map<String, dynamic>);
 
                               if ((_settings.userData.value as Map<String, dynamic>)['parameters']['hasSeenTutorial'] ==false) {
-                                navigateToTutorial();
+                                TutorialHelpers().navigateToTutorial(context);
                               } else {
-                                Helpers().getStates(_gamePlayState, _settings);
-
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                       builder: (context) => const GameScreen()),
                                 );
+                                Helpers().getStates(_gamePlayState, _settings);
+
                               }
                             },
-                            child: menuButton( palette, translate("New Game", language),)),
+                            child: menuButton( 
+                              palette, 
+                              Helpers().translateText(language, "New Game")
+                            )
+                          ),
 
                         TextButton(
                             onPressed: () {
@@ -340,7 +335,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             },
                             child: menuButton(
                               palette,
-                              translate("Leaderboards", language),
+                              Helpers().translateText(language, "Leaderboards")
                             )),
 
                         TextButton(
@@ -357,7 +352,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             },
                             child: menuButton(
                               palette,
-                              translate("Instructions", language),
+                              Helpers().translateText(language, "Instructions")
                             )),
 
                         TextButton(
@@ -374,28 +369,9 @@ class _MenuScreenState extends State<MenuScreen> {
                             },
                             child: menuButton(
                               palette,
-                              translate("Settings", language),
+                              Helpers().translateText(language, "Settings")
                             )),
 
-                        // menuSelectionButton(
-                        //     context,
-                        //     translate("Leaderboards", language),
-                        //     const LeaderboardsScreen()),
-                        // menuSelectionButton(
-                        //     context,
-                        //     translate("Instructions", language),
-                        //     const InstructionsScreen()),
-                        // menuSelectionButton(
-                        //     context,
-                        //     translate("Settings", language),
-                        //     const SettingsScreen()),
-
-                        // ElevatedButton(
-                        //   onPressed: () {
-                        //     FirestoreMethods().uploadAlphabet(alphabets);
-                        //   },
-                        //   child: Text("upload alphabets")
-                        // ),
 
                         const Expanded(flex: 1, child: SizedBox()),
                       ],
@@ -436,43 +412,4 @@ Widget menuButton(ColorPalette palette, String body) {
   );
 }
 
-// Widget menuSelectionButton(BuildContext context, String body, Widget target) {
-//   return Padding(
-//     padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-//     child: Container(
-//       width: double.infinity,
-//       height: 50,
-//       decoration: const BoxDecoration(
-//           gradient: LinearGradient(
-//               begin: Alignment.topLeft,
-//               end: Alignment.bottomRight,
-//               colors: <Color>[
-//                 Color.fromARGB(255, 87, 87, 87),
-//                 Color.fromARGB(255, 87, 87, 87),
-//                 // const Color.fromARGB(255, 148, 148, 148),
-//               ],
-//               tileMode: TileMode.mirror),
-//           border: Border(),
-//           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-//       child: InkWell(
-//         onTap: () {
-//           audioController.playSfx(SfxType.optionSelected);
-//           // Future.delayed(const Duration(milliseconds: 400), () {
-//           Navigator.of(context).pushAndRemoveUntil(
-//             MaterialPageRoute(builder: (context) => target),
-//             ModalRoute.withName('/'),
-//           );
-//           // });
-//         },
-//         child: Align(
-//           alignment: Alignment.center,
-//           child: Text(
-//             body,
-//             style: const TextStyle(
-//                 fontSize: 22, color: Color.fromARGB(255, 235, 235, 235)),
-//           ),
-//         ),
-//       ),
-//     ),
-//   );
-// }
+

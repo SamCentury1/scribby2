@@ -205,7 +205,11 @@ class _TutorialStepState extends State<TutorialStep>
                                 backgroundColor: palette.optionButtonBgColor,
                               ),
                               onPressed: () {
-                                goToNextStep(tutorialState, _animationState);
+                                if (currentStep['step'] == 21) {
+                                  tutorialState.setSequenceStep(tutorialState.sequenceStep+15);
+                                } else {
+                                  goToNextStep(tutorialState, _animationState);
+                                }
                               },
                               child: Text(
                                 "next",

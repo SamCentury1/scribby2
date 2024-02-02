@@ -128,13 +128,7 @@ class GamePlayState with ChangeNotifier {
     notifyListeners();
   }
 
-  // int _currentTime = 0;
-  // int get currentTime => _currentTime;
 
-  // void setCurrentTime(int value) {
-  //   _currentTime = value;
-  //   notifyListeners();
-  // }
 
   String _pressedTile = "1_1";
   String get pressedTile => _pressedTile;
@@ -208,6 +202,15 @@ class GamePlayState with ChangeNotifier {
     _currentLanguage = value;
     notifyListeners();
   }
+
+  // a continuous list of randomly generated letters
+  List<String> _dictionary = []; // randomLetterListState;
+  List<String> get dictionary => _dictionary;
+
+  void setDictionary(List<String> value) {
+    _dictionary = value;
+    notifyListeners();
+  }  
 
   // a virtual version of a tile bag
   List<Map<String, dynamic>> _alphabetState = []; //startingAlphabetState;

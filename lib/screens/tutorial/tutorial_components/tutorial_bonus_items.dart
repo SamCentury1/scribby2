@@ -1,11 +1,11 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
+// import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TutorialBonusItems extends StatefulWidget {
   final Animation animation;
@@ -225,7 +225,7 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
         final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
         // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep); 
 
-        return Container(
+        return SizedBox(
           width: double.infinity,
           height: 50,
           // color: Colors.grey,

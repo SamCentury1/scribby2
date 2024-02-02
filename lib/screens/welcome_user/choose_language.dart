@@ -3,6 +3,7 @@ import 'dart:math';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -165,14 +166,16 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                   opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
                   child: DropdownMenu<String>(
                     width: screenWidth*0.5,
-                    label: const Text(
-                      "Primary Language",
+                    label: Text(
+                      Helpers().translateDemoSequence(getPrimaryLanguage(settingsState.languageDataList), "Primary Language"),
                       style: TextStyle(
-                        color: Colors.white
+                        // color: Colors.white
+                        color: palette.textColor2,
                       ),
                     ),
-                    textStyle: const TextStyle(
-                      color: Colors.white
+                    textStyle: TextStyle(
+                      // color: Colors.white
+                      color: palette.textColor2
                     ),
                     initialSelection: getPrimaryLanguage(settingsState.languageDataList),
                     onSelected: (value) {
@@ -204,16 +207,20 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 500),
                   opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0 ,
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(12.0,2.0,12.0,2.0),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12.0,2.0,12.0,2.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Select all languages you would play with",
+                          Helpers().translateDemoSequence(
+                            getPrimaryLanguage(settingsState.languageDataList), 
+                            "Select all languages you would play with"
+                          ),
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.white
+                            // color: Colors.white
+                            color: palette.textColor2
                           ),
                         ),
                       ],
@@ -271,7 +278,12 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                             ), 
                           ),                            
                         ),
-                        child: const Text("Proceed"),
+                        child: Text(
+                          Helpers().translateDemoSequence(
+                            getPrimaryLanguage(settingsState.languageDataList), 
+                            "Proceed"
+                          ),                          
+                        ),
                       ),
                     
                     ),

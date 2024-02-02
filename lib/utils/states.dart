@@ -219,8 +219,8 @@ List<Map<String, dynamic>> stringCombinations = [
 
 List<Map<String, dynamic>> demoBoardState_1 = [
   // Random Letters
-  {"tileId": "0_0", "row": 0, "column": 0, "letter": "A", "active": false},
-  {"tileId": "0_1", "row": 0, "column": 1, "letter": "K", "active": false},
+  {"tileId": "0_0", "row": 0, "column": 0, "letter": "letter_1", "active": false},
+  {"tileId": "0_1", "row": 0, "column": 1, "letter": "letter_2", "active": false},
   // Board
   {"tileId": "1_1", "row": 1, "column": 1, "letter": "", "active": false},
   {"tileId": "1_2", "row": 1, "column": 2, "letter": "", "active": false},
@@ -235,10 +235,10 @@ List<Map<String, dynamic>> demoBoardState_1 = [
 
 List<Map<String, dynamic>> demoBoardState_2 = [
   // Random Letters
-  {"tileId": "0_0", "row": 0, "column": 0, "letter": "K", "active": false},
-  {"tileId": "0_1", "row": 0, "column": 1, "letter": "U", "active": false},
+  {"tileId": "0_0", "row": 0, "column": 0, "letter": "letter_2", "active": false},
+  {"tileId": "0_1", "row": 0, "column": 1, "letter": "letter_3", "active": false},
   // Board
-  {"tileId": "1_1", "row": 1, "column": 1, "letter": "A", "active": false},
+  {"tileId": "1_1", "row": 1, "column": 1, "letter": "letter_1", "active": false},
   {"tileId": "1_2", "row": 1, "column": 2, "letter": "", "active": false},
   {"tileId": "1_3", "row": 1, "column": 3, "letter": "", "active": false},
   {"tileId": "2_1", "row": 2, "column": 1, "letter": "", "active": false},
@@ -251,12 +251,12 @@ List<Map<String, dynamic>> demoBoardState_2 = [
 
 List<Map<String, dynamic>> demoBoardState_3 = [
   // Random Letters
-  {"tileId": "0_0", "row": 0, "column": 0, "letter": "U", "active": false},
-  {"tileId": "0_1", "row": 0, "column": 1, "letter": "S", "active": false},
+  {"tileId": "0_0", "row": 0, "column": 0, "letter": "letter_3", "active": false},
+  {"tileId": "0_1", "row": 0, "column": 1, "letter": "letter_4", "active": false},
   // Board
-  {"tileId": "1_1", "row": 1, "column": 1, "letter": "A", "active": false},
+  {"tileId": "1_1", "row": 1, "column": 1, "letter": "letter_1", "active": false},
   {"tileId": "1_2", "row": 1, "column": 2, "letter": "", "active": false},
-  {"tileId": "1_3", "row": 1, "column": 3, "letter": "K", "active": false},
+  {"tileId": "1_3", "row": 1, "column": 3, "letter": "letter_2", "active": false},
   {"tileId": "2_1", "row": 2, "column": 1, "letter": "", "active": false},
   {"tileId": "2_2", "row": 2, "column": 2, "letter": "", "active": false},
   {"tileId": "2_3", "row": 2, "column": 3, "letter": "", "active": false},
@@ -267,15 +267,15 @@ List<Map<String, dynamic>> demoBoardState_3 = [
 
 List<Map<String, dynamic>> demoBoardState_4 = [
   // Random Letters
-  {"tileId": "0_0", "row": 0, "column": 0, "letter": "S", "active": false},
-  {"tileId": "0_1", "row": 0, "column": 1, "letter": "E", "active": false},
+  {"tileId": "0_0", "row": 0, "column": 0, "letter": "letter_4", "active": false},
+  {"tileId": "0_1", "row": 0, "column": 1, "letter": "letter_5", "active": false},
   // Board
-  {"tileId": "1_1", "row": 1, "column": 1, "letter": "A", "active": false},
+  {"tileId": "1_1", "row": 1, "column": 1, "letter": "letter_1", "active": false},
   {"tileId": "1_2", "row": 1, "column": 2, "letter": "", "active": false},
-  {"tileId": "1_3", "row": 1, "column": 3, "letter": "K", "active": false},
+  {"tileId": "1_3", "row": 1, "column": 3, "letter": "letter_2", "active": false},
   {"tileId": "2_1", "row": 2, "column": 1, "letter": "", "active": false},
   {"tileId": "2_2", "row": 2, "column": 2, "letter": "", "active": false},
-  {"tileId": "2_3", "row": 2, "column": 3, "letter": "U", "active": false},
+  {"tileId": "2_3", "row": 2, "column": 3, "letter": "letter_3", "active": false},
   {"tileId": "3_1", "row": 3, "column": 1, "letter": "", "active": false},
   {"tileId": "3_2", "row": 3, "column": 2, "letter": "", "active": false},
   {"tileId": "3_3", "row": 3, "column": 3, "letter": "", "active": false},
@@ -283,15 +283,15 @@ List<Map<String, dynamic>> demoBoardState_4 = [
 
 List<Map<String, dynamic>> demoBoardState_5 = [
   // Random Letters
-  {"tileId": "0_0", "row": 0, "column": 0, "letter": "E", "active": false},
-  {"tileId": "0_1", "row": 0, "column": 1, "letter": "N", "active": false},
+  {"tileId": "0_0", "row": 0, "column": 0, "letter": "letter_5", "active": false},
+  {"tileId": "0_1", "row": 0, "column": 1, "letter": "letter_6", "active": false},
   // Board
-  {"tileId": "1_1", "row": 1, "column": 1, "letter": "A", "active": true},
-  {"tileId": "1_2", "row": 1, "column": 2, "letter": "S", "active": true},
-  {"tileId": "1_3", "row": 1, "column": 3, "letter": "K", "active": true},
+  {"tileId": "1_1", "row": 1, "column": 1, "letter": "letter_1", "active": true},
+  {"tileId": "1_2", "row": 1, "column": 2, "letter": "letter_4", "active": true},
+  {"tileId": "1_3", "row": 1, "column": 3, "letter": "letter_2", "active": true},
   {"tileId": "2_1", "row": 2, "column": 1, "letter": "", "active": false},
   {"tileId": "2_2", "row": 2, "column": 2, "letter": "", "active": false},
-  {"tileId": "2_3", "row": 2, "column": 3, "letter": "U", "active": false},
+  {"tileId": "2_3", "row": 2, "column": 3, "letter": "letter_3", "active": false},
   {"tileId": "3_1", "row": 3, "column": 1, "letter": "", "active": false},
   {"tileId": "3_2", "row": 3, "column": 2, "letter": "", "active": false},
   {"tileId": "3_3", "row": 3, "column": 3, "letter": "", "active": false},
@@ -299,19 +299,106 @@ List<Map<String, dynamic>> demoBoardState_5 = [
 
 List<Map<String, dynamic>> demoBoardState_6 = [
   // Random Letters
-  {"tileId": "0_0", "row": 0, "column": 0, "letter": "E", "active": false},
-  {"tileId": "0_1", "row": 0, "column": 1, "letter": "N", "active": false},
+  {"tileId": "0_0", "row": 0, "column": 0, "letter": "letter_5", "active": false},
+  {"tileId": "0_1", "row": 0, "column": 1, "letter": "letter_6", "active": false},
   // Board
   {"tileId": "1_1", "row": 1, "column": 1, "letter": "", "active": false},
   {"tileId": "1_2", "row": 1, "column": 2, "letter": "", "active": false},
   {"tileId": "1_3", "row": 1, "column": 3, "letter": "", "active": false},
   {"tileId": "2_1", "row": 2, "column": 1, "letter": "", "active": false},
   {"tileId": "2_2", "row": 2, "column": 2, "letter": "", "active": false},
-  {"tileId": "2_3", "row": 2, "column": 3, "letter": "U", "active": false},
+  {"tileId": "2_3", "row": 2, "column": 3, "letter": "letter_3", "active": false},
   {"tileId": "3_1", "row": 3, "column": 1, "letter": "", "active": false},
   {"tileId": "3_2", "row": 3, "column": 2, "letter": "", "active": false},
   {"tileId": "3_3", "row": 3, "column": 3, "letter": "", "active": false},
 ];
+
+
+
+
+final Map<String,dynamic> demoStateDynamicLetters = {
+  'english': {
+    'letter_1' : 'A',
+    'letter_2' : 'K',
+    'letter_3' : 'U',
+    'letter_4' : 'S',
+    'letter_5' : 'E',
+    'letter_6' : 'N',
+    'WORD' : 'ASK',
+  },
+
+  'french': {
+    'letter_1' : 'E',
+    'letter_2' : 'U',
+    'letter_3' : 'V',
+    'letter_4' : 'A',
+    'letter_5' : 'R',
+    'letter_6' : 'S',
+    'WORD' : 'EAU',
+  },  
+
+  'spanish': {
+    'letter_1' : 'G',
+    'letter_2' : 'L',
+    'letter_3' : 'S',
+    'letter_4' : 'O',
+    'letter_5' : 'B',
+    'letter_6' : 'T',
+    'WORD' : 'GOL',
+  },  
+
+  'german': {
+    'letter_1' : 'I',
+    'letter_2' : 'H',
+    'letter_3' : 'T',
+    'letter_4' : 'C',
+    'letter_5' : 'W',
+    'letter_6' : 'R',
+    'WORD' : 'ICH',
+  },  
+
+  'italian': {
+    'letter_1' : 'O',
+    'letter_2' : 'A',
+    'letter_3' : 'Z',
+    'letter_4' : 'R',
+    'letter_5' : 'I',
+    'letter_6' : 'B',
+    'WORD' : 'ORA',
+  },  
+
+  'portuguese': {
+    'letter_1' : 'B',
+    'letter_2' : 'M',
+    'letter_3' : 'L',
+    'letter_4' : 'O',
+    'letter_5' : 'J',
+    'letter_6' : 'A',
+    'WORD' : 'BOM',
+  },  
+
+  'greek': {
+    'letter_1' : 'Ε',
+    'letter_2' : 'Ρ',
+    'letter_3' : 'Ζ',
+    'letter_4' : 'Α',
+    'letter_5' : 'Τ',
+    'letter_6' : 'Π',
+    'WORD' : 'ΕΑΡ',
+  }, 
+
+  'dutch': {
+    'letter_1' : 'S',
+    'letter_2' : 'T',
+    'letter_3' : 'H',
+    'letter_4' : 'E',
+    'letter_5' : 'X',
+    'letter_6' : 'G',
+    'WORD' : 'SET',
+  },              
+};
+
+
 
 List<Map<String, dynamic>> englishAlphabet = [
   {"letter": "A", "type": "vowel", "points": 1, "count": 86, "inPlay": 0},
@@ -344,13 +431,22 @@ List<Map<String, dynamic>> englishAlphabet = [
 
 List<Map<String, dynamic>> frenchAlphabet = [
   {"letter": "A", "type": "vowel", "points": 1, "count": 90, "inPlay": 0},
+  {"letter": "À", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Â", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
   {"letter": "B", "type": "consonant", "points": 3, "count": 20, "inPlay": 0},
   {"letter": "C", "type": "consonant", "points": 1, "count": 20, "inPlay": 0},
+  {"letter": "Ç", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
   {"letter": "D", "type": "consonant", "points": 2, "count": 30, "inPlay": 0},
   {"letter": "E", "type": "vowel", "points": 1, "count": 150, "inPlay": 0},
+  {"letter": "È", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "É", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ê", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ë", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
   {"letter": "F", "type": "consonant", "points": 4, "count": 20, "inPlay": 0},
   {"letter": "G", "type": "consonant", "points": 2, "count": 20, "inPlay": 0},
   {"letter": "H", "type": "consonant", "points": 4, "count": 20, "inPlay": 0},
+  {"letter": "Î", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ï", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
   {"letter": "I", "type": "vowel", "points": 1, "count": 80, "inPlay": 0},
   {"letter": "J", "type": "consonant", "points": 8, "count": 10, "inPlay": 0},
   {"letter": "K", "type": "consonant", "points": 10, "count": 10, "inPlay": 0},
@@ -358,24 +454,222 @@ List<Map<String, dynamic>> frenchAlphabet = [
   {"letter": "M", "type": "consonant", "points": 2, "count": 30, "inPlay": 0},
   {"letter": "N", "type": "consonant", "points": 1, "count": 60, "inPlay": 0},
   {"letter": "O", "type": "vowel", "points": 1, "count": 60, "inPlay": 0},
+  {"letter": "Ô", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
   {"letter": "P", "type": "consonant", "points": 3, "count": 20, "inPlay": 0},
   {"letter": "Q", "type": "consonant", "points": 8, "count": 3, "inPlay": 0},
   {"letter": "R", "type": "consonant", "points": 1, "count": 60, "inPlay": 0},
   {"letter": "S", "type": "consonant", "points": 1, "count": 60, "inPlay": 0},
   {"letter": "T", "type": "consonant", "points": 1, "count": 60, "inPlay": 0},
-  {
-    "letter": "U",
-    "type": "vowel",
-    "points": 1,
-    "count": 60,
-    "inPlay": 0
-  }, // count originally 41
+  {"letter": "U","type": "vowel","points": 1,"count": 60,"inPlay": 0},
+  {"letter": "U","type": "vowel","points": 10,"count": 1,"inPlay": 0},
+  {"letter": "U","type": "vowel","points": 10,"count": 1,"inPlay": 0},
+  {"letter": "U","type": "vowel","points": 10,"count": 1,"inPlay": 0}, // count originally 41
   {"letter": "V", "type": "consonant", "points": 4, "count": 20, "inPlay": 0},
   {"letter": "W", "type": "consonant", "points": 10, "count": 3, "inPlay": 0},
   {"letter": "X", "type": "consonant", "points": 10, "count": 3, "inPlay": 0},
   {"letter": "Y", "type": "consonant", "points": 10, "count": 3, "inPlay": 0},
   {"letter": "Z", "type": "consonant", "points": 10, "count": 3, "inPlay": 0},
 ];
+
+List<Map<String, dynamic>> spanishAlphabet = [
+  {"letter": "A", "type": "vowel", "points": 1, "count": 12, "inPlay": 0},
+  {"letter": "Á", "type": "vowel", "points": 10, "count": 2, "inPlay": 0},
+  {"letter": "B", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+  {"letter": "C", "type": "consonant", "points": 3, "count": 4, "inPlay": 0},
+  {"letter": "D", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "E", "type": "vowel", "points": 1, "count": 12, "inPlay": 0},
+  {"letter": "É", "type": "vowel", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "F", "type": "consonant", "points": 4, "count": 1, "inPlay": 0},
+  {"letter": "G", "type": "consonant", "points": 2, "count": 2, "inPlay": 0},
+  {"letter": "H", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "I", "type": "vowel", "points": 1, "count": 6, "inPlay": 0},
+  {"letter": "Í", "type": "vowel", "points": 10, "count": 2, "inPlay": 0},
+  {"letter": "J", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "L", "type": "consonant", "points": 1, "count": 4, "inPlay": 0},
+  {"letter": "M", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+  {"letter": "N", "type": "consonant", "points": 1, "count": 5, "inPlay": 0},
+  {"letter": "Ñ", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "O", "type": "vowel", "points": 1, "count": 9, "inPlay": 0},
+  {"letter": "Ó", "type": "vowel", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "P", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+  {"letter": "Q", "type": "consonant", "points": 5, "count": 1, "inPlay": 0},
+  {"letter": "R", "type": "consonant", "points": 1, "count": 5, "inPlay": 0},
+  {"letter": "S", "type": "consonant", "points": 1, "count": 6, "inPlay": 0},
+  {"letter": "T", "type": "consonant", "points": 1, "count": 4, "inPlay": 0},
+  {"letter": "U","type": "vowel","points": 1,"count": 5,"inPlay": 0}, 
+  {"letter": "Ú","type": "vowel","points": 10,"count": 1,"inPlay": 0},
+  {"letter": "Ü","type": "vowel","points": 10,"count": 1,"inPlay": 0}, 
+  {"letter": "X", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Y", "type": "consonant", "points": 4, "count": 1, "inPlay": 0},
+  {"letter": "Z", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+];
+
+
+List<Map<String, dynamic>> germanAlphabet = [
+  {"letter": "A", "type": "consonant", "points": 1, "count": 12, "inPlay": 0},
+  {"letter": "Ä", "type": "consonant", "points": 6, "count": 2, "inPlay": 0},
+  {"letter": "B", "type": "consonant", "points": 3, "count": 4, "inPlay": 0},
+  {"letter": "C", "type": "consonant", "points": 4, "count": 4, "inPlay": 0},
+  {"letter": "D", "type": "consonant", "points": 1, "count": 7, "inPlay": 0},
+  {"letter": "E", "type": "consonant", "points": 1, "count": 29, "inPlay": 0},
+  {"letter": "F", "type": "consonant", "points": 4, "count": 4, "inPlay": 0},
+  {"letter": "G", "type": "consonant", "points": 2, "count": 6, "inPlay": 0},
+  {"letter": "H", "type": "consonant", "points": 2, "count": 8, "inPlay": 0},
+  {"letter": "I", "type": "consonant", "points": 1, "count": 11, "inPlay": 0},
+  {"letter": "J", "type": "consonant", "points": 6, "count": 2, "inPlay": 0},
+  {"letter": "K", "type": "consonant", "points": 4, "count": 4, "inPlay": 0},
+  {"letter": "L", "type": "consonant", "points": 2, "count": 6, "inPlay": 0},
+  {"letter": "M", "type": "consonant", "points": 3, "count": 8, "inPlay": 0},
+  {"letter": "N", "type": "consonant", "points": 1, "count": 17, "inPlay": 0},
+  {"letter": "O", "type": "consonant", "points": 2, "count": 6, "inPlay": 0},
+  {"letter": "Ö", "type": "consonant", "points": 8, "count": 2, "inPlay": 0},
+  {"letter": "P", "type": "consonant", "points": 4, "count": 3, "inPlay": 0},
+  {"letter": "Q", "type": "consonant", "points": 10, "count": 2, "inPlay": 0},
+  {"letter": "R", "type": "consonant", "points": 1, "count": 11, "inPlay": 0},
+  {"letter": "S", "type": "consonant", "points": 1, "count": 14, "inPlay": 0},
+  {"letter": "T", "type": "consonant", "points": 1, "count": 12, "inPlay": 0},
+  {"letter": "U", "type": "consonant", "points": 1, "count": 10, "inPlay": 0},
+  {"letter": "Ü", "type": "consonant", "points": 6, "count": 2, "inPlay": 0},
+  {"letter": "V", "type": "consonant", "points": 6, "count": 2, "inPlay": 0},
+  {"letter": "W", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+  {"letter": "X", "type": "consonant", "points": 8, "count": 2, "inPlay": 0},
+  {"letter": "Y", "type": "consonant", "points": 10, "count": 2, "inPlay": 0},
+  {"letter": "Z", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+
+];
+List<Map<String, dynamic>> italianAlphabet = [
+  {"letter": "O", "type": "consonant", "points": 1, "count": 15, "inPlay": 0},
+  {"letter": "A", "type": "consonant", "points": 1, "count": 14, "inPlay": 0},
+  {"letter": "I", "type": "consonant", "points": 1, "count": 12, "inPlay": 0},
+  {"letter": "E", "type": "consonant", "points": 1, "count": 11, "inPlay": 0},
+  {"letter": "C", "type": "consonant", "points": 2, "count": 6, "inPlay": 0},
+  {"letter": "R", "type": "consonant", "points": 2, "count": 6, "inPlay": 0},
+  {"letter": "S", "type": "consonant", "points": 2, "count": 6, "inPlay": 0},
+  {"letter": "T", "type": "consonant", "points": 2, "count": 6, "inPlay": 0},
+  {"letter": "L", "type": "consonant", "points": 3, "count": 5, "inPlay": 0},
+  {"letter": "M", "type": "consonant", "points": 3, "count": 5, "inPlay": 0},
+  {"letter": "N", "type": "consonant", "points": 3, "count": 5, "inPlay": 0},
+  {"letter": "U", "type": "consonant", "points": 3, "count": 5, "inPlay": 0},
+  {"letter": "B", "type": "consonant", "points": 5, "count": 3, "inPlay": 0},
+  {"letter": "D", "type": "consonant", "points": 5, "count": 3, "inPlay": 0},
+  {"letter": "F", "type": "consonant", "points": 5, "count": 3, "inPlay": 0},
+  {"letter": "P", "type": "consonant", "points": 5, "count": 3, "inPlay": 0},
+  {"letter": "V", "type": "consonant", "points": 5, "count": 3, "inPlay": 0},
+  {"letter": "G", "type": "consonant", "points": 8, "count": 2, "inPlay": 0},
+  {"letter": "H", "type": "consonant", "points": 8, "count": 2, "inPlay": 0},
+  {"letter": "Z", "type": "consonant", "points": 8, "count": 2, "inPlay": 0},
+  {"letter": "Q", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+
+];
+List<Map<String, dynamic>> greekAlphabet = [
+  {"letter": "Α", "type": "consonant", "points": 1, "count": 12, "inPlay": 0},
+  {"letter": "Ο", "type": "consonant", "points": 1, "count": 9, "inPlay": 0},
+  {"letter": "Ε", "type": "consonant", "points": 1, "count": 8, "inPlay": 0},
+  {"letter": "Ι", "type": "consonant", "points": 1, "count": 8, "inPlay": 0},
+  {"letter": "Τ", "type": "consonant", "points": 1, "count": 8, "inPlay": 0},
+  {"letter": "Η", "type": "consonant", "points": 1, "count": 7, "inPlay": 0},
+  {"letter": "Σ", "type": "consonant", "points": 1, "count": 7, "inPlay": 0},
+  {"letter": "Ν", "type": "consonant", "points": 1, "count": 6, "inPlay": 0},
+  {"letter": "Ρ", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "Κ", "type": "consonant", "points": 2, "count": 4, "inPlay": 0},
+  {"letter": "Π", "type": "consonant", "points": 2, "count": 4, "inPlay": 0},
+  {"letter": "Υ", "type": "consonant", "points": 2, "count": 4, "inPlay": 0},
+  {"letter": "Λ", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "Μ", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "Ω", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "Γ", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "Δ", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "Β", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Φ", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Χ", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Ζ", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Θ", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ξ", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ψ", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+
+];
+List<Map<String, dynamic>> portugueseAlphabet = [
+  {"letter": "A", "type": "consonant", "points": 1, "count": 14, "inPlay": 0},
+  {"letter": "E", "type": "consonant", "points": 1, "count": 11, "inPlay": 0},
+  {"letter": "I", "type": "consonant", "points": 1, "count": 10, "inPlay": 0},
+  {"letter": "O", "type": "consonant", "points": 1, "count": 10, "inPlay": 0},
+  {"letter": "S", "type": "consonant", "points": 1, "count": 8, "inPlay": 0},
+  {"letter": "U", "type": "consonant", "points": 1, "count": 7, "inPlay": 0},
+  {"letter": "M", "type": "consonant", "points": 1, "count": 6, "inPlay": 0},
+  {"letter": "R", "type": "consonant", "points": 1, "count": 6, "inPlay": 0},
+  {"letter": "T", "type": "consonant", "points": 1, "count": 5, "inPlay": 0},
+  {"letter": "D", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "L", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "C", "type": "consonant", "points": 2, "count": 4, "inPlay": 0},
+  {"letter": "P", "type": "consonant", "points": 2, "count": 4, "inPlay": 0},
+  {"letter": "N", "type": "consonant", "points": 3, "count": 4, "inPlay": 0},
+  {"letter": "B", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "Ç", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+  {"letter": "F", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "G", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "H", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "V", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "J", "type": "consonant", "points": 5, "count": 2, "inPlay": 0},
+  {"letter": "Q", "type": "consonant", "points": 6, "count": 1, "inPlay": 0},
+  {"letter": "X", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Z", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Á", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "É", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Í", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ó", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ú", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Â", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ê", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ô", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Ã", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "Õ", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+
+];
+List<Map<String, dynamic>> dutchAlphabet = [
+  {"letter": "A", "type": "consonant", "points": 1, "count": 6, "inPlay": 0},
+  {"letter": "Ä", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "B", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+  {"letter": "C", "type": "consonant", "points": 5, "count": 2, "inPlay": 0},
+  {"letter": "D", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "E", "type": "consonant", "points": 1, "count": 18, "inPlay": 0},
+  {"letter": "Ë", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "É", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "È", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "F", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "G", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "H", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "I", "type": "consonant", "points": 1, "count": 4, "inPlay": 0},
+  {"letter": "Ï", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "J", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "K", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "L", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "M", "type": "consonant", "points": 3, "count": 3, "inPlay": 0},
+  {"letter": "N", "type": "consonant", "points": 1, "count": 10, "inPlay": 0},
+  {"letter": "O", "type": "consonant", "points": 1, "count": 6, "inPlay": 0},
+  {"letter": "Ö", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "P", "type": "consonant", "points": 3, "count": 2, "inPlay": 0},
+  {"letter": "Q", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "R", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "S", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "T", "type": "consonant", "points": 2, "count": 5, "inPlay": 0},
+  {"letter": "U", "type": "consonant", "points": 4, "count": 3, "inPlay": 0},
+  {"letter": "Ü", "type": "consonant", "points": 10, "count": 1, "inPlay": 0},
+  {"letter": "V", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+  {"letter": "W", "type": "consonant", "points": 5, "count": 2, "inPlay": 0},
+  {"letter": "X", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Y", "type": "consonant", "points": 8, "count": 1, "inPlay": 0},
+  {"letter": "Z", "type": "consonant", "points": 4, "count": 2, "inPlay": 0},
+
+];
+
+
+
+
+
+
+
+
+
 
 List<Map<String, dynamic>> tutorialBoard_1 = [
   // // Random Letters
@@ -425,6 +719,7 @@ List<Map<String, dynamic>> tutorialBoard_1 = [
   {"index": 35,"tileId": "6_6","row": 6,"column": 6,"letter": "","active": false, "alive": true  },
 ];
 
+
 /// This list goes through the steps of the tutoial walkthrough
 List<Map<String, dynamic>> tutorialDetails = [
   // {"step": 0,"text":"Welcome to Scribby! This tutorial will show you how to play the game", "targets": []},
@@ -434,7 +729,7 @@ List<Map<String, dynamic>> tutorialDetails = [
 
   {
     "step" :      0,
-    "text" :      "Welcome to Scribby! This tutorial will show you how to play the game",
+    "text" :      "",
     "targets" :   [],
     "points":     0,
     "words":      0,
@@ -478,7 +773,7 @@ List<Map<String, dynamic>> tutorialDetails = [
     'callbackTarget': null,
     'tilesInWord':  [],
     'isPaused':   false,
-    'isGameStarted': false,
+    'isGameStarted': true,
     'isGameEnded': false,    
   },
 
@@ -503,7 +798,7 @@ List<Map<String, dynamic>> tutorialDetails = [
     'callbackTarget': null,
     'tilesInWord':  [],
     'isPaused':   false,
-    'isGameStarted': false,
+    'isGameStarted': true,
     'isGameEnded': false,    
   },      
 
@@ -1368,33 +1663,33 @@ List<Map<String, dynamic>> tutorialDetails = [
 
 
 
-  {
-    "step" :      37,
-    "text" :      "Okay let's get serious!",
-    "targets" :   [],
-    "points":     4,
-    "words":      1,
-    "newPoints":  0,
-    "newWords":   0,
-    "streak":     0,
-    "crossword":  0,
-    "complete":   true,
-    "autoPlace":  false,
-    "input":      null,
-    "inputType":  null,
-    'isTapped':   false,
-    'isDrag':     false,
-    'dragSource': null,
-    'tilesToRemove': [],
-    'callbackTarget': null,
-    'tilesInWord':  [],
-    'isPaused':   false,
-    'isGameStarted': true,
-    'isGameEnded': false,     
-  },      
+  // {
+  //   "step" :      37,
+  //   "text" :      "Okay let's get serious!",
+  //   "targets" :   [],
+  //   "points":     4,
+  //   "words":      1,
+  //   "newPoints":  0,
+  //   "newWords":   0,
+  //   "streak":     0,
+  //   "crossword":  0,
+  //   "complete":   true,
+  //   "autoPlace":  false,
+  //   "input":      null,
+  //   "inputType":  null,
+  //   'isTapped':   false,
+  //   'isDrag':     false,
+  //   'dragSource': null,
+  //   'tilesToRemove': [],
+  //   'callbackTarget': null,
+  //   'tilesInWord':  [],
+  //   'isPaused':   false,
+  //   'isGameStarted': true,
+  //   'isGameEnded': false,     
+  // },      
 
   {
-    "step" :      38,
+    "step" :      37,
     "text" :      "Let's play the word WASP by placing the A from our reserves into the glowing tile",
     "targets" :   ['reserve_1', 3],
     "points":     4,
@@ -1419,7 +1714,7 @@ List<Map<String, dynamic>> tutorialDetails = [
   },
   
   {
-    "step" :      39,
+    "step" :      38,
     "text" :      "WOW! You just played three words! WASP, WAS, and ASP",
     "targets" :   [ 2,3,4,5],
     "points":     4,
@@ -1445,7 +1740,7 @@ List<Map<String, dynamic>> tutorialDetails = [
 
 
   {
-    "step" :      40,
+    "step" :      39,
     "text" :      "Your score is multipled by the number of words you found this turn. This brings your score from 12 to 36!",
     "targets" :   ['new_points','new_words','multi_word', 2,3,4,5],
     "points":     40,
@@ -1470,7 +1765,7 @@ List<Map<String, dynamic>> tutorialDetails = [
   },  
 
   {
-    "step" :      41,
+    "step" :      40,
     "text" :      "Your tally climbs to 40 points and 4 words!",
     "targets" :   ['points','words', 2,3,4,5],
     "points":     40,
@@ -1496,7 +1791,7 @@ List<Map<String, dynamic>> tutorialDetails = [
 
 
   {
-    "step" :      42,
+    "step" :      41,
     "text" :      "There are other ways you can multiply your score... Tap the glowing tile to create the word 'HUN'",
     "targets" :   [23],
     "points":     40,
@@ -1521,7 +1816,7 @@ List<Map<String, dynamic>> tutorialDetails = [
   },      
 
   {
-    "step" :      43,
+    "step" :      42,
     "text" :      "You just scored for a second turn in a row! You're on a hot streak!",
     "targets" :   [17,23,29, 'new_points', 'new_words','streak'],
     "points":     40,
@@ -1546,7 +1841,7 @@ List<Map<String, dynamic>> tutorialDetails = [
   },
 
   {
-    "step" :      44,
+    "step" :      43,
     "text" :      "Your points are tallied and the streak persists",
     "targets" :   ['streak','points', 'words'],
     "points":     50,
@@ -1572,7 +1867,7 @@ List<Map<String, dynamic>> tutorialDetails = [
 
 
   {
-    "step" :      45,
+    "step" :      44,
     "text" :      "You can also double your score by finding words and the horizonal and vertical axis",
     "targets" :   [],
     "points":     50,
@@ -1597,7 +1892,7 @@ List<Map<String, dynamic>> tutorialDetails = [
   },  
 
   {
-    "step" :      46,
+    "step" :      45,
     "text" :      "Drag the glowing reserve tile into the glowing tile on the board to create a crossword",
     "targets" :   ['reserve_2',21],
     "points":     50,
@@ -1629,7 +1924,7 @@ List<Map<String, dynamic>> tutorialDetails = [
     "words":      5,
     "newPoints":  0,
     "newWords":   0,
-    "streak":     0,
+    "streak":     3,
     "crossword":  0,
     "complete":   true,
     "autoPlace":  false,

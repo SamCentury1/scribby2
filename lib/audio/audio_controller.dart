@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
@@ -16,7 +17,7 @@ class AudioController {
   final List<AudioPlayer> _sfxPlayers;
   final _lock = Lock();
 
-  final int _currentSfxPlayer = 0;
+  int _currentSfxPlayer = 0;
 
   SettingsController? _settings;
 
@@ -112,6 +113,7 @@ class AudioController {
       final fileName = options[_random.nextInt(options.length)];
       final currentPlayer = _sfxPlayers[_currentSfxPlayer];
       currentPlayer.play(AssetSource('audio/sfx/$fileName'));
+      _currentSfxPlayer = (_currentSfxPlayer + 1) % _sfxPlayers.length; // removing this prevents sounds from playing simultaneously
       debugPrint(" ====== AUDIO ======  audio/sfx/$fileName executed");
     });
 

@@ -1,6 +1,4 @@
 // import 'package:flutter/foundation.dart';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
@@ -53,10 +51,8 @@ class _TutorialScreen1State extends State<TutorialScreen1>
     gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     initializeAnimations(palette);
 
-    print(tutorialState.sequenceStep);
 
-    // print(tutorialState.tutorialStateHistory);
-    // _animationState.addListener(_handleAnimationStateChange);
+
   }
 
   void initializeAnimations(
@@ -212,7 +208,9 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                       return IconButton(
                         color: palette.optionButtonBgColor,
                         onPressed: () {
-                          debugPrint("Go back ");
+                          if (currentStep['step'] == 36) {
+                            tutorialState.setSequenceStep(tutorialState.sequenceStep-14);
+                          }
                           TutorialHelpers().executePreviousStep(
                               tutorialState, animationState);
                         },
@@ -299,7 +297,8 @@ class _TutorialScreen1State extends State<TutorialScreen1>
               // const TutorialStep() :
               // bottomNavigationBar: NavigationBar(destinations: const []),
             ),
-            TutorialEndedOverlay()
+            TutorialEndedOverlay(),
+            PreGameOverlay()
           ],
         ));
       },

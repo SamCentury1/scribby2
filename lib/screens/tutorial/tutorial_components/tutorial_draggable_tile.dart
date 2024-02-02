@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/providers/animation_state.dart';
+// import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -170,7 +170,7 @@ class TutorialDraggableTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-    final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
+    // final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     final int tileId = tileState['id']; 
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {

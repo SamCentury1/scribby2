@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -90,15 +91,20 @@ class _TimerWidgetState extends State<TimerWidget>
 
   @override
   Widget build(BuildContext context) {
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+
+    
 
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
+        late String levelText = Helpers().translateText(gamePlayState.currentLanguage, "Level");
+        // print(levelText);
         return Row(
           children: [
             Text(
-              "Level ${gamePlayState.currentLevel}",
+              // Helpers().translateText("Level", gamePlayState.currentLanguage),
+              // "level",
+              "$levelText ${gamePlayState.currentLevel}",
               style: TextStyle(
                 fontSize: 22,
                 color: palette.textColor1,

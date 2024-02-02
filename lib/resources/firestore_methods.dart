@@ -377,8 +377,7 @@ class FirestoreMethods {
   // }
 
   // EXECUTES IN THE SETTINGS PAGE - IN THE DROPOWN MENU FOR CHANGING THE CURRENT LANGUAGE
-  Future<void> updateParameters(
-      String uid, String parameter, dynamic updatedValue) async {
+  Future<void> updateParameters( String uid, String parameter, dynamic updatedValue) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final docSnap = await docRef.get();

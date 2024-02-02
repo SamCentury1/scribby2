@@ -1,10 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
+import 'package:scribby_flutter_v2/screens/tutorial/tutorial_screen_1.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
 
@@ -616,4 +616,17 @@ class TutorialHelpers {
     }
     return res;
   }
+
+  void navigateToTutorial(BuildContext context) {
+    late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+    // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
+    getFullTutorialStates2(tutorialState, tutorialDetails);
+    // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
+    
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const TutorialScreen1()
+      )
+    );
+  }  
 }

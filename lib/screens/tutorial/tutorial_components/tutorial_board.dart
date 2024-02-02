@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
@@ -170,7 +168,7 @@ Widget emptyTile(double tileSide, ColorPalette palette) {
         ), // colorTileBorder(tileObject, palette), width: 3),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
-      child: SizedBox()
+      child: const SizedBox()
   );
 }
 
@@ -222,7 +220,7 @@ class _TutorialTileState extends State<TutorialTile>
   late AnimationState animationState;
 
   // late AnimationController _tileGlowController;
-  late Animation<double> _tileGlowAnimation;
+  // late Animation<double> _tileGlowAnimation;
   late ColorPalette palette;
 
   @override

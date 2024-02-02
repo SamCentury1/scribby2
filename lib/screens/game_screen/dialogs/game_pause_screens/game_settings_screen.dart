@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/styles/styles.dart';
@@ -18,17 +20,20 @@ class GameSettings extends StatelessWidget {
     late ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: false);
 
-    late GamePlayState gamePlaySettings =
-        Provider.of<GamePlayState>(context, listen: false);
+    late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+
     return Consumer<SettingsController>(
       builder: (context, settings, child) {
         return DialogWidget(
             key,
-            "Settings",
+            Helpers().translateText(gamePlayState.currentLanguage, "Settings"),
             SingleChildScrollView(
               child: Column(
                 children: [
-                  textHeading(palette, "Parameters"),
+                  textHeading(
+                    palette, 
+                    Helpers().translateText(gamePlayState.currentLanguage, "Parameters"),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Card(
@@ -42,7 +47,8 @@ class GameSettings extends StatelessWidget {
                               Expanded(
                                 flex: 3,
                                 child: Text(
-                                  "Sound On",
+                                  Helpers().translateText(gamePlayState.currentLanguage, "Sound On",),
+                                  
                                   style: TextStyle(
                                       fontSize: 22, color: palette.textColor3),
                                 ),
@@ -52,8 +58,11 @@ class GameSettings extends StatelessWidget {
                                 child: ValueListenableBuilder<bool>(
                                   valueListenable: settings.soundsOn,
                                   builder: (context, soundsOn, child) => IconButton(
-                                      onPressed: () =>
-                                          settings.toggleSoundsOn(),
+                                      onPressed: () {
+                                          settings.toggleSoundsOn();
+                                          late Map<String,dynamic> userMap = settings.userData.value as Map<String,dynamic>;
+                                          FirestoreMethods().updateParameters( userMap['uid'] ,'soundOn', !soundsOn);
+                                      },
                                       icon: soundsOn
                                           ? const Icon(Icons.volume_up)
                                           : const Icon(Icons.volume_off),
@@ -71,16 +80,31 @@ class GameSettings extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  textHeading(palette, "Scoring"),
-                  textSubHeading(palette, "Letter Values"),
-                  textContainer(palette,
-                      "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"),
-                  textContainer(palette,
-                      "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"),
+                  textHeading(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage, "Scoring"),
+                  ),
+                  
+                  textSubHeading(
+                    palette, 
+                    Helpers().translateText(gamePlayState.currentLanguage, "Letter Values"),
+                  ),
+                  textContainer(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage,
+                      "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"
+                    ),
+                  ),
+                  textContainer(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage,
+                      "All letters have a predetermined value. When a word is found the score is tabulated according to the value of each letter in the word"
+                    ),
+                  ),
                   Wrap(
                     direction: Axis.horizontal,
                     children: [
-                      for (dynamic item in gamePlaySettings.alphabetState)
+                      for (dynamic item in gamePlayState.alphabetState)
                         SizedBox(
                             width: 45,
                             height: 45,
@@ -92,9 +116,13 @@ class GameSettings extends StatelessWidget {
                             ))
                     ],
                   ),
-                  textSubHeading(palette, "Multipliers - Word Lengths"),
+                  textSubHeading(
+                    palette, 
+                    Helpers().translateText(gamePlayState.currentLanguage,"Multipliers - Word Lengths")),
                   textContainer(palette,
+                    Helpers().translateText(gamePlayState.currentLanguage,
                       "To arrive to a total score for the turn, first, each word is multiplied by the Word Length Multiplier."),
+                    ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -115,7 +143,8 @@ class GameSettings extends StatelessWidget {
                         TableRow(children: <Widget>[
                           Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("Word Length",
+                              child: Text(
+                                Helpers().translateText(gamePlayState.currentLanguage,"Word Length",),
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: palette.textColor2))),
@@ -147,7 +176,8 @@ class GameSettings extends StatelessWidget {
                         TableRow(children: <Widget>[
                           Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("Multiplier",
+                              child: Text(
+                                Helpers().translateText(gamePlayState.currentLanguage,"Multiplier",),
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: palette.textColor2))),
@@ -182,23 +212,41 @@ class GameSettings extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  textSubHeading(palette, "Multipliers - Streaks"),
-                  textContainer(palette,
-                      "The streak is defined by the number of consecutive turns where at least one word was found"),
+                  textSubHeading(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage, "Multipliers - Streaks"),),
+                  textContainer(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage,
+                      "The streak is defined by the number of consecutive turns where at least one word was found"),),
                   const SizedBox(
                     height: 20,
                   ),
-                  textSubHeading(palette, "Multipliers - Crosswords"),
-                  textContainer(palette,
-                      "If multiple words are found, at least one in a row, and one in a column - then a crossword as been found. "),
-                  textContainer(palette,
+                  textSubHeading(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage, "Multipliers - Crosswords"),),
+                  textContainer(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage,
+                      "If multiple words are found, at least one in a row, and one in a column - then a crossword as been found."),
+                  ),
+                  textContainer(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage,
                       "The multiplier for crosswords will always be 2x"),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  textSubHeading(palette, "Multipliers - Word Count"),
-                  textContainer(palette,
+                  textSubHeading(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage, "Multipliers - Word Count"),
+                  ),
+                  textContainer(
+                    palette,
+                    Helpers().translateText(gamePlayState.currentLanguage,
                       "The final score is multiplied by the number of words that were found"),
+                  ),
                 ],
               ),
             ),

@@ -3,6 +3,7 @@ import 'dart:ui';
 // import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -39,14 +40,15 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                         gamePlayState.setIsGameStarted(true);
                       }),
                 ),
-                const Center(
+                Center(
                   child: DefaultTextStyle(
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 32,
                         color: Colors.white,
                         fontStyle: FontStyle.italic),
                     child: Text(
-                      "Tap To Start",
+                      Helpers().translateText(gamePlayState.currentLanguage, "Tap to Start",),
+                      
                     ),
                   ),
                 ),

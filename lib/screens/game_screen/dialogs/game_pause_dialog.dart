@@ -1,6 +1,7 @@
 // import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -41,8 +42,7 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
 
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
@@ -123,28 +123,28 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                           icon: const Icon(
                             Icons.gamepad,
                           ),
-                          label: 'Summary',
+                          label: Helpers().translateText(gamePlayState.currentLanguage,'Summary'),
                           backgroundColor: palette.optionButtonBgColor2,
                         ),
                         BottomNavigationBarItem(
                           icon: const Icon(
                             Icons.help,
                           ),
-                          label: 'Help',
+                          label: Helpers().translateText(gamePlayState.currentLanguage,'Help'),
                           backgroundColor: palette.optionButtonBgColor2,
                         ),
                         BottomNavigationBarItem(
                           icon: const Icon(
                             Icons.settings,
                           ),
-                          label: 'Settings',
+                          label: Helpers().translateText(gamePlayState.currentLanguage,'Settings'),
                           backgroundColor: palette.optionButtonBgColor2,
                         ),
                         BottomNavigationBarItem(
                           icon: const Icon(
                             Icons.exit_to_app,
                           ),
-                          label: 'Quit',
+                          label: Helpers().translateText(gamePlayState.currentLanguage,'Quit'),
                           backgroundColor: palette.optionButtonBgColor2,
                         ),
                       ],
@@ -159,3 +159,4 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
     );
   }
 }
+

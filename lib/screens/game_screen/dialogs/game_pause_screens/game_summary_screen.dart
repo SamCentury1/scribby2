@@ -23,7 +23,11 @@ class GameSummaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GamePlayState>(builder: (context, gamePlayState, child) {
       return DialogWidget(
-          key, "Game Summary", GameSummaryContent(gamePlayState), null);
+          key, 
+          Helpers().translateText(gamePlayState.currentLanguage, "Game Summary"), 
+          GameSummaryContent(gamePlayState), 
+          null
+        );
     });
   }
 }
@@ -108,63 +112,22 @@ class _ShowWordsViewState extends State<ShowWordsView> {
         return SingleChildScrollView(
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "All ${gamePlayState.summaryData['uniqueWords'].length} Unique Words",
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: widget.palette.textColor2,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
               gamePlayState.summaryData.isEmpty
-                  ? const Text("No words found yet...")
+                  ? Text(
+                    Helpers().translateText(gamePlayState.currentLanguage,"No words found yet..."),
+                    )
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
                         width: double.infinity,
-                        // child: Table(
-                        //   columnWidths: const {
-                        //     0: FixedColumnWidth(1),
-                        //     1: FixedColumnWidth(200),
-                        //   },
-                        //   children: [
-                        //     for (int i = 0;
-                        //         i <
-                        //             widget.gamePlayState.summaryData['uniqueWords']
-                        //                 .length;
-                        //         i++)
-                        //       TableRow(children: [
-                        //         TableCell(
-                        //             child: Text(
-                        //           "${(i + 1).toString()}.",
-                        //           style: TextStyle(
-                        //             fontSize: 22,
-                        //             color: widget.palette.textColor2,
-                        //           ),
-                        //         )),
-                        //         TableCell(
-                        //             child: Text(
-                        //           widget.gamePlayState.summaryData['uniqueWords']
-                        //               [i],
-                        //           style: TextStyle(
-                        //             fontSize: 22,
-                        //             color: widget.palette.textColor2,
-                        //           ),
-                        //         )),
-                        //       ])
-                        //   ],
-                        // ),
+
                         child: Table(
                           columnWidths: const <int, TableColumnWidth>{
                             0: FlexColumnWidth(1),
-                            1: FlexColumnWidth(5),
+                            1: FlexColumnWidth(7),
                             2: FlexColumnWidth(2),
                           },
                           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -180,22 +143,23 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Word",
-                                    style: TextStyle(color: widget.palette.textColor2, fontSize: 20),
+                                    Helpers().translateText(gamePlayState.currentLanguage,"Word"),
+                                    
+                                    style: TextStyle(color: widget.palette.textColor2, fontSize: 18),
                                   ),
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    "Points",
-                                    style: TextStyle(color: widget.palette.textColor2, fontSize: 20),
+                                    Helpers().translateText(gamePlayState.currentLanguage,"Points"),
+                                    style: TextStyle(color: widget.palette.textColor2, fontSize: 18),
                                     textAlign: TextAlign.right,
                                   ),
                                 ),
                               ]
                             ),
                             for (int i=0; i<summary.length; i++)
-                            scoreSummaryTableRow(i, widget.palette,summary[i], context),
+                            Helpers().scoreSummaryTableRow(i, widget.palette,summary[i], context),
                           ]
                         ),                    
                       ),
@@ -211,7 +175,7 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                       width: 10,
                     ),
                     Text(
-                      "Hide",
+                      Helpers().translateText(gamePlayState.currentLanguage, "Hide"),
                       style: TextStyle(
                         fontSize: 24,
                         color: widget.palette.textColor2,
@@ -227,134 +191,9 @@ class _ShowWordsViewState extends State<ShowWordsView> {
     );
   }
 }
-Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette) {
 
-  Color textColor = turn.isEven ? palette.textColor1 : palette.textColor3;
-  late IconData iconItem;
-  if (stat == 'count') {
-    iconItem = Icons.bookmark;
-  } else if (stat == 'crosswords') {
-    iconItem = Icons.close;
-  } else if (stat == 'streak') {
-    iconItem = Icons.bolt;
-  }
 
-  return SizedBox(
-    width: 35,
-    child: Stack(
-      children: [
-        Icon(
-          iconItem,
-          size: 16,
-          color: textColor,
-        ),
-        Positioned(
-          left: 14.0,
-          top:-3,
-          child: Text.rich(
-            TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                    text:"x",
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: textColor
-                    )
-                ),
-                TextSpan(
-                  text: data.toString(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: textColor
-                  )
-                ),
-              ],
-            ),
-          ),          
-        )
-    
-      ],
-    ),
-  );
-}
 
-TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context) {
-
-  Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
-
-  return TableRow(children: [
-    Center(
-      child: Text(
-        (index+1).toString(),
-        style: TextStyle(
-          color: textColor,
-          fontSize: 20
-        ),
-      ),
-    ),
-    Row(
-      children: [
-        GestureDetector(
-          child: Text(
-            data['word'],
-            style: TextStyle(
-              color: textColor,
-              fontSize: 20,
-            ),
-          ),
-          onTap: () {
-            showDialog(
-              context: context, 
-              builder:(context) {
-                return FutureBuilder<String>(
-                  future: GameLogic().fetchDefinition(data["word"]),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return AlertDialog(
-                        title: Text(data["word"]),
-                        content: Text("Fetching definition..."),
-                      );
-                    } else if (snapshot.hasError) {
-                      return AlertDialog(
-                        title: Text(data["word"]),
-                        content: Text("Error fetching definition"),
-                      );
-                    } else {
-                      return AlertDialog(
-                        title: Text(data["word"]),
-                        content: Text(snapshot.data ?? "No definition available"),
-                      );
-                    }                    
-                  },
-                  // child: AlertDialog(
-                  //   title: Text(data["word"]),
-                  //   content: Text(
-                  //     // GameLogic().getWordDefinition(data["word"])
-                      
-                  //   ),
-                  // ),
-                );
-              },
-            );
-          },
-        ),
-        SizedBox(width: 10,),
-        Expanded(child: SizedBox()),
-        data['count'] > 1 ? multiplierIcon('count',data['turn'], data['count'], palette) : const SizedBox(),
-        data['crosswords'] > 1 ? multiplierIcon('crosswords',data['turn'], data['crosswords'], palette) : const SizedBox(),
-        data['streak'] > 1 ? multiplierIcon('streak',data['turn'], data['streak'], palette) : const SizedBox(),
-      ],
-    ),
-    Align(
-      alignment: Alignment.centerRight,
-      child: Text(
-        data['points'].toString(),
-        style: TextStyle(color: textColor, fontSize: 20),
-        textAlign: TextAlign.right,
-      ),
-    ),
-  ]);
-}
 
 
 class GameSummaryView extends StatefulWidget {
@@ -389,19 +228,19 @@ class _GameSummaryViewState extends State<GameSummaryView> {
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: <TableRow>[
             tableRowItem(
-                "Score",
+              Helpers().translateText(widget.gamePlayState.currentLanguage, "Score",),
                 // widget.gamePlayState.currentLevel.toString(),
                 (widget.gamePlayState.summaryData['points'] ?? 0).toString(),
                 Icon(Icons.emoji_events,
                     size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
-                "Duration",
+              Helpers().translateText(widget.gamePlayState.currentLanguage, "Duration",),
                 GameLogic().formatTime(widget.gamePlayState.duration.inSeconds),
                 Icon(Icons.timer, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
-                "Level",
+              Helpers().translateText(widget.gamePlayState.currentLanguage, "Level",),
                 widget.gamePlayState.currentLevel.toString(),
                 Icon(Icons.bar_chart,
                     size: 22, color: widget.palette.textColor2),
@@ -410,7 +249,7 @@ class _GameSummaryViewState extends State<GameSummaryView> {
         ),
         const Expanded(child: SizedBox()),
         Text(
-          "Summary",
+          Helpers().translateText(widget.gamePlayState.currentLanguage, "Summary",),
           style: TextStyle(color: widget.palette.textColor2, fontSize: 24),
         ),
         Table(
@@ -422,25 +261,25 @@ class _GameSummaryViewState extends State<GameSummaryView> {
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: <TableRow>[
             tableRowItem(
-                "Longest Streak",
+                Helpers().translateText(widget.gamePlayState.currentLanguage, "Longest Streak",),
                 (widget.gamePlayState.summaryData['longestStreak'] ?? 0)
                     .toString(),
                 Icon(Icons.bolt, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
-                "Cross Words",
+                Helpers().translateText(widget.gamePlayState.currentLanguage, "Cross Words",),
                 (widget.gamePlayState.summaryData['crosswords'] ?? 0)
                     .toString(),
                 Icon(Icons.close, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
-                "Most Points",
+                Helpers().translateText(widget.gamePlayState.currentLanguage, "Most Points",),
                 (widget.gamePlayState.summaryData['mostPoints'] ?? 0)
                     .toString(),
                 Icon(Icons.star, size: 22, color: widget.palette.textColor2),
                 widget.palette),
             tableRowItem(
-                "Most Words",
+                Helpers().translateText(widget.gamePlayState.currentLanguage, "Most Words",),
                 (widget.gamePlayState.summaryData['mostWords'] ?? 0).toString(),
                 Icon(Icons.my_library_books,
                     size: 22, color: widget.palette.textColor2),
@@ -452,26 +291,34 @@ class _GameSummaryViewState extends State<GameSummaryView> {
             ? const SizedBox()
             : InkWell(
                 onTap: widget.toggleDisplay,
-                child: Text.rich(
-                  TextSpan(
-                    text: 'View all ',
+                child: Text(
+                  Helpers().translateText(widget.gamePlayState.currentLanguage, "View points summary"),
                     style: TextStyle(
                         fontSize: 20,
                         color: widget.palette.textColor3,
-                        fontStyle: FontStyle.italic),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: widget
-                              .gamePlayState.summaryData['uniqueWords'].length
-                              .toString(),
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              decorationColor: widget.palette.textColor3,
-                              decorationThickness: 1.0)),
-                      const TextSpan(text: ' words'),
-                    ],
-                  ),
+                        fontStyle: FontStyle.italic
+                    ),
                 ),
+                // child: Text.rich(
+                //   TextSpan(
+                //     text: 'View all ',
+                //     style: TextStyle(
+                //         fontSize: 20,
+                //         color: widget.palette.textColor3,
+                //         fontStyle: FontStyle.italic),
+                //     children: <TextSpan>[
+                //       TextSpan(
+                //           text: widget
+                //               .gamePlayState.summaryData['uniqueWords'].length
+                //               .toString(),
+                //           style: TextStyle(
+                //               decoration: TextDecoration.underline,
+                //               decorationColor: widget.palette.textColor3,
+                //               decorationThickness: 1.0)),
+                //       const TextSpan(text: ' words'),
+                //     ],
+                //   ),
+                // ),
               ),
         const Expanded(child: SizedBox()),
       ]),

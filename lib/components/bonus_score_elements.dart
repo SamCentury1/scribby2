@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -686,7 +687,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                        "Level ${gamePlayState.currentLevel.toString()}",
+                        "${Helpers().translateText(gamePlayState.currentLanguage, "Level")} ${gamePlayState.currentLevel.toString()}",
                         style: TextStyle(
                             fontSize: 42,
                             color: getLevelUpWidgetColor(

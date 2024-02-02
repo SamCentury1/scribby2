@@ -69,8 +69,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void updateSettingsState(List<dynamic> languages, String currentLanguage) {
-    late SettingsState settingsState =
-        Provider.of<SettingsState>(context, listen: false);
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     late List<Map<String, dynamic>> selected = settingsState.languageDataList
         .where((element) => languages.contains(element['flag']))
         .toList();
@@ -106,242 +105,255 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : Consumer<ColorPalette>(
-            builder: (context, palette, child) {
-              return Scaffold(
-                  appBar: AppBar(
-                    leading: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      color: palette.textColor2,
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const MenuScreen(),
+        : StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .doc("users/${AuthService().currentUser!.uid}")
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const CircularProgressIndicator();
+              }
+              var document = snapshot.data;
+              String username = document?['username'];
+              var darkMode = document?['parameters']['darkMode'];
+              var soundOn = document?['parameters']['soundOn'];
+              var muted = document?['parameters']['muted'];
+              var currentLanguage = document?['parameters']['currentLanguage'];
+              List<dynamic> languages = document?['parameters']['languages'];      
+              return Consumer<ColorPalette>(
+                builder: (context, palette, child) {
+                  return Scaffold(
+                      appBar: AppBar(
+                        leading: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          color: palette.textColor2,
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const MenuScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                        title: Text(
+                          Helpers().translateText(
+                            currentLanguage, 'Settings',
                           ),
-                        );
-                      },
-                    ),
-                    title: Text(
-                      'Settings',
-                      style: TextStyle(color: palette.textColor2),
-                    ),
-                    backgroundColor: palette.modalNavigationBarBgColor,
-                  ),
-                  body: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .doc("users/${AuthService().currentUser!.uid}")
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
-                        }
-                        var document = snapshot.data;
-                        String username = document?['username'];
-                        var darkMode = document?['parameters']['darkMode'];
-                        var soundOn = document?['parameters']['soundOn'];
-                        var muted = document?['parameters']['muted'];
-                        var currentLanguage =
-                            document?['parameters']['currentLanguage'];
-                        List<dynamic> languages =
-                            document?['parameters']['languages'];
-
-                        return Container(
-                          color: palette.screenBackgroundColor,
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                "Username",
-                                style: TextStyle(
-                                    fontSize: 22, color: _palette.textColor1),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    16.0, 8.0, 16.0, 8.0),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 80,
-                                  child: Card(
-                                    color: palette.optionButtonBgColor,
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          26.0, 8.0, 26.0, 8.0),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: !userNameEditView
-                                            ? Row(
-                                                children: [
-                                                  Text(
-                                                    Helpers().capitalizeName(
-                                                        username),
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        color:
-                                                            palette.textColor2),
-                                                  ),
-                                                  const Expanded(
-                                                      flex: 1,
-                                                      child: SizedBox()),
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          userNameEditView =
-                                                              true;
-                                                        });
-                                                      },
-                                                      icon: const Icon(
-                                                          Icons.edit),
-                                                      color:
-                                                          palette.textColor2),
-                                                ],
-                                              )
-                                            : Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Center(
-                                                    child: SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.65,
-                                                      child: TextField(
-                                                        controller:
-                                                            _userNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                          labelText: 'Username',
+                          style: TextStyle(color: palette.textColor2),
+                        ),
+                        backgroundColor: palette.modalNavigationBarBgColor,
+                      ),
+                      body: Container(
+                              color: palette.screenBackgroundColor,
+                              child: Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    Helpers().translateText(
+                                      currentLanguage, "Username",
+                                    ),                               
+                                    
+                                    style: TextStyle(
+                                        fontSize: 22, color: _palette.textColor1),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        16.0, 8.0, 16.0, 8.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      height: 80,
+                                      child: Card(
+                                        color: palette.optionButtonBgColor,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              26.0, 8.0, 26.0, 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: !userNameEditView
+                                                ? Row(
+                                                    children: [
+                                                      Text(
+                                                        Helpers().capitalizeName(
+                                                            username),
+                                                        style: TextStyle(
+                                                            fontSize: 22,
+                                                            color:
+                                                                palette.textColor2),
+                                                      ),
+                                                      const Expanded(
+                                                          flex: 1,
+                                                          child: SizedBox()),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              userNameEditView =
+                                                                  true;
+                                                            });
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.edit),
+                                                          color:
+                                                              palette.textColor2),
+                                                    ],
+                                                  )
+                                                : Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Center(
+                                                        child: SizedBox(
+                                                          width:
+                                                              MediaQuery.of(context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.65,
+                                                          child: TextField(
+                                                            controller:
+                                                                _userNameController,
+                                                            decoration: InputDecoration(
+                                                              border: OutlineInputBorder(),
+                                                              labelText: Helpers().translateText(
+                                                                currentLanguage,
+                                                                "Username",
+                                                              ),
+                                                              // 'Username',
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
+            
+                                                      // Expanded(flex: 1, child: SizedBox()),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            AuthService().updateUsername(
+                                                                AuthService()
+                                                                    .currentUser!
+                                                                    .uid,
+                                                                _userNameController
+                                                                    .text
+                                                                    .toString());
+                                                            // settings.setUser(_userNameController.text.toString());
+                                                            setState(() {
+                                                              userNameEditView =
+                                                                  false;
+                                                            });
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.save),
+                                                          color: darkMode
+                                                              ? Colors.grey[350]
+                                                              : Colors.amber[600]),
+                                                    ],
                                                   ),
-
-                                                  // Expanded(flex: 1, child: SizedBox()),
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        AuthService().updateUsername(
-                                                            AuthService()
-                                                                .currentUser!
-                                                                .uid,
-                                                            _userNameController
-                                                                .text
-                                                                .toString());
-                                                        // settings.setUser(_userNameController.text.toString());
-                                                        setState(() {
-                                                          userNameEditView =
-                                                              false;
-                                                        });
-                                                      },
-                                                      icon: const Icon(
-                                                          Icons.save),
-                                                      color: darkMode
-                                                          ? Colors.grey[350]
-                                                          : Colors.amber[600]),
-                                                ],
-                                              ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                "Parameters",
-                                style: TextStyle(
-                                    fontSize: 22, color: _palette.textColor1),
-                              ),
-                              parameterCard(
-                                palette,
-                                "Color Theme",
-                                () {
-                                  // toggleDarkTheme(_palette,!darkMode);
-                                  updateParameter(
-                                      "darkMode", !darkMode, _palette);
-                                },
-                                [
-                                  const Icon(Icons.nightlight),
-                                  const Icon(Icons.sunny),
-                                ],
-                                darkMode,
-                              ),
-                              parameterCard(
-                                palette,
-                                "Muted",
-                                () {
-                                  updateParameter("muted", !muted, _palette);
-                                },
-                                [
-                                  const Icon(Icons.volume_mute),
-                                  const Icon(Icons.volume_up),
-                                ],
-                                muted,
-                              ),
-                              parameterCard(
-                                palette,
-                                "Sound",
-                                () {
-                                  updateParameter(
-                                      "soundOn", !soundOn, _palette);
-                                },
-                                [
-                                  const Icon(Icons.music_note),
-                                  const Icon(Icons.music_off),
-                                ],
-                                soundOn,
-                              ),
-                              Text(
-                                "Language",
-                                style: TextStyle(
-                                    fontSize: 22, color: _palette.textColor1),
-                              ),
-                              languageCard(
-                                palette,
-                                "Current",
-                                currentLanguage,
-                                languages,
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 26.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            palette.optionButtonBgColor,
-                                        foregroundColor:
-                                            palette.optionButtonTextColor,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10.0)),
-                                        )),
-                                    child: const Text("Add / Remove Language"),
-                                    onPressed: () {
-                                      displayLanguagesDialog(context, palette,
-                                          languages, currentLanguage);
-
-                                      updateSettingsState(
-                                          languages, currentLanguage);
-                                      // print()
-                                    },
+                                  const SizedBox(
+                                    height: 30,
                                   ),
-                                ),
+                                  Text(
+                                    Helpers().translateText(
+                                      currentLanguage,
+                                      "Parameters",
+                                    ),
+                                    style: TextStyle(
+                                        fontSize: 22, color: _palette.textColor1),
+                                  ),
+                                  parameterCard(
+                                    palette,
+                                    Helpers().translateText(currentLanguage, "Color Theme",),
+                                    
+                                    () {
+                                      // toggleDarkTheme(_palette,!darkMode);
+                                      updateParameter(
+                                          "darkMode", !darkMode, _palette);
+                                    },
+                                    [
+                                      const Icon(Icons.nightlight),
+                                      const Icon(Icons.sunny),
+                                    ],
+                                    darkMode,
+                                  ),
+                                  parameterCard(
+                                    palette,
+                                    Helpers().translateText(currentLanguage, "Muted",),
+                                    
+                                    () {
+                                      updateParameter("muted", !muted, _palette);
+                                    },
+                                    [
+                                      const Icon(Icons.volume_mute),
+                                      const Icon(Icons.volume_up),
+                                    ],
+                                    muted,
+                                  ),
+                                  parameterCard(
+                                    palette,
+                                    Helpers().translateText(currentLanguage, "Sound On",),
+                                    () {
+                                      updateParameter(
+                                          "soundOn", !soundOn, _palette);
+                                    },
+                                    [
+                                      const Icon(Icons.music_note),
+                                      const Icon(Icons.music_off),
+                                    ],
+                                    soundOn,
+                                  ),
+                                  Text(
+                                    Helpers().translateText(currentLanguage, "Language",),
+                                    style: TextStyle(
+                                        fontSize: 22, color: _palette.textColor1),
+                                  ),
+                                  languageCard(
+                                    palette,
+                                    Helpers().translateText(currentLanguage, "Current",),
+                                    currentLanguage,
+                                    languages,
+                                    currentLanguage
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 26.0),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                palette.optionButtonBgColor,
+                                            foregroundColor:
+                                                palette.optionButtonTextColor,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                            )),
+                                        child: Text(
+                                          Helpers().translateText(currentLanguage, "Add / Remove Language",),
+                                        ),
+                                        onPressed: () {
+                                          displayLanguagesDialog(context, palette,
+                                              languages, currentLanguage);
+            
+                                          updateSettingsState(
+                                              languages, currentLanguage);
+                                          // print()
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  const Expanded(flex: 1, child: SizedBox()),
+                                ],
                               ),
-                              const Expanded(flex: 1, child: SizedBox()),
-                            ],
-                          ),
-                        );
-                      }));
-            },
-          );
+                            )
+                          );
+                },
+              );
+    });
   }
 }
 
@@ -379,11 +391,9 @@ Widget parameterCard(ColorPalette palette, String cardBody,
   );
 }
 
-Widget languageCard(
-    ColorPalette palette, String cardBody, var value, List<dynamic> languages) {
+Widget languageCard(ColorPalette palette, String cardBody, var value, List<dynamic> languages, String currentLanguage) {
   Future<void> changeCurrentLanguage(dynamic newLanguage) async {
-    await FirestoreMethods().updateParameters(
-        AuthService().currentUser!.uid, "currentLanguage", newLanguage);
+    await FirestoreMethods().updateParameters(AuthService().currentUser!.uid, "currentLanguage", newLanguage);
   }
 
   return Padding(
@@ -416,7 +426,8 @@ Widget languageCard(
                         return DropdownMenuItem<dynamic>(
                           value: val,
                           child: Text(
-                            Helpers().capitalize(val),
+                            Helpers().translateText(currentLanguage,val),
+                            // Helpers().capitalize(val),
                             style: TextStyle(
                               color: palette.textColor2,
                             ),
@@ -506,6 +517,13 @@ class _LanguageDialogState extends State<LanguageDialog> {
     });
   }
 
+  String translateDynamicLanguage(String language, String originalString, String flag) {
+      String tranlatedFlag = Helpers().translateText(language, flag);
+      String res = originalString.replaceAll('new_language', tranlatedFlag);
+      return res;
+  }
+
+
   void updateList(List<Map<String, dynamic>> languages,
       Map<String, dynamic> targetObject, String currentLanguage) {
     if (targetObject['flag'] == currentLanguage) {
@@ -521,11 +539,13 @@ class _LanguageDialogState extends State<LanguageDialog> {
           if (targetObject['selected'] == true) {
             languageObject.update("change", (value) => "removed");
             languageObject.update("selected", (value) => false);
-            result = "Removed";
+            // result = "Removed";
+            result = Helpers().translateText(currentLanguage, "new_language was removed from languages");
           } else {
             languageObject.update("change", (value) => "added");
             languageObject.update("selected", (value) => true);
-            result = "Added";
+            // result = "Added";
+            result = Helpers().translateText(currentLanguage, "new_language was added to languages");
           }
         }
       }
@@ -533,7 +553,10 @@ class _LanguageDialogState extends State<LanguageDialog> {
         currentSelection = languages;
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('$result ${targetObject['flag']} !'),
+        content: Text(
+          translateDynamicLanguage(currentLanguage, result, targetObject['flag'])
+          // '$result ${targetObject['flag']} !'
+        ),
         duration: const Duration(milliseconds: 1000),
       ));
     }
@@ -553,7 +576,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
         AuthService().currentUser!.uid, "languages", newLanguages);
     Navigator.of(context).pop();
 
-    debugPrint("current language $newLanguages");
   }
 
   Color getLanguageColor(
@@ -590,7 +612,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        "Add / Remove Language",
+        Helpers().translateText(widget.currentLanguage, "Add / Remove Language",),
         style: TextStyle(color: widget.palette.optionButtonTextColor),
       ),
       backgroundColor: widget.palette
@@ -649,7 +671,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
               Navigator.of(context).pop();
             },
             child: Text(
-              "Cancel",
+              Helpers().translateText(widget.currentLanguage, "Cancel"),
               style: TextStyle(color: widget.palette.optionButtonTextColor),
             )),
         TextButton(
@@ -657,7 +679,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
               setUpdatedLanguages(currentSelection, widget.currentLanguage);
             },
             child: Text(
-              "Save",
+              Helpers().translateText(widget.currentLanguage, "Save"),
               style: TextStyle(color: widget.palette.optionButtonTextColor),
             )),
       ],

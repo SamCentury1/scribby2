@@ -1,9 +1,13 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
+import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
+import 'package:scribby_flutter_v2/utils/translations.dart';
 
 class Helpers {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
@@ -57,4 +61,179 @@ class Helpers {
       debugPrint("something went wrong retrieving the alphabet from storage");
     }
   }
+
+
+  Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette) {
+
+    Color textColor = turn.isEven ? palette.textColor1 : palette.textColor3;
+    late IconData iconItem;
+    if (stat == 'count') {
+      iconItem = Icons.bookmark;
+    } else if (stat == 'crosswords') {
+      iconItem = Icons.close;
+    } else if (stat == 'streak') {
+      iconItem = Icons.bolt;
+    }
+
+    return SizedBox(
+      width: 35,
+      child: Stack(
+        children: [
+          Icon(
+            iconItem,
+            size: 16,
+            color: textColor,
+          ),
+          Positioned(
+            left: 14.0,
+            top:-3,
+            child: Text.rich(
+              TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text:"x",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: textColor
+                      )
+                  ),
+                  TextSpan(
+                    text: data.toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: textColor
+                    )
+                  ),
+                ],
+              ),
+            ),          
+          )
+      
+        ],
+      ),
+    );
+  }  
+
+  TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context) {
+
+    Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
+
+    return TableRow(children: [
+      Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "${(index+1).toString()}.",
+          style: TextStyle(
+            color: textColor,
+            fontSize: 20
+          ),
+        ),
+      ),
+      Row(
+        children: [
+          GestureDetector(
+            child: Text(
+              data['word'],
+              style: TextStyle(
+                color: textColor,
+                fontSize: 20,
+              ),
+            ),
+            onTap: () {
+              showDialog(
+                context: context, 
+                builder:(context) {
+                  return FutureBuilder<String>(
+                    future: GameLogic().fetchDefinition(data["word"]),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return AlertDialog(
+                          backgroundColor: palette.optionButtonBgColor,
+                          title: Text(
+                            data["word"],
+                            style: TextStyle(
+                              color: palette.textColor2
+                            ),
+                          ),
+                          content:SizedBox()  //Text("Fetching definition..."),
+                        );
+                      } else if (snapshot.hasError) {
+                        return AlertDialog(
+                          backgroundColor: palette.optionButtonBgColor,
+                          title: Text(
+                            data["word"],
+                            style: TextStyle(
+                              color: palette.textColor2
+                            ),
+                          ),
+                          content: Text(
+                            "Error fetching definition",
+                            style: TextStyle(
+                              color: palette.textColor2
+                            ),                            
+                          ),
+                        );
+                      } else {
+                        return AlertDialog(
+                          backgroundColor: palette.optionButtonBgColor,
+                          title: Text(
+                            data["word"],
+                            style: TextStyle(
+                              color: palette.textColor2
+                            ),
+                          ),
+                          content: Text(
+                            snapshot.data ?? "No definition available",
+                            style: TextStyle(
+                              color: palette.textColor2
+                            ),                            
+                          ),
+                        );
+                      }                    
+                    },
+      
+                  );
+                },
+              );
+            },
+          ),
+          SizedBox(width: 10,),
+          Expanded(child: SizedBox()),
+          data['count'] > 1 ? multiplierIcon('count',data['turn'], data['count'], palette) : const SizedBox(),
+          data['crosswords'] > 1 ? multiplierIcon('crosswords',data['turn'], data['crosswords'], palette) : const SizedBox(),
+          data['streak'] > 1 ? multiplierIcon('streak',data['turn'], data['streak'], palette) : const SizedBox(),
+        ],
+      ),
+      Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          data['points'].toString(),
+          style: TextStyle(color: textColor, fontSize: 20),
+          textAlign: TextAlign.right,
+        ),
+      ),
+    ]);
+  }
+
+  String translateText(String language, String originalString,) {
+    final Map<String,dynamic> languageMap = translations.firstWhere((element) => element['key'] == originalString);
+    return languageMap['data'][language];
+  }
+
+  String translateDemoSequence(String language, String originalString,) {
+    String res = "";
+    String translatedBody = translateText(language, originalString);
+    late Map<String,dynamic> dynamicLetters = demoStateDynamicLetters[language];
+    dynamicLetters.forEach((key, value) {
+      print("replace $key with $value");
+      translatedBody = translatedBody.replaceAll(key, value);
+    });
+    print(res);
+    return translatedBody;
+  }
+
+
+
+
+
 }

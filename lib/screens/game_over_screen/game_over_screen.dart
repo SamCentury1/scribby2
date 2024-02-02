@@ -5,8 +5,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 // import 'package:scribby_flutter_v2/ads/interstitial_ad_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
@@ -68,6 +71,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
             },
             // Called when an ad request failed.
             onAdFailedToLoad: (LoadAdError error) {
+              setState(() {
+                isLoading = false;
+              });
               debugPrint('InterstitialAd failed to load: $error');
             },
           ));
@@ -93,6 +99,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
         onAdFailedToShowFullScreenContent: (ad, err) {
           // Dispose the ad here to free resources.
           ad.dispose();
+
         },
         // Called when the ad dismissed full screen content.
         onAdDismissedFullScreenContent: (ad) {
@@ -107,6 +114,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
   void validateHighScore() {
     // SettingsState settings, ColorPalette palette, int currentScore
     final settings = context.read<SettingsController>();
+    final audioController = context.read<AudioController>();
     // final palette = context.read<ColorPalette>();
     final gamePlayState = context.read<GamePlayState>();
     final int currentScore = gamePlayState.endOfGameData['points'];
@@ -120,8 +128,10 @@ class _GameOverScreenState extends State<GameOverScreen> {
     }
 
     if (currentScore > currentHighScore) {
+      audioController.playSfx(SfxType.highScore);
       setState(() {
         _duringCelebration = true;
+
       });
 
       Future.delayed(const Duration(milliseconds: 2000), () {
@@ -155,7 +165,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
           Center(
             child: SizedBox(
               child: Text(
-                "New High Score:",
+                Helpers().translateText(currentLanguage, "New High Score:"),
+                
                 style: TextStyle(fontSize: 32, color: palette.textColor3),
               ),
             ),
@@ -171,7 +182,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
           ),
           Center(
             child: Text(
-              "Previous High Score: $currentHighScore",
+              
+              "${Helpers().translateText(currentLanguage, "Previous High Score:")} $currentHighScore",
               style: TextStyle(color: palette.textColor3, fontSize: 24),
             ),
           ),
@@ -182,7 +194,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
         children: [
           Center(
             child: Text(
-              "Score: ${currentScore.toString()}",
+              // Helpers().translateText(currentLanguage, "Score:")
+              "${Helpers().translateText(currentLanguage, "Score")}: ${currentScore.toString()}",
               style: TextStyle(color: palette.textColor3, fontSize: 42),
             ),
           ),
@@ -198,7 +211,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
                   width: 10,
                 ),
                 Text(
-                  "High Score: $currentHighScore",
+                  // Helpers().translateText(currentLanguage, "High Score:")
+                  "${Helpers().translateText(currentLanguage, "High Score:")} $currentHighScore",
                   style: TextStyle(color: palette.textColor3, fontSize: 18),
                 ),
               ],
@@ -215,7 +229,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
         Provider.of<ColorPalette>(context, listen: false);
     late SettingsState settings =
         Provider.of<SettingsState>(context, listen: false);
-    late GamePlayState _gamePlayState =
+    late GamePlayState gamePlayState =
         Provider.of<GamePlayState>(context, listen: false);
 
     return isLoading
@@ -224,7 +238,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
           )
         : PopScope(
             onPopInvoked: (details) {
-              _gamePlayState.endGame();
+              gamePlayState.endGame();
               FirestoreMethods().updateSettingsState(
                   settings, AuthService().currentUser!.uid);
               Navigator.of(context).pushReplacement(
@@ -239,6 +253,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                     padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 18.0),
                     child: Consumer<GamePlayState>(
                       builder: (context, gamePlayState, child) {
+                        late List<Map<String,dynamic>> summary = GameLogic().getPointsSummary(gamePlayState);
                         return SafeArea(
                             child: Column(
                           children: [
@@ -266,47 +281,47 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                     TableCellVerticalAlignment.middle,
                                 children: <TableRow>[
                                   rowStatItem(
-                                      "Duration",
+                                      Helpers().translateText(gamePlayState.currentLanguage, "Duration",),
                                       GameLogic().formatTime(gamePlayState
                                           .endOfGameData['duration']),
                                       Icon(Icons.timer,
-                                          size: 26, color: palette.textColor3),
+                                          size: 22, color: palette.textColor3),
                                       palette),
                                   rowStatItem(
-                                      "Level",
+                                      Helpers().translateText(gamePlayState.currentLanguage, "Level",),
                                       gamePlayState.endOfGameData['level']
                                           .toString(),
                                       Icon(Icons.bar_chart_rounded,
-                                          size: 26, color: palette.textColor3),
+                                          size: 22, color: palette.textColor3),
                                       palette),
                                   rowStatItem(
-                                      "Longest Streak",
+                                      Helpers().translateText(gamePlayState.currentLanguage, "Longest Streak",),
                                       gamePlayState
                                           .endOfGameData['longestStreak']
                                           .toString(),
                                       Icon(Icons.electric_bolt,
-                                          size: 26, color: palette.textColor3),
+                                          size: 22, color: palette.textColor3),
                                       palette),
                                   rowStatItem(
-                                      "Cross Words",
+                                      Helpers().translateText(gamePlayState.currentLanguage, "Cross Words",),
                                       gamePlayState.endOfGameData['crossWords']
                                           .toString(),
                                       Icon(Icons.close,
-                                          size: 26, color: palette.textColor3),
+                                          size: 22, color: palette.textColor3),
                                       palette),
                                   rowStatItem(
-                                      "Most Points",
+                                      Helpers().translateText(gamePlayState.currentLanguage, "Most Points",),
                                       gamePlayState.endOfGameData['mostPoints']
                                           .toString(),
                                       Icon(Icons.star,
-                                          size: 26, color: palette.textColor3),
+                                          size: 22, color: palette.textColor3),
                                       palette),
                                   rowStatItem(
-                                      "Most Words",
+                                      Helpers().translateText(gamePlayState.currentLanguage, "Most Words",),
                                       gamePlayState.endOfGameData['mostWords']
                                           .toString(),
                                       Icon(Icons.my_library_books_sharp,
-                                          size: 26, color: palette.textColor3),
+                                          size: 22, color: palette.textColor3),
                                       palette),
                                 ],
                               ),
@@ -323,7 +338,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: Text(
-                                          "All Words",
+                                          Helpers().translateText(gamePlayState.currentLanguage, "Summary of Points",),
                                           style: TextStyle(
                                               color: palette.textColor3),
                                         ),
@@ -337,48 +352,48 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                               MediaQuery.of(context).size.width,
                                           child: SingleChildScrollView(
                                             child: Table(
-                                              // border: TableBorder.all(),
-                                              columnWidths: const <int,
-                                                  TableColumnWidth>{
+                                              columnWidths: const <int, TableColumnWidth>{
                                                 0: FlexColumnWidth(1),
-                                                1: FlexColumnWidth(3),
+                                                1: FlexColumnWidth(5),
+                                                2: FlexColumnWidth(2),
                                               },
-                                              defaultVerticalAlignment:
-                                                  TableCellVerticalAlignment
-                                                      .middle,
+                                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                                               children: <TableRow>[
-                                                for (int i = 0;
-                                                    i <
-                                                        gamePlayState
-                                                                .endOfGameData[
-                                                            'uniqueWords'];
-                                                    i++)
-                                                  TableRow(children: [
-                                                    Text(
-                                                      (i + 1).toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: palette
-                                                              .textColor3),
+                                                TableRow(
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        "#",
+                                                        style: TextStyle(color: palette.textColor2, fontSize: 20),
+                                                      ),
                                                     ),
-                                                    Text(
-                                                      gamePlayState
-                                                              .endOfGameData[
-                                                          'uniqueWordsList'][i],
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: palette
-                                                              .textColor3),
-                                                    )
-                                                  ])
-                                              ],
-                                            ),
+                                                    Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text(
+                                                        Helpers().translateText(gamePlayState.currentLanguage, "Word",),
+                                                        style: TextStyle(color: palette.textColor2, fontSize: 20),
+                                                      ),
+                                                    ),
+                                                    Align(
+                                                      alignment: Alignment.centerRight,
+                                                      child: Text(
+                                                        Helpers().translateText(gamePlayState.currentLanguage, "Points"),
+                                                        style: TextStyle(color: palette.textColor2, fontSize: 20),
+                                                        textAlign: TextAlign.right,
+                                                      ),
+                                                    ),
+                                                  ]
+                                                ),
+                                                for (int i=0; i< summary.length; i++)
+                                                Helpers().scoreSummaryTableRow(i, palette,summary[i], context),
+                                              ]
+                                            ),                                              
                                           ),
                                         ),
                                         actions: <Widget>[
                                           InkWell(
                                             child: Text(
-                                              'Close',
+                                              Helpers().translateText(gamePlayState.currentLanguage, "Close"),
                                               style: TextStyle(
                                                   color: palette.textColor3),
                                             ),
@@ -390,27 +405,35 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                       );
                                     });
                               },
-                              child: Text.rich(
-                                TextSpan(
-                                  text: 'View all ',
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      color: palette.textColor3,
-                                      fontStyle: FontStyle.italic),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: gamePlayState
-                                            .endOfGameData['uniqueWords']
-                                            .toString(),
-                                        style: TextStyle(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            decorationColor: palette.textColor3,
-                                            decorationThickness: 1.0)),
-                                    const TextSpan(text: ' words'),
-                                  ],
+                              child: Text(
+                                Helpers().translateText(gamePlayState.currentLanguage, "View points summary"),
+                                style: TextStyle(
+                                  color: palette.textColor2,
+                                  fontSize: 24,
+                                  fontStyle: FontStyle.italic
                                 ),
                               ),
+                              // child: Text.rich(
+                              //   TextSpan(
+                              //     text: 'View all ',
+                              //     style: TextStyle(
+                              //         fontSize: 24,
+                              //         color: palette.textColor3,
+                              //         fontStyle: FontStyle.italic),
+                              //     children: <TextSpan>[
+                              //       TextSpan(
+                              //           text: gamePlayState
+                              //               .endOfGameData['uniqueWords']
+                              //               .toString(),
+                              //           style: TextStyle(
+                              //               decoration:
+                              //                   TextDecoration.underline,
+                              //               decorationColor: palette.textColor3,
+                              //               decorationThickness: 1.0)),
+                              //       const TextSpan(text: ' words'),
+                              //     ],
+                              //   ),
+                              // ),
                             ),
                             const Expanded(
                               flex: 3,
@@ -443,7 +466,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                             const MenuScreen()));
                               },
                               child: Text(
-                                "Main Menu",
+                                Helpers().translateText(gamePlayState.currentLanguage, "Main Menu"),
                                 style: TextStyle(
                                   color: palette.textColor3,
                                 ),
@@ -480,13 +503,13 @@ TableRow rowStatItem(
     Center(child: icon),
     Text(
       text,
-      style: TextStyle(fontSize: 22, color: palette.textColor3),
+      style: TextStyle(fontSize: 18, color: palette.textColor3),
     ),
     Align(
       alignment: Alignment.centerRight,
       child: Text(
         data.toString(),
-        style: TextStyle(fontSize: 22, color: palette.textColor3),
+        style: TextStyle(fontSize: 18, color: palette.textColor3),
       ),
     ),
   ]);

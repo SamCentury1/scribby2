@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -165,20 +166,28 @@ class _WelcomeUserState extends State<WelcomeUser> {
                 const Expanded(flex: 2, child: SizedBox()),
 
                 Text(
-                  "Welcome!",
+                  // "Welcome!",
+                  Helpers().translateDemoSequence(
+                    getPrimaryLanguage(settingsState.languageDataList), 
+                    "Welcome!"
+                  ),                  
                   style: TextStyle(
                     fontSize: 32,
                     // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
-                    color: palette.tileBgColor,
+                    color: palette.textColor2,
                   ),
                 ),
                 const SizedBox(height: 20,),
                 Text(
-                  "Pick an original username",
+                  Helpers().translateDemoSequence(
+                    getPrimaryLanguage(settingsState.languageDataList), 
+                    "Pick an original username"
+                  ),                  
+          
                   style: TextStyle(
                     fontSize: 22,
                     // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
-                    color: palette.tileBgColor
+                    color: palette.textColor2
                   ),
                 ),            
                 Consumer<SettingsController>(
@@ -199,14 +208,27 @@ class _WelcomeUserState extends State<WelcomeUser> {
                                   width: MediaQuery.of(context).size.width*0.8,
                                   child: TextField(
                                     controller: _userNameController,
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Username',
+                                    decoration: InputDecoration(
+                                      fillColor: palette.textColor2,
+                                      focusColor: palette.textColor2,
+                                      hoverColor: palette.textColor2,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: palette.textColor2, width: 1.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: palette.textColor2, width: 2.0),
+                                        borderRadius: BorderRadius.circular(25.0),
+                                      ),
+                                      labelStyle: TextStyle(color: palette.textColor2),
+                                      labelText: Helpers().translateDemoSequence(
+                                        getPrimaryLanguage(settingsState.languageDataList), 
+                                        "Pick an original username"
+                                      ),
                                     ),
                                     style: TextStyle(
                                       fontSize: 18,
                                       // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
-                                      color: palette.tileBgColor
+                                      color: palette.textColor2
                                     ),
                                   ),
                                 ),
@@ -224,9 +246,22 @@ class _WelcomeUserState extends State<WelcomeUser> {
                   onPressed: () {
                     
                     if (forbiddenNames.contains(_userNameController.text.toLowerCase())) {
-                      _showBadNameDialog(context, "pick something more original");
+                      _showBadNameDialog(
+                        context,
+                        Helpers().translateDemoSequence(
+                          getPrimaryLanguage(settingsState.languageDataList), 
+                          "pick something more original"
+                        ),                        
+                        
+                      );
                     } else if (checkForBadWords(_userNameController.text.toLowerCase())) {
-                      _showBadNameDialog(context, "hey! no bad words!");
+                      _showBadNameDialog(
+                        context, 
+                        Helpers().translateDemoSequence(
+                          getPrimaryLanguage(settingsState.languageDataList), 
+                          "Hey! No bad words!"
+                        ),   
+                      );
                     } else {
                       // settings.setUser(_userNameController.text.toLowerCase());
                       AuthService().updateUsername(AuthService().currentUser!.uid, _userNameController.text.toLowerCase());
@@ -248,7 +283,13 @@ class _WelcomeUserState extends State<WelcomeUser> {
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     )
                   ),
-                  child: const Text("Save User"),
+                  child: Text(
+                    Helpers().translateDemoSequence(
+                      getPrimaryLanguage(settingsState.languageDataList), 
+                      "Save"
+                    ),                     
+                    
+                  ),
                 ),
                 const Expanded(flex: 3, child: SizedBox()),             
               ],
@@ -265,6 +306,7 @@ class _WelcomeUserState extends State<WelcomeUser> {
 
 
 Future<void> _showBadNameDialog(BuildContext context, String textBody,) async {
+  
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -295,7 +337,7 @@ Future<void> _showBadNameDialog(BuildContext context, String textBody,) async {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Okay'),
+              child: Text('Okay'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

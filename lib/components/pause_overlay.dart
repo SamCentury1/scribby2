@@ -14,8 +14,7 @@ class PauseOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late AnimationState animationState =
-        Provider.of<AnimationState>(context, listen: false);
+    late AnimationState animationState =Provider.of<AnimationState>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return AnimatedOpacity(

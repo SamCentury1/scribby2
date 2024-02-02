@@ -35,11 +35,14 @@ class DialogWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 32,
-                          color: palette.textColor2,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 32,
+                            color: palette.textColor2,
+                          ),
                         ),
                       ),
                       Divider(

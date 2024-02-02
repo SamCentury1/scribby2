@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
-import 'package:scribby_flutter_v2/providers/animation_state.dart';
+// import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_help_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_settings_screen.dart';
@@ -58,7 +58,7 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    late AnimationState animationState =Provider.of<AnimationState>(context, listen: false);
+    // late AnimationState animationState =Provider.of<AnimationState>(context, listen: false);
     late ColorPalette palette =Provider.of<ColorPalette>(context, listen: false);
     // late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
     // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
@@ -181,7 +181,7 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
                                   unselectedItemColor: palette.optionButtonTextColor,
                                   items: [
                                     BottomNavigationBarItem(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.gamepad,
                                         // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'summary_icon', widget.animation),
                                         
@@ -190,7 +190,7 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
                                       backgroundColor: palette.optionButtonBgColor2
                                     ),
                                     BottomNavigationBarItem(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.help,
                                         // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'help_icon', widget.animation),
                                       ),
@@ -198,7 +198,7 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
                                       backgroundColor: palette.optionButtonBgColor2
                                     ),
                                     BottomNavigationBarItem(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.settings,
                                         // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'settings_icon', widget.animation),
                                       ),
@@ -206,7 +206,7 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
                                       backgroundColor: palette.optionButtonBgColor2
                                     ),
                                     BottomNavigationBarItem(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.exit_to_app,
                                         // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'exit_icon', widget.animation),
                                       ),
@@ -315,7 +315,6 @@ class _TutorialSummaryScreenState extends State<TutorialSummaryScreen> {
     });
   }
 
-  @override
   Key? get key => null;
 
 
@@ -678,7 +677,6 @@ class _TutorialExitPageState extends State<TutorialExitPage> {
   late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
   late TutorialState tutorialState = Provider.of<TutorialState>(context,listen: false);
   late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
-  @override
   Key? get key => null;
 
   @override
