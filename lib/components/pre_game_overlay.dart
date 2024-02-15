@@ -48,7 +48,6 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                         fontStyle: FontStyle.italic),
                     child: Text(
                       Helpers().translateText(gamePlayState.currentLanguage, "Tap to Start",),
-                      
                     ),
                   ),
                 ),

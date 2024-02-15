@@ -172,19 +172,25 @@ class _GameOverScreenState extends State<GameOverScreen> {
             ),
           ),
           Center(
-            child: Text(
-              currentScore.toString(),
-              style: TextStyle(color: palette.textColor3, fontSize: 42),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                currentScore.toString(),
+                style: TextStyle(color: palette.textColor3, fontSize: 42),
+              ),
             ),
           ),
           const SizedBox(
             height: 15,
           ),
           Center(
-            child: Text(
-              
-              "${Helpers().translateText(currentLanguage, "Previous High Score:")} $currentHighScore",
-              style: TextStyle(color: palette.textColor3, fontSize: 24),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                
+                "${Helpers().translateText(currentLanguage, "Previous High Score:")} $currentHighScore",
+                style: TextStyle(color: palette.textColor3, fontSize: 24),
+              ),
             ),
           ),
         ],
@@ -385,7 +391,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                                   ]
                                                 ),
                                                 for (int i=0; i< summary.length; i++)
-                                                Helpers().scoreSummaryTableRow(i, palette,summary[i], context),
+                                                Helpers().scoreSummaryTableRow(i, palette,summary[i], context, gamePlayState.currentLanguage),
                                               ]
                                             ),                                              
                                           ),
@@ -501,9 +507,13 @@ TableRow rowStatItem(
 
   return TableRow(children: <Widget>[
     Center(child: icon),
-    Text(
-      text,
-      style: TextStyle(fontSize: 18, color: palette.textColor3),
+    FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 18, color: palette.textColor3),
+      ),
     ),
     Align(
       alignment: Alignment.centerRight,

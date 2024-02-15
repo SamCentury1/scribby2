@@ -61,35 +61,63 @@ class TutorialState extends ChangeNotifier {
   }  
 
   List<String> _tutorialLettersToAdd = [
-    "",
-    "T",
-    "L",
-    "A",
-    "C",
-    "A",
-    "E",
-    "S",
-    "P",
-    "W", // 2
-    "T", // 20
-    "A", // 22
-    "G", // 27
-    "B", // 15,
-    "P", // 5
-    "N", // 24
-    "S", // 4
-    "H", // 17
-    "I", // 18
-    "N", // 29
-    "T", // 30
-    "U",
-    // "V",
-    "R",
-    "Z",
-    "E",
-    "Y",
-    "W",
-    "O"
+      "letter_00" ,
+      "letter_01" ,
+      "letter_02" ,
+      "letter_03" ,
+      "letter_04" ,
+      "letter_05" ,
+      "letter_06" ,
+      "letter_07" ,
+      "letter_08" ,
+      "letter_09" ,
+      "letter_10" ,
+      "letter_11" ,
+      "letter_12" ,
+      "letter_13" ,
+      "letter_14" ,
+      "letter_15" ,
+      "letter_16" ,
+      "letter_17" ,
+      "letter_18" ,   
+      "letter_19" ,
+      "letter_20" ,
+      "letter_21" ,
+      "letter_22" ,
+      "letter_23" ,       
+      "letter_24" ,
+      "letter_25" ,     
+      "letter_26" ,     
+      "letter_27" ,       
+    // "",
+    // "T",
+    // "L",
+    // "A",
+    // "C",
+    // "A",
+    // "E",
+    // "S",
+    // "P",
+    // "W", // 2
+    // "T", // 20
+    // "A", // 22
+    // "G", // 27
+    // "B", // 15,
+    // "P", // 5
+    // "N", // 24
+    // "S", // 4
+    // "H", // 17
+    // "I", // 18
+    // "N", // 29
+    // "T", // 30
+    // "U",
+    // // "V",
+    // "R",
+    // "Z",
+    // "E",
+    // "Y",
+    // "W",
+    // "O"
   ]; // tutorialLettersToAddState;
   List<String> get tutorialLettersToAdd => _tutorialLettersToAdd;
 
@@ -254,25 +282,185 @@ class TutorialState extends ChangeNotifier {
 
 
   Map<String,dynamic> _tutorialSummaryData = {
-    "score": 462,
-    "words": 9,
-    "longestStreak": 4,
-    "crosswords": 1,
-    "mostPoints": 304,
-    "mostWords": 3,
-    "summary": [
-      {"turn": 1, "index": 1, "word": "CAT", "wordMultiplier": 1, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 4},
-      {"turn": 2, "index": 2, "word": "WAS", "wordMultiplier": 3, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 12},
-      {"turn": 2, "index": 3, "word": "ASP", "wordMultiplier": 3, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 9},
-      {"turn": 2, "index": 4, "word": "WASP", "wordMultiplier": 3, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 15},
-      {"turn": 3, "index": 5, "word": "HUN", "wordMultiplier": 1, "crosswordMultiplier": 1, "streakMultiplier": 2, "points": 10},
-      {"turn": 4, "index": 6, "word": "TEA", "wordMultiplier": 2, "crosswordMultiplier": 2, "streakMultiplier": 3, "points": 48},
-      {"turn": 4, "index": 7, "word": "BEG", "wordMultiplier": 2, "crosswordMultiplier": 2, "streakMultiplier": 3, "points": 60},
-      {"turn": 5, "index": 8, "word": "PRINT", "wordMultiplier": 2, "crosswordMultiplier": 1, "streakMultiplier": 4, "points": 112},
-      {"turn": 5, "index": 9, "word": "SPRINT", "wordMultiplier": 2, "crosswordMultiplier": 1, "streakMultiplier": 4, "points": 192},        
-    ]
+
+    "english": {
+
+      "score": 462,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 304,
+      "mostWords": 3,
+      "summary": [
+        {"turn": 1, "index": 1, "word": "word_1", "wordMultiplier": 1, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 4}, // "CAT"
+        {"turn": 2, "index": 2, "word": "word_2", "wordMultiplier": 3, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 12}, // "WAS"
+        {"turn": 2, "index": 3, "word": "word_3", "wordMultiplier": 3, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 9}, // "ASP"
+        {"turn": 2, "index": 4, "word": "word_4", "wordMultiplier": 3, "crosswordMultiplier": 1, "streakMultiplier": 1, "points": 15}, // "WASP"
+        {"turn": 3, "index": 5, "word": "word_5", "wordMultiplier": 1, "crosswordMultiplier": 1, "streakMultiplier": 2, "points": 10}, // "HUN"
+        {"turn": 4, "index": 6, "word": "word_6", "wordMultiplier": 2, "crosswordMultiplier": 2, "streakMultiplier": 3, "points": 48}, // "TEA"
+        {"turn": 4, "index": 7, "word": "word_7", "wordMultiplier": 2, "crosswordMultiplier": 2, "streakMultiplier": 3, "points": 60}, // "BEG"
+        {"turn": 5, "index": 8, "word": "word_8", "wordMultiplier": 2, "crosswordMultiplier": 1, "streakMultiplier": 4, "points": 112}, // "PRINT"
+        {"turn": 5, "index": 9, "word": "word_9", "wordMultiplier": 2, "crosswordMultiplier": 1, "streakMultiplier": 4, "points": 192}, // "SPRINT"        
+      ]
+
+    },
+
+    "french": {
+      "score": 551,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 272,
+      "mostWords": 3,
+      "summary": [
+        {'turn': 1,'index': 1,'word': 'word_1','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 3}, //'EAU'
+        {'turn': 2,'index': 2,'word': 'word_2','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 30}, //'JEU'
+        {'turn': 2,'index': 3,'word': 'word_3','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 36}, //'EUX'
+        {'turn': 2,'index': 4,'word': 'word_4','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 60}, //'JEUX'
+        {'turn': 3,'index': 5,'word': 'word_5','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 2,'points': 6}, //'LIT'
+        {'turn': 4,'index': 6,'word': 'word_6','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 144}, //'NEZ'
+        {'turn': 4,'index': 7,'word': 'word_7','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 48}, //'MER'
+        {'turn': 5,'index': 8,'word': 'word_8','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 80}, //'LAINE'
+        {'turn': 5,'index': 9,'word': 'word_9','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 192} //'PLAINE'
+      ]
+
+    },
+
+
+    "spanish": {
+      "score": 580,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 384,
+      "mostWords": 3,
+      "summary": [
+        {'turn': 1, 'index': 1,  'word': 'word_1',  'wordMultiplier': 1,  'crosswordMultiplier': 1,  'streakMultiplier': 1,  'points': 4}, //'GOL' 
+        {'turn': 2,  'index': 2,  'word': 'word_2',  'wordMultiplier': 3,  'crosswordMultiplier': 1,  'streakMultiplier': 1,  'points': 15}, //'MIR' 
+        {'turn': 2,  'index': 3,  'word': 'word_3',  'wordMultiplier': 3,  'crosswordMultiplier': 1,  'streakMultiplier': 1,  'points': 9}, //'IRA' 
+        {'turn': 2,  'index': 4,  'word': 'word_4',  'wordMultiplier': 3,  'crosswordMultiplier': 1,  'streakMultiplier': 1,  'points': 18}, //'MIRA' 
+        {'turn': 3,  'index': 5,  'word': 'word_5',  'wordMultiplier': 1,  'crosswordMultiplier': 1,  'streakMultiplier': 2,  'points': 6}, //'TEA' 
+        {'turn': 4,  'index': 6,  'word': 'word_6',  'wordMultiplier': 2,  'crosswordMultiplier': 2,  'streakMultiplier': 3,  'points': 72}, //'SOY' 
+        {'turn': 4,  'index': 7,  'word': 'word_7',  'wordMultiplier': 2,  'crosswordMultiplier': 2,  'streakMultiplier': 3,  'points': 72}, //'VOS' 
+        {'turn': 5,  'index': 8,  'word': 'word_8',  'wordMultiplier': 2,  'crosswordMultiplier': 1,  'streakMultiplier': 4,  'points': 240}, //'PRIMAR' 
+        {'turn': 5,  'index': 9,  'word': 'word_9',  'wordMultiplier': 2,  'crosswordMultiplier': 1,  'streakMultiplier': 4,  'points': 144} //'PRIMA'
+      ]
+    },  
+
+
+
+    "german": {
+      "score": 652,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 416,
+      "mostWords": 3,
+      "summary": [
+        {'turn': 1,'index': 1,  'word': 'word_1',  'wordMultiplier': 1,  'crosswordMultiplier': 1,  'streakMultiplier': 1,  'points': 6}, //'CES' 
+        {'turn': 2,'index': 2,'word': 'word_2','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 9}, //'ADE'
+        {'turn': 2,'index': 3,'word': 'word_3','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 9}, //'DER'
+        {'turn': 2,'index': 4,'word': 'word_4','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 12}, //'ADER'
+        {'turn': 3,'index': 5,'word': 'word_5','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 2,'points': 8}, //'TAL'
+        {'turn': 4,'index': 6,'word': 'word_6','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 120}, //'ÜBE'
+        {'turn': 4,'index': 7,'word': 'word_7','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 72}, //'ABO'
+        {'turn': 5,'index': 8,'word': 'word_8','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 288}, //'FLOGEN'
+        {'turn': 5,'index': 9,'word': 'word_9','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 128} //'LOGEN'
+      ]
+
+    },  
+
+    "italian": {
+      "score": 1067,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 808,
+      "mostWords": 3,
+      "summary": [
+          {'turn': 1,'index': 1,'word': 'word_1','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 5}, //'EIL'
+          {'turn': 2,'index': 2,'word': 'word_2','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 24}, //'CAP'
+          {'turn': 2,'index': 3,'word': 'word_3','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 21}, //'API'
+          {'turn': 2,'index': 4,'word': 'word_4','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 27}, //'CAPI'
+          {'turn': 3,'index': 5,'word': 'word_5','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 2,'points': 14}, //'UNO'
+          {'turn': 4,'index': 6,'word': 'word_6','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 84}, //'VIA'
+          {'turn': 4,'index': 7,'word': 'word_7','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 84}, //'PIO'
+          {'turn': 5,'index': 8,'word': 'word_8','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 504}, //'RAGGIO'
+          {'turn': 5,'index': 9,'word': 'word_9','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 304} //'AGGIO'
+      ]
+
+    },  
+
+    "portuguese": {
+      "score": 769,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 504,
+      "mostWords": 3,
+      "summary": [
+        {'turn': 1,'index': 1,'word': 'word_1','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 3}, //'TIR'
+        {'turn': 2,'index': 2,'word': 'word_2','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 12}, //'PAR'
+        {'turn': 2,'index': 3,'word': 'word_3','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 9}, //'ARA'
+        {'turn': 2,'index': 4,'word': 'word_4','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 15}, //'PARA'
+        {'turn': 3,'index': 5,'word': 'word_5','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 2,'points': 10}, //'ABE'
+        {'turn': 4,'index': 6,'word': 'word_6','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 144}, //'SAÍ'
+        {'turn': 4,'index': 7,'word': 'word_7','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 72}, //'VAI'
+        {'turn': 5,'index': 8,'word': 'word_8','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 312}, //'TEXTOS'
+        {'turn': 5,'index': 9,'word': 'word_9','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 192} //'TEXTO'
+      ]
+
+    },  
+
+    "greek": {
+      "score": 546,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 344,
+      "mostWords": 3,
+      "summary": [
+        {'turn': 1,'index': 1,'word': 'word_1','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 4}, //'ΟΡΕ'
+        {'turn': 2,'index': 2,'word': 'word_2','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 15}, //'ΜΕΣ'
+        {'turn': 2,'index': 3,'word': 'word_3','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 15}, //'ΕΣΩ'
+        {'turn': 2,'index': 4,'word': 'word_4','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 24}, //'ΜΕΣΩ'
+        {'turn': 3,'index': 5,'word': 'word_5','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 2,'points': 24}, //'ΑΨΕ'
+        {'turn': 4,'index': 6,'word': 'word_6','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 72}, //'ΑΠΩ'
+        {'turn': 4,'index': 7,'word': 'word_7','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 48}, //'ΟΠΑ'
+        {'turn': 5,'index': 8,'word': 'word_8','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 216}, //'ΣΚΥΡΟΣ'
+        {'turn': 5,'index': 9,'word': 'word_9','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 128} //'ΚΥΡΟΣ'
+      ]
+
+    },  
+
+    "dutch": {
+      "score": 549,
+      "words": 9,
+      "longestStreak": 4,
+      "crosswords": 1,
+      "mostPoints": 304,
+      "mostWords": 3,
+      "summary": [
+        {'turn': 1,'index': 1,'word': 'word_1','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 5}, //'TAS'
+        {'turn': 2,'index': 2,'word': 'word_2','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 21}, //'GAL'
+        {'turn': 2,'index': 3,'word': 'word_3','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 21}, //'ALG'
+        {'turn': 2,'index': 4,'word': 'word_4','wordMultiplier': 3,'crosswordMultiplier': 1,'streakMultiplier': 1,'points': 30}, //'GALG'
+        {'turn': 3,'index': 5,'word': 'word_5','wordMultiplier': 1,'crosswordMultiplier': 1,'streakMultiplier': 2,'points': 12}, //'ZEE'
+        {'turn': 4,'index': 6,'word': 'word_6','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 84}, //'BAL'
+        {'turn': 4,'index': 7,'word': 'word_7','wordMultiplier': 2,'crosswordMultiplier': 2,'streakMultiplier': 3,'points': 72}, //'JAN'
+        {'turn': 5,'index': 8,'word': 'word_8','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 192}, //'AARDEN'
+        {'turn': 5,'index': 9,'word': 'word_9','wordMultiplier': 2,'crosswordMultiplier': 1,'streakMultiplier': 4,'points': 112} //'AARDE'
+      ]
+    },  
+
+                        
+  
 
   };
+
+
+  
+
   Map<String,dynamic> get tutorialSummaryData => _tutorialSummaryData;
 
   void setTutorialSummaryData(Map<String,dynamic> value) {

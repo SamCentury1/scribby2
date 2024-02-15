@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/game_over_screen.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 // import 'package:scribby_flutter_v2/utils/definitions.dart';
@@ -1448,18 +1450,55 @@ class GameLogic {
   //   return res;
   // }
 
-  Future<String> fetchDefinition(String word) async {
-    final response = await http.get(Uri.parse("https://api.dictionaryapi.dev/api/v2/entries/en/$word"));
+  Future<String> fetchDefinition(String word, String language) async {
+
     String res = "";
-    if (response.statusCode == 200) {
-      dynamic jsonResponse = json.decode(response.body);
-      // res = response[0]
-      // late String sss = response.body[0].; // ['meanings'][0]['definitions'];
-      print(jsonResponse[0]['meanings'][0]['definitions'][0]['definition']);
-      res = jsonResponse[0]['meanings'][0]['definitions'][0]['definition'];
+
+    if (language == 'english') {
+
+      final response = await http.get(Uri.parse("https://api.dictionaryapi.dev/api/v2/entries/en/$word"));
+      
+      if (response.statusCode == 200) {
+        dynamic jsonResponse = json.decode(response.body);
+        // res = response[0]
+        // late String sss = response.body[0].; // ['meanings'][0]['definitions'];
+        print(jsonResponse[0]['meanings'][0]['definitions'][0]['definition']);
+        res = jsonResponse[0]['meanings'][0]['definitions'][0]['definition'];
+      } else {
+        res = "no definition available";
+      }
     } else {
-      res = "no definition available";
+
+      String baseUrl_1 = "https://firebasestorage.googleapis.com/v0/b/scribby-6934e.appspot.com/o/definitions%2F";
+
+      String baseUrl_2 = "%2F";
+   
+      String baseUrl_3 = ".json?alt=media&token=511d5629-7808-4821-a455-b66360cbf707";
+      
+      String url = baseUrl_1 + language + baseUrl_2 + word + baseUrl_3;
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        dynamic jsonResponse = json.decode(response.body);
+        final String decodedBody = utf8.decode(response.bodyBytes);
+        final Map<String,dynamic> jsonMap = json.decode(decodedBody);
+        print(jsonMap['data'][0][10]);
+        res = jsonMap['data'][0];
+      } else {
+        res = "no definition available";
+      }      
+      // final Map<String,dynamic> futureMap = await StorageMethods().getWordDefinition(language, word);
+
+      // if (futureMap.isEmpty) {
+      //   res = "no definition available";
+      // } else {
+      //   res = futureMap['data'][0];
+      // }
+      // print(futureMap);
     }
+
+    print("result = $res");
     return res;
   }
 

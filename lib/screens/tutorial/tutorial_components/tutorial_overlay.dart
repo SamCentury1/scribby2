@@ -331,7 +331,7 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                             fontSize: 28
                           ), 
                           child: Text(
-                            "Welcome to Scribby! Would you like to go through the tutorial?"
+                            Helpers().translateText(gamePlayState.currentLanguage, "Welcome to Scribby! Would you like to go through the tutorial?")
                           )
                         ),
                       ),
@@ -357,7 +357,9 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                                 ), 
                               ),                            
                             ),
-                            child: const Text("Proceed"),
+                            child: Text(
+                              Helpers().translateText(gamePlayState.currentLanguage, "Proceed")
+                            ),
                           ),
                           ElevatedButton(
                             onPressed: () {
@@ -385,7 +387,9 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                                 ), 
                               ),                            
                             ),
-                            child: const Text("Skip Tutorial"),
+                            child: Text(
+                              Helpers().translateText(gamePlayState.currentLanguage, "Skip Tutorial")
+                            ),
                           ),                          
                         ],
                       ),

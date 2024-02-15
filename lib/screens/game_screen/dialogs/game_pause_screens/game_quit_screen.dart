@@ -178,7 +178,7 @@ class _GameQuitScreenState extends State<GameQuitScreen>
                       backgroundColor: palette.optionButtonBgColor2,
                       title: Text(
                         Helpers().translateText(gamePlayState.currentLanguage,
-                        "Restart",
+                        "Restart Game",
                         ),
                         style: TextStyle(color: palette.textColor2),
                       ),

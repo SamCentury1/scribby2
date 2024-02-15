@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_screen_1.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -179,26 +181,24 @@ class TutorialHelpers {
     }
   }
 
-  void executePreviousStep(
-      TutorialState tutorialState, AnimationState animationState) {
+  void executePreviousStep( TutorialState tutorialState, AnimationState animationState) {
     // late AnimationState animationState =
     //     Provider.of<AnimationState>(context, listen: false);
     late Map<String, dynamic> currentStep = getCurrentStep2(tutorialState);
 
-    // if (currentStep['isGameStarted']) {
-    //   if (currentStep['isGameEnded']) {
-    //     tutorialState.setSequenceStep(tutorialState.sequenceStep - 1);
-    //   } else {
-    //     tutorialState.setSequenceStep(tutorialState.sequenceStep - 1);
-    //     animationState.setShouldRunTutorialPreviousStepAnimation(true);
-    //   }
-    // } else {
-    if (tutorialState.sequenceStep > 0) {
-      animationState.setShouldRunTutorialPreviousStepAnimation(true);
-      tutorialState.setSequenceStep(tutorialState.sequenceStep - 1);
-      animationState.setShouldRunTutorialPreviousStepAnimation(false);
+    if (currentStep['step'] > 0) {
+      if (currentStep['step'] == 36) {
+        tutorialState.setSequenceStep(currentStep['step']-14);
+        animationState.setShouldRunTutorialPreviousStepAnimation(true);
+        animationState.setShouldRunTutorialPreviousStepAnimation(false);        
+      } else {
+        tutorialState.setSequenceStep(currentStep['step'] - 1);
+        animationState.setShouldRunTutorialPreviousStepAnimation(true);
+        animationState.setShouldRunTutorialPreviousStepAnimation(false);        
+      }
     }
-    // }
+
+    print(tutorialState.sequenceStep);
   }
 
   // void saveStateHistory(TutorialState tutorialState, List<Map<String,dynamic>> steps) {
@@ -262,11 +262,9 @@ class TutorialHelpers {
   //   }
   // }
 
-  void reactToTileTap(TutorialState tutorialState,
-      AnimationState animationState, Map<String, dynamic> currentStep) {
+  void reactToTileTap(TutorialState tutorialState, AnimationState animationState, Map<String, dynamic> currentStep) {
     final Map<String, dynamic> nextStep = tutorialState.tutorialStateHistory2
-        .firstWhere(
-            (element) => element['step'] == tutorialState.sequenceStep + 1);
+        .firstWhere( (element) => element['step'] == tutorialState.sequenceStep + 1);
 
     animationState.setShouldRunTutorialNextStepAnimation(true);
     tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
@@ -279,10 +277,24 @@ class TutorialHelpers {
     }
   }
 
+  List<String> translateLetter(String language, List<String> letterIds) {
+    final Map<String,dynamic> correspondingLetters = tutorialLetters[language];
+    late List<String> newLetters = [];
+    for (String letterId in letterIds) {
+      print(letterId);
+      String letter = correspondingLetters[letterId];
+      print("should be converted to $letter");
+      newLetters.add(letter);
+    }
+
+
+    return newLetters;
+  }
+
   void getFullTutorialStates2(
-      TutorialState tutorialState, List<Map<String, dynamic>> steps) {
+      TutorialState tutorialState, List<Map<String, dynamic>> steps, String currentLanguage) {
     late List<Map<String, dynamic>> states = [];
-    late List<String> letters = tutorialState.tutorialLettersToAdd;
+    late List<String> letters = translateLetter(currentLanguage,tutorialState.tutorialLettersToAdd);
 
     late List<Map<String, dynamic>> newBoard = tutorialBoard_1;
     late List<Map<String, dynamic>> newReserves = tutorialState.reserveTiles;
@@ -452,6 +464,11 @@ class TutorialHelpers {
         }
       }
 
+      String translatedText = translateTutorialStep(currentLanguage, currentStep['text']);
+      print("the text for the current step is ${translatedText}");
+
+      // currentStep['translatedText'] = translatedText; 
+      currentStep.update('text', (value) => translatedText);
       currentStep['random_letter_3'] = letters[tutorialState.tutorialMove];
       currentStep['random_letter_2'] = letters[tutorialState.tutorialMove + 1];
       currentStep['random_letter_1'] = letters[tutorialState.tutorialMove + 2];
@@ -459,7 +476,7 @@ class TutorialHelpers {
       currentStep['reserves'] = newReserves;
 
       // print(currentStep['tileState']);
-      log(currentStep.toString());
+      // log(currentStep.toString());
 
       states.add(currentStep);
     }
@@ -619,14 +636,53 @@ class TutorialHelpers {
 
   void navigateToTutorial(BuildContext context) {
     late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
-    // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
-    getFullTutorialStates2(tutorialState, tutorialDetails);
-    // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
+    late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+
+
+      // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
+      getFullTutorialStates2(tutorialState, tutorialDetails, gamePlayState.currentLanguage);
+      // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
+      
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const TutorialScreen1()
+        )
+      );
+      
+
+  }
+
+
+  String translateDemoWord(String language, String originalText) {
+    return tutorialWords[language][originalText];
+  }
+
+  String translateTutorialStep(String language, String originalString,) {
+    String res = "";
+
     
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const TutorialScreen1()
-      )
-    );
+    String translatedBody = Helpers().translateText(language, originalString);
+    late Map<String,dynamic> dynamicLetters = tutorialLetters[language];
+    dynamicLetters.forEach((key, value) {
+      translatedBody = translatedBody.replaceAll(key, value);
+    });
+
+    late Map<String,dynamic> dynamicWords = tutorialWords[language]; 
+    dynamicWords.forEach((key, value) {
+      translatedBody = translatedBody.replaceAll(key, value);
+    });    
+
+    late Map<String,dynamic> dynamicPoints = tutorialPoints[language]['points'];
+    dynamicPoints.forEach((key, value) {
+      translatedBody = translatedBody.replaceAll(key, value);
+    }); 
+
+    late Map<String,dynamic> dynamicNewPoints = tutorialPoints[language]['newPoints'];
+    dynamicNewPoints.forEach((key, value) {
+      translatedBody = translatedBody.replaceAll(key, value);
+    });        
+
+    return translatedBody;
   }  
+
 }

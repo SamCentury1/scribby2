@@ -11,6 +11,7 @@ import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_board.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_bonus_items.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_ended_overlay.dart';
+import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_floating_step.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_overlay.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_pause_overlay.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_random_letters.dart';
@@ -103,43 +104,14 @@ class _TutorialScreen1State extends State<TutorialScreen1>
     return res;
   }
 
-  // void getUserFromStorage(SettingsController settings) {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   try {
-  //     final Map<String, dynamic> userDataFromStorage =
-  //         (settings.userData.value as Map<String, dynamic>);
-  //     setState(() {
-  //       _userFromStorage = userDataFromStorage;
-
-  //       isLoading = false;
-  //     });
-  //     // _palette.
-  //   } catch (error) {
-  //     debugPrint(error.toString());
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-    // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
-    // final Palette palette = Provider.of<Palette>(context, listen: false);
-    // final TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
-    // tutorialState.setTutorialTextGlowOpacity(_textGlowAnimation.value);
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
-        // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-        // currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep)
-        // final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-        final Map<String, dynamic> currentStep =
-            TutorialHelpers().getCurrentStep2(tutorialState);
+        final Map<String, dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
 
         return SafeArea(
             child: Stack(
@@ -208,15 +180,15 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                       return IconButton(
                         color: palette.optionButtonBgColor,
                         onPressed: () {
-                          if (currentStep['step'] == 36) {
-                            tutorialState.setSequenceStep(tutorialState.sequenceStep-14);
-                          }
-                          TutorialHelpers().executePreviousStep(
-                              tutorialState, animationState);
+                          // if (currentStep['step'] == 36) {
+                          //   tutorialState.setSequenceStep(tutorialState.sequenceStep-14);
+                          // }
+                          TutorialHelpers().executePreviousStep(tutorialState, animationState);
                         },
-                        icon: Icon(Icons.replay_circle_filled_sharp,
-                            color: getColor(palette, _textGlowAnimation,
-                                currentStep, 'back_step')),
+                        icon: Icon(
+                          Icons.replay_circle_filled_sharp,
+                          color: getColor(palette, _textGlowAnimation, currentStep, 'back_step')
+                        ),
                       );
                     },
                   ),
@@ -242,6 +214,7 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                           TutorialBoard(animation: _textGlowAnimation),
                           const Expanded(child: SizedBox()),
                           Container(
+                            padding: EdgeInsets.only(bottom: 10.0),
                             color: palette.screenBackgroundColor,
                             child: AnimatedBuilder(
                               animation: _textGlowAnimation,
@@ -291,14 +264,17 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                 ],
               ),
               // bottomNavigationBar:   currentStep['isGameStarted'] && !currentStep['isGameEnded'] ? const SizedBox() : const TutorialStep(),
-              bottomNavigationBar:
-                  TutorialStep(), // displayTextBox(currentStep),
+              // bottomNavigationBar:TutorialStep(), // displayTextBox(currentStep),
 
               // const TutorialStep() :
               // bottomNavigationBar: NavigationBar(destinations: const []),
             ),
             TutorialEndedOverlay(),
-            PreGameOverlay()
+            PreGameOverlay(),
+            TutorialFloatingStep(
+              width: MediaQuery.of(context).size.width,
+              // tutorialState: tutorialState,
+            )
           ],
         ));
       },

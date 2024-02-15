@@ -257,19 +257,7 @@ class _MenuScreenState extends State<MenuScreen> {
     // final settings = context.watch<SettingsController>();
 
     return isLoading ? const Center(child: CircularProgressIndicator(),):
-        // ValueListenableBuilder(
-        //   valueListenable: settings.darkTheme,
-        //   builder: (context,darkTheme,child) {
 
-        // if (AuthService().currentUser!.uid == null ) {
-        //   return WelcomeUser();
-        // }
-        // if (_userName == "") {
-        //   return WelcomeUser();
-        // }
-        // if (_userData?["username"] == "") {
-        //   return ChooseLanguage();
-        // }
 
         Consumer<ColorPalette>(
             builder: (context, palette, child) {
@@ -309,6 +297,9 @@ class _MenuScreenState extends State<MenuScreen> {
 
                               if ((_settings.userData.value as Map<String, dynamic>)['parameters']['hasSeenTutorial'] ==false) {
                                 TutorialHelpers().navigateToTutorial(context);
+                                setState(() {
+                                  isLoading = false;
+                                });
                               } else {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(

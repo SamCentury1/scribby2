@@ -1201,6 +1201,19 @@ final List<Map<String,dynamic>> translations = [
       "dutch" : "Woord",
     }    
   },   
+  {
+    "key": "Words",
+    "data": {
+      "english": "Words",
+      "french": "Mots",
+      "spanish": "Palabras",
+      "german" : "Wörter",
+      "italian" : "Parole",
+      "portuguese" : "Palavras",
+      "greek" : "Λόγια",
+      "dutch" : "Woorden",
+    }    
+  },     
 
   {
     "key": "Points",
@@ -1261,86 +1274,86 @@ final List<Map<String,dynamic>> translations = [
   // },
 
   {
-    "key": "The two letters at the top are randomly generated. The center letter letter_1 gets placed next",
+    "key": "The two letters at the top are randomly generated. The center letter letter_01 gets placed next",
     "data": {
-      "english": "The two letters at the top are randomly generated. The center letter letter_1 gets placed next",
-      "french": "Les deux lettres en haut sont générées aléatoirement. La lettre centrale letter_1 est placée ensuite",
-      "spanish": "Las dos letras de la parte superior se generan aleatoriamente. La letra central letter_1 se coloca a continuación",
-      "german" : "Die beiden Buchstaben oben werden zufällig generiert. Als nächstes wird der mittlere Buchstabe letter_1 platziert",
-      "italian" : "Le due lettere in alto vengono generate casualmente. La lettera centrale letter_1 viene posizionata successivamente",
-      "portuguese" : "As duas letras no topo são geradas aleatoriamente. A letra central letter_1 é colocada a seguir",
-      "greek" : "Τα δύο γράμματα στην κορυφή δημιουργούνται τυχαία. Το κεντρικό γράμμα letter_1 τοποθετείται στη συνέχεια",
-      "dutch" : "De twee letters bovenaan worden willekeurig gegenereerd. De middelste letter letter_1 wordt als volgende geplaatst",
+      "english": "The two letters at the top are randomly generated. The center letter letter_01 gets placed next",
+      "french": "Les deux lettres en haut sont générées aléatoirement. La lettre centrale letter_01 est placée ensuite",
+      "spanish": "Las dos letras de la parte superior se generan aleatoriamente. La letra central letter_01 se coloca a continuación",
+      "german" : "Die beiden Buchstaben oben werden zufällig generiert. Als nächstes wird der mittlere Buchstabe letter_01 platziert",
+      "italian" : "Le due lettere in alto vengono generate casualmente. La lettera centrale letter_01 viene posizionata successivamente",
+      "portuguese" : "As duas letras no topo são geradas aleatoriamente. A letra central letter_01 é colocada a seguir",
+      "greek" : "Τα δύο γράμματα στην κορυφή δημιουργούνται τυχαία. Το κεντρικό γράμμα letter_01 τοποθετείται στη συνέχεια",
+      "dutch" : "De twee letters bovenaan worden willekeurig gegenereerd. De middelste letter letter_01 wordt als volgende geplaatst",
     }    
   },
 
   {
-    "key": "When the letter letter_1 is placed inside the board, the letter to the right letter_2 will become the center letter and a new random letter will be generated and take its spot",
+    "key": "When the letter letter_01 is placed inside the board, the letter to the right letter_02 will become the center letter and a new random letter will be generated and take its spot",
     "data": {
-      "english": "When the letter letter_1 is placed inside the board, the letter to the right letter_2 will become the center letter and a new random letter will be generated and take its spot",
-      "french": "Lorsque la lettre letter_1 est placée à l'intérieur du tableau, la lettre à droite letter_2 deviendra la lettre centrale et une nouvelle lettre aléatoire sera générée et prendra sa place.",
-      "spanish": "Cuando la letra letter_1 se coloca dentro del tablero, la letra de la derecha letter_2 se convertirá en la letra central y se generará una nueva letra aleatoria que ocupará su lugar.",
-      "german" : "Wenn der Buchstabe letter_1 innerhalb der Tafel platziert wird, wird der Buchstabe daneben, letter_2, zum mittleren Buchstaben und ein neuer zufälliger Buchstabe wird generiert und nimmt seinen Platz ein",
-      "italian" : "Quando la lettera letter_1 viene posizionata all'interno del tabellone, la lettera a destra letter_2 diventerà la lettera centrale e una nuova lettera casuale verrà generata e prenderà il suo posto",
-      "portuguese" : "Quando a letra letter_1 for colocada dentro do tabuleiro, a letra à direita letter_2 se tornará a letra central e uma nova letra aleatória será gerada e ocupará seu lugar",
-      "greek" : "Όταν το γράμμα letter_1 τοποθετηθεί μέσα στον πίνακα, το γράμμα στα δεξιά letter_2 θα γίνει το κεντρικό γράμμα και ένα νέο τυχαίο γράμμα θα δημιουργηθεί και θα πάρει τη θέση του",
-      "dutch" : "Wanneer de letter letter_1 in het bord wordt geplaatst, wordt de letter rechts letter_2 de middelste letter en wordt er een nieuwe willekeurige letter gegenereerd die zijn plek inneemt",
+      "english": "When the letter letter_01 is placed inside the board, the letter to the right letter_02 will become the center letter and a new random letter will be generated and take its spot",
+      "french": "Lorsque la lettre letter_01 est placée à l'intérieur du tableau, la lettre à droite letter_02 deviendra la lettre centrale et une nouvelle lettre aléatoire sera générée et prendra sa place.",
+      "spanish": "Cuando la letra letter_01 se coloca dentro del tablero, la letra de la derecha letter_02 se convertirá en la letra central y se generará una nueva letra aleatoria que ocupará su lugar.",
+      "german" : "Wenn der Buchstabe letter_01 innerhalb der Tafel platziert wird, wird der Buchstabe daneben, letter_02, zum mittleren Buchstaben und ein neuer zufälliger Buchstabe wird generiert und nimmt seinen Platz ein",
+      "italian" : "Quando la lettera letter_01 viene posizionata all'interno del tabellone, la lettera a destra letter_02 diventerà la lettera centrale e una nuova lettera casuale verrà generata e prenderà il suo posto",
+      "portuguese" : "Quando a letra letter_01 for colocada dentro do tabuleiro, a letra à direita letter_02 se tornará a letra central e uma nova letra aleatória será gerada e ocupará seu lugar",
+      "greek" : "Όταν το γράμμα letter_01 τοποθετηθεί μέσα στον πίνακα, το γράμμα στα δεξιά letter_02 θα γίνει το κεντρικό γράμμα και ένα νέο τυχαίο γράμμα θα δημιουργηθεί και θα πάρει τη θέση του",
+      "dutch" : "Wanneer de letter letter_01 in het bord wordt geplaatst, wordt de letter rechts letter_02 de middelste letter en wordt er een nieuwe willekeurige letter gegenereerd die zijn plek inneemt",
     }    
   },
       
   {
-    "key": "A new letter letter_3 is randomly generated to be place after the next letter letter_2 is placed.",
+    "key": "A new letter letter_03 is randomly generated to be place after the next letter letter_02 is placed.",
     "data": {
-      "english": "A new letter letter_3 is randomly generated to be place after the next letter letter_2 is placed.",
-      "french": "Une nouvelle lettre letter_3 est générée aléatoirement pour être placée après le placement de la lettre suivante letter_2.",
-      "spanish": "Se genera aleatoriamente una nueva letra letter_3 que se colocará después de que se coloque la siguiente letra letter_2.",
-      "german" : "Ein neuer Buchstabe (letter_3) wird zufällig generiert und nach dem nächsten Buchstaben (letter_2) platziert.",
-      "italian" : "Una nuova lettera letter_3 viene generata casualmente da posizionare dopo il posizionamento della lettera successiva letter_2.",
-      "portuguese" : "Uma nova letra letter_3 é gerada aleatoriamente para ser colocada após a próxima letra letter_2 ser colocada.",
-      "greek" : "Ένα νέο γράμμα letter_3 δημιουργείται τυχαία για να τοποθετηθεί μετά την τοποθέτηση του επόμενου γράμματος letter_2.",
-      "dutch" : "Er wordt willekeurig een nieuwe letter letter_3 gegenereerd, die wordt geplaatst nadat de volgende letter letter_2 is geplaatst.",
+      "english": "A new letter letter_03 is randomly generated to be place after the next letter letter_02 is placed.",
+      "french": "Une nouvelle lettre letter_03 est générée aléatoirement pour être placée après le placement de la lettre suivante letter_02.",
+      "spanish": "Se genera aleatoriamente una nueva letra letter_03 que se colocará después de que se coloque la siguiente letra letter_02.",
+      "german" : "Ein neuer Buchstabe (letter_03) wird zufällig generiert und nach dem nächsten Buchstaben (letter_02) platziert.",
+      "italian" : "Una nuova lettera letter_03 viene generata casualmente da posizionare dopo il posizionamento della lettera successiva letter_02.",
+      "portuguese" : "Uma nova letra letter_03 é gerada aleatoriamente para ser colocada após a próxima letra letter_02 ser colocada.",
+      "greek" : "Ένα νέο γράμμα letter_03 δημιουργείται τυχαία για να τοποθετηθεί μετά την τοποθέτηση του επόμενου γράμματος letter_02.",
+      "dutch" : "Er wordt willekeurig een nieuwe letter letter_03 gegenereerd, die wordt geplaatst nadat de volgende letter letter_02 is geplaatst.",
     }    
   },
 
   {
-    "key": "Place your letters strategically to create words. In this case, we see the letter_4 coming after the letter_3",
+    "key": "Place your letters strategically to create words. In this case, we see the letter_04 coming after the letter_03",
     "data": {
-      "english": "Place your letters strategically to create words. In this case, we see the letter_4 coming after the letter_3",
-      "french": "Placez vos lettres stratégiquement pour créer des mots. Dans ce cas, on voit la letter_4 venir après la letter_3",
-      "spanish": "Coloca tus letras estratégicamente para crear palabras. En este caso, vemos la letter_4 después de la letter_3.",
-      "german" : "Platzieren Sie Ihre Buchstaben strategisch, um Wörter zu bilden. In diesem Fall sehen wir den letter_4 nach dem letter_3",
-      "italian" : "Posiziona le tue lettere in modo strategico per creare parole. In questo caso, vediamo la letter_4 che segue la letter_3",
-      "portuguese" : "Coloque suas letras estrategicamente para criar palavras. Neste caso, vemos a letter_4 vindo depois da letter_3",
-      "greek" : "Τοποθετήστε τα γράμματα σας στρατηγικά για να δημιουργήσετε λέξεις. Σε αυτήν την περίπτωση, βλέπουμε το letter_4 να έρχεται μετά το letter_3",
-      "dutch" : "Plaats uw letters strategisch om woorden te creëren. In dit geval zien we de letter_4 na de letter_3 komen",
+      "english": "Place your letters strategically to create words. In this case, we see the letter_04 coming after the letter_03",
+      "french": "Placez vos lettres stratégiquement pour créer des mots. Dans ce cas, on voit la letter_04 venir après la letter_03",
+      "spanish": "Coloca tus letras estratégicamente para crear palabras. En este caso, vemos la letter_04 después de la letter_03.",
+      "german" : "Platzieren Sie Ihre Buchstaben strategisch, um Wörter zu bilden. In diesem Fall sehen wir den letter_04 nach dem letter_03",
+      "italian" : "Posiziona le tue lettere in modo strategico per creare parole. In questo caso, vediamo la letter_04 che segue la letter_03",
+      "portuguese" : "Coloque suas letras estrategicamente para criar palavras. Neste caso, vemos a letter_04 vindo depois da letter_03",
+      "greek" : "Τοποθετήστε τα γράμματα σας στρατηγικά για να δημιουργήσετε λέξεις. Σε αυτήν την περίπτωση, βλέπουμε το letter_04 να έρχεται μετά το letter_03",
+      "dutch" : "Plaats uw letters strategisch om woorden te creëren. In dit geval zien we de letter_04 na de letter_03 komen",
     }    
   },   
 
   {
-    "key": "The letter_3 is placed below the letter_2 so the letter_4 can be placed between the letter_1 and the letter_2 and create the word WORD",
+    "key": "The letter_03 is placed below the letter_02 so the letter_04 can be placed between the letter_01 and the letter_02 and create the word WORD",
     "data": {
-      "english": "The letter_3 is placed below the letter_2 so the letter_4 can be placed between the letter_1 and the letter_2 and create the word WORD",
-      "french": "La lettre_3 est placée en dessous de la letter_2 afin que la letter_4 puisse être placée entre la letter_1 et la letter_2 et créer le mot WORD",
-      "spanish": "La letter_3 se coloca debajo de la letter_2 para que la letter_4 se pueda colocar entre la letter_1 y la letter_2 y crear la palabra WORD",
-      "german" : "Der letter_3 wird unter dem letter_2 platziert, sodass der letter_4 zwischen dem letter_1 und dem letter_2 platziert werden kann und das Wort WORD entsteht",
-      "italian" : "La letter_3 è posizionata sotto la letter_2 in modo che la letter_4 possa essere posizionata tra la letter_1 e la letter_2 e creare la parola WORD",
-      "portuguese" : "A letter_3 é colocada abaixo da letter_2 para que a letter_4 possa ser colocada entre a letter_1 e a letter_2 e crie a palavra WORD",
-      "greek" : "Το letter_3 τοποθετείται κάτω από το letter_2, οπότε το letter_4 μπορεί να τοποθετηθεί μεταξύ του letter_1 και του letter_2 και να δημιουργήσει τη λέξη WORD",
-      "dutch" : "De letter_3 wordt onder de letter_2 geplaatst, zodat de letter_4 tussen de letter_1 en de letter_2 kan worden geplaatst en het woord WORD kan worden gemaakt",
+      "english": "The letter_03 is placed below the letter_02 so the letter_04 can be placed between the letter_01 and the letter_02 and create the word WORD",
+      "french": "La lettre_3 est placée en dessous de la letter_02 afin que la letter_04 puisse être placée entre la letter_01 et la letter_02 et créer le mot WORD",
+      "spanish": "La letter_03 se coloca debajo de la letter_02 para que la letter_04 se pueda colocar entre la letter_01 y la letter_02 y crear la palabra WORD",
+      "german" : "Der letter_03 wird unter dem letter_02 platziert, sodass der letter_04 zwischen dem letter_01 und dem letter_02 platziert werden kann und das Wort WORD entsteht",
+      "italian" : "La letter_03 è posizionata sotto la letter_02 in modo che la letter_04 possa essere posizionata tra la letter_01 e la letter_02 e creare la parola WORD",
+      "portuguese" : "A letter_03 é colocada abaixo da letter_02 para que a letter_04 possa ser colocada entre a letter_01 e a letter_02 e crie a palavra WORD",
+      "greek" : "Το letter_03 τοποθετείται κάτω από το letter_02, οπότε το letter_04 μπορεί να τοποθετηθεί μεταξύ του letter_01 και του letter_02 και να δημιουργήσει τη λέξη WORD",
+      "dutch" : "De letter_03 wordt onder de letter_02 geplaatst, zodat de letter_04 tussen de letter_01 en de letter_02 kan worden geplaatst en het woord WORD kan worden gemaakt",
     }    
   },
 
   {
-    "key": "The letter_4 is placed in between the letter_1 and letter_2. The letters animate and you are granted points for the letters.",
+    "key": "The letter_04 is placed in between the letter_01 and letter_02. The letters animate and you are granted points for the letters.",
     "data": {
-      "english": "The letter_4 is placed in between the letter_1 and letter_2. The letters animate and you are granted points for the letters.",
-      "french": "La letter_4 est placée entre la letter_1 et la letter_2. Les lettres s'animent et vous recevez des points pour les lettres.",
-      "spanish": "La letter_4 se coloca entre la letter_1 y la letter_2. Las letras se animan y se te conceden puntos por las letras.",
-      "german" : "Der letter_4 wird zwischen letter_1 und letter_2 platziert. Die Buchstaben werden animiert und Sie erhalten Punkte für die Buchstaben.",
-      "italian" : "La letter_4 è posizionata tra la letter_1 e la letter_2. Le lettere si animano e ti vengono assegnati punti per le lettere.",
-      "portuguese" : "A letter_4 é colocada entre a letter_1 e a letter_2. As letras são animadas e você recebe pontos pelas letras.",
-      "greek" : "Το letter_4 τοποθετείται ανάμεσα στο letter_1 και letter_2. Τα γράμματα ζωντανεύουν και σας δίνονται πόντους για τα γράμματα.",
-      "dutch" : "De letter_4 wordt tussen de letter_1 en letter_2 geplaatst. De letters animeren en je krijgt punten voor de letters.",
+      "english": "The letter_04 is placed in between the letter_01 and letter_02. The letters animate and you are granted points for the letters.",
+      "french": "La letter_04 est placée entre la letter_01 et la letter_02. Les lettres s'animent et vous recevez des points pour les lettres.",
+      "spanish": "La letter_04 se coloca entre la letter_01 y la letter_02. Las letras se animan y se te conceden puntos por las letras.",
+      "german" : "Der letter_04 wird zwischen letter_01 und letter_02 platziert. Die Buchstaben werden animiert und Sie erhalten Punkte für die Buchstaben.",
+      "italian" : "La letter_04 è posizionata tra la letter_01 e la letter_02. Le lettere si animano e ti vengono assegnati punti per le lettere.",
+      "portuguese" : "A letter_04 é colocada entre a letter_01 e a letter_02. As letras são animadas e você recebe pontos pelas letras.",
+      "greek" : "Το letter_04 τοποθετείται ανάμεσα στο letter_01 και letter_02. Τα γράμματα ζωντανεύουν και σας δίνονται πόντους για τα γράμματα.",
+      "dutch" : "De letter_04 wordt tussen de letter_01 en letter_02 geplaatst. De letters animeren en je krijgt punten voor de letters.",
     }    
   },
 
@@ -1791,17 +1804,734 @@ final List<Map<String,dynamic>> translations = [
       "greek" : "",
       "dutch" : "",
     }    
-  },                   
+  },               
+
+
+/// ========================================================
+
+  {
+    "key": "Welcome to Scribby! Would you like to go through the tutorial?",
+    "data": {
+      "english": "Welcome to Scribby! Would you like to go through the tutorial?",
+      "french": "Bienvenue à Scribby! Souhaitez-vous suivre le tutoriel ?",
+      "spanish": "Bienvenido a Scribby! ¿Quieres seguir el tutorial?",
+      "german" : "Willkommen zu Scribby! Möchten Sie das Tutorial durchgehen?",
+      "italian" : "Benvenuto a Scribby! Vuoi seguire il tutorial?",
+      "portuguese" : "Bem-vindo ao Scribby! Você gostaria de seguir o tutorial?",
+      "greek" : "Καλωσήρθες στο Scribby! Θα θέλατε να παρακολουθήσετε το σεμινάριο;",
+      "dutch" : "Welkom bij Scribby! Wil je de tutorial doorlopen?",
+    }    
+  },
+
+  {
+    "key": "Proceed",
+    "data": {
+      "english": "Proceed",
+      "french": "Procéder",
+      "spanish": "Proceder",
+      "german" : "Fortfahren",
+      "italian" : "Procedere",
+      "portuguese" : "Continuar",
+      "greek" : "Προχωρώ",
+      "dutch" : "Doorgaan",
+    }    
+  },
+
+  {
+    "key": "Skip Tutorial",
+    "data": {
+      "english": "Skip Tutorial",
+      "french": "Passer le tutoriel",
+      "spanish": "Saltar tutorial",
+      "german" : "Lernprogramm überspringen",
+      "italian" : "Salta il tutorial",
+      "portuguese" : "Pular tuturial",
+      "greek" : "Παράλειψη εκμάθησης",
+      "dutch" : "Handleiding overslaan",
+    }    
+  },    
 
 
 
+  {
+    "key": "To skip the tutorial at any step, click on 'Skip Tutorial' at the top",
+    "data": {
+      "english": "To skip the tutorial at any step, click on 'Skip Tutorial' at the top",
+      "french": "Pour ignorer le didacticiel à n'importe quelle étape, cliquez sur « Passer le didacticiel » en haut",
+      "spanish": "Para omitir el tutorial en cualquier paso, haga clic en 'Omitir tutorial' en la parte superior.",
+      "german" : "Um das Tutorial an einem beliebigen Punkt zu überspringen, klicken Sie oben auf „Tutorial überspringen“",
+      "italian" : "Per saltare il tutorial in qualsiasi passaggio, fai clic su 'Salta Tutorial' in alto",
+      "portuguese" : "Para pular o tutorial em qualquer etapa, clique em 'Pular Tutorial' na parte superior",
+      "greek" : "Για να παραλείψετε το σεμινάριο σε οποιοδήποτε βήμα, κάντε κλικ στο 'Παράλειψη εκμάθησης' στο επάνω μέρος",
+      "dutch" : "Om de tutorial bij elke stap over te slaan, klik je bovenaan op 'Tutorial overslaan'",
+    }    
+  },
 
+  {
+    "key": "To go back one step, tap the circular arrow icon at the top",
+    "data": {
+      "english": "To go back one step, tap the circular arrow icon at the top",
+      "french": "Pour revenir en arrière, appuyez sur l'icône de flèche circulaire en haut",
+      "spanish": "Para retroceder un paso, toque el ícono de flecha circular en la parte superior",
+      "german" : "Um einen Schritt zurückzugehen, tippen Sie oben auf das kreisförmige Pfeilsymbol",
+      "italian" : "Per tornare indietro di un passaggio, tocca l'icona della freccia circolare in alto",
+      "portuguese" : "Para voltar uma etapa, toque no ícone de seta circular na parte superior",
+      "greek" : "Για να επιστρέψετε ένα βήμα πίσω, πατήστε το εικονίδιο κυκλικού βέλους στην κορυφή",
+      "dutch" : "Om één stap terug te gaan, tikt u bovenaan op het ronde pijlpictogram",
+    }    
+  },               
 
+  {
+    "key": "The objective is to score as many points as possible by spelling words",
+    "data": {
+      "english": "The objective is to score as many points as possible by spelling words",
+      "french": "L'objectif est de marquer le plus de points possible en épelant des mots",
+      "spanish": "El objetivo es sumar tantos puntos como sea posible deletreando palabras",
+      "german" : "Ziel ist es, durch die Rechtschreibung von Wörtern möglichst viele Punkte zu erzielen",
+      "italian" : "L'obiettivo è ottenere più punti possibile scrivendo le parole",
+      "portuguese" : "O objetivo é marcar o máximo de pontos possível soletrando palavras",
+      "greek" : "Ο στόχος είναι να συγκεντρώσετε όσο το δυνατόν περισσότερους πόντους με την ορθογραφία λέξεων",
+      "dutch" : "Het doel is om zoveel mogelijk punten te scoren door woorden te spellen",
+    }    
+  },               
 
-
-
-
-
+  {
+    "key": "Every turn, you place the upcoming letter",
+    "data": {
+      "english": "Every turn, you place the upcoming letter",
+      "french": "À chaque tour, vous placez la lettre à venir",
+      "spanish": "En cada turno, colocas la próxima carta",
+      "german" : "In jeder Runde platzierst du den nächsten Buchstaben",
+      "italian" : "Ad ogni turno, metti la lettera in arrivo",
+      "portuguese" : "A cada turno, você coloca a próxima cart",
+      "greek" : "Σε κάθε στροφή, τοποθετείτε το επερχόμενο γράμμα",
+      "dutch" : "Elke beurt plaats je de komende letter",
+    }    
+  },    {
+    "key": "Tap the glowing tile to play the upcoming letter",
+    "data": {
+      "english": "Tap the glowing tile to play the upcoming letter",
+      "french": "Appuyez sur la tuile lumineuse pour lire la lettre à venir",
+      "spanish": "Toca el mosaico brillante para reproducir la siguiente letra",
+      "german" : "Tippen Sie auf die leuchtende Kachel, um den nächsten Buchstaben abzuspielen",
+      "italian" : "Tocca la tessera luminosa per riprodurre la lettera successiva",
+      "portuguese" : "Toque no bloco brilhante para reproduzir a próxima carta",
+      "greek" : "Πατήστε το λαμπερό πλακίδιο για να παίξετε το επερχόμενο γράμμα",
+      "dutch" : "Tik op de gloeiende tegel om de komende letter af te spelen",
+    }    
+  },    {
+    "key": "A new letter is randomly generated",
+    "data": {
+      "english": "A new letter is randomly generated",
+      "french": "Une nouvelle lettre est générée aléatoirement",
+      "spanish": "Se genera aleatoriamente una nueva letra",
+      "german" : "Ein neuer Buchstabe wird zufällig generiert",
+      "italian" : "Una nuova lettera viene generata casualmente",
+      "portuguese" : "Uma nova carta é gerada aleatoriamente",
+      "greek" : "Ένα νέο γράμμα δημιουργείται τυχαία",
+      "dutch" : "Er wordt willekeurig een nieuwe letter gegenereerd",
+    }    
+  },    {
+    "key": "You have a limited amount of time to make a move",
+    "data": {
+      "english": "You have a limited amount of time to make a move",
+      "french": "Vous disposez d'un temps limité pour agir",
+      "spanish": "Tienes una cantidad de tiempo limitada para hacer un movimiento",
+      "german" : "Sie haben nur eine begrenzte Zeit, um einen Schritt zu machen",
+      "italian" : "Hai un tempo limitato per fare una mossa",
+      "portuguese" : "Você tem um tempo limitado para fazer uma jogada",
+      "greek" : "Έχετε περιορισμένο χρόνο για να κάνετε μια κίνηση",
+      "dutch" : "Je hebt een beperkte hoeveelheid tijd om een zet te doen",
+    }    
+  },    {
+    "key": "If the timer runs out, a random spot on the board will be locked for the rest of the game!",
+    "data": {
+      "english": "If the timer runs out, a random spot on the board will be locked for the rest of the game!",
+      "french": "Si le temps imparti est écoulé, un emplacement aléatoire sur le plateau sera verrouillé pour le reste de la partie !",
+      "spanish": "Si se acaba el tiempo, ¡un lugar aleatorio en el tablero quedará bloqueado por el resto del juego!",
+      "german" : "Wenn der Timer abläuft, wird ein zufälliger Platz auf dem Spielbrett für den Rest des Spiels gesperrt!",
+      "italian" : "Se il tempo scade, un punto casuale sul tabellone verrà bloccato per il resto del gioco!",
+      "portuguese" : "Se o tempo acabar, um local aleatório no tabuleiro ficará bloqueado pelo resto do jogo!",
+      "greek" : "Εάν το χρονόμετρο τελειώσει, ένα τυχαίο σημείο στον πίνακα θα κλειδωθεί για το υπόλοιπο του παιχνιδιού!",
+      "dutch" : "Als de timer afloopt, wordt een willekeurige plek op het bord voor de rest van het spel vergrendeld",
+    }    
+  },    {
+    "key": "For simplicity, the timer will be disabled for the tutorial",
+    "data": {
+      "english": "For simplicity, the timer will be disabled for the tutorial",
+      "french": "Par souci de simplicité, le timer sera désactivé pour le tutoriel,",
+      "spanish": "Para simplificar, el temporizador estará desactivado para el tutorial.",
+      "german" : "Der Einfachheit halber wird der Timer für das Tutorial deaktiviert.",
+      "italian" : "Per semplicità, il timer sarà disabilitato per il tutorial",
+      "portuguese" : "Para simplificar, o cronômetro será desabilitado para o tutorial",
+      "greek" : "Για απλότητα, το χρονόμετρο θα απενεργοποιηθεί για το σεμινάριο",
+      "dutch" : "Voor de eenvoud wordt de timer uitgeschakeld voor de zelfstudie",
+    }    
+  },    {
+    "key": "Now back to business, tap the glowing tile to place the next letter",
+    "data": {
+      "english": "Now back to business, tap the glowing tile to place the next letter",
+      "french": "Revenons maintenant aux affaires, appuyez sur la tuile lumineuse pour placer la lettre suivante",
+      "spanish": "Ahora volvamos al asunto, toque el mosaico brillante para colocar la siguiente letra",
+      "german" : "Zurück zum Geschäft: Tippen Sie auf die leuchtende Kachel, um den nächsten Buchstaben zu platzieren",
+      "italian" : "Ora torniamo al lavoro, tocca la tessera luminosa per posizionare la lettera successiva",
+      "portuguese" : "Agora, de volta ao trabalho, toque no bloco brilhante para colocar a próxima letra",
+      "greek" : "Τώρα επιστρέψτε στην επιχείρηση, πατήστε το λαμπερό πλακίδιο για να τοποθετήσετε το επόμενο γράμμα",
+      "dutch" : "Nu weer aan het werk, tik op de gloeiende tegel om de volgende letter te plaatsen",
+    }    
+  },    {
+    "key": "Notice that 1-letter and 2-letter words aren't scored here... ",
+    "data": {
+      "english": "Notice that 1-letter and 2-letter words aren't scored here... ",
+      "french": "Notez que les mots de 1 et 2 lettres ne sont pas notés ici... ",
+      "spanish": "Observe que las palabras de 1 y 2 letras no se puntúan aquí... ",
+      "german" : "Beachten Sie, dass Wörter mit einem oder zwei Buchstaben hier nicht bewertet werden... ",
+      "italian" : "Tieni presente che le parole di 1 e 2 lettere non vengono conteggiate qui... ",
+      "portuguese" : "Observe que palavras de 1 e 2 letras não são pontuadas aqui... ",
+      "greek" : "Παρατηρήστε ότι οι λέξεις με 1 και 2 γράμματα δεν βαθμολογούνται εδώ... ",
+      "dutch" : "Merk op dat woorden van 1 en 2 letters hier niet worden gescoord... ",
+    }    
+  },    {
+    "key": "Only 3-letter words or more will get you points... Tap the glowing tile to complete the word",
+    "data": {
+      "english": "Only 3-letter words or more will get you points... Tap the glowing tile to complete the word",
+      "french": "Seuls les mots de 3 lettres ou plus vous rapporteront des points... Appuyez sur la vignette lumineuse pour compléter le mot",
+      "spanish": "Solo las palabras de 3 letras o más te darán puntos... Toca el mosaico brillante para completar la palabra",
+      "german" : "Nur Wörter mit 3 oder mehr Buchstaben bringen Ihnen Punkte ... Tippen Sie auf die leuchtende Kachel, um das Wort zu vervollständigen",
+      "italian" : "Solo le parole di 3 o più lettere ti faranno guadagnare punti... Tocca la tessera luminosa per completare la parola",
+      "portuguese" : "Apenas palavras de 3 letras ou mais lhe darão pontos... Toque no bloco brilhante para completar a palavra",
+      "greek" : "Μόνο λέξεις 3 γραμμάτων ή περισσότερες θα σας πάρουν πόντους... Πατήστε το λαμπερό πλακίδιο για να ολοκληρώσετε τη λέξη",
+      "dutch" : "Alleen woorden van drie letters of meer leveren punten op... Tik op de gloeiende tegel om het woord te voltooien",
+    }    
+  },    {
+    "key": "Congratulations! You just played the word “word_1” !",
+    "data": {
+      "english": "Congratulations! You just played the word “word_1” !",
+      "french": "Toutes nos félicitations! Vous venez de jouer le mot word_1 !",
+      "spanish": "¡Felicidades! ¡Acabas de tocar la palabra word_1!",
+      "german" : "Glückwunsch! Du hast gerade das Wort word_1 gespielt!",
+      "italian" : "Congratulazioni! Hai appena suonato la parola word_1!",
+      "portuguese" : "Parabéns! Você acabou de jogar a palavra word_1! ",
+      "greek" : "Συγχαρητήρια! Μόλις παίξατε τη λέξη word_1! ",
+      "dutch" : "Gefeliciteerd! Je hebt zojuist het woord word_1 gespeeld! ",
+    }    
+  },    {
+    "key": "Your new score will be tallied ",
+    "data": {
+      "english": "Your new score will be tallied ",
+      "french": "Votre nouveau score sera comptabilisé",
+      "spanish": "Se contabilizará su nueva puntuación",
+      "german" : "Ihr neuer Punktestand wird gezählt",
+      "italian" : "Il tuo nuovo punteggio verrà conteggiato",
+      "portuguese" : "Sua nova pontuação será contabilizada",
+      "greek" : "Η νέα σας βαθμολογία θα υπολογιστεί",
+      "dutch" : "Je nieuwe score wordt opgeteld",
+    }    
+  },    {
+    "key": "And the old tiles will be replaced with new ones",
+    "data": {
+      "english": "And the old tiles will be replaced with new ones",
+      "french": "Et les vieilles tuiles seront remplacées par des nouvelles",
+      "spanish": "Y las tejas viejas serán reemplazadas por otras nuevas",
+      "german" : "Und die alten Fliesen werden durch neue ersetzt",
+      "italian" : "E le vecchie piastrelle verranno sostituite con delle nuove",
+      "portuguese" : "E os ladrilhos antigos serão substituídos por novos",
+      "greek" : "Και τα παλιά πλακάκια θα αντικατασταθούν με νέα",
+      "dutch" : "En de oude tegels worden vervangen door nieuwe",
+    }    
+  },    {
+    "key": "Now let's find out what these tiles at the bottom do",
+    "data": {
+      "english": "Now let's find out what these tiles at the bottom do",
+      "french": "Voyons maintenant ce que font ces tuiles en bas",
+      "spanish": "Ahora descubramos qué hacen estos mosaicos en la parte inferior",
+      "german" : "Lassen Sie uns nun herausfinden, was diese Kacheln unten bewirken",
+      "italian" : "Ora scopriamo cosa fanno queste tessere in basso",
+      "portuguese" : "Agora vamos descobrir o que essas peças na parte inferior fazem",
+      "greek" : "Τώρα ας μάθουμε τι κάνουν αυτά τα πλακάκια στο κάτω μέρος",
+      "dutch" : "Laten we nu eens kijken wat deze tegels onderaan doen",
+    }    
+  },    {
+    "key": "They serve to help you strategically save letters you want to play later in the game",
+    "data": {
+      "english": "They serve to help you strategically save letters you want to play later in the game",
+      "french": "Ils servent à vous aider à sauvegarder stratégiquement les lettres que vous souhaitez jouer plus tard dans le jeu",
+      "spanish": "Sirven para ayudarte a guardar estratégicamente las letras que deseas jugar más adelante en el juego",
+      "german" : "Sie dienen dazu, Ihnen beim strategischen Speichern von Buchstaben zu helfen, die Sie später im Spiel spielen möchten",
+      "italian" : "Servono per aiutarti a salvare strategicamente le lettere che desideri riprodurre più avanti nel gioco",
+      "portuguese" : "Eles servem para ajudá-lo a salvar estrategicamente as cartas que deseja jogar mais tarde no jogo",
+      "greek" : "Χρησιμεύουν για να σας βοηθήσουν να αποθηκεύσετε στρατηγικά γράμματα που θέλετε να παίξετε αργότερα στο παιχνίδι",
+      "dutch" : "Ze dienen om je te helpen bij het strategisch opslaan van letters die je later in het spel wilt spelen",
+    }    
+  },    {
+    "key": "To use them simply tap into one of the empty reserve spots. Tap the glowing reserve spot",
+    "data": {
+      "english": "To use them simply tap into one of the empty reserve spots. Tap the glowing reserve spot",
+      "french": "Pour les utiliser, appuyez simplement sur l’un des emplacements de réserve vides. Appuyez sur le point de réserve lumineux",
+      "spanish": "Para usarlos, simplemente toque uno de los espacios de reserva vacíos. Toca el punto de reserva brillante",
+      "german" : "Um sie zu nutzen, tippen Sie einfach auf einen der freien Reserveplätze. Tippen Sie auf den leuchtenden Reservepunkt",
+      "italian" : "Per usarli basta toccare uno dei punti di riserva vuoti. Tocca il punto luminoso della riserva",
+      "portuguese" : "Para usá-los, basta tocar em um dos espaços de reserva vazios. Toque no local de reserva brilhante",
+      "greek" : "Για να τα χρησιμοποιήσετε, απλώς πατήστε σε ένα από τα κενά σημεία φύλαξης. Πατήστε το λαμπερό σημείο αποθήκευσης",
+      "dutch" : "Om ze te gebruiken, tikt u eenvoudigweg op een van de lege reserveplekken. Tik op de gloeiende reserveplek",
+    }    
+  },    {
+    "key": "You have at most 5 reserves, tap the glowing reserve spot to place the next letter",
+    "data": {
+      "english": "You have at most 5 reserves, tap the glowing reserve spot to place the next letter",
+      "french": "Vous avez au maximum 5 réserves, appuyez sur le point de réserve lumineux pour placer la lettre suivante",
+      "spanish": "Tienes como máximo 5 reservas, toca el punto de reserva brillante para colocar la siguiente letra",
+      "german" : "Du hast maximal 5 Reserven, tippe auf die leuchtende Reservestelle, um den nächsten Buchstaben zu platzieren",
+      "italian" : "Hai al massimo 5 riserve, tocca il punto luminoso della riserva per posizionare la lettera successiva",
+      "portuguese" : "Você tem no máximo 5 reservas, toque no ponto de reserva brilhante para colocar a próxima carta",
+      "greek" : "Έχετε το πολύ 5 αποθεματικά, πατήστε το λαμπερό σημείο για να τοποθετήσετε το επόμενο γράμμα",
+      "dutch" : "Je hebt maximaal 5 reserves, tik op de gloeiende reserveplek om de volgende letter te plaatsen",
+    }    
+  },    {
+    "key": "You'll see how these letters can be strategically played in a moment",
+    "data": {
+      "english": "You'll see how these letters can be strategically played in a moment",
+      "french": "Vous verrez comment ces lettres peuvent être jouées stratégiquement dans un instant",
+      "spanish": "Verás como estas cartas se pueden jugar estratégicamente en un momento",
+      "german" : "Wie diese Buchstaben strategisch eingesetzt werden können, werden Sie gleich sehen",
+      "italian" : "Vedrai come queste lettere possono essere giocate strategicamente in un attimo",
+      "portuguese" : "Você verá como essas cartas podem ser jogadas estrategicamente em um momento",
+      "greek" : "Θα δείτε πώς αυτά τα γράμματα μπορούν να παιχτούν στρατηγικά σε μια στιγμή",
+      "dutch" : "Je zult zo zien hoe deze letters strategisch kunnen worden gespeeld",
+    }    
+  },    {
+    "key": "Let's start filling up the board with letters",
+    "data": {
+      "english": "Let's start filling up the board with letters",
+      "french": "Commençons à remplir le tableau de lettres",
+      "spanish": "Empecemos a llenar el tablero con letras",
+      "german" : "Fangen wir an, die Tafel mit Buchstaben zu füllen",
+      "italian" : "Iniziamo a riempire la lavagna con le lettere",
+      "portuguese" : "Vamos começar a preencher o quadro com letras",
+      "greek" : "Ας αρχίσουμε να γεμίζουμε τον πίνακα με γράμματα",
+      "dutch" : "Laten we beginnen met het vullen van het bord met letters",
+    }    
+  },    {
+    "key": "Great! Now let's see how we can score some real points!",
+    "data": {
+      "english": "Great! Now let's see how we can score some real points!",
+      "french": "Super! Voyons maintenant comment nous pouvons marquer de vrais points !",
+      "spanish": "¡Excelente! ¡Ahora veamos cómo podemos sumar algunos puntos reales!",
+      "german" : "Großartig! Nun wollen wir sehen, wie wir echte Punkte erzielen können!",
+      "italian" : "Grande! Ora vediamo come possiamo segnare dei punti veri!",
+      "portuguese" : "Ótimo! Agora vamos ver como podemos marcar alguns pontos reais!",
+      "greek" : "Εξαιρετική! Τώρα ας δούμε πώς μπορούμε να κερδίσουμε μερικούς πραγματικούς πόντους!",
+      "dutch" : "Geweldig! Laten we nu eens kijken hoe we echte punten kunnen scoren!",
+    }    
+  },    {
+    "key": "Let's play the word “word_4”  by placing the “letter_05” from our reserves into the glowing tile",
+    "data": {
+      "english": "Let's play the word “word_4”  by placing the “letter_05” from our reserves into the glowing tile",
+      "french": "Jouons le mot « word_4 » en plaçant le « letter_05 » de nos réserves dans la tuile lumineuse",
+      "spanish": "Juguemos a la palabra “word_4” colocando el “letter_05” de nuestras reservas en el mosaico brillante",
+      "german" : "Spielen wir das Wort „word_4“, indem wir die „letter_05“ aus unseren Reserven in die leuchtende Kachel legen",
+      "italian" : "Giochiamo con la parola 'word_4' posizionando il 'letter_05' dalle nostre riserve nella tessera luminosa",
+      "portuguese" : "Vamos jogar a palavra “word_4” colocando o “letter_05” de nossas reservas na peça brilhante",
+      "greek" : "Ας παίξουμε τη λέξη 'word_4' τοποθετώντας το 'letter_05' από τα αποθέματά μας στο λαμπερό πλακάκι",
+      "dutch" : "Laten we het woord “word_4” spelen door de “letter_05” uit onze reserves in de gloeiende tegel te plaatsen",
+    }    
+  },    {
+    "key": "Good job! You just played three words! “word_4”, “word_2”, and “word_3”",
+    "data": {
+      "english": "Good job! You just played three words! “word_4”, “word_2”, and “word_3”",
+      "french": "Bon travail! Vous venez de jouer trois mots ! 'word_4', 'word_2' et 'word_3'",
+      "spanish": "¡Buen trabajo! ¡Acabas de jugar tres palabras! “word_4”, “word_2” y “word_3”",
+      "german" : "Gute Arbeit! Du hast gerade drei Wörter gespielt! „word_4“, „word_2“ und „word_3“",
+      "italian" : "Buon lavoro! Hai appena giocato tre parole! “word_4”, “word_2” e “word_3”",
+      "portuguese" : "Bom trabalho! Você acabou de jogar três palavras! “word_4”, “word_2” e “word_3”",
+      "greek" : "Καλή δουλειά! Μόλις έπαιξες τρεις λέξεις! 'word_4', 'word_2' και 'word_3'",
+      "dutch" : "Goed gedaan! Je hebt zojuist drie woorden gespeeld! “word_4”, “word_2” en “word_3”",
+    }    
+  },    {
+    "key": "Your score is multiplied by the number of words you found this turn. This brings your score to nPts_2 for this turn!",
+    "data": {
+      "english": "Your score is multiplied by the number of words you found this turn. This brings your score to nPts_2 for this turn!",
+      "french": "Votre score est multiplié par le nombre de mots que vous avez trouvés ce tour-ci. Cela porte votre score à nPts_2 pour ce tour !",
+      "spanish": "Tu puntuación se multiplica por la cantidad de palabras que encontraste este turno. ¡Esto eleva tu puntuación a nPts_2 para este turno!",
+      "german" : "Ihre Punktzahl wird mit der Anzahl der Wörter multipliziert, die Sie in diesem Zug gefunden haben. Das bringt deine Punktzahl für diesen Zug auf nPts_2!",
+      "italian" : "Il tuo punteggio viene moltiplicato per il numero di parole che hai trovato in questo turno. Questo porta il tuo punteggio a nPts_2 per questo turno!",
+      "portuguese" : "Sua pontuação é multiplicada pelo número de palavras que você encontrou neste turno. Isso eleva sua pontuação para nPts_2 neste turno!",
+      "greek" : "Η βαθμολογία σας πολλαπλασιάζεται με τον αριθμό των λέξεων που βρήκατε αυτή τη σειρά. Αυτό ανεβάζει τη βαθμολογία σας στο nPts_2 για αυτή τη σειρά!",
+      "dutch" : "Je score wordt vermenigvuldigd met het aantal woorden dat je deze beurt hebt gevonden. Dit brengt je score op nPts_2 voor deze beurt!",
+    }    
+  },    {
+    "key": "Your tally climbs to points_2 points and 4 words!",
+    "data": {
+      "english": "Your tally climbs to points_2 points and 4 words!",
+      "french": "Votre total grimpe à points_2 points et 4 mots !",
+      "spanish": "¡Tu cuenta sube a points_2 puntos y 4 palabras!",
+      "german" : "Ihre Bilanz steigt auf points_2 Punkte und 4 Wörter!",
+      "italian" : "Il tuo conteggio sale a points_2 punti e 4 parole!",
+      "portuguese" : "Sua contagem sobe para points_2 pontos e 4 palavras!",
+      "greek" : "Ο απολογισμός σας ανεβαίνει σε points_2 πόντους και 4 λέξεις!",
+      "dutch" : "Je totaal stijgt naar points_2 punten en 4 woorden!",
+    }    
+  },    {
+    "key": "There are other ways you can multiply your score... Tap the glowing tile to create the word “word_5”",
+    "data": {
+      "english": "There are other ways you can multiply your score... Tap the glowing tile to create the word “word_5”",
+      "french": "Il existe d'autres façons de multiplier votre score... Appuyez sur la tuile lumineuse pour créer le mot « word_5 »",
+      "spanish": "Hay otras formas de multiplicar tu puntuación... Toca el mosaico brillante para crear la palabra 'word_5'",
+      "german" : "Es gibt andere Möglichkeiten, wie Sie Ihre Punktzahl vervielfachen können ... Tippen Sie auf die leuchtende Kachel, um das Wort „word_5“ zu erstellen",
+      "italian" : "Esistono altri modi per moltiplicare il tuo punteggio... Tocca la tessera luminosa per creare la parola 'word_5'",
+      "portuguese" : "Existem outras maneiras de multiplicar sua pontuação... Toque no bloco brilhante para criar a palavra “word_5”",
+      "greek" : "Υπάρχουν άλλοι τρόποι με τους οποίους μπορείτε να πολλαπλασιάσετε τη βαθμολογία σας... Πατήστε το λαμπερό πλακίδιο για να δημιουργήσετε τη λέξη 'word_5'",
+      "dutch" : "Er zijn andere manieren waarop je je score kunt vermenigvuldigen... Tik op de gloeiende tegel om het woord “word_5” te maken",
+    }    
+  },    {
+    "key": "You just scored for a second turn in a row! You're on a hot streak!",
+    "data": {
+      "english": "You just scored for a second turn in a row! You're on a hot streak!",
+      "french": "Vous venez de marquer pour un deuxième tour consécutif ! Vous êtes sur une bonne lancée !",
+      "spanish": "¡Acabas de anotar por segundo turno consecutivo! ¡Estás en una buena racha!",
+      "german" : "Du hast gerade zum zweiten Mal in Folge gepunktet! Du bist in einer heißen Phase!",
+      "italian" : "Hai appena segnato per il secondo turno di fila! Sei in un periodo di successo!",
+      "portuguese" : "Você acabou de marcar pela segunda vez consecutiva! Você está em uma maré de sorte!",
+      "greek" : "Μόλις σκόραρες για δεύτερη συνεχόμενη στροφή! Είσαι σε καυτή σειρά!",
+      "dutch" : "Je hebt zojuist voor de tweede beurt op rij gescoord! Je bent op een hete streak!",
+    }    
+  },    {
+    "key": "Your points are tallied and the streak persists",
+    "data": {
+      "english": "Your points are tallied and the streak persists",
+      "french": "Vos points sont comptés et la séquence persiste",
+      "spanish": "Tus puntos se cuentan y la racha persiste",
+      "german" : "Ihre Punkte werden gezählt und die Serie hält an,",
+      "italian" : "I tuoi punti vengono conteggiati e la serie di vittorie persiste",
+      "portuguese" : "Seus pontos são contabilizados e a sequência persiste",
+      "greek" : "Οι πόντοι σας συγκεντρώνονται και το σερί συνεχίζεται",
+      "dutch" : "Je punten worden opgeteld en de streak blijft bestaan",
+    }    
+  },    {
+    "key": "You can also double your score by finding words and the horizonal and vertical axis",
+    "data": {
+      "english": "You can also double your score by finding words and the horizonal and vertical axis",
+      "french": "Vous pouvez également doubler votre score en trouvant des mots et les axes horizontal et vertical",
+      "spanish": "También puedes duplicar tu puntuación encontrando palabras y el eje horizontal y vertical",
+      "german" : "Sie können Ihre Punktzahl auch verdoppeln, indem Sie Wörter und die horizontale und vertikale Achse finden.",
+      "italian" : "Puoi anche raddoppiare il tuo punteggio trovando le parole e gli assi orizzontale e verticale",
+      "portuguese" : "Você também pode dobrar sua pontuação encontrando palavras e os eixos horizontal e vertical",
+      "greek" : "Μπορείτε επίσης να διπλασιάσετε τη βαθμολογία σας βρίσκοντας λέξεις και τον οριζόντιο και τον κάθετο άξονα",
+      "dutch" : "Je kunt je score ook verdubbelen door woorden en de horizontale en verticale as te vinden",
+    }    
+  },    {
+    "key": "Drag the glowing reserve tile into the glowing tile on the board to create a crossword",
+    "data": {
+      "english": "Drag the glowing reserve tile into the glowing tile on the board to create a crossword",
+      "french": "Faites glisser la tuile de réserve lumineuse dans la tuile lumineuse du tableau pour créer des mots croisés",
+      "spanish": "Arrastra el mosaico de reserva brillante al mosaico brillante del tablero para crear un crucigrama",
+      "german" : "Ziehen Sie das leuchtende Reserveplättchen auf das leuchtende Plättchen auf der Tafel, um ein Kreuzworträtsel zu erstellen.",
+      "italian" : "Trascina la tessera luminosa della riserva nella tessera luminosa sul tabellone per creare un cruciverba",
+      "portuguese" : "Arraste a peça de reserva brilhante para a peça brilhante no tabuleiro para criar palavras cruzadas",
+      "greek" : "Σύρετε το λαμπερό εφεδρικό πλακίδιο στο λαμπερό πλακίδιο στον πίνακα για να δημιουργήσετε ένα σταυρόλεξο",
+      "dutch" : "Sleep de gloeiende reservetegel naar de gloeiende tegel op het bord om een kruiswoordraadsel te maken",
+    }    
+  },    {
+    "key": "You just crossed the word “word_7” with “word_6”!",
+    "data": {
+      "english": "You just crossed the word “word_7” with “word_6”!",
+      "french": "Vous venez de croiser le mot « word_7 » avec « word_6 » !",
+      "spanish": "¡Acabas de cruzar la palabra “word_7” con “word_6”!",
+      "german" : "Du hast gerade das Wort „word_7“ mit „word_6“ gekreuzt!",
+      "italian" : "Hai appena incrociato la parola 'word_7' con 'word_6'!",
+      "portuguese" : "Você acabou de cruzar a palavra “word_7” com “word_6”!",
+      "greek" : "Μόλις διασταύρωσες τη λέξη 'word_7' με 'word_6'!",
+      "dutch" : "Je hebt zojuist het woord “word_7” gekruist met “word_6”!",
+    }    
+  },    {
+    "key": "You just multiplied your initial points by 12!!! (3 * 2 * 2)",
+    "data": {
+      "english": "You just multiplied your initial points by 12!!! (3 * 2 * 2)",
+      "french": "Vous venez de multiplier vos points initiaux par 12 !!! (3*2*2)",
+      "spanish": "¡¡¡Acabas de multiplicar tus puntos iniciales por 12!!! (3*2*2)",
+      "german" : "Sie haben gerade Ihre Anfangspunkte mit 12 multipliziert!!! (3 * 2 * 2)",
+      "italian" : "Hai appena moltiplicato i tuoi punti iniziali per 12!!! (3*2*2)",
+      "portuguese" : "Você acabou de multiplicar seus pontos iniciais por 12!!! (3*2*2)",
+      "greek" : "Μόλις πολλαπλασιάσατε τους αρχικούς σας πόντους επί 12!!! (3 * 2 * 2)",
+      "dutch" : "Je hebt zojuist je initiële punten vermenigvuldigd met 12!!! (3 * 2 * 2)",
+    }    
+  },    {
+    "key": "Next we'll see what happens when we find words that are 5 and 6 letters long",
+    "data": {
+      "english": "Next we'll see what happens when we find words that are 5 and 6 letters long",
+      "french": "Ensuite, nous verrons ce qui se passe lorsque nous trouvons des mots de 5 ou 6 lettres",
+      "spanish": "A continuación veremos qué sucede cuando encontramos palabras que tienen 5 y 6 letras",
+      "german" : "Als nächstes werden wir sehen, was passiert, wenn wir Wörter finden, die 5 und 6 Buchstaben lang sind,",
+      "italian" : "Successivamente vedremo cosa succede quando troviamo parole lunghe 5 e 6 lettere",
+      "portuguese" : "A seguir veremos o que acontece quando encontramos palavras com 5 e 6 letras",
+      "greek" : "Στη συνέχεια θα δούμε τι θα συμβεί όταν βρούμε λέξεις που έχουν μήκος 5 και 6 γράμματα",
+      "dutch" : "Vervolgens zullen we zien wat er gebeurt als we woorden vinden die 5 en 6 letters lang zijn",
+    }    
+  },    {
+    "key": "5 letter words and 6 letter words are doubled and tripled in value respectively...",
+    "data": {
+      "english": "5 letter words and 6 letter words are doubled and tripled in value respectively...",
+      "french": "Les mots de 5 lettres et les mots de 6 lettres ont respectivement doublé et triplé en valeur...",
+      "spanish": "Las palabras de 5 letras y las palabras de 6 letras se duplican y triplican en valor respectivamente...",
+      "german" : "Wörter mit 5 Buchstaben und Wörter mit 6 Buchstaben werden im Wert verdoppelt bzw. verdreifacht ...",
+      "italian" : "Le parole di 5 lettere e le parole di 6 lettere hanno rispettivamente un valore raddoppiato e triplicato...",
+      "portuguese" : "Palavras de 5 letras e palavras de 6 letras têm valor duplicado e triplicado, respectivamente...",
+      "greek" : "Οι λέξεις 5 γραμμάτων και 6 γραμμάτων διπλασιάζονται και τριπλασιάζονται σε αξία αντίστοιχα...",
+      "dutch" : "Woorden van 5 letters en woorden van 6 letters worden respectievelijk in waarde verdubbeld en verdrievoudigd...",
+    }    
+  },    {
+    "key": "Tap the glowing tile to place the letter “letter_22”",
+    "data": {
+      "english": "Tap the glowing tile to place the letter “letter_22”",
+      "french": "Appuyez sur la tuile lumineuse pour placer la lettre « letter_22 »",
+      "spanish": "Toque el mosaico brillante para colocar la letra 'letter_22'",
+      "german" : "Tippen Sie auf die leuchtende Kachel, um den Buchstaben „letter_22“ zu platzieren",
+      "italian" : "Tocca la tessera luminosa per posizionare la lettera “letter_22”",
+      "portuguese" : "Toque no bloco brilhante para colocar a letra “letter_22”",
+      "greek" : "Πατήστε το λαμπερό πλακίδιο για να τοποθετήσετε το γράμμα 'letter_22'",
+      "dutch" : "Tik op de gloeiende tegel om de letter “letter_22” te plaatsen",
+    }    
+  },    {
+    "key": "You just found the words “word_8” and “word_9”",
+    "data": {
+      "english": "You just found the words “word_8” and “word_9”",
+      "french": "Vous venez de trouver les mots « word_8 » et « word_9 »",
+      "spanish": "Acabas de encontrar las palabras “word_8” y “word_9”",
+      "german" : "Sie haben gerade die Wörter „word_8“ und „word_9“ gefunden",
+      "italian" : "Hai appena trovato le parole “word_8” e “word_9”",
+      "portuguese" : "Você acabou de encontrar as palavras “word_8” e “word_9”",
+      "greek" : "Μόλις βρήκατε τις λέξεις 'word_8' και 'word_9'",
+      "dutch" : "Je hebt zojuist de woorden “word_8” en “word_9” gevonden",
+    }    
+  },    {
+    "key": "With the word multiplier (2x) and streak multiplier (4x) you're at nPts_5 points!",
+    "data": {
+      "english": "With the word multiplier (2x) and streak multiplier (4x) you're at nPts_5 points!",
+      "french": "Avec le multiplicateur de mots (2x) et le multiplicateur de séquences (4x), vous êtes à nPts_5 points !",
+      "spanish": "¡Con el multiplicador de palabras (2x) y el multiplicador de rachas (4x) estás en nPts_5 puntos!",
+      "german" : "Mit dem Wortmultiplikator (2x) und dem Streak-Multiplikator (4x) sind Sie bei nPts_5 Punkten!",
+      "italian" : "Con il moltiplicatore di parole (2x) e il moltiplicatore di serie (4x) sei a nPts_5 punti!",
+      "portuguese" : "Com o multiplicador de palavras (2x) e o multiplicador de sequência (4x) você está com nPts_5 pontos!",
+      "greek" : "Με τις λέξεις πολλαπλασιαστής (2x) και πολλαπλασιαστής σειρών (4x) είστε στους nPts_5 βαθμούς!",
+      "dutch" : "Met de woordvermenigvuldiger (2x) en streak-vermenigvuldiger (4x) sta je op nPts_5 punten!",
+    }    
+  },    {
+    "key": "Now your score will be tallied and reflect the new tally of points_5 points!",
+    "data": {
+      "english": "Now your score will be tallied and reflect the new tally of points_5 points!",
+      "french": "Votre score sera désormais comptabilisé et reflétera le nouveau décompte de points_5 points !",
+      "spanish": "¡Ahora su puntuación será contada y reflejará la nueva cuenta de points_5 puntos!",
+      "german" : "Jetzt wird Ihre Punktzahl gezählt und spiegelt die neue Bilanz von points_5 Punkten wider!",
+      "italian" : "Ora il tuo punteggio verrà conteggiato e rifletterà il nuovo conteggio di points_5 punti!",
+      "portuguese" : "Agora sua pontuação será computada e refletirá a nova contagem de points_5 pontos!",
+      "greek" : "Τώρα η βαθμολογία σας θα υπολογιστεί και θα αντικατοπτρίζει τη νέα καταμέτρηση των points_5 πόντων!",
+      "dutch" : "Nu wordt je score opgeteld en weerspiegelt de nieuwe telling van points_5 punten!",
+    }    
+  },    {
+    "key": "That's pretty much it! Last thing to show you is the pause menu. Click the glowing pause button.",
+    "data": {
+      "english": "That's pretty much it! Last thing to show you is the pause menu. Click the glowing pause button.",
+      "french": "C'est à peu près ça ! La dernière chose à vous montrer est le menu pause. Cliquez sur le bouton pause lumineux.",
+      "spanish": "¡Eso es practicamente todo! Lo último que le mostraremos es el menú de pausa. Haga clic en el botón de pausa brillante.",
+      "german" : "Das wars so ziemlich! Als letztes wird Ihnen das Pausenmenü angezeigt. Klicken Sie auf die leuchtende Pause-Schaltfläche.,",
+      "italian" : "Questo è praticamente tutto! L'ultima cosa da mostrarti è il menu di pausa. Fare clic sul pulsante di pausa luminoso.",
+      "portuguese" : "É basicamente isso! A última coisa a mostrar é o menu de pausa. Clique no botão de pausa brilhante.",
+      "greek" : "Αυτό είναι λίγο πολύ! Το τελευταίο πράγμα που θα σας δείξω είναι το μενού παύσης. Κάντε κλικ στο λαμπερό κουμπί παύσης.",
+      "dutch" : "Dat is het eigenlijk wel! Het laatste dat u moet laten zien, is het pauzemenu. Klik op de gloeiende pauzeknop.",
+    }    
+  },    {
+    "key": "The pause menu displays the game summary as well as a summary of scored points! tap 'View score summary' to see it",
+    "data": {
+      "english": "The pause menu displays the game summary as well as a summary of scored points! tap 'View score summary' to see it",
+      "french": "Le menu pause affiche le résumé du jeu ainsi qu'un récapitulatif des points marqués ! appuyez sur « Afficher le résumé des scores » pour le voir",
+      "spanish": "¡El menú de pausa muestra el resumen del juego y un resumen de los puntos anotados! toca 'Ver resumen de puntuación' para verlo",
+      "german" : "Das Pausenmenü zeigt die Spielzusammenfassung sowie eine Zusammenfassung der erzielten Punkte an! Tippen Sie auf „Ergebniszusammenfassung anzeigen“, um sie anzuzeigen.",
+      "italian" : "Il menu di pausa mostra il riepilogo del gioco e un riepilogo dei punti segnati! tocca 'Visualizza riepilogo punteggio' per vederlo",
+      "portuguese" : "O menu de pausa exibe o resumo do jogo, bem como um resumo dos pontos marcados! toque em 'Ver resumo da pontuação' para vê-lo",
+      "greek" : "Το μενού παύσης εμφανίζει τη σύνοψη του παιχνιδιού καθώς και μια σύνοψη των πόντων που σημειώθηκαν! πατήστε «Προβολή σύνοψης βαθμολογίας» για να το δείτε",
+      "dutch" : "Het pauzemenu toont de spelsamenvatting en een samenvatting van de gescoorde punten! tik op 'Bekijk scoreoverzicht' om het te zien",
+    }    
+  },    {
+    "key": "All the words are tabulated with their multipliers!",
+    "data": {
+      "english": "All the words are tabulated with their multipliers!",
+      "french": "Tous les mots sont compilés avec leurs multiplicateurs !",
+      "spanish": "¡Todas las palabras están tabuladas con sus multiplicadores!",
+      "german" : "Alle Wörter sind mit ihren Multiplikatoren tabellarisch aufgeführt!",
+      "italian" : "Tutte le parole sono tabulate con i loro moltiplicatori!",
+      "portuguese" : "Todas as palavras são tabuladas com seus multiplicadores!",
+      "greek" : "Όλες οι λέξεις ταξινομούνται με τους πολλαπλασιαστές τους!",
+      "dutch" : "Alle woorden zijn in tabelvorm weergegeven met hun vermenigvuldigers!",
+    }    
+  },    {
+    "key": "You can navigate to the instructions page for a refresher on how to play - Tap the glowing help icon",
+    "data": {
+      "english": "You can navigate to the instructions page for a refresher on how to play - Tap the glowing help icon",
+      "french": "Vous pouvez accéder à la page d'instructions pour un rappel sur la façon de jouer - Appuyez sur l'icône d'aide lumineuse",
+      "spanish": "Puedes navegar a la página de instrucciones para repasar cómo jugar: toca el icono de ayuda brillante",
+      "german" : "Sie können zur Seite mit den Anweisungen navigieren, um die Spielanleitung aufzufrischen. Tippen Sie auf das leuchtende Hilfesymbol",
+      "italian" : "Puoi accedere alla pagina delle istruzioni per rinfrescarti le idee su come giocare: tocca l'icona luminosa della guida",
+      "portuguese" : "Você pode navegar até a página de instruções para relembrar como jogar - Toque no ícone de ajuda brilhante",
+      "greek" : "Μπορείτε να μεταβείτε στη σελίδα οδηγιών για μια ανανέωση σχετικά με τον τρόπο παιχνιδιού - Πατήστε το λαμπερό εικονίδιο βοήθειας",
+      "dutch" : "Je kunt naar de instructiepagina navigeren voor een opfrisser over hoe je moet spelen. Tik op het gloeiende helppictogram",
+    }    
+  },    {
+    "key": "You can adjust parameters on the settings page - Tap the glowing settings icon",
+    "data": {
+      "english": "You can adjust parameters on the settings page - Tap the glowing settings icon",
+      "french": "Vous pouvez ajuster les paramètres sur la page des paramètres - Appuyez sur l'icône lumineuse des paramètres",
+      "spanish": "Puede ajustar los parámetros en la página de configuración: toque el ícono de configuración brillante",
+      "german" : "Sie können Parameter auf der Einstellungsseite anpassen. Tippen Sie auf das leuchtende Einstellungssymbol",
+      "italian" : "Puoi regolare i parametri nella pagina delle impostazioni: tocca l'icona luminosa delle impostazioni",
+      "portuguese" : "Você pode ajustar os parâmetros na página de configurações - Toque no ícone brilhante de configurações",
+      "greek" : "Μπορείτε να προσαρμόσετε τις παραμέτρους στη σελίδα ρυθμίσεων - Πατήστε το λαμπερό εικονίδιο ρυθμίσεων",
+      "dutch" : "U kunt parameters aanpassen op de instellingenpagina. Tik op het oplichtende instellingenpictogram",
+    }    
+  },    {
+    "key": "And finally, you can exit the game or restart at any time - Tap the exit icon",
+    "data": {
+      "english": "And finally, you can exit the game or restart at any time - Tap the exit icon",
+      "french": "Et enfin, vous pouvez quitter le jeu ou redémarrer à tout moment - Appuyez sur l'icône de sortie",
+      "spanish": "Y finalmente, puedes salir del juego o reiniciarlo en cualquier momento: toca el ícono de salir",
+      "german" : "Und schließlich können Sie das Spiel jederzeit beenden oder neu starten. Tippen Sie auf das Beenden-Symbol",
+      "italian" : "Infine, puoi uscire dal gioco o riavviarlo in qualsiasi momento: tocca l'icona di uscita",
+      "portuguese" : "E finalmente, você pode sair do jogo ou reiniciar a qualquer momento - Toque no ícone de saída",
+      "greek" : "Και τέλος, μπορείτε να βγείτε από το παιχνίδι ή να κάνετε επανεκκίνηση ανά πάσα στιγμή - Πατήστε το εικονίδιο εξόδου",
+      "dutch" : "En tot slot kun je het spel op elk gewenst moment afsluiten of opnieuw starten. Tik op het afsluitpictogram",
+    }    
+  },    {
+    "key": "Congratulations!",
+    "data": {
+      "english": "Congratulations!",
+      "french": "Toutes nos félicitations!",
+      "spanish": "¡Felicidades!",
+      "german" : "Glückwunsch!",
+      "italian" : "Congratulazioni!",
+      "portuguese" : "Parabéns!",
+      "greek" : "Συγχαρητήρια!",
+      "dutch" : "Gefeliciteerd!",
+    }    
+  },    {
+    "key": "You just completed the demo! How would you like to proceed?",
+    "data": {
+      "english": "You just completed the demo! How would you like to proceed?",
+      "french": "Vous venez de terminer la démo ! Comment aimeriez-vous proceder?",
+      "spanish": "¡Acabas de completar la demostración! ¿Cómo quieres proceder?",
+      "german" : "Sie haben gerade die Demo abgeschlossen! Wie möchten Sie fortfahren?",
+      "italian" : "Hai appena completato la demo! Come vorresti procedere?",
+      "portuguese" : "Você acabou de concluir a demonstração! Como você gostaria de proceder?",
+      "greek" : "Μόλις ολοκληρώσατε το demo! Πως θα θέλατε να συνεχίσετε;",
+      "dutch" : "Je hebt zojuist de demo voltooid! Hoe wilt u doorgaan?",
+    }    
+  },    {
+    "key": "Start Game!",
+    "data": {
+      "english": "Start Game!",
+      "french": "Démarrer jeu!",
+      "spanish": "¡Empezar juego!",
+      "german" : "Spiel beginnen!",
+      "italian" : "Inizia il gioco!",
+      "portuguese" : "Começar o jogo!",
+      "greek" : "Ξεκίνα το παιχνίδι!",
+      "dutch" : "Start het spel!",
+    }    
+  },    {
+    "key": "Restart Tutorial",
+    "data": {
+      "english": "Restart Tutorial",
+      "french": "Redémarrer le didacticiel",
+      "spanish": "Tutorial de reinicio",
+      "german" : "Starten Sie das Tutorial neu",
+      "italian" : "Riavvia l'esercitazione",
+      "portuguese" : "Reiniciar tutorial",
+      "greek" : "Επανεκκίνηση του φροντιστηρίου",
+      "dutch" : "Start de les opnieuw",
+    }    
+  },    {
+    "key": "Tap the glowing tile to place the upcoming letter",
+    "data": {
+      "english": "",
+      "french": "",
+      "spanish": "",
+      "german" : "",
+      "italian" : "",
+      "portuguese" : "",
+      "greek" : "",
+      "dutch" : "",
+    }    
+  },    {
+    "key": "Restart Game",
+    "data": {
+      "english": "Restart Game",
+      "french": "Recommencer",
+      "spanish": "Reanudar",
+      "german" : "Neu starten",
+      "italian" : "Ricomincia",
+      "portuguese" : "Reiniciar",
+      "greek" : "Επανεκκίνηση",
+      "dutch" : "Herstarten",
+    }    
+  },    {
+    "key": "",
+    "data": {
+      "english": "",
+      "french": "",
+      "spanish": "",
+      "german" : "",
+      "italian" : "",
+      "portuguese" : "",
+      "greek" : "",
+      "dutch" : "",
+    }    
+  },    {
+    "key": "",
+    "data": {
+      "english": "",
+      "french": "",
+      "spanish": "",
+      "german" : "",
+      "italian" : "",
+      "portuguese" : "",
+      "greek" : "",
+      "dutch" : "",
+    }    
+  },    {
+    "key": "",
+    "data": {
+      "english": "",
+      "french": "",
+      "spanish": "",
+      "german" : "",
+      "italian" : "",
+      "portuguese" : "",
+      "greek" : "",
+      "dutch" : "",
+    }    
+  },    {
+    "key": "",
+    "data": {
+      "english": "",
+      "french": "",
+      "spanish": "",
+      "german" : "",
+      "italian" : "",
+      "portuguese" : "",
+      "greek" : "",
+      "dutch" : "",
+    }    
+  },    {
+    "key": "",
+    "data": {
+      "english": "",
+      "french": "",
+      "spanish": "",
+      "german" : "",
+      "italian" : "",
+      "portuguese" : "",
+      "greek" : "",
+      "dutch" : "",
+    }    
+  },  
 
 
 

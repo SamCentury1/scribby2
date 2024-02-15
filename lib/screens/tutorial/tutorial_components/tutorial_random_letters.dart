@@ -295,6 +295,9 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                             tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
                                             _animationState.setShouldRunAnimation(true);
                                             _animationState.setShouldRunAnimation(false);
+                                            _animationState.setShouldRunTutorialNextStepAnimation(true);
+                                            _animationState.setShouldRunTutorialNextStepAnimation(false);
+
 
                                           }
                                           // tutorialState.tutorialCountDownController.restart()

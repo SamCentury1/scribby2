@@ -67,8 +67,8 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                             color: palette.textColor2,
                             fontSize: 28
                           ), 
-                          child: const Text(
-                            "Congratulations! "
+                          child: Text(
+                            Helpers().translateText(gamePlayState.currentLanguage, "Congratulations!")
                           )
                         ),
                       ),
@@ -81,9 +81,11 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                               fontSize: 22,
                               
                             ), 
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                "You just completed the demo! How would you like to proceed?"
+                                  Helpers().translateText(gamePlayState.currentLanguage, 
+                                  "You just completed the demo! How would you like to proceed?"
+                                ),
                               ),
                             )
                           ),
@@ -119,7 +121,9 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                                 ), 
                               ),                            
                             ),
-                            child: const Text("Start Game!"),
+                            child: Text(
+                              Helpers().translateText(gamePlayState.currentLanguage, "Start Game!"),
+                              ),
                           ),
                           ElevatedButton(
                             onPressed: () {
@@ -139,7 +143,9 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                                 ), 
                               ),                            
                             ),
-                            child: const Text("Restart Tutorial"),
+                            child: Text(
+                              Helpers().translateText(gamePlayState.currentLanguage, "Restart Tutorial")
+                            ),
                           ),                          
                         ],
                       ),

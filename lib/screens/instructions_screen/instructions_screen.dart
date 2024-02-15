@@ -154,16 +154,22 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                 tileMode: TileMode.mirror),
                                             border: const Border(),
                                             borderRadius: const BorderRadius.all(Radius.circular(12.0))),
-                                        child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              Helpers().translateText(
-                                                language, 
-                                                "Watch a Demo!"
-                                              ),
-                                              style:
-                                                  TextStyle(fontSize: 24, color: palette.optionButtonTextColor),
-                                            )),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Align(
+                                              alignment: Alignment.center,
+                                              child: FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Text(
+                                                  Helpers().translateText(
+                                                    language, 
+                                                    "Watch a Demo!"
+                                                  ),
+                                                  style:
+                                                      TextStyle(fontSize: 24, color: palette.optionButtonTextColor),
+                                                ),
+                                              )),
+                                        ),
                                       ),
                                     )
                                   ),                                  

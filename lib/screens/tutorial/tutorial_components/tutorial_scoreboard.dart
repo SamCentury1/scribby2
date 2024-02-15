@@ -1,7 +1,9 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -30,6 +32,8 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
 
   @override
   Widget build(BuildContext context) {
+    final GamePlayState gamePlayState = context.read<GamePlayState>();
+    String language = gamePlayState.currentLanguage;    
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) { 
         
@@ -45,14 +49,14 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
                   AnimatedBuilder(
                     animation: widget.animation,
                     builder: (context, child) {
-                      return scoreWidget(palette, widget.animation, currentStep, 'points');
+                      return scoreWidget(palette, widget.animation, currentStep, 'points', language);
                     },
                   ),
 
                   AnimatedBuilder(
                     animation: widget.animation,
                     builder: (context, child) {
-                      return newPointsWidget(palette, widget.animation, currentStep, 'new_points');
+                      return newPointsWidget(palette, widget.animation, currentStep, 'new_points', language);
                     },
                   ),
                   const Expanded(flex: 1, child: SizedBox()),
@@ -118,7 +122,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
 //   return res;
 // }
 
-Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
+Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, String language) {
   return Container(
     // height: 30,
     decoration: BoxDecoration(
@@ -153,7 +157,10 @@ Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic
               color: getColor(palette, animation, currentStep, widgetId),
               shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
             ),
-            child: Text(currentStep['points'].toString()),
+            child: Text(
+              translateValue(language, currentStep['points'],'points')
+              // currentStep['points'].toString()
+            ),
           )
         ],
       ),
@@ -161,8 +168,15 @@ Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic
   );
 }
 
+String translateValue(String language, String points, String stat) {
 
-Widget newPointsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
+  String translatedValue = tutorialPoints[language][stat][points];
+  return translatedValue;
+
+}
+
+
+Widget newPointsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, String language) {
   return Container(
     child: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -174,7 +188,9 @@ Widget newPointsWidget(ColorPalette palette, Animation animation, Map<String,dyn
           color: getColor(palette, animation, currentStep, widgetId),
           shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
         ),
-        child: Text("+${currentStep['newPoints']}"),
+        child: Text(
+          "+${translateValue(language, currentStep['newPoints'],'newPoints')}"
+        ),
       ),
     ),
   );

@@ -11,6 +11,11 @@ import 'package:scribby_flutter_v2/utils/translations.dart';
 
 class Helpers {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+  String formatWord(String s) {
+    String lower = s.toLowerCase();
+    String newString = lower[0].toUpperCase() + lower.substring(1);
+    return newString;
+  } 
 
   String fixForCharacter(String s, String character) {
     List<String> strings = s.split(character);
@@ -114,9 +119,11 @@ class Helpers {
     );
   }  
 
-  TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context) {
+  TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context, String language) {
 
     Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
+    String word = data["word"];
+
 
     return TableRow(children: [
       Align(
@@ -144,13 +151,13 @@ class Helpers {
                 context: context, 
                 builder:(context) {
                   return FutureBuilder<String>(
-                    future: GameLogic().fetchDefinition(data["word"]),
+                    future: GameLogic().fetchDefinition(data["word"], language),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return AlertDialog(
                           backgroundColor: palette.optionButtonBgColor,
                           title: Text(
-                            data["word"],
+                            word,
                             style: TextStyle(
                               color: palette.textColor2
                             ),
@@ -161,7 +168,7 @@ class Helpers {
                         return AlertDialog(
                           backgroundColor: palette.optionButtonBgColor,
                           title: Text(
-                            data["word"],
+                            word,
                             style: TextStyle(
                               color: palette.textColor2
                             ),
@@ -177,7 +184,7 @@ class Helpers {
                         return AlertDialog(
                           backgroundColor: palette.optionButtonBgColor,
                           title: Text(
-                            data["word"],
+                            word,
                             style: TextStyle(
                               color: palette.textColor2
                             ),
@@ -216,7 +223,7 @@ class Helpers {
   }
 
   String translateText(String language, String originalString,) {
-    final Map<String,dynamic> languageMap = translations.firstWhere((element) => element['key'] == originalString);
+    late Map<String,dynamic> languageMap = translations.firstWhere((element) => element['key'] == originalString);
     return languageMap['data'][language];
   }
 
@@ -225,12 +232,12 @@ class Helpers {
     String translatedBody = translateText(language, originalString);
     late Map<String,dynamic> dynamicLetters = demoStateDynamicLetters[language];
     dynamicLetters.forEach((key, value) {
-      print("replace $key with $value");
       translatedBody = translatedBody.replaceAll(key, value);
     });
-    print(res);
     return translatedBody;
   }
+
+
 
 
 

@@ -159,7 +159,7 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                               ]
                             ),
                             for (int i=0; i<summary.length; i++)
-                            Helpers().scoreSummaryTableRow(i, widget.palette,summary[i], context),
+                            Helpers().scoreSummaryTableRow(i, widget.palette,summary[i], context, gamePlayState.currentLanguage),
                           ]
                         ),                    
                       ),
