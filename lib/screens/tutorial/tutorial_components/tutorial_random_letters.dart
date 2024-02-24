@@ -214,7 +214,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                       duration: 5,
                     );
                   }
-                }                
+                }             
 
                 return SizedBox(
                   // color: Color.fromARGB(255, 220, 171, 230),
@@ -259,10 +259,9 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                         height: side*0.8,
                                             // 70, // MediaQuery.of(context).size.height / 3,
                                         // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
-                                        ringColor: palette.tileBgColor,
+                                        ringColor: tutorialState.sequenceStep == 7 ? palette.tileBgColor : palette.tileTextColor,
                                         ringGradient: null,
-                                        fillColor: palette
-                                            .tileTextColor, // Colors.purpleAccent[100]!,
+                                        fillColor: palette.tileTextColor, // Colors.purpleAccent[100]!,
                                         fillGradient: null,
                                         // backgroundColor:GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
                                         backgroundColor:
@@ -273,7 +272,8 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                         textStyle: TextStyle(
                                             fontSize: 33.0,
                                             // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
-                                            color: palette.tileBgColor),
+                                            color:  tutorialState.sequenceStep == 7 ? palette.tileBgColor : palette.screenBackgroundColor
+                                          ),
                                         textFormat: CountdownTextFormat.S,
                                         isReverse: true,
                                         isReverseAnimation: false,
@@ -305,7 +305,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                         onChange: (String timeStamp) {},
                                         timeFormatterFunction: (defaultFormatterFunction, duration) {
                                           
-                                          if (duration.inSeconds > 0) {
+                                          if (duration.inSeconds >= 0 && duration.inSeconds <= 5 ) {
                                             String durationString = Function.apply(defaultFormatterFunction, [duration]);
                                             int parsedDuration = int.parse(durationString);
                                             String finalDuration = (parsedDuration+1).toString();

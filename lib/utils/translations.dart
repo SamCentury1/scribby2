@@ -1137,7 +1137,7 @@ final List<Map<String,dynamic>> translations = [
       "french": "Maximum points",
       "spanish": "mayoría puntos",
       "german" : "Die meisten Punkte",
-      "italian" : "La maggior parte dei punti",
+      "italian" : "miglior svolta (punti)",
       "portuguese" : "A maioria dos pontos",
       "greek" : "Οι περισσότεροι πόντοι",
       "dutch" : "De meeste punten",
@@ -1152,7 +1152,7 @@ final List<Map<String,dynamic>> translations = [
       "french": "Maximum mots",
       "spanish": "mayoría palabras",
       "german" : "Die meisten Wörter",
-      "italian" : "La maggior parte delle parole",
+      "italian" : "svolta migliore (parole)",
       "portuguese" : "A maioria das palavras",
       "greek" : "Οι περισσότερες λέξεις",
       "dutch" : "De meeste woorden",
@@ -1850,7 +1850,19 @@ final List<Map<String,dynamic>> translations = [
       "dutch" : "Handleiding overslaan",
     }    
   },    
-
+  {
+    'key': 'Demonstration',
+    'data': {
+      'english': 'Demonstration',
+      'french': 'Démonstration',
+      'spanish': 'Demostración',
+      'german': 'Nachweis',
+      'italian': 'Dimostrazione',
+      'portuguese': 'Demonstração',
+      'greek': 'Αποδείξεις',
+      'dutch': 'Demonstratie'
+    }
+  },
 
 
   {

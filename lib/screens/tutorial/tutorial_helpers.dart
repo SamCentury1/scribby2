@@ -187,15 +187,15 @@ class TutorialHelpers {
     late Map<String, dynamic> currentStep = getCurrentStep2(tutorialState);
 
     if (currentStep['step'] > 0) {
-      if (currentStep['step'] == 36) {
-        tutorialState.setSequenceStep(currentStep['step']-14);
-        animationState.setShouldRunTutorialPreviousStepAnimation(true);
-        animationState.setShouldRunTutorialPreviousStepAnimation(false);        
-      } else {
+      // if (currentStep['step'] == 36) {
+      //   tutorialState.setSequenceStep(currentStep['step']-14);
+      //   animationState.setShouldRunTutorialPreviousStepAnimation(true);
+      //   animationState.setShouldRunTutorialPreviousStepAnimation(false);        
+      // } else {
         tutorialState.setSequenceStep(currentStep['step'] - 1);
         animationState.setShouldRunTutorialPreviousStepAnimation(true);
         animationState.setShouldRunTutorialPreviousStepAnimation(false);        
-      }
+      // }
     }
 
     print(tutorialState.sequenceStep);
@@ -291,199 +291,304 @@ class TutorialHelpers {
     return newLetters;
   }
 
-  void getFullTutorialStates2(
-      TutorialState tutorialState, List<Map<String, dynamic>> steps, String currentLanguage) {
+
+  // List<Map<String, dynamic>> getCopyOfTutorialStates(TutorialState tutorialState, List<Map<String, dynamic>> steps) {
+
+  //   late List<Map<String, dynamic>> boardTemplate = [];
+  //   for (Map<String,dynamic> item in tutorialBoard_1) {
+  //     late Map<String,dynamic> newMap = {}; 
+  //     item.forEach((key, value) {
+  //       newMap[key] = value;
+  //     });     
+  //     boardTemplate.add(newMap);
+  //   }
+  //   late List<Map<String, dynamic>> states = [];
+
+  //   for (Map<String,dynamic> item in steps) {
+  //     late Map<String,dynamic> newMap = {}; 
+  //     item.forEach((key, value) {
+  //       newMap[key] = value;
+  //     });      
+  //     newMap['tileState'] = boardTemplate;
+  //     states.add(newMap);
+  //   }
+  //   return states;
+  // }
+
+  void getFullTutorialStates3(TutorialState tutorialState, List<Map<String, dynamic>> steps, String currentLanguage) {
     late List<Map<String, dynamic>> states = [];
+
     late List<String> letters = translateLetter(currentLanguage,tutorialState.tutorialLettersToAdd);
 
-    late List<Map<String, dynamic>> newBoard = tutorialBoard_1;
-    late List<Map<String, dynamic>> newReserves = tutorialState.reserveTiles;
+    // late List<Map<String, dynamic>> newReserves = tutorialState.reserveTiles;    
 
-    // late int move = 0;
+    for (var currentStep in steps) {
 
-    for (int i = 0; i < steps.length; i++) {
-      late Map<String, dynamic> currentStep = steps[i];
-      late List<Map<String, dynamic>> boardAtStep = [];
-      late List<Map<String, dynamic>> reservesAtStep = [];
+      List<Map<String, dynamic>> boardStateCopy = tutorialState.tutorialBoardState
+          .map((map) => Map<String, dynamic>.from(map))
+          .toList();      
 
-      if (currentStep['isTapped'] || currentStep['autoPlace']) {
-        // move = move + 1;
-        tutorialState.setTutorialMove(tutorialState.tutorialMove + 1);
 
-        late String targetType = currentStep['input'].split("_")[0];
-        late int targetIndex = int.parse(currentStep['input'].split("_")[1]);
-        late String letterSource = letters[tutorialState.tutorialMove];
+      List<Map<String, dynamic>> reservesStateCopy = tutorialState.reserveTiles
+          .map((map) => Map<String,dynamic>.from(map))
+          .toList();
 
-        if (targetType == 'tile') {
-          /// create a new board where the state reflects that tile getting populated with a letter;
+      // if (currentStep['isTapped'] || currentStep['autoPlace']) {
+      //   tutorialState.setTutorialMove(tutorialState.tutorialMove + 1);
+      // }
 
-          late Map<String, dynamic> tileState =
-              newBoard.firstWhere((element) => element['index'] == targetIndex);
 
-          for (int j = 0; j < newBoard.length; j++) {
-            final bool alive =
-                currentStep['autoPlace'] ? false : newBoard[j]['alive'];
-            final bool active =
-                currentStep['tilesInWord'].contains(newBoard[j]['index']);
 
-            if (newBoard[j]['index'] == targetIndex) {
-              boardAtStep.add({
-                "index": newBoard[j]['index'],
-                "tileId": newBoard[j]['tileId'],
-                "row": newBoard[j]['row'],
-                "column": newBoard[j]['column'],
-                "letter": letterSource,
-                "active": active,
-                "alive": alive, // newBoard[j]['alive'],
-              });
-            } else {
-              boardAtStep.add({
-                "index": newBoard[j]['index'],
-                "tileId": newBoard[j]['tileId'],
-                "row": newBoard[j]['row'],
-                "column": newBoard[j]['column'],
-                "letter": newBoard[j]['letter'],
-                "active": active,
-                "alive": newBoard[j]['alive'], // newBoard[j]['alive'],
-              });
-            }
-          }
+      for (var letterToUpdate in currentStep['board']) {
 
-          newBoard = boardAtStep;
-          reservesAtStep = steps[i - 1]['reserves'];
+        if (letterToUpdate['tile'] != null) {
+          late Map<String,dynamic> targetLetterObject =  reservesStateCopy.firstWhere((element) => element['id'] == letterToUpdate['index']);
+          String letterString = tutorialLetters[currentLanguage][letterToUpdate['letter']];
 
-          // tileState.update('letter', (value) => letterSource);
-          // tileState.update('active', (value) => false);
-          // boardAtStep[boardAtStep.indexWhere((element) => element['index'] == targetIndex)] = tileState;
-        } else if (targetType == 'reserve') {
-          late Map<String, dynamic> reserveState =
-              newReserves.firstWhere((element) => element['id'] == targetIndex);
+          targetLetterObject.update('body', (value) => letterString);
 
-          // reserveState.update('body', (value) => letterSource);
-          // newReserves[newReserves.indexWhere((element) => element['id'] == targetIndex)] = reserveState;
-
-          for (int j = 0; j < newReserves.length; j++) {
-            if (newReserves[j]['id'] == targetIndex) {
-              // reserveState.update('body', (value) => letterSource);
-              reservesAtStep
-                  .add({"id": newReserves[j]['id'], "body": letterSource});
-            } else {
-              reservesAtStep.add(newReserves[j]);
-            }
-          }
-
-          newReserves = reservesAtStep;
-          boardAtStep = steps[i - 1]['tileState'];
-
-          // print(  "turn $i === reserves:  $newReserves");
-        }
-      } else {
-        if (currentStep['tilesToRemove'].isNotEmpty) {
-          for (int j = 0; j < newBoard.length; j++) {
-            if (currentStep['tilesToRemove'].contains(newBoard[j]['index'])) {
-              boardAtStep.add({
-                "index": newBoard[j]['index'],
-                "tileId": newBoard[j]['tileId'],
-                "row": newBoard[j]['row'],
-                "column": newBoard[j]['column'],
-                "letter": "",
-                "active": false,
-                "alive": newBoard[j]['alive'],
-              });
-            } else {
-              boardAtStep.add(newBoard[j]);
-            }
-          }
-          newBoard = boardAtStep;
-          reservesAtStep = steps[i - 1]['reserves'];
-        }
-
-        if (currentStep['isDrag']) {
-          log(steps[i - 1]['reserves'].toString());
-
-          // late String dragTileType = currentStep['dragSource'].split("_")[0];
-          late int dragTileIndex =
-              int.parse(currentStep['dragSource'].split("_")[1]);
-          late Map<String, dynamic> reserveObject = steps[i - 1]['reserves']
-              .firstWhere((element) => element['id'] == dragTileIndex);
-          late String letterSource = reserveObject['body'];
-
-          late String targetType = currentStep['input'].split("_")[0];
-          late int targetIndex = int.parse(currentStep['input'].split("_")[1]);
-          // late String letterSource = letters[tutorialState.tutorialMove];
-
-          for (int j = 0; j < newBoard.length; j++) {
-            // final bool alive =  currentStep['autoPlace'] ? false : newBoard[j]['alive'];
-            final bool active =
-                currentStep['tilesInWord'].contains(newBoard[j]['index']);
-            if (newBoard[j]['index'] == targetIndex) {
-              // tileState.update('letter', (value) => letterSource);
-              // tileState.update('active', (value) => false);
-              boardAtStep.add({
-                "index": newBoard[j]['index'],
-                "tileId": newBoard[j]['tileId'],
-                "row": newBoard[j]['row'],
-                "column": newBoard[j]['column'],
-                "letter": letterSource,
-                "active": active,
-                "alive": newBoard[j]['alive'],
-              });
-            } else {
-              boardAtStep.add({
-                "index": newBoard[j]['index'],
-                "tileId": newBoard[j]['tileId'],
-                "row": newBoard[j]['row'],
-                "column": newBoard[j]['column'],
-                "letter": newBoard[j]['letter'],
-                "active": active,
-                "alive": newBoard[j]['alive'],
-              });
-              // boardAtStep.add(newBoard[j]);
-            }
-          }
-
-          for (int j = 0; j < newReserves.length; j++) {
-            if (newReserves[j]['id'] == dragTileIndex) {
-              reservesAtStep.add({
-                "id": dragTileIndex,
-                "body": "",
-              });
-            } else {
-              reservesAtStep.add(newReserves[j]);
-            }
-          }
-
-          newBoard = boardAtStep;
-          newReserves = reservesAtStep;
-          // reservesAtStep = steps[i-1]['reserves'];
         } else {
-          if (tutorialState.sequenceStep > 2) {
-            boardAtStep = steps[i - 1]['tileState'];
-            reservesAtStep = steps[i - 1]['reserves'];
+          late Map<String,dynamic> targetLetterObject =  boardStateCopy.firstWhere((element) => element['index'] == letterToUpdate['index']);
+          String letterString = tutorialLetters[currentLanguage][letterToUpdate['letter']];
+
+          targetLetterObject.update('letter', (value) => letterString);
+
+          if (letterToUpdate['active'] != null) {
+            targetLetterObject.update('active', (value) => letterToUpdate['active']);
+          }
+
+          if (letterToUpdate['alive'] != null) {
+            targetLetterObject.update('alive', (value) => letterToUpdate['alive']);
           }
         }
+
+
+        // boardAtStep[boardAtStep.indexWhere((element) => element['index'] == letterToUpdate['index'])] == targetLetterObject;
       }
-
+    
       String translatedText = translateTutorialStep(currentLanguage, currentStep['text']);
-      print("the text for the current step is ${translatedText}");
 
-      // currentStep['translatedText'] = translatedText; 
       currentStep.update('text', (value) => translatedText);
-      currentStep['random_letter_3'] = letters[tutorialState.tutorialMove];
-      currentStep['random_letter_2'] = letters[tutorialState.tutorialMove + 1];
-      currentStep['random_letter_1'] = letters[tutorialState.tutorialMove + 2];
-      currentStep['tileState'] = newBoard;
-      currentStep['reserves'] = newReserves;
+      // currentStep['random_letter_3'] = letters[tutorialState.tutorialMove];
+      // currentStep['random_letter_2'] = letters[tutorialState.tutorialMove + 1];
+      // currentStep['random_letter_1'] = letters[tutorialState.tutorialMove + 2];
+      currentStep['random_letter_3'] = letters[currentStep['turn']];
+      currentStep['random_letter_2'] = letters[currentStep['turn'] + 1];
+      currentStep['random_letter_1'] = letters[currentStep['turn'] + 2];      
+      currentStep['tileState'] = boardStateCopy;
+      currentStep['reserves'] = reservesStateCopy;
 
       // print(currentStep['tileState']);
       // log(currentStep.toString());
+      tutorialState.setTutorialBoardState(boardStateCopy);
+      tutorialState.setReserveTiles(reservesStateCopy);
 
       states.add(currentStep);
+      
     }
-    // log(states.toString());
-    // log(states.toString());
+
     tutorialState.setTutorialStateHistory2(states);
+
+    for (Map<String,dynamic> item in states) {
+      log("===========================================================${item.toString()}================================================================");
+    }    
+
+
+
   }
+
+
+
+  // void getFullTutorialStates2(TutorialState tutorialState, List<Map<String, dynamic>> steps, String currentLanguage) {
+  //   late List<Map<String, dynamic>> states = [];
+  //   late List<String> letters = translateLetter(currentLanguage,tutorialState.tutorialLettersToAdd);
+
+  //   late List<Map<String, dynamic>> newBoard = tutorialBoard_1;
+  //   late List<Map<String, dynamic>> newReserves = tutorialState.reserveTiles;
+
+  //   // late int move = 0;
+
+  //   for (int i = 0; i < steps.length; i++) {
+  //     late Map<String, dynamic> currentStep = steps[i];
+  //     late List<Map<String, dynamic>> boardAtStep = [];
+  //     late List<Map<String, dynamic>> reservesAtStep = [];
+
+  //     if (currentStep['isTapped'] || currentStep['autoPlace']) {
+  //       // move = move + 1;
+  //       tutorialState.setTutorialMove(tutorialState.tutorialMove + 1);
+
+  //       late String targetType = currentStep['input'].split("_")[0];
+  //       late int targetIndex = int.parse(currentStep['input'].split("_")[1]);
+  //       late String letterSource = letters[tutorialState.tutorialMove];
+
+  //       if (targetType == 'tile') {
+  //         /// create a new board where the state reflects that tile getting populated with a letter;
+
+  //         late Map<String, dynamic> tileState =
+  //             newBoard.firstWhere((element) => element['index'] == targetIndex);
+
+  //         for (int j = 0; j < newBoard.length; j++) {
+  //           final bool alive =
+  //               currentStep['autoPlace'] ? false : newBoard[j]['alive'];
+  //           final bool active =
+  //               currentStep['tilesInWord'].contains(newBoard[j]['index']);
+
+  //           if (newBoard[j]['index'] == targetIndex) {
+  //             boardAtStep.add({
+  //               "index": newBoard[j]['index'],
+  //               "tileId": newBoard[j]['tileId'],
+  //               "row": newBoard[j]['row'],
+  //               "column": newBoard[j]['column'],
+  //               "letter": letterSource,
+  //               "active": active,
+  //               "alive": alive, // newBoard[j]['alive'],
+  //             });
+  //           } else {
+  //             boardAtStep.add({
+  //               "index": newBoard[j]['index'],
+  //               "tileId": newBoard[j]['tileId'],
+  //               "row": newBoard[j]['row'],
+  //               "column": newBoard[j]['column'],
+  //               "letter": newBoard[j]['letter'],
+  //               "active": active,
+  //               "alive": newBoard[j]['alive'], // newBoard[j]['alive'],
+  //             });
+  //           }
+  //         }
+
+  //         newBoard = boardAtStep;
+  //         reservesAtStep = steps[i - 1]['reserves'];
+
+  //         // tileState.update('letter', (value) => letterSource);
+  //         // tileState.update('active', (value) => false);
+  //         // boardAtStep[boardAtStep.indexWhere((element) => element['index'] == targetIndex)] = tileState;
+  //       } else if (targetType == 'reserve') {
+  //         late Map<String, dynamic> reserveState =
+  //             newReserves.firstWhere((element) => element['id'] == targetIndex);
+
+  //         // reserveState.update('body', (value) => letterSource);
+  //         // newReserves[newReserves.indexWhere((element) => element['id'] == targetIndex)] = reserveState;
+
+  //         for (int j = 0; j < newReserves.length; j++) {
+  //           if (newReserves[j]['id'] == targetIndex) {
+  //             // reserveState.update('body', (value) => letterSource);
+  //             reservesAtStep
+  //                 .add({"id": newReserves[j]['id'], "body": letterSource});
+  //           } else {
+  //             reservesAtStep.add(newReserves[j]);
+  //           }
+  //         }
+
+  //         newReserves = reservesAtStep;
+  //         boardAtStep = steps[i - 1]['tileState'];
+
+  //         // print(  "turn $i === reserves:  $newReserves");
+  //       }
+  //     } else {
+  //       if (currentStep['tilesToRemove'].isNotEmpty) {
+  //         for (int j = 0; j < newBoard.length; j++) {
+  //           if (currentStep['tilesToRemove'].contains(newBoard[j]['index'])) {
+  //             boardAtStep.add({
+  //               "index": newBoard[j]['index'],
+  //               "tileId": newBoard[j]['tileId'],
+  //               "row": newBoard[j]['row'],
+  //               "column": newBoard[j]['column'],
+  //               "letter": "",
+  //               "active": false,
+  //               "alive": newBoard[j]['alive'],
+  //             });
+  //           } else {
+  //             boardAtStep.add(newBoard[j]);
+  //           }
+  //         }
+  //         newBoard = boardAtStep;
+  //         reservesAtStep = steps[i - 1]['reserves'];
+  //       }
+
+  //       if (currentStep['isDrag']) {
+
+  //         // late String dragTileType = currentStep['dragSource'].split("_")[0];
+  //         late int dragTileIndex =
+  //             int.parse(currentStep['dragSource'].split("_")[1]);
+  //         late Map<String, dynamic> reserveObject = steps[i - 1]['reserves']
+  //             .firstWhere((element) => element['id'] == dragTileIndex);
+  //         late String letterSource = reserveObject['body'];
+
+  //         late String targetType = currentStep['input'].split("_")[0];
+  //         late int targetIndex = int.parse(currentStep['input'].split("_")[1]);
+  //         // late String letterSource = letters[tutorialState.tutorialMove];
+
+  //         for (int j = 0; j < newBoard.length; j++) {
+  //           // final bool alive =  currentStep['autoPlace'] ? false : newBoard[j]['alive'];
+  //           final bool active =
+  //               currentStep['tilesInWord'].contains(newBoard[j]['index']);
+  //           if (newBoard[j]['index'] == targetIndex) {
+  //             // tileState.update('letter', (value) => letterSource);
+  //             // tileState.update('active', (value) => false);
+  //             boardAtStep.add({
+  //               "index": newBoard[j]['index'],
+  //               "tileId": newBoard[j]['tileId'],
+  //               "row": newBoard[j]['row'],
+  //               "column": newBoard[j]['column'],
+  //               "letter": letterSource,
+  //               "active": active,
+  //               "alive": newBoard[j]['alive'],
+  //             });
+  //           } else {
+  //             boardAtStep.add({
+  //               "index": newBoard[j]['index'],
+  //               "tileId": newBoard[j]['tileId'],
+  //               "row": newBoard[j]['row'],
+  //               "column": newBoard[j]['column'],
+  //               "letter": newBoard[j]['letter'],
+  //               "active": active,
+  //               "alive": newBoard[j]['alive'],
+  //             });
+  //             // boardAtStep.add(newBoard[j]);
+  //           }
+  //         }
+
+  //         for (int j = 0; j < newReserves.length; j++) {
+  //           if (newReserves[j]['id'] == dragTileIndex) {
+  //             reservesAtStep.add({
+  //               "id": dragTileIndex,
+  //               "body": "",
+  //             });
+  //           } else {
+  //             reservesAtStep.add(newReserves[j]);
+  //           }
+  //         }
+
+  //         newBoard = boardAtStep;
+  //         newReserves = reservesAtStep;
+  //         // reservesAtStep = steps[i-1]['reserves'];
+  //       } else {
+  //         if (tutorialState.sequenceStep > 2) {
+  //           boardAtStep = steps[i - 1]['tileState'];
+  //           reservesAtStep = steps[i - 1]['reserves'];
+  //         }
+  //       }
+  //     }
+
+  //     String translatedText = translateTutorialStep(currentLanguage, currentStep['text']);
+
+  //     // currentStep['translatedText'] = translatedText; 
+  //     currentStep.update('text', (value) => translatedText);
+  //     currentStep['random_letter_3'] = letters[tutorialState.tutorialMove];
+  //     currentStep['random_letter_2'] = letters[tutorialState.tutorialMove + 1];
+  //     currentStep['random_letter_1'] = letters[tutorialState.tutorialMove + 2];
+  //     currentStep['tileState'] = newBoard;
+  //     currentStep['reserves'] = newReserves;
+
+  //     // print(currentStep['tileState']);
+  //     // log(currentStep.toString());
+
+  //     states.add(currentStep);
+  //   }
+  //   // log(states.toString());
+  //   // log(states.toString());
+  //   tutorialState.setTutorialStateHistory2(states);
+  // }
 
   // void getFullTutorialStates(TutorialState tutorialState, List<Map<String,dynamic>> steps) {
   //   for (int i=0; i < steps.length; i++) {
@@ -575,8 +680,7 @@ class TutorialHelpers {
 
   Map<String, dynamic> getPreviousStep2(TutorialState tutorialState) {
     int step = tutorialState.sequenceStep;
-    List<Map<String, dynamic>> tutorialStateHistory2 =
-        tutorialState.tutorialStateHistory2;
+    List<Map<String, dynamic>> tutorialStateHistory2 = tutorialState.tutorialStateHistory2;
     if (tutorialState.sequenceStep <= 0) {
       step = tutorialState.sequenceStep;
     } else {
@@ -586,6 +690,18 @@ class TutorialHelpers {
         tutorialStateHistory2.firstWhere((element) => element['step'] == step);
     return currentStep;
   }
+
+  Map<String, dynamic> getNextStep2(TutorialState tutorialState) {
+    int step = tutorialState.sequenceStep;
+    List<Map<String, dynamic>> tutorialStateHistory2 = tutorialState.tutorialStateHistory2;
+
+    step = tutorialState.sequenceStep >= (tutorialState.tutorialStateHistory2.length - 1)
+      ? tutorialState.sequenceStep
+      : tutorialState.sequenceStep + 1;
+
+    final Map<String, dynamic> stepDetails = tutorialStateHistory2.firstWhere((element) => element['step'] == step);
+    return stepDetails;
+  }  
 
   Color getGlowAnimationColor(Map<String, dynamic> currentStep,
       ColorPalette palette, dynamic widgetId, Animation animation) {
@@ -640,7 +756,8 @@ class TutorialHelpers {
 
 
       // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
-      getFullTutorialStates2(tutorialState, tutorialDetails, gamePlayState.currentLanguage);
+      getFullTutorialStates3(tutorialState, tutorialDetails, gamePlayState.currentLanguage);
+      // getFullTutorialStates2(tutorialState, tutorialDetails, gamePlayState.currentLanguage);
       // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
       
       Navigator.of(context).pushReplacement(

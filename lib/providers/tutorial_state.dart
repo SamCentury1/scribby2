@@ -272,6 +272,24 @@ class TutorialState extends ChangeNotifier {
     notifyListeners();
   }  
 
+  List<Map<String,dynamic>> _tutorialStateHistory3 = [];
+  List<Map<String,dynamic>> get tutorialStateHistory3 => _tutorialStateHistory3;
+
+  void setTutorialStateHistory3(List<Map<String,dynamic>> value) {
+    _tutorialStateHistory3 = value;
+    notifyListeners();
+  }    
+
+
+  List<Map<String,dynamic>> _tutorialBoardState = tutorialBoard_1;
+  List<Map<String,dynamic>> get tutorialBoardState => _tutorialBoardState;
+
+  void setTutorialBoardState(List<Map<String,dynamic>> value) {
+    _tutorialBoardState = value;
+    notifyListeners();
+  }    
+
+
   int _tutorialMove = 0;
   int get tutorialMove => _tutorialMove;
 

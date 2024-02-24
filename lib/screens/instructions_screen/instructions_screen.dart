@@ -46,6 +46,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
       final Map<String,dynamic> userData = (settings.userData.value as Map<String, dynamic>);
       final Map<String, dynamic> alphabetObject = (settings.alphabet.value as Map<String, dynamic>);
       res = {"userData": userData, "alphabet": alphabetObject['alphabet']};
+
     } catch (error) {
       debugPrint(error.toString());
     }
@@ -291,6 +292,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                     direction: Axis.horizontal,
                                     children: [
                                       for (dynamic item in snapshot.data!['alphabet'])
+                                      
                                         SizedBox(
                                             width: 45,
                                             height: 45,

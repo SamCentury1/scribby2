@@ -120,7 +120,7 @@ class _TutorialScreen1State extends State<TutorialScreen1>
               appBar: AppBar(
                 backgroundColor: palette.optionButtonBgColor,
                 title: Text(
-                  'Tutorial',
+                  Helpers().translateText(gamePlayState.currentLanguage, "Demonstration"),
                   style: TextStyle(color: palette.textColor2),
                 ),
                 actions: <Widget>[
@@ -133,7 +133,9 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text("Skip Tutorial"),
+                                title: Text(
+                                  Helpers().translateText(gamePlayState.currentLanguage, "Start Game!"),
+                                ),
                                 content: Text(
                                     'Are you sure you want to skip the tutorial?'),
                                 actions: <TextButton>[
@@ -184,6 +186,14 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                           //   tutorialState.setSequenceStep(tutorialState.sequenceStep-14);
                           // }
                           TutorialHelpers().executePreviousStep(tutorialState, animationState);
+                          if (tutorialState.sequenceStep == 6) {
+                            tutorialState.tutorialCountDownController.restart(
+                              duration: 5,
+                            );
+                            tutorialState.tutorialCountDownController.pause();                       
+                            // tutorialState.tutorialCountDownController.restart();
+                          }
+                          debugPrint(tutorialState.sequenceStep.toString());
                         },
                         icon: Icon(
                           Icons.replay_circle_filled_sharp,
@@ -208,9 +218,9 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                           const TutorialTimerWidget(),
                           TutorialScoreboard(animation: _textGlowAnimation),
                           TutorialBonusItems(animation: _textGlowAnimation),
-                          const Expanded(child: SizedBox()),
+                          const Expanded(flex: 5, child: SizedBox()),
                           TutorialRandomLetters(animation: _textGlowAnimation),
-                          const Expanded(child: SizedBox()),
+                          // const Expanded(child: SizedBox()),
                           TutorialBoard(animation: _textGlowAnimation),
                           const Expanded(child: SizedBox()),
                           Container(
@@ -237,10 +247,10 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                                   onTap: () {
                                     if (currentStep['callbackTarget'] ==
                                         'pause') {
-                                      tutorialState.setSequenceStep(
-                                          tutorialState.sequenceStep + 1);
+                                      tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+                                      animationState.setShouldRunTutorialNextStepAnimation(true);
+                                      animationState.setShouldRunTutorialNextStepAnimation(false);
                                     }
-                                    debugPrint('pause');
                                   },
                                 );
                               },
@@ -316,305 +326,308 @@ Widget spaceForSteps(Map<String, dynamic> currentStep) {
 //   return res;
 // }
 
-class GameSummaryScreen extends StatelessWidget {
-  const GameSummaryScreen({super.key});
+// class GameSummaryScreen extends StatelessWidget {
+//   const GameSummaryScreen({super.key});
 
-  @override
-  Key? get key => null;
+//   @override
+//   Key? get key => null;
 
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<TutorialState>(builder: (context, tutorialState, child) {
-      return DialogWidget(
-          key, "Game Summary", TutorialSummaryContent(tutorialState), null);
-    });
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<TutorialState>(builder: (context, tutorialState, child) {
+//       return DialogWidget(
+//           key, "Game Summary", TutorialSummaryContent(tutorialState), null);
+//     });
+//   }
+// }
 
-class TutorialSummaryContent extends StatefulWidget {
-  final TutorialState tutorialState;
-  // final GameState gameState;
-  const TutorialSummaryContent(this.tutorialState,
-      // this.gameState,
-      {super.key});
+// class TutorialSummaryContent extends StatefulWidget {
+//   final TutorialState tutorialState;
+//   // final GameState gameState;
+//   const TutorialSummaryContent(this.tutorialState,
+//       // this.gameState,
+//       {super.key});
 
-  @override
-  State<TutorialSummaryContent> createState() => _TutorialSummaryContentState();
-}
+//   @override
+//   State<TutorialSummaryContent> createState() => _TutorialSummaryContentState();
+// }
 
-class _TutorialSummaryContentState extends State<TutorialSummaryContent> {
-  late bool displayWords;
+// class _TutorialSummaryContentState extends State<TutorialSummaryContent> {
+//   // late bool displayWords;
 
-  @override
-  void initState() {
-    super.initState();
-    displayWords = false;
-  }
+//   // @override
+//   // void initState() {
+//   //   super.initState();
+//   //   displayWords = false;
+//   // }
 
-  void toggleDisplay() {
-    setState(() {
-      displayWords = !displayWords;
-    });
-  }
+//   // void toggleDisplay() {
+//   //   setState(() {
+//   //     displayWords = !displayWords;
+//   //   });
+//   // }
 
-  @override
-  Widget build(BuildContext context) {
-    late ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: true);
+//   @override
+//   Widget build(BuildContext context) {
+//     late ColorPalette palette =
+//         Provider.of<ColorPalette>(context, listen: true);
 
-    return Consumer<TutorialState>(
-      builder: (context, tutorialState, child) {
-        return displayWords
-            ? ShowWordsView(
-                palette: palette,
-                tutorialState: tutorialState,
-                toggleDisplay: toggleDisplay,
-              )
-            : TutorialSummaryView(
-                palette: palette,
-                tutorialState: tutorialState,
-                // curentHighscore: Helpers().getCurrentHighScore(settings),
-                toggleDisplay: toggleDisplay);
-      },
-    );
-  }
-}
+//     return Consumer<TutorialState>(
+//       builder: (context, tutorialState, child) {
+//         if (tutorialState.sequenceStep == 42) {
+//           return ShowWordsView(
+//             palette: palette,
+//             tutorialState: tutorialState,
+//             // toggleDisplay: toggleDisplay,
+//           );         
+//         } else if (tutorialState.sequenceStep == 41) {
+//           return TutorialSummaryView(
+//             palette: palette,
+//             tutorialState: tutorialState,
+//             // curentHighscore: Helpers().getCurrentHighScore(settings),
+//             // toggleDisplay: toggleDisplay
+//           );
+//         } else {
+//           return SizedBox();
+//         }
+//         // return tutorialState.sequenceStep == 42 
+//         //     ? ShowWordsView(
+//         //         palette: palette,
+//         //         tutorialState: tutorialState,
+//         //         toggleDisplay: toggleDisplay,
+//         //       )
+//         //     : TutorialSummaryView(
+//         //         palette: palette,
+//         //         tutorialState: tutorialState,
+//         //         // curentHighscore: Helpers().getCurrentHighScore(settings),
+//         //         toggleDisplay: toggleDisplay);
+//       },
+//     );
+//   }
+// }
 
-class ShowWordsView extends StatefulWidget {
-  final ColorPalette palette;
-  final TutorialState tutorialState;
-  final VoidCallback toggleDisplay;
+// class ShowWordsView extends StatefulWidget {
+//   final ColorPalette palette;
+//   final TutorialState tutorialState;
+//   // final VoidCallback toggleDisplay;
 
-  const ShowWordsView(
-      {super.key,
-      required this.palette,
-      required this.tutorialState,
-      required this.toggleDisplay});
+//   const ShowWordsView(
+//       {super.key,
+//       required this.palette,
+//       required this.tutorialState,
+//       // required this.toggleDisplay
+//     });
 
-  @override
-  State<ShowWordsView> createState() => _ShowWordsViewState();
-}
+//   @override
+//   State<ShowWordsView> createState() => _ShowWordsViewState();
+// }
 
-class _ShowWordsViewState extends State<ShowWordsView> {
-  // late bool displayWords;
+// class _ShowWordsViewState extends State<ShowWordsView> {
+//   // late bool displayWords;
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                // "All ${widget.gamePlayState.summaryData['uniqueWords'].length} Unique Words",
-                "0",
-                style: const TextStyle(fontSize: 24),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: Table(
-                columnWidths: const {
-                  0: FixedColumnWidth(1),
-                  1: FixedColumnWidth(200),
-                },
-                children: [
-                  // for (int i = 0;i <widget.gamePlayState.summaryData['uniqueWords'].length;i++)
-                  //   TableRow(children: [
-                  //     TableCell(
-                  //         child: Text(
-                  //       "${(i + 1).toString()}.",
-                  //       style: TextStyle(
-                  //         fontSize: 22,
-                  //         color: widget.palette.textColor2,
-                  //       ),
-                  //     )),
-                  //     TableCell(
-                  //         child: Text(
-                  //       widget.gamePlayState.summaryData['uniqueWords']
-                  //           [i],
-                  //       style: TextStyle(
-                  //         fontSize: 22,
-                  //         color: widget.palette.textColor2,
-                  //       ),
-                  //     )),
-                  //   ])
-                ],
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: widget.toggleDisplay,
-            child: Row(
-              children: [
-                const Expanded(flex: 1, child: SizedBox()),
-                Icon(Icons.arrow_upward,
-                    size: 20, color: widget.palette.textColor2),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Hide",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: widget.palette.textColor2,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SingleChildScrollView(
+//       child: Column(
+//         children: [
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Text(
+//                 // "All ${widget.gamePlayState.summaryData['uniqueWords'].length} Unique Words",
+//                 "0",
+//                 style: const TextStyle(fontSize: 24),
+//               ),
+//             ],
+//           ),
+//           const SizedBox(
+//             height: 20,
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(8.0),
+//             child: SizedBox(
+//               width: double.infinity,
+//               child: Table(
+//                 columnWidths: const {
+//                   0: FixedColumnWidth(1),
+//                   1: FixedColumnWidth(200),
+//                 },
+//                 children: [
+//                   TableRow(children: [Text("caca")])
+//                 ],
+//               ),
+//             ),
+//           ),
+//           InkWell(
+//             // onTap: widget.toggleDisplay,
+//             child: Row(
+//               children: [
+//                 const Expanded(flex: 1, child: SizedBox()),
+//                 Icon(Icons.arrow_upward,
+//                     size: 20, color: widget.palette.textColor2),
+//                 const SizedBox(
+//                   width: 10,
+//                 ),
+//                 Text(
+//                   "Hide",
+//                   style: TextStyle(
+//                     fontSize: 24,
+//                     color: widget.palette.textColor2,
+//                   ),
+//                 )
+//               ],
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class TutorialSummaryView extends StatefulWidget {
-  final ColorPalette palette;
-  final TutorialState tutorialState;
-  // final int curentHighscore;
-  final VoidCallback toggleDisplay;
-  const TutorialSummaryView(
-      {super.key,
-      required this.palette,
-      required this.tutorialState,
-      // required this.curentHighscore,
-      required this.toggleDisplay});
+// class TutorialSummaryView extends StatefulWidget {
+//   final ColorPalette palette;
+//   final TutorialState tutorialState;
+//   // final int curentHighscore;
+//   // final VoidCallback toggleDisplay;
+//   const TutorialSummaryView(
+//       {super.key,
+//       required this.palette,
+//       required this.tutorialState,
+//       // required this.curentHighscore,
+//       // required this.toggleDisplay
+//       });
 
-  @override
-  State<TutorialSummaryView> createState() => _TutorialSummaryViewState();
-}
+//   @override
+//   State<TutorialSummaryView> createState() => _TutorialSummaryViewState();
+// }
 
-class _TutorialSummaryViewState extends State<TutorialSummaryView> {
-  @override
-  Widget build(BuildContext context) {
-    late TutorialState tutorialState =
-        Provider.of<TutorialState>(context, listen: false);
-    final Map<String, dynamic> currentStep =
-        TutorialHelpers().getCurrentStep2(tutorialState);
+// class _TutorialSummaryViewState extends State<TutorialSummaryView> {
+//   @override
+//   Widget build(BuildContext context) {
+//     late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+//     late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
+//     final Map<String, dynamic> currentStep =
+//         TutorialHelpers().getCurrentStep2(tutorialState);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(children: [
-        const Expanded(child: SizedBox()),
-        Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(5),
-            2: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            tableRowItem(
-                "Score",
-                // widget.gamePlayState.currentLevel.toString(),
-                (currentStep['points'] ?? 0).toString(),
-                Icon(Icons.emoji_events,
-                    size: 22, color: widget.palette.textColor2),
-                widget.palette),
-            tableRowItem(
-                "Duration",
-                "--",
-                Icon(Icons.timer, size: 22, color: widget.palette.textColor2),
-                widget.palette),
-            tableRowItem(
-                "Level",
-                "Level 1",
-                Icon(Icons.bar_chart,
-                    size: 22, color: widget.palette.textColor2),
-                widget.palette),
-          ],
-        ),
-        const Expanded(child: SizedBox()),
-        Text(
-          "Summary",
-          style: TextStyle(color: widget.palette.textColor2, fontSize: 24),
-        ),
-        Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(5),
-            2: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            tableRowItem(
-                "Longest Streak",
-                4.toString(),
-                Icon(Icons.bolt, size: 22, color: widget.palette.textColor2),
-                widget.palette),
-            tableRowItem(
-                "Cross Words",
-                1.toString(),
-                Icon(Icons.close, size: 22, color: widget.palette.textColor2),
-                widget.palette),
-            tableRowItem(
-                "Most Points",
-                276.toString(),
-                Icon(Icons.star, size: 22, color: widget.palette.textColor2),
-                widget.palette),
-            tableRowItem(
-                "Most Words",
-                3.toString(),
-                Icon(Icons.my_library_books,
-                    size: 22, color: widget.palette.textColor2),
-                widget.palette),
-          ],
-        ),
-        const Expanded(child: SizedBox()),
-        // widget.gamePlayState.summaryData.isEmpty
-        //     ? const SizedBox()
-        InkWell(
-          onTap: widget.toggleDisplay,
-          child: Text("View points summary"
-              // TextSpan(
-              //   text: 'View all ',
-              //   style: TextStyle(
-              //       fontSize: 20,
-              //       color: widget.palette.textColor3,
-              //       fontStyle: FontStyle.italic),
-              //   children: <TextSpan>[
-              //     TextSpan(
-              //         text: widget.gamePlayState.summaryData['uniqueWords'].length.toString(),
-              //         style: TextStyle(
-              //             decoration: TextDecoration.underline,
-              //             decorationColor: widget.palette.textColor3,
-              //             decorationThickness: 1.0)),
-              //     const TextSpan(text: ' words'),
-              //   ],
-              // ),
-              ),
-        ),
-        const Expanded(child: SizedBox()),
-      ]),
-    );
-  }
-}
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//       child: Column(children: [
+//         const Expanded(child: SizedBox()),
+//         Table(
+//           columnWidths: const <int, TableColumnWidth>{
+//             0: FlexColumnWidth(1),
+//             1: FlexColumnWidth(5),
+//             2: FlexColumnWidth(2),
+//           },
+//           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+//           children: <TableRow>[
+//             tableRowItem(
+//                 "Score",
+//                 // widget.gamePlayState.currentLevel.toString(),
+//                 (currentStep['points'] ?? 0).toString(),
+//                 Icon(Icons.emoji_events,
+//                     size: 22, color: widget.palette.textColor2),
+//                 widget.palette),
+//             tableRowItem(
+//                 "Duration",
+//                 "--",
+//                 Icon(Icons.timer, size: 22, color: widget.palette.textColor2),
+//                 widget.palette),
+//             tableRowItem(
+//                 "Level",
+//                 "Level 1",
+//                 Icon(Icons.bar_chart,
+//                     size: 22, color: widget.palette.textColor2),
+//                 widget.palette),
+//           ],
+//         ),
+//         const Expanded(child: SizedBox()),
+//         Text(
+//           "Summary",
+//           style: TextStyle(color: widget.palette.textColor2, fontSize: 24),
+//         ),
+//         Table(
+//           columnWidths: const <int, TableColumnWidth>{
+//             0: FlexColumnWidth(1),
+//             1: FlexColumnWidth(5),
+//             2: FlexColumnWidth(2),
+//           },
+//           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+//           children: <TableRow>[
+//             tableRowItem(
+//                 "Longest Streak",
+//                 4.toString(),
+//                 Icon(Icons.bolt, size: 22, color: widget.palette.textColor2),
+//                 widget.palette),
+//             tableRowItem(
+//                 "Cross Words",
+//                 1.toString(),
+//                 Icon(Icons.close, size: 22, color: widget.palette.textColor2),
+//                 widget.palette),
+//             tableRowItem(
+//                 "Most Points",
+//                 276.toString(),
+//                 Icon(Icons.star, size: 22, color: widget.palette.textColor2),
+//                 widget.palette),
+//             tableRowItem(
+//                 "Most Words",
+//                 3.toString(),
+//                 Icon(Icons.my_library_books,
+//                     size: 22, color: widget.palette.textColor2),
+//                 widget.palette),
+//           ],
+//         ),
+//         const Expanded(child: SizedBox()),
+//         // widget.gamePlayState.summaryData.isEmpty
+//         //     ? const SizedBox()
+//         InkWell(
+//           onTap: () {
+//             tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
+//             animationState.setShouldRunTutorialNextStepAnimation(true);
+//             animationState.setShouldRunTutorialNextStepAnimation(false);
+//           }, // widget.toggleDisplay,
+//           child: Text("View points summary"),
+//               // TextSpan(
+//               //   text: 'View all ',
+//               //   style: TextStyle(
+//               //       fontSize: 20,
+//               //       color: widget.palette.textColor3,
+//               //       fontStyle: FontStyle.italic),
+//               //   children: <TextSpan>[
+//               //     TextSpan(
+//               //         text: widget.gamePlayState.summaryData['uniqueWords'].length.toString(),
+//               //         style: TextStyle(
+//               //             decoration: TextDecoration.underline,
+//               //             decorationColor: widget.palette.textColor3,
+//               //             decorationThickness: 1.0)),
+//               //     const TextSpan(text: ' words'),
+//               //   ],
+//               // ),
+//               // ),
+//         ),
+//         const Expanded(child: SizedBox()),
+//       ]),
+//     );
+//   }
+// }
 
-TableRow tableRowItem(
-    String textBody, String data, Icon icon, ColorPalette palette) {
-  return TableRow(children: [
-    Center(
-      child: icon,
-    ),
-    Text(
-      textBody,
-      style: TextStyle(color: palette.textColor2, fontSize: 20),
-    ),
-    Align(
-      alignment: Alignment.centerRight,
-      child: Text(
-        data,
-        style: TextStyle(color: palette.textColor2, fontSize: 20),
-        textAlign: TextAlign.right,
-      ),
-    ),
-  ]);
-}
+// TableRow tableRowItem(
+//     String textBody, String data, Icon icon, ColorPalette palette) {
+//   return TableRow(children: [
+//     Center(
+//       child: icon,
+//     ),
+//     Text(
+//       textBody,
+//       style: TextStyle(color: palette.textColor2, fontSize: 20),
+//     ),
+//     Align(
+//       alignment: Alignment.centerRight,
+//       child: Text(
+//         data,
+//         style: TextStyle(color: palette.textColor2, fontSize: 20),
+//         textAlign: TextAlign.right,
+//       ),
+//     ),
+//   ]);
+// }

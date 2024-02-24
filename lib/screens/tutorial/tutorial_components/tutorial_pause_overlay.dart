@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
+import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
@@ -106,7 +107,7 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
                     borderRadius: BorderRadius.circular(15.0),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.85,
-                      height: MediaQuery.of(context).size.height * 0.65,
+                      height: MediaQuery.of(context).size.height * 0.55,
                       decoration: BoxDecoration(
                           borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                           color: palette.optionButtonBgColor
@@ -258,33 +259,27 @@ class TutorialSummaryScreen extends StatefulWidget {
 
 class _TutorialSummaryScreenState extends State<TutorialSummaryScreen> {
 
-
-  late bool displayWords;
-
-  @override
-  void initState() {
-    super.initState();
-    displayWords = false;
-  }
-
-  void toggleDisplay() {
-    setState(() {
-      displayWords = !displayWords;
-    });
-  }
-
   Key? get key => null;
 
-
+  
   @override
   Widget build(BuildContext context) {
-    return DialogWidget(
-      key, 
-      Helpers().translateText(widget.language, 'Game Summary'), 
-      displayWords 
-        ? TutorialDisplayScoreSummary(toggleDisplay: toggleDisplay, language: widget.language,)  
-        : TutorialDisplayGameSummary(toggleDisplay: toggleDisplay, animation: widget.animation, language: widget.language),
-      null
+    // final TutorialState tutorialState = context.read<TutorialState>();
+
+    return Consumer<TutorialState>(
+      builder: (context,tutorialState,child) {
+        return DialogWidget(
+          key, 
+          Helpers().translateText(widget.language, 'Game Summary'), 
+          // displayWords
+          tutorialState.sequenceStep >= 42  
+            ? TutorialDisplayScoreSummary( language: widget.language,)  
+            : tutorialState.sequenceStep <= 41 
+              ? TutorialDisplayGameSummary( animation: widget.animation, language: widget.language)
+              : const SizedBox(),
+          null
+        );
+      }
     );
     // return displayWords 
     //   ? TutorialDisplayScoreSummary(toggleDisplay: toggleDisplay,) 
@@ -294,11 +289,11 @@ class _TutorialSummaryScreenState extends State<TutorialSummaryScreen> {
 
 
 class TutorialDisplayScoreSummary extends StatefulWidget {
-  final VoidCallback toggleDisplay;
+  // final VoidCallback toggleDisplay;
   final String language;
   const TutorialDisplayScoreSummary({
     super.key,
-    required this.toggleDisplay,
+    // required this.toggleDisplay,
     required this.language,
   });
 
@@ -310,54 +305,58 @@ class _TutorialDisplayScoreSummaryState extends State<TutorialDisplayScoreSummar
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-    late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+    // late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
     // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
-    late Map<String,dynamic> gameSummary = tutorialState.tutorialSummaryData[widget.language]; 
-    return Column(
-      children: [
-        Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(5),
-            2: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            TableRow(
-              children: [
-                Center(
-                  child: Text(
-                    "#",
-                    style: TextStyle(color: palette.textColor2, fontSize: 20),
-                  ),
+    return Consumer<TutorialState>(
+      builder: (context, tutorialState, child) {
+        late Map<String,dynamic> gameSummary = tutorialState.tutorialSummaryData[widget.language]; 
+        return Column(
+          children: [
+            Table(
+              columnWidths: const <int, TableColumnWidth>{
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(5),
+                2: FlexColumnWidth(2),
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: <TableRow>[
+                TableRow(
+                  children: [
+                    Center(
+                      child: Text(
+                        "#",
+                        style: TextStyle(color: palette.textColor2, fontSize: 20),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        Helpers().translateText(widget.language, "Word",),
+                        style: TextStyle(color: palette.textColor2, fontSize: 20),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        Helpers().translateText(widget.language, "Points",),
+                        style: TextStyle(color: palette.textColor2, fontSize: 20),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ]
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    Helpers().translateText(widget.language, "Word",),
-                    style: TextStyle(color: palette.textColor2, fontSize: 20),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    Helpers().translateText(widget.language, "Points",),
-                    style: TextStyle(color: palette.textColor2, fontSize: 20),
-                    textAlign: TextAlign.right,
-                  ),
-                ),
+                for (int i=0; i<gameSummary['summary'].length; i++)
+                scoreSummaryTableRow(i,palette,gameSummary['summary'][i], widget.language),
               ]
             ),
-            for (int i=0; i<gameSummary['summary'].length; i++)
-            scoreSummaryTableRow(i,palette,gameSummary['summary'][i], widget.language),
-          ]
-        ),
-        const Expanded(child: SizedBox(),),        
-        // ElevatedButton(
-        //   onPressed: () {}, 
-        //   child: Text("view game")
-        // )
-      ],
+            const Expanded(child: SizedBox(),),        
+            // ElevatedButton(
+            //   onPressed: () {}, 
+            //   child: Text("view game")
+            // )
+          ],
+        );
+      } ,
     );
   }
 }
@@ -455,12 +454,12 @@ TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynami
 }
 
 class TutorialDisplayGameSummary extends StatefulWidget {
-  final VoidCallback toggleDisplay;
+  // final VoidCallback toggleDisplay;
   final Animation animation;
   final String language;
   const TutorialDisplayGameSummary({
     super.key,
-    required this.toggleDisplay,
+    // required this.toggleDisplay,
     required this.animation,
     required this.language,
   });    
@@ -474,117 +473,125 @@ class _TutorialDisplayGameSummaryState extends State<TutorialDisplayGameSummary>
 
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-    late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+    late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     
-    late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(children: [
-        const Expanded(child: SizedBox()),
-        Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(5),
-            2: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            tableRowItem(
-                Helpers().translateText(widget.language, "Score",),
-                tutorialState.tutorialSummaryData[widget.language]['score'].toString(),
-                Icon(Icons.emoji_events,
-                    size: 22, color: palette.textColor2),
-                palette),
-            tableRowItem(
-                Helpers().translateText(widget.language, "Words",),
-                tutorialState.tutorialSummaryData[widget.language]['words'].toString(),
-                Icon(Icons.book_sharp,
-                    size: 22, color: palette.textColor2),
-                palette),                
-            tableRowItem(
-                Helpers().translateText(widget.language, "Duration",),
-                "--",
-                Icon(Icons.timer, size: 22, color: palette.textColor2),
-                palette),
-            tableRowItem(
-                Helpers().translateText(widget.language, "Level",),
-                "1",
-                Icon(Icons.bar_chart,
-                    size: 22, color: palette.textColor2),
-                palette),
-          ],
-        ),
-        const Expanded(child: SizedBox()),
-        Text(
-          Helpers().translateText(widget.language, "Summary",),
-          style: TextStyle(color: palette.textColor2, fontSize: 24),
-        ),
-        Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(5),
-            2: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            tableRowItem(
-                Helpers().translateText(widget.language, "Longest Streak",),
-                tutorialState.tutorialSummaryData[widget.language]['longestStreak'].toString(),
-                Icon(Icons.bolt, size: 22, color: palette.textColor2),
-                palette),
-            tableRowItem(
-                Helpers().translateText(widget.language, "Cross Words",),
-                tutorialState.tutorialSummaryData[widget.language]['crosswords'].toString(),
-                Icon(Icons.close, size: 22, color: palette.textColor2),
-                palette),
-            tableRowItem(
-                Helpers().translateText(widget.language, "Most Points",),
-                tutorialState.tutorialSummaryData[widget.language]['mostPoints'].toString(),
-                Icon(Icons.star, size: 22, color: palette.textColor2),
-                palette),
-            tableRowItem(
-                Helpers().translateText(widget.language, "Most Words",),
-                tutorialState.tutorialSummaryData[widget.language]['mostWords'].toString(),
-                Icon(Icons.my_library_books,
-                    size: 22, color: palette.textColor2),
-                palette),
-          ],
-        ),
-        const Expanded(child: SizedBox()),
-        InkWell(
-          onTap: () {
-            if (currentStep['callbackTarget'] == 'view_score_summary') {
-              tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
-              widget.toggleDisplay();
-            }
-          },
-          child: Container(
-            padding: EdgeInsets.only(bottom: 4),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(
-              color: palette.textColor2,
-              width: 1.0, // Underline thickness
-              ))
-            ),
-            child: AnimatedBuilder(
-              animation: widget.animation,
-              builder: (context, child) {   
-                return Text(
-                  Helpers().translateText(widget.language, "View points summary",),
-                  style: TextStyle(
-                    color: palette.textColor2,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 22,
-                    shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'view_score_summary', widget.animation)
-                  ),
-                );
+    return Consumer<TutorialState>(
+      builder: (context, tutorialState, child) {
+        // late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+        late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+        
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(children: [
+            const Expanded(child: SizedBox()),
+            Table(
+              columnWidths: const <int, TableColumnWidth>{
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(5),
+                2: FlexColumnWidth(2),
               },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: <TableRow>[
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Score",),
+                    tutorialState.tutorialSummaryData[widget.language]['score'].toString(),
+                    Icon(Icons.emoji_events,
+                        size: 22, color: palette.textColor2),
+                    palette),
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Words",),
+                    tutorialState.tutorialSummaryData[widget.language]['words'].toString(),
+                    Icon(Icons.book_sharp,
+                        size: 22, color: palette.textColor2),
+                    palette),                
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Duration",),
+                    "--",
+                    Icon(Icons.timer, size: 22, color: palette.textColor2),
+                    palette),
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Level",),
+                    "1",
+                    Icon(Icons.bar_chart,
+                        size: 22, color: palette.textColor2),
+                    palette),
+              ],
             ),
-          ),
-        ),
-        const Expanded(child: SizedBox()),
-      ]),
+            const Expanded(child: SizedBox()),
+            Text(
+              Helpers().translateText(widget.language, "Summary",),
+              style: TextStyle(color: palette.textColor2, fontSize: 24),
+            ),
+            Table(
+              columnWidths: const <int, TableColumnWidth>{
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(5),
+                2: FlexColumnWidth(2),
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: <TableRow>[
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Longest Streak",),
+                    tutorialState.tutorialSummaryData[widget.language]['longestStreak'].toString(),
+                    Icon(Icons.bolt, size: 22, color: palette.textColor2),
+                    palette),
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Cross Words",),
+                    tutorialState.tutorialSummaryData[widget.language]['crosswords'].toString(),
+                    Icon(Icons.close, size: 22, color: palette.textColor2),
+                    palette),
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Most Points",),
+                    tutorialState.tutorialSummaryData[widget.language]['mostPoints'].toString(),
+                    Icon(Icons.star, size: 22, color: palette.textColor2),
+                    palette),
+                tableRowItem(
+                    Helpers().translateText(widget.language, "Most Words",),
+                    tutorialState.tutorialSummaryData[widget.language]['mostWords'].toString(),
+                    Icon(Icons.my_library_books,
+                        size: 22, color: palette.textColor2),
+                    palette),
+              ],
+            ),
+            const Expanded(child: SizedBox()),
+            GestureDetector(
+              onTap: () {
+                if (currentStep['callbackTarget'] == 'view_score_summary') {
+                  tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
+                  animationState.setShouldRunTutorialNextStepAnimation(true);
+                  animationState.setShouldRunTutorialNextStepAnimation(false);
+                  // widget.toggleDisplay();
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: 4),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(
+                  color: palette.textColor2,
+                  width: 1.0, // Underline thickness
+                  ))
+                ),
+                child: AnimatedBuilder(
+                  animation: widget.animation,
+                  builder: (context, child) {   
+                    return Text(
+                      Helpers().translateText(widget.language, "View points summary",),
+                      style: TextStyle(
+                        color: palette.textColor2,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 22,
+                        shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'view_score_summary', widget.animation)
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const Expanded(child: SizedBox()),
+          ]),
+        );
+      },
     );
   }  
 }
@@ -596,9 +603,12 @@ TableRow tableRowItem(
     Center(
       child: icon,
     ),
-    Text(
-      textBody,
-      style: TextStyle(color: palette.textColor2, fontSize: 20),
+    FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        textBody,
+        style: TextStyle(color: palette.textColor2, fontSize: 20),
+      ),
     ),
     Align(
       alignment: Alignment.centerRight,

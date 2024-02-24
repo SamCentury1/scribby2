@@ -91,7 +91,7 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                           ),
                         ),
                       ),                      
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
 

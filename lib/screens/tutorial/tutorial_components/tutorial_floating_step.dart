@@ -25,17 +25,14 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
   late AnimationState _animationState;
   late ColorPalette palette;
 
-  // late Animation<Offset> _slideEnterAnimation;
-  // late AnimationController _slideEnterController;
-
   late Animation<double> _slideEnterAnimation2;
   late AnimationController _slideEnterController2;  
 
-  late Animation<double> _slideEnterAnimation3;
-  late AnimationController _slideEnterController3;    
+  late Animation<double> _slideExitAnimation3;
+  late AnimationController _slideExitController3;    
 
-  // late Animation<Offset> _slideExitAnimation;
-  // late AnimationController _slideExitController;
+
+  late bool next = true;
 
   @override
   void initState() {
@@ -51,397 +48,227 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
 
   void _handleAnimationStateChange() {
     if (_animationState.shouldRunTutorialNextStepAnimation) {
+      setState(() {
+        next = true;
+      });
       _runSlideAnimations();
     }
 
     if (_animationState.shouldRunTutorialPreviousStepAnimation) {
-      _runReverseAnimations();
+      _runSlideAnimations();
+      setState(() {
+        next = false;
+      });
     }
   }
 
   void _runSlideAnimations() {
-    // _slideEnterController.reset();
     _slideEnterController2.reset();  
-    _slideEnterController3.reset();    
-    // _slideExitController.reset();
+    _slideExitController3.reset();    
 
-    // _slideEnterController.forward();
     _slideEnterController2.forward();
-    _slideEnterController3.forward();    
-    // _slideExitController.forward();
-  }
-
-  void _runReverseAnimations() {
-    // _slideEnterController.reverse();
-    // _slideExitController.reverse();
-    _slideEnterController2.reverse();
-    _slideEnterController3.reverse();
-     
+    _slideExitController3.forward();    
   }
 
 
   void initializeAnimations(width) {
-    // _slideEnterController = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 300),
-    // );
-
-    // _slideEnterAnimation = Tween<Offset>(
-    //   begin: const Offset(-2.0, 4.0),
-    //   end: Offset(0.0, 4.0),
-    // ).animate(_slideEnterController);
-
-    // _slideEnterController.forward();
-
-    // _slideExitController = AnimationController(
-    //     vsync: this, duration: const Duration(milliseconds: 300));
-
-    // _slideExitAnimation = Tween<Offset>(
-    //   begin: Offset(0.0, 4.0),
-    //   end: const Offset(-2.0, 4.0),
-    // ).animate(_slideExitController);
-
-    // _slideExitController.forward();
-
 
     _slideEnterController2 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-
     _slideEnterAnimation2 = Tween<double>(
-      begin: width*-1,
+      begin: width,
       end: 0,
     ).animate(_slideEnterController2);
     _slideEnterController2.forward();
 
-    _slideEnterController3 = AnimationController(
+    _slideExitController3 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
-    _slideEnterAnimation3 = Tween<double>(
+    _slideExitAnimation3 = Tween<double>(
       begin: 0,
-      end: width*1,
-    ).animate(_slideEnterController3);    
-
-    // _slideEnterController2.forward();    
+      end: width,
+    ).animate(_slideExitController3);    
+    _slideEnterController2.forward();    
   }  
 
 
-  void goToNextStep( TutorialState tutorialState, AnimationState animationState) {
-    // late Map<String, dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
-    tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
-    animationState.setShouldRunTutorialNextStepAnimation(true);
-    animationState.setShouldRunTutorialNextStepAnimation(false);
-
+  double getExitProperty(bool isNext, Map<String,dynamic> previousStep, Map<String,dynamic> nextStep, double height) {
+    final Map<String,dynamic> step = isNext ?  previousStep : nextStep;
+    return (step['height'] as double) * height;
 
   }  
+  Map<String,dynamic> getLeftOrRightEnter(Map<String,dynamic> getStepDetails, Animation animation) {
+    final double? left = getStepDetails['left'] ? (animation.value*-1) : null;
+    final double? right = getStepDetails['left'] ? null : (animation.value*-1);    
+    return {"left": left, "right": right};
+  }
+
+  Map<String,dynamic> getLeftOrRightExit(bool isNext, Map<String,dynamic> previousStep, Map<String,dynamic> nextStep, Animation animation) {
+    final Map<String,dynamic> step = isNext ? previousStep : nextStep;
+    return getLeftOrRightEnter(step,animation);
+  }
+
+  Map<String,dynamic> getTargetStepState(bool isNext,  Map<String,dynamic> previousStep,Map<String,dynamic> nextStep) {
+    final Map<String,dynamic> step = isNext ?  previousStep : nextStep;
+    return step;
+  }
 
     
   @override
   Widget build(BuildContext context) {
-
-    // Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(widget.tutorialState);
-    // Map<String,dynamic> previousStep = TutorialHelpers().getPreviousStep2(widget.tutorialState);
-    // Map<String,dynamic> previouStep = TutorialHelpers().getCurrentStep2(widget.tutorialState);
-
-
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
 
-      Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
       Map<String,dynamic> previousStep = TutorialHelpers().getPreviousStep2(tutorialState);
+      Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+      Map<String,dynamic> nextStep = TutorialHelpers().getNextStep2(tutorialState);
 
 
-      print("=================================================================");
-      print("right now, the step is ${currentStep['step']} ---------------------");
-      print("display this guy at ${MediaQuery.of(context).size.height*(currentStep['height'] as double)} from the top");
-      print("on the ${currentStep['left'] ? 'left' : 'right'} side");
-      print("----------------------------------------");
-      print("And it should say '${currentStep['text']}");
-      print("=================================================================");    
       return Stack(
         children: [
-
-          // ================ ACTUAL BUTTON =======================
-          // ================== RIGHT SIDE ==========================
-          
+          // ================ ENTER =======================
           AnimatedBuilder(
             animation: _slideEnterAnimation2,
             builder: (context, child) {
               return 
               Positioned(
                 top: MediaQuery.of(context).size.height*(currentStep['height'] as double),
-                right: _slideEnterAnimation2.value,
-                child: currentStep['left'] ? SizedBox() : Container(
-                  width: MediaQuery.of(context).size.width*0.8,
-                  child: ClipRRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 15.0,
-                        sigmaY: 15.0,
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.5),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10.0),
-                            topLeft: Radius.circular(10.0),
-                            )
-                        ),
-                        child:Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Flex(
-                            direction: Axis.horizontal,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Flexible(
-                                child: DefaultTextStyle(
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  child: Text(
-                                    currentStep['text']
-                                    // "The goal of this game is to score as many poits as possible"
-                                  )
-                                ),
-                              ),
-                              !currentStep['complete'] ? SizedBox() :
-                              IconButton(
-                                onPressed : () {
-                                  if (currentStep['step'] == 21) {
-                                    tutorialState.setSequenceStep(tutorialState.sequenceStep+15);
-                                  } else {
-                                    goToNextStep(tutorialState, _animationState);
-                                  }
-                                },
-                                padding: EdgeInsets.zero,
-                                color: palette.tileBgColor,
-                                iconSize: 36,
-                                icon: Icon(
-                                  Icons.navigate_next_sharp,
-                                ),
-                              )
-                            ],
-                          ),  
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                left: getLeftOrRightEnter(currentStep, _slideEnterAnimation2)['left'],
+                right: getLeftOrRightEnter(currentStep, _slideEnterAnimation2)['right'],
+                child: cardContainer(tutorialState,_animationState,currentStep,palette,MediaQuery.of(context).size.width*0.8),
+                // child: cardContainer(
+                //   next, 
+                //   tutorialState,
+                //   _animationState,
+                //   previousStep, 
+                //   currentStep, 
+                //   nextStep,
+                //   palette,
+                //   MediaQuery.of(context).size.width*0.8
+                // ),                
               );
             },
           ),
-      
-          // ================ FAKE BUTTON =======================
-          // ================== RIGHT SIDE ==========================      
-           
+
+          // ================ EXIT =======================
           AnimatedBuilder(
-            animation: _slideEnterAnimation3,
+            animation: _slideExitAnimation3,
             builder: (context, child) {
-              return Positioned(
-                top: MediaQuery.of(context).size.height*(previousStep['height'] as double),
-                right: _slideEnterAnimation3.value*-1,
-                child: currentStep['left'] ? SizedBox() : Container(
-                  width: MediaQuery.of(context).size.width*0.8,
-                  child: ClipRRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 15.0,
-                        sigmaY: 15.0,
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.5),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10.0),
-                            topLeft: Radius.circular(10.0),
-                            )
-                        ),
-                        child:Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Flex(
-                            direction: Axis.horizontal,
-                            children: [
-                              Flexible(
-                                child: DefaultTextStyle(
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  child: Text(
-                                    previousStep['text']
-                                  )
-                                ),
-                              ),
-                              !currentStep['complete'] ? SizedBox() :
-                              IconButton(
-                                onPressed : () {
-                                  if (currentStep['step'] == 21) {
-                                    tutorialState.setSequenceStep(tutorialState.sequenceStep+15);
-                                  } else {
-                                    goToNextStep(tutorialState, _animationState);
-                                  }
-                                },
-                                padding: EdgeInsets.zero,
-                                color: palette.tileBgColor,
-                                iconSize: 36,
-                                icon: Icon(
-                                  Icons.navigate_next_sharp,
-                                ),
-                              )
-                            ],
-                          ),  
-                        ),
-                      ),
-                    ),
-                  ),
+              return 
+              Positioned(
+                top: getExitProperty(next, previousStep, nextStep, MediaQuery.of(context).size.height),
+                // top: MediaQuery.of(context).size.height*(currentStep['height'] as double),
+                left: getLeftOrRightExit(next, previousStep, nextStep, _slideExitAnimation3)['left'],
+                right: getLeftOrRightExit(next, previousStep, nextStep, _slideExitAnimation3)['right'],
+                child: cardContainer(
+                  tutorialState,
+                  _animationState,
+                  getTargetStepState(next,previousStep,nextStep),
+                  palette,
+                  MediaQuery.of(context).size.width*0.8
                 ),
               );
             },
-          ),
-
-          // ================ ACTUAL BUTTON =======================
-          // ================== LEFT SIDE ==========================
-
-
-
-          AnimatedBuilder(
-            animation: _slideEnterAnimation2,
-            builder: (context, child) {
-              return Positioned(
-                top: MediaQuery.of(context).size.height*(currentStep['height'] as double),
-                left: _slideEnterAnimation2.value,
-                child:  !currentStep['left'] ? SizedBox() : Container(
-                  width: MediaQuery.of(context).size.width*0.8,
-                  child: ClipRRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 15.0,
-                        sigmaY: 15.0,
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.5),
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(10.0),
-                            topRight: Radius.circular(10.0),
-                            )
-                        ),
-                        child:Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Flex(
-                            direction: Axis.horizontal,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Flexible(
-                                child: DefaultTextStyle(
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  child: Text(
-                                    currentStep['text']
-                                    // "The goal of this game is to score as many poits as possible"
-                                  )
-                                ),
-                              ),
-                              !currentStep['complete'] ? SizedBox() :
-                              IconButton(
-                                onPressed : () {
-                                  if (currentStep['step'] == 21) {
-                                    tutorialState.setSequenceStep(tutorialState.sequenceStep+15);
-                                  } else {
-                                    goToNextStep(tutorialState, _animationState);
-                                  }
-                                },
-                                padding: EdgeInsets.zero,
-                                color: palette.tileBgColor,
-                                iconSize: 36,
-                                icon: Icon(
-                                  Icons.navigate_next_sharp,
-                                ),
-                              )
-                            ],
-                          ),  
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-      
-          // ================ FAKE BUTTON =======================
-          // ================== LEFT SIDE ==========================      
-      
-
-          AnimatedBuilder(
-            animation: _slideEnterAnimation3,
-            builder: (context, child) {
-              return Positioned(
-                top: MediaQuery.of(context).size.height*(previousStep['height'] as double),
-                left: _slideEnterAnimation3.value*-1,
-                child:  !currentStep['left'] ? SizedBox() : Container(
-                  width: MediaQuery.of(context).size.width*0.8,
-                  child: ClipRRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 15.0,
-                        sigmaY: 15.0,
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.5),
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(10.0),
-                            topRight: Radius.circular(10.0),
-                            )
-                        ),
-                        child:Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Flex(
-                            direction: Axis.horizontal,
-                            children: [
-                              Flexible(
-                                child: DefaultTextStyle(
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  child: Text(
-                                    previousStep['text']
-                                  )
-                                ),
-                              ),
-                              !currentStep['complete'] ? SizedBox() :
-                              IconButton(
-                                onPressed : () {
-                                  if (currentStep['step'] == 21) {
-                                    tutorialState.setSequenceStep(tutorialState.sequenceStep+15);
-                                  } else {
-                                    goToNextStep(tutorialState, _animationState);
-                                  }
-                                },
-                                padding: EdgeInsets.zero,
-                                color: palette.tileBgColor,
-                                iconSize: 36,
-                                icon: Icon(
-                                  Icons.navigate_next_sharp,
-                                ),
-                              )
-                            ],
-                          ),  
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
+          ),          
         ],
       );
       },
     );
+  }
+}
+
+
+Widget cardContainer(TutorialState tutorialState, AnimationState animationState, Map<String,dynamic> currentStep, ColorPalette palette, double width) {
+// Widget cardContainer(
+//   bool next,
+//   TutorialState tutorialState, 
+//   AnimationState animationState, 
+//   Map<String,dynamic> previousStep,
+//   Map<String,dynamic> currentStep, 
+//   Map<String,dynamic> nextStep, 
+//   ColorPalette palette, 
+//   double width) {  
+
+    return Container(
+      width: width,//MediaQuery.of(context).size.width*0.8,
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 15.0,
+            sigmaY: 15.0,
+          ),
+          child: Container(
+            decoration: getBoxDecoration(currentStep),
+            child:Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Flexible(
+                    child: DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                      child: Text(
+                        currentStep['text']
+                      )
+                    ),
+                  ),
+                  iconButton(tutorialState,animationState,currentStep,palette),
+                ],
+              ),  
+            ),
+          ),
+        ),
+      ),
+    );
+}
+
+BoxDecoration getBoxDecoration(Map<String,dynamic> stepDetails) {
+  if (stepDetails['left']) {
+    return BoxDecoration(
+      color: Colors.grey.withOpacity(0.5),
+      borderRadius: const BorderRadius.only(
+        bottomRight: Radius.circular(10.0),
+        topRight: Radius.circular(10.0),
+        )
+    );     
+  } else {
+    return BoxDecoration(
+      color: Colors.grey.withOpacity(0.5),
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(10.0),
+        topLeft: Radius.circular(10.0),
+        )
+    );   
+  }
+}
+
+Widget iconButton(TutorialState tutorialState, AnimationState animationState, Map<String,dynamic> currentStep, ColorPalette palette) {
+  if (currentStep['complete']) {    
+    return IconButton(
+      onPressed : () {
+        // if (currentStep['step'] == 21) {
+        //   tutorialState.setSequenceStep(tutorialState.sequenceStep+15);
+        // } else {
+          tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
+          animationState.setShouldRunTutorialNextStepAnimation(true);
+          animationState.setShouldRunTutorialNextStepAnimation(false);        
+        // }
+      },
+      padding: EdgeInsets.zero,
+      color: palette.tileBgColor,
+      iconSize: 36,
+      icon: const Icon(
+        Icons.navigate_next_sharp,
+      ),
+    );
+  } else {
+    return const SizedBox();
   }
 }

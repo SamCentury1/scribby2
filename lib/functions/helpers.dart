@@ -223,6 +223,7 @@ class Helpers {
   }
 
   String translateText(String language, String originalString,) {
+    // print(originalString);
     late Map<String,dynamic> languageMap = translations.firstWhere((element) => element['key'] == originalString);
     return languageMap['data'][language];
   }

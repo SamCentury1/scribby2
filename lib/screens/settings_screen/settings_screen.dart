@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,15 +39,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       isLoading = true;
     });
     try {
-      final SettingsState settingsState =
-          Provider.of<SettingsState>(context, listen: false);
-      final Map<String, dynamic> userData = await FirestoreMethods()
-          .getUserData(AuthService().currentUser!.uid) as Map<String, dynamic>;
+      final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+      final Map<String, dynamic> userData = await FirestoreMethods().getUserData(AuthService().currentUser!.uid) as Map<String, dynamic>;
       if (userData.isNotEmpty) {
         settingsState.updateUserData(userData);
         _palette.getThemeColors(userData['parameters']['darkMode']);
         setState(() {
-          // _userData = userData;
           isLoading = false;
         });
       }
@@ -452,6 +451,7 @@ Future<void> displayLanguagesDialog(BuildContext context, ColorPalette palette,
     List<dynamic> languages, String currentLanguage) async {
   return showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) {
       return LanguageDialog(
         languages: languages,
@@ -479,6 +479,7 @@ class LanguageDialog extends StatefulWidget {
 
 class _LanguageDialogState extends State<LanguageDialog> {
   late List<Map<String, dynamic>> currentSelection = [];
+  late List<Map<String, dynamic>> originalSelection;
   late SettingsState _settingsState;
 
   @override
@@ -489,17 +490,26 @@ class _LanguageDialogState extends State<LanguageDialog> {
     getLatestSelection(widget.languages, _settingsState);
   }
 
-  void getLatestSelection(
-      List<dynamic> languages, SettingsState settingsState) {
+
+
+  void getLatestSelection( List<dynamic> languages, SettingsState settingsState) {
+
     late List<Map<String, dynamic>> selected = settingsState.languageDataList
-        .where((element) => element['selected'] == true)
+        // .where((element) => element['selected'] == true)
+        .where((element) => languages.contains(element['flag']))
         .toList();
     late List<Map<String, dynamic>> unSelected = settingsState.languageDataList
-        .where((element) => element['selected'] == false)
+        // .where((element) => element['selected'] == false)
+        .where((element) => !languages.contains(element['flag']))
         .toList();
+
     late List<Map<String, dynamic>> newList = [...selected, ...unSelected];
 
     late List<Map<String, dynamic>> sortedList = [];
+
+    print("SELECTED  = $selected");
+    print("==============================");
+    print("UNSELECTED  = $unSelected");
 
     for (int i = 0; i < newList.length; i++) {
       Map<String, dynamic> newObject = newList[i];
@@ -517,6 +527,52 @@ class _LanguageDialogState extends State<LanguageDialog> {
     });
   }
 
+  void cancelSelections(List<dynamic> languages, SettingsState settingsState) {
+    late List<Map<String, dynamic>> selected = settingsState.languageDataList
+        .where((element) => languages.contains(element['flag']))
+        .toList();
+    late List<Map<String, dynamic>> unSelected = settingsState.languageDataList
+        .where((element) => !languages.contains(element['flag']))
+        .toList();
+  
+
+    // get the langs that are not part of the original selected but were marked selected = true
+
+    late List<Map<String,dynamic>> newUnSelected = [];
+    for (Map<String,dynamic> item in unSelected) {
+      if (item['selected'] == true) {
+        item.update('selected', (value) => false);
+      }
+      newUnSelected.add(item);
+    }
+
+
+    late List<Map<String,dynamic>> newSelected = [];
+    for (Map<String,dynamic> item in selected) {
+      if (item['selected'] == false) {
+        item.update('selected', (value) => true);
+      }
+      newSelected.add(item);
+    }    
+
+    // late List<Map<String,dynamic>> impostersInSelected = unSelected.where((element) => element['selected'] == true).toList();
+    
+    // for (Map<String,dynamic> imposter in impostersInSelected) {
+    //   imposter.update('selected', (value) => false);
+    // }
+    late List<Map<String, dynamic>> newList = [...newSelected, ...newUnSelected];
+    print("new list = ${newList}");
+
+    setState(() {
+      currentSelection = newList;
+    });
+
+    // newTileState[newTileState.indexWhere((element) => element['index'] == targetIndex)] = targetObject;
+  
+  }
+
+
+
   String translateDynamicLanguage(String language, String originalString, String flag) {
       String tranlatedFlag = Helpers().translateText(language, flag);
       String res = originalString.replaceAll('new_language', tranlatedFlag);
@@ -524,13 +580,18 @@ class _LanguageDialogState extends State<LanguageDialog> {
   }
 
 
-  void updateList(List<Map<String, dynamic>> languages,
-      Map<String, dynamic> targetObject, String currentLanguage) {
+
+  void updateList(List<Map<String, dynamic>> languages,Map<String, dynamic> targetObject, String currentLanguage) {
+
+    // late List<Map<String,dynamic>> languagesCopy = languages.map((e) => e ).toList();
+
     if (targetObject['flag'] == currentLanguage) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Can't remove the current language!"),
-        duration: Duration(milliseconds: 1000),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Can't remove the current language!"),
+          duration: Duration(milliseconds: 1000),
+        )
+      );
     } else {
       late String result = "";
       for (int i = 0; i < languages.length; i++) {
@@ -555,15 +616,13 @@ class _LanguageDialogState extends State<LanguageDialog> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           translateDynamicLanguage(currentLanguage, result, targetObject['flag'])
-          // '$result ${targetObject['flag']} !'
         ),
         duration: const Duration(milliseconds: 1000),
       ));
     }
   }
 
-  void setUpdatedLanguages(
-      List<Map<String, dynamic>> currentSelection, String currentLanguage) {
+  void setUpdatedLanguages(List<Map<String, dynamic>> currentSelection, String currentLanguage) {
     List<String> newLanguages = [];
 
     for (Map<String, dynamic> languageObject in currentSelection) {
@@ -610,13 +669,15 @@ class _LanguageDialogState extends State<LanguageDialog> {
 
   @override
   Widget build(BuildContext context) {
+
+    // late SettingsState settingsState = Provider.of<SettingsState>(context,listen: false);
     return AlertDialog(
       title: Text(
         Helpers().translateText(widget.currentLanguage, "Add / Remove Language",),
         style: TextStyle(color: widget.palette.optionButtonTextColor),
       ),
-      backgroundColor: widget.palette
-          .modalNavigationBarBgColor, //widget.palette.optionButtonBgColor,
+      // barrier
+      backgroundColor: widget.palette.modalNavigationBarBgColor, //widget.palette.optionButtonBgColor,
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.width,
@@ -625,36 +686,32 @@ class _LanguageDialogState extends State<LanguageDialog> {
           itemCount: currentSelection.length,
           itemBuilder: (BuildContext context, int index) {
             final Map<String, dynamic> language = currentSelection[index];
+
+            print(language);
+
             return Card(
-              color: getLanguageColor(language["change"],
-                  language["originalSelection"], widget.palette),
+              color: getLanguageColor(language["change"],language["originalSelection"], widget.palette),
               child: ListTile(
                   leading: Container(
-                    // child: Text(body),
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(50.0)),
+                      borderRadius:const BorderRadius.all(Radius.circular(50.0)),
                       image: DecorationImage(
-                        // opacity: widget.langData['selected'] ? 1.0 : 0.8,
                         image: NetworkImage(language['url']),
                       ),
                     ),
                   ),
                   title: Text(
                     language['body'],
-                    style:
-                        TextStyle(color: widget.palette.optionButtonTextColor),
+                    style:TextStyle(color: widget.palette.optionButtonTextColor),
                   ),
                   trailing: IconButton(
                       onPressed: () {
-                        updateList(
-                            currentSelection, language, widget.currentLanguage);
-                        // updateList(settingsState.languageDataList, language);
+                        updateList(currentSelection, language, widget.currentLanguage);
                       },
-                      icon: Icon(
+                      icon: Icon( 
                         language['selected']
                             ? Icons.remove_circle
                             : Icons.add_circle,
@@ -668,6 +725,20 @@ class _LanguageDialogState extends State<LanguageDialog> {
       actions: <Widget>[
         TextButton(
             onPressed: () {
+              cancelSelections(widget.languages, _settingsState);
+              // getLatestSelection(widget.languages, _settingsState);
+              print(currentSelection);
+              // print("============= ORIGINAL =================");
+              // print("======================================");
+
+
+              // print("============= CURRENT =================");
+              // print("======================================");              
+
+              // for (Map<String,dynamic> item in currentSelection) {
+              //   print(item);
+              // }
+
               Navigator.of(context).pop();
             },
             child: Text(
