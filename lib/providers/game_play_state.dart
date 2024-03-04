@@ -130,7 +130,7 @@ class GamePlayState with ChangeNotifier {
 
 
 
-  String _pressedTile = "1_1";
+  String _pressedTile = "";
   String get pressedTile => _pressedTile;
 
   void setPressedTile(String value) {
@@ -246,7 +246,7 @@ class GamePlayState with ChangeNotifier {
     _turnWords = 0;
     _activeStreak = 0;
     _currentTurn = 0;
-    _pressedTile = "1_1";
+    _pressedTile = "";
     _alphabetState = []; // startingAlphabetState;
     _randomLetterList = []; // randomLetterListState;
     _reserveTiles = [
@@ -335,6 +335,7 @@ class GamePlayState with ChangeNotifier {
 
     notifyListeners();
   }
+  
 
   bool _isGameEnded = false;
   bool get isGameEnded => _isGameEnded;
@@ -363,6 +364,17 @@ class GamePlayState with ChangeNotifier {
 
   // Duration get cdDuration => _cdDuration;
   // Timer get cdTimer => _cdTimer!;
+
+  int? _isTileTapped;
+  int? get isTileTapped => _isTileTapped;
+
+  void setIsTiletapped(int? value) {
+    _isTileTapped = value;
+    notifyListeners();
+  }
+
+
+
 
   bool _shouldPauseCountDownAnimation = false;
   bool get shouldPauseCountDownAnimation => _shouldPauseCountDownAnimation;
@@ -491,7 +503,7 @@ class GamePlayState with ChangeNotifier {
     _turnWords = 0;
     _activeStreak = 0;
     _currentTurn = 0;
-    _pressedTile = "1_1";
+    _pressedTile = "";
     _alphabetState = []; //startingAlphabetState;
     _randomLetterList = ["", "", ""];
     _reserveTiles = [

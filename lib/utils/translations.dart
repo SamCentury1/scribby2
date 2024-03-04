@@ -19,6 +19,21 @@ final List<Map<String,dynamic>> translations = [
 
 
   {
+    "key": "Home",
+    "data": {
+      "english": "Home",
+      "french": "Accueil",
+      "spanish": "Inicio",
+      "german" : "Startseite",
+      "italian" : "Inizio",
+      "portuguese" : "Começar",
+      "greek" : "Αρχή",
+      "dutch" : "Begin",
+    }
+  },
+
+
+  {
     "key": "New Game",
     "data": {
       "english": "New Game",
@@ -45,6 +60,20 @@ final List<Map<String,dynamic>> translations = [
       "dutch" : "Leidersborden",
     }
   },
+
+  {
+    "key": "Leaderboard",
+    "data": {
+      "english": "Leaderboard",
+      "french": "Classement",
+      "spanish": "Clasificación",
+      "german" : "Rangfolge",
+      "italian" : "Classifica",
+      "portuguese" : "Classificação",
+      "greek" : "Σειρά κατάταξης",
+      "dutch" : "Ranglijst",
+    }
+  },  
 
 
   {
@@ -353,7 +382,9 @@ final List<Map<String,dynamic>> translations = [
       "greek" : "Ολλανδός",
       "dutch" : "Nederlands",
     }    
-  },                        
+  },   
+
+                         
 
 
 
@@ -1244,6 +1275,21 @@ final List<Map<String,dynamic>> translations = [
     }    
   },
 
+
+   {
+    "key": "No words found yet...",
+    "data": {
+      "english": "No words found yet...",
+      "french": "Aucun mot trouvé pour l'instant...",
+      "spanish": "Aún no se han encontrado palabras...",
+      "german" : "Noch keine Wörter gefunden...",
+      "italian" : "Nessuna parola trovata ancora...",
+      "portuguese" : "Nenhuma palavra encontrada ainda...",
+      "greek" : "Δεν βρέθηκαν λέξεις ακόμα...",
+      "dutch" : "Nog geen woorden gevonden...",
+    }    
+  }, 
+
   {
     "key": "The objective of the game is to create words with the randomly generated letters.",
     "data": {
@@ -1717,16 +1763,16 @@ final List<Map<String,dynamic>> translations = [
 
 
   {
-    "key": "New High Score:",
+    "key": "New High Score",
     "data": {
-      "english": "New High Score:",
-      "french": "Nouveau record:",
-      "spanish": "Nuevo record:",
-      "german" : "Neuer Highscore:",
-      "italian" : "Nuovo record:",
-      "portuguese" : "Novo recorde:",
-      "greek" : "Νέα υψηλή βαθμολογία:",
-      "dutch" : "Nieuwe topscore:",
+      "english": "New High Score",
+      "french": "Nouveau Record",
+      "spanish": "Nuevo Record",
+      "german" : "Neuer Highscore",
+      "italian" : "Nuovo Record",
+      "portuguese" : "Novo Recorde",
+      "greek" : "Νέα υψηλή βαθμολογία",
+      "dutch" : "Nieuwe Topscore",
     }    
   },    
 
@@ -1813,7 +1859,7 @@ final List<Map<String,dynamic>> translations = [
     "key": "Welcome to Scribby! Would you like to go through the tutorial?",
     "data": {
       "english": "Welcome to Scribby! Would you like to go through the tutorial?",
-      "french": "Bienvenue à Scribby! Souhaitez-vous suivre le tutoriel ?",
+      "french": "Bienvenue à Scribby! Souhaitez-vous suivre le tutoriel?",
       "spanish": "Bienvenido a Scribby! ¿Quieres seguir el tutorial?",
       "german" : "Willkommen zu Scribby! Möchten Sie das Tutorial durchgehen?",
       "italian" : "Benvenuto a Scribby! Vuoi seguire il tutorial?",
@@ -1844,10 +1890,10 @@ final List<Map<String,dynamic>> translations = [
       "french": "Passer le tutoriel",
       "spanish": "Saltar tutorial",
       "german" : "Lernprogramm überspringen",
-      "italian" : "Salta il tutorial",
-      "portuguese" : "Pular tuturial",
+      "italian" : "Salta Tutorial",
+      "portuguese" : "Pular Tutorial",
       "greek" : "Παράλειψη εκμάθησης",
-      "dutch" : "Handleiding overslaan",
+      "dutch" : "Tutorial overslaan",
     }    
   },    
   {
@@ -1869,9 +1915,9 @@ final List<Map<String,dynamic>> translations = [
     "key": "To skip the tutorial at any step, click on 'Skip Tutorial' at the top",
     "data": {
       "english": "To skip the tutorial at any step, click on 'Skip Tutorial' at the top",
-      "french": "Pour ignorer le didacticiel à n'importe quelle étape, cliquez sur « Passer le didacticiel » en haut",
-      "spanish": "Para omitir el tutorial en cualquier paso, haga clic en 'Omitir tutorial' en la parte superior.",
-      "german" : "Um das Tutorial an einem beliebigen Punkt zu überspringen, klicken Sie oben auf „Tutorial überspringen“",
+      "french": "Pour ignorer le didacticiel à n'importe quelle étape, cliquez sur « Passer le tutoriel » en haut",
+      "spanish": "Para omitir el tutorial en cualquier paso, haga clic en 'Saltar tutorial' en la parte superior.",
+      "german" : "Um das Tutorial an einem beliebigen Punkt zu überspringen, klicken Sie oben auf „Lernprogramm überspringen“",
       "italian" : "Per saltare il tutorial in qualsiasi passaggio, fai clic su 'Salta Tutorial' in alto",
       "portuguese" : "Para pular o tutorial em qualquer etapa, clique em 'Pular Tutorial' na parte superior",
       "greek" : "Για να παραλείψετε το σεμινάριο σε οποιοδήποτε βήμα, κάντε κλικ στο 'Παράλειψη εκμάθησης' στο επάνω μέρος",
@@ -2483,7 +2529,21 @@ final List<Map<String,dynamic>> translations = [
       "greek" : "Επανεκκίνηση",
       "dutch" : "Herstarten",
     }    
-  },    {
+  },    
+  
+  // ===================================================
+  // ============= WELCOME USER ========================
+  
+  {'key': 'Select all languages you would play with',
+  'data': {'english': 'Select all languages you would play with',
+    'french': 'Sélectionnez toutes les langues que vous jouiez avec',
+    'spanish': 'Seleccione todos los idiomas con los que jugaría',
+    'german': 'Wählen Sie alle Sprachen aus, mit denen Sie spielen würden',
+    'italian': 'Seleziona tutte le lingue con cui vuoi giocare',
+    'portuguese': 'Selecione todos os idiomas com os quais você jogaria',
+    'greek': 'Επιλέξτε όλες τις γλώσσες που θα παίξετε με',
+    'dutch': 'Verkoop alle talen waarmee je zou spelen'}},
+  {
     "key": "",
     "data": {
       "english": "",

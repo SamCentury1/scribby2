@@ -23,6 +23,7 @@ class AuthService {
           "soundOn": true,
           "hasSeenTutorial": false,
         },
+        "createdAt": DateTime.now(),
         "highScores": {}
       });
       // } on FirebaseAuthException catch (e) {

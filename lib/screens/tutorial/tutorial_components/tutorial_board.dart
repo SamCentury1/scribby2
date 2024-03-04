@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_draggable_tile.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
@@ -31,7 +32,10 @@ class _TutorialBoardState extends State<TutorialBoard> {
 
   @override
   Widget build(BuildContext context) {
-    late double boardWidth = MediaQuery.of(context).size.width * 0.7;
+
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+
+    late double boardWidth = (MediaQuery.of(context).size.width )*settingsState.sizeFactor*0.8;
     late double tileSide = boardWidth / 6;
 
     
@@ -70,12 +74,12 @@ class _TutorialBoardState extends State<TutorialBoard> {
             ),
           ),
           // const Expanded(flex: 1, child: SizedBox()),
-          const SizedBox(height: 10,),
+          SizedBox(height: 10*settingsState.sizeFactor,),
           Consumer<TutorialState>(
             builder: (context, tutorialState, child) {
               return SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: (MediaQuery.of(context).size.width * 0.7)/6,
+                width: MediaQuery.of(context).size.width *settingsState.sizeFactor*0.8,
+                height: (MediaQuery.of(context).size.width *settingsState.sizeFactor*0.8)/6,
                 // color: Colors.purple,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -262,48 +266,13 @@ class _TutorialTileState extends State<TutorialTile>
     return res;
   }
 
-  // Color getBoxShadow(Map<String, dynamic> tileObject,TutorialState tutorialState, ColorPalette palette, ) {
-  //   // Map<String, dynamic> stepDetails = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-  //   Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-  //   Color res = Colors.transparent;
-
-  //   // print(stepDetails);
-  //   if (stepDetails['targets'].contains(tileObject['index'])) {
-  //     // if (tileObject['letter'] == "") {
-  //       res = Color.fromRGBO(
-  //         palette.focusedTutorialTile.red,
-  //         palette.focusedTutorialTile.green,
-  //         palette.focusedTutorialTile.blue,
-  //         0.3);
-  //       // );
-  //     // } else {
-  //     //   res = Colors.transparent;
-  //     // }
-  //   } else {
-  //     res = Colors.transparent;
-  //   }
-  //   return res;
-  // }
-
-  // Color getTextColor(Map<String, dynamic> tileObject,ColorPalette palette, ) {
-  //   Color res = palette.tileBgColor;
-  //   if (!tileObject['alive']) {
-  //     res = Colors.transparent;
-  //     // res = Color.fromRGBO(
-  //     //   palette.focusedTutorialTile.red,
-  //     //   palette.focusedTutorialTile.green,
-  //     //   palette.focusedTutorialTile.blue,
-  //     //   1.0
-  //     // );      
-  //   }
-  //   return res;
-  // }
 
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: true);
 
     late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
     // late Map<String, dynamic> tileState = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
     // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
@@ -331,7 +300,7 @@ class _TutorialTileState extends State<TutorialTile>
         } else {}
       },
       child: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: EdgeInsets.all(2.0*settingsState.sizeFactor),
         child: AnimatedBuilder(
           animation: widget.animation,
           builder: (context, child) {
@@ -344,7 +313,7 @@ class _TutorialTileState extends State<TutorialTile>
                       color: colorTileBg(tileState, palette),
                       // color:Color.fromARGB(167, 56, 56, 56) ,
                       border: Border.all(
-                        width: 3,
+                        width: (3*settingsState.sizeFactor),
                         // color: colorTileBorder(tileState, tutorialState, palette, widget.animation),
                         color: getBorderColor(tileState, palette, widget.animation, currentStep)
                       ),
@@ -360,7 +329,7 @@ class _TutorialTileState extends State<TutorialTile>
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsets.all(4.0),
+                      padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
                       child: Container(
                         // color: Colors.orange,
                         decoration: getInnerTileBoxDecoration(tutorialState, palette, widget.index, widget.animation),
@@ -371,7 +340,7 @@ class _TutorialTileState extends State<TutorialTile>
                               return Text(
                                 tileState['letter'],
                                 style: TextStyle(
-                                  fontSize: 22, 
+                                  fontSize: (18*settingsState.sizeFactor), 
                                   color: getTextColor(tileState,palette, widget.animation),
                                   shadows: getTextShadow(tileState,palette, widget.animation),
                                   // color: palette.tileBgColor

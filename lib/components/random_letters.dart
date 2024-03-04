@@ -4,12 +4,17 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class RandomLetters extends StatefulWidget {
+  final double tileSize;
+  final SettingsState settingsState;
   const RandomLetters({
     super.key,
+    required this.tileSize,
+    required this.settingsState,
   });
 
   @override
@@ -49,7 +54,7 @@ class _RandomLettersState extends State<RandomLetters>
   @override
   void initState() {
     super.initState();
-    initializeAnimations();
+    initializeAnimations(widget.tileSize, widget.settingsState.sizeFactor );
     _animationState = Provider.of<AnimationState>(context, listen: false);
     _gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     _animationState.addListener(_handleAnimationStateChange);
@@ -74,7 +79,7 @@ class _RandomLettersState extends State<RandomLetters>
   }
 
   // THIS FUNCTION TELLS THE CODE WHAT TO DO
-  void initializeAnimations() {
+  void initializeAnimations(double tileSize, double sizeFactor) {
     _shrinkAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
 
@@ -99,8 +104,8 @@ class _RandomLettersState extends State<RandomLetters>
         vsync: this, duration: const Duration(milliseconds: 500));
 
     _sizeAnimation = Tween<double>(
-      begin: 50,
-      end: 100,
+      begin: tileSize * 0.5,
+      end: tileSize,
     ).animate(CurvedAnimation(
         parent: _sizeAnimationController, curve: Curves.easeIn));
 
@@ -108,8 +113,8 @@ class _RandomLettersState extends State<RandomLetters>
         vsync: this, duration: const Duration(milliseconds: 500));
 
     _fontAnimation = Tween<double>(
-      begin: 26,
-      end: 60,
+      begin: 26 * sizeFactor,
+      end: 44 * sizeFactor,
     ).animate(CurvedAnimation(
         parent: _fontAnimationController, curve: Curves.easeIn));
 
@@ -165,8 +170,10 @@ class _RandomLettersState extends State<RandomLetters>
   Widget build(BuildContext context) {
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    final double width = MediaQuery.of(context).size.width *0.6;
+    final double side = width/3.3;
 
     return Stack(
       children: [
@@ -176,9 +183,8 @@ class _RandomLettersState extends State<RandomLetters>
             Consumer<GamePlayState>(
               builder: (context, gamePlayState, child) {
                 return SizedBox(
-                  // color: Color.fromARGB(255, 220, 171, 230),
-                  width: double.infinity,
-                  height: 100,
+                  width: MediaQuery.of(context).size.width * settingsState.sizeFactor,
+                  height: side*1.1,                  
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,10 +204,9 @@ class _RandomLettersState extends State<RandomLetters>
                                       .getCountdownDuration(
                                           gamePlayState.currentLevel), // 5,
                                   controller: gamePlayState.countDownController,
-                                  width:
-                                      70, // MediaQuery.of(context).size.width / 3,
-                                  height:
-                                      70, // MediaQuery.of(context).size.height / 3,
+                                  width: side * settingsState.sizeFactor,
+                                      // 70, // MediaQuery.of(context).size.width / 3,
+                                  height: side * settingsState.sizeFactor,// MediaQuery.of(context).size.height / 3,
                                   // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
                                   ringColor: palette.tileBgColor,
                                   ringGradient: null,
@@ -215,7 +220,7 @@ class _RandomLettersState extends State<RandomLetters>
                                   strokeWidth: 5.0,
                                   strokeCap: StrokeCap.round,
                                   textStyle: TextStyle(
-                                      fontSize: 33.0,
+                                      fontSize: (33.0 * settingsState.sizeFactor),
                                       // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
                                       color: palette.tileBgColor),
                                   textFormat: CountdownTextFormat.S,
@@ -254,8 +259,8 @@ class _RandomLettersState extends State<RandomLetters>
                                 builder: (context, child) {
                                   return Center(
                                     child: Container(
-                                      width: 100 * _shrinkAnimation.value,
-                                      height: 100 * _shrinkAnimation.value,
+                                      width: (side * 1) * _shrinkAnimation.value,
+                                      height: (side * 1) * _shrinkAnimation.value,
                                       decoration: BoxDecoration(
                                           color: palette.tileBgColor,
                                           borderRadius: const BorderRadius.all(
@@ -265,7 +270,7 @@ class _RandomLettersState extends State<RandomLetters>
                                         GameLogic().displayRandomLetters(
                                             gamePlayState.randomLetterList, 3),
                                         style: TextStyle(
-                                          fontSize: 60 * _shrinkAnimation.value,
+                                          fontSize: (44 * settingsState.sizeFactor) * _shrinkAnimation.value,
                                           color: palette.tileTextColor,
                                         ),
                                       )),
@@ -280,8 +285,8 @@ class _RandomLettersState extends State<RandomLetters>
                                     position: _slideAnimation,
                                     child: Center(
                                       child: Container(
-                                        width: _sizeAnimation.value,
-                                        height: _sizeAnimation.value,
+                                        width:  (_sizeAnimation.value ),
+                                        height:  (_sizeAnimation.value ),
                                         decoration: BoxDecoration(
                                             color: palette.tileBgColor,
                                             borderRadius:
@@ -313,8 +318,8 @@ class _RandomLettersState extends State<RandomLetters>
                             position: _letter2Animation,
                             child: Center(
                                 child: Container(
-                                    width: 50,
-                                    height: 50,
+                                    width: (side*0.6),
+                                    height: (side*0.6),
                                     decoration: BoxDecoration(
                                         color: palette.tileBgColor,
                                         borderRadius: const BorderRadius.all(
@@ -324,7 +329,7 @@ class _RandomLettersState extends State<RandomLetters>
                                         GameLogic().displayRandomLetters(
                                             gamePlayState.randomLetterList, 1),
                                         style: TextStyle(
-                                          fontSize: 26,
+                                          fontSize: (26 * settingsState.sizeFactor),
                                           color: palette.tileTextColor,
                                         ),
                                       ),

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -217,6 +218,8 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
   @override
   Widget build(BuildContext context) {
 
+
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     return Consumer<TutorialState>(
       builder:(context, tutorialState, child) {
 
@@ -227,7 +230,7 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
 
         return SizedBox(
           width: double.infinity,
-          height: 50,
+          height: 50*settingsState.sizeFactor,
           // color: Colors.grey,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -245,14 +248,14 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
                           children: [
                             Icon(
                               Icons.bolt, 
-                              size: 30,
+                              size: 24*settingsState.sizeFactor,
                               color: getColor(palette, widget.animation, currentStep, 'streak', 'streak'),
                               shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'streak', widget.animation),
                             ),
                             Text(
                               "${currentStep['streak'].toString()}x",
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 22*settingsState.sizeFactor,
                                 color:  getColor(palette, widget.animation, currentStep, 'streak', 'streak'),
                                 shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'streak', widget.animation),
                               ),
@@ -277,15 +280,15 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
                         return Row(
                           children: [
                             Icon(
-                              Icons.book, 
-                              size: 30, 
+                              Icons.my_library_books_sharp, 
+                              size: 24*settingsState.sizeFactor, 
                               color: getColor(palette, widget.animation, currentStep, 'multi_word', 'newWords'),
                               shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'multi_word', widget.animation),
                             ),
                             Text(
                               "${currentStep['newWords'].toString()}x",
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 22*settingsState.sizeFactor,
                                 color: getColor(palette, widget.animation, currentStep, 'multi_word', 'newWords'),
                                 shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'multi_word', widget.animation),
                               ),
@@ -311,14 +314,14 @@ class _TutorialBonusItemsState extends State<TutorialBonusItems>  with TickerPro
                           children: [
                             Icon(
                               Icons.close, 
-                              size: 30,
+                              size: 24*settingsState.sizeFactor,
                               color: getColor(palette, widget.animation, currentStep, 'cross_word', 'crossword'),
                               shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'cross_word', widget.animation),
                             ),
                             Text(
                               "${currentStep['crossword'].toString()}x",
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 22*settingsState.sizeFactor,
                                 color: getColor(palette, widget.animation, currentStep, 'cross_word', 'crossword'),
                                 shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'cross_word', widget.animation),
                               ),

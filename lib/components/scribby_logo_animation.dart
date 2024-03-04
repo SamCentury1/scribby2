@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:scribby_flutter_v2/styles/styles.dart';
 
@@ -16,20 +18,20 @@ class _ScribbyLogoAnimationState extends State<ScribbyLogoAnimation> with Single
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromRGBO(0, 241, 101, 0),
-      width: MediaQuery.of(context).size.width*0.9,
-      height: 250,//MediaQuery.of(context).size.width*0.7,
-      child: const Stack(
-        children: <Widget>[
-          LogoLetterAnimation(index: 0, letter: "S"),
-          LogoLetterAnimation(index: 1, letter: "C"),
-          LogoLetterAnimation(index: 2, letter: "R"),
-          LogoLetterAnimation(index: 3, letter: "I"),
-          LogoLetterAnimation(index: 4, letter: "B"),
-          LogoLetterAnimation(index: 5, letter: "B"),
-          LogoLetterAnimation(index: 6, letter: "Y"),                              
-        ],
+    return Center(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width*0.9,
+        child: const Stack(
+          children: <Widget>[
+            LogoLetterAnimation(index: 0, letter: "S"),
+            LogoLetterAnimation(index: 1, letter: "C"),
+            LogoLetterAnimation(index: 2, letter: "R"),
+            LogoLetterAnimation(index: 3, letter: "I"),
+            LogoLetterAnimation(index: 4, letter: "B"),
+            LogoLetterAnimation(index: 5, letter: "B"),
+            LogoLetterAnimation(index: 6, letter: "Y"),                              
+          ],
+        ),
       ),
     );
   }
@@ -50,6 +52,8 @@ class LogoLetterAnimation extends StatefulWidget {
 }
 
 class _LogoLetterAnimationState extends State<LogoLetterAnimation> with SingleTickerProviderStateMixin{
+
+
 
   late final AnimationController _slideController = AnimationController(
     vsync: this,
@@ -158,6 +162,8 @@ class _LogoLetterAnimationState extends State<LogoLetterAnimation> with SingleTi
       int intValue = random.nextInt(possibleAngles.length);  
       int letterValue = random.nextInt(9) + 1 ;
 
+      late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+
 
       return AnimatedBuilder(
         animation: _slideController,
@@ -175,7 +181,7 @@ class _LogoLetterAnimationState extends State<LogoLetterAnimation> with SingleTi
                 child: SizedBox(
                   width: sideLength,
                   height: sideLength,
-                  child: scrabbleTile(widget.letter,letterValue,sideLength,1),
+                  child: scrabbleTile(widget.letter,letterValue,sideLength,1*settingsState.sizeFactor),
 
                 ),
               ),

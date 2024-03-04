@@ -259,6 +259,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
@@ -297,6 +298,7 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
         late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
+        late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
   
         return AnimatedOpacity(
           opacity: getOpacity(tutorialState),
@@ -313,7 +315,7 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
                       child: Container(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withOpacity(0.7),
                       ),
                     ),
                   ),
@@ -322,20 +324,23 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                   width: double.infinity,
                   child: Column(
                     children: [
-                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(flex: 3, child: SizedBox()),
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(16.0*settingsState.sizeFactor),
                         child: DefaultTextStyle(
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: palette.textColor2,
-                            fontSize: 28
+                            color: palette.focusedTutorialTile,
+                            fontSize: 28*settingsState.sizeFactor
                           ), 
                           child: Text(
-                            Helpers().translateText(gamePlayState.currentLanguage, "Welcome to Scribby! Would you like to go through the tutorial?")
+                            Helpers().translateText(gamePlayState.currentLanguage, "Welcome to Scribby! Would you like to go through the tutorial?"),
+                            
                           )
                         ),
                       ),
-                      Row(
+                      Expanded(flex: 1, child: SizedBox()),
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
 
@@ -393,7 +398,7 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                           ),                          
                         ],
                       ),
-                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(flex: 3, child: SizedBox()),
 
                     ],
                   ),

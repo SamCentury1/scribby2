@@ -10,8 +10,14 @@ import 'dart:io';
 class StorageMethods {
 
   Future<List<String>> downloadWordList(String language) async {
+
+    late String actualLanguage = 'english';
+    if  (language != '' || language != null) {
+      actualLanguage = language;
+    }
+    
     final FirebaseStorage storage = FirebaseStorage.instance;
-    final String fileName = 'all_valid_${language}_words.txt';
+    final String fileName = 'all_valid_${actualLanguage}_words.txt';
     final Directory appDocDir = await getApplicationDocumentsDirectory();
     final File downloadToFile = File('${appDocDir.path}/$fileName');
     late List<String> res = [];
@@ -27,6 +33,7 @@ class StorageMethods {
       // Store words to local storage (e.g., shared_preferences or hive)
       // ...
     } catch (e) {
+      debugPrint("there was an error running downloadWordList() : ${e.toString()} ");
       // Handle errors
     }
     return res;

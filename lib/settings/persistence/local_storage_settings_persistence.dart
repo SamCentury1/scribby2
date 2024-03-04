@@ -1,4 +1,5 @@
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
+import 'package:scribby_flutter_v2/utils/states.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -43,7 +44,7 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   @override
   Future<Object> getAlphabet() async {
     final prefs = await instanceFuture;
-    return json.decode(prefs.getString('alphabet') ?? "");
+    return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
   }
 
   /// ========= SAVE THE DATA =================

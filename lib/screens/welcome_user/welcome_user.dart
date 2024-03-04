@@ -160,139 +160,163 @@ class _WelcomeUserState extends State<WelcomeUser> {
             
 
             
-            child: Column(
-              children: <Widget>[
-
-                const Expanded(flex: 2, child: SizedBox()),
-
-                Text(
-                  // "Welcome!",
-                  Helpers().translateDemoSequence(
-                    getPrimaryLanguage(settingsState.languageDataList), 
-                    "Welcome!"
-                  ),                  
-                  style: TextStyle(
-                    fontSize: 32,
-                    // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
-                    color: palette.textColor2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: <Widget>[
+              
+                  const Expanded(flex: 2, child: SizedBox()),
+              
+                  Text(
+                    // "Welcome!",
+                    Helpers().translateWelcomeText(
+                      getPrimaryLanguage(settingsState.languageDataList), 
+                      "Welcome!"
+                    ),                  
+                    style: TextStyle(
+                      fontSize: 32,
+                      // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
+                      color: palette.textColor2,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20,),
-                Text(
-                  Helpers().translateDemoSequence(
-                    getPrimaryLanguage(settingsState.languageDataList), 
-                    "Pick an original username"
-                  ),                  
-          
-                  style: TextStyle(
-                    fontSize: 22,
-                    // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
-                    color: palette.textColor2
-                  ),
-                ),            
-                Consumer<SettingsController>(
-                  builder: (context, settings, child) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0,8.0,16.0,8.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 80,
-                        child: Align(
-                          alignment: Alignment.center,
-                                                      
-                          child : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width*0.8,
-                                  child: TextField(
-                                    controller: _userNameController,
-                                    decoration: InputDecoration(
-                                      fillColor: palette.textColor2,
-                                      focusColor: palette.textColor2,
-                                      hoverColor: palette.textColor2,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(color: palette.textColor2, width: 1.0),
+                  const SizedBox(height: 20,),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      Helpers().translateWelcomeText(
+                        getPrimaryLanguage(settingsState.languageDataList), 
+                        "Pick an original username"
+                      ),                  
+                          
+                      style: TextStyle(
+                        fontSize: 22,
+                        // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
+                        color: palette.textColor2
+                      ),
+                    ),
+                  ),            
+                  Consumer<SettingsController>(
+                    builder: (context, settings, child) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0,8.0,16.0,8.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 80,
+                          child: Align(
+                            alignment: Alignment.center,
+                                                        
+                            child : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.8,
+                                    child: TextField(
+                                      controller: _userNameController,
+                                      decoration: InputDecoration(
+                                        fillColor: palette.textColor2,
+                                        focusColor: palette.textColor2,
+                                        hoverColor: palette.textColor2,
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(color: palette.textColor2, width: 1.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: palette.textColor2, width: 2.0),
+                                          borderRadius: BorderRadius.circular(25.0),
+                                        ),
+                                        labelStyle: TextStyle(color: palette.textColor2, fontSize: 12),
+                                        labelText: Helpers().translateWelcomeText(
+                                          getPrimaryLanguage(settingsState.languageDataList), 
+                                          "Pick an original username"
+                                        ),
                                       ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: palette.textColor2, width: 2.0),
-                                        borderRadius: BorderRadius.circular(25.0),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
+                                        color: palette.textColor2
                                       ),
-                                      labelStyle: TextStyle(color: palette.textColor2),
-                                      labelText: Helpers().translateDemoSequence(
-                                        getPrimaryLanguage(settingsState.languageDataList), 
-                                        "Pick an original username"
-                                      ),
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
-                                      color: palette.textColor2
                                     ),
                                   ),
                                 ),
-                              ),
-                                            
-                              // Expanded(flex: 1, child: SizedBox()),                                                 
-                            ],
+                                              
+                                // Expanded(flex: 1, child: SizedBox()),                                                 
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                ),              
-                ElevatedButton(
-                  onPressed: () {
-                    
-                    if (forbiddenNames.contains(_userNameController.text.toLowerCase())) {
-                      _showBadNameDialog(
-                        context,
-                        Helpers().translateDemoSequence(
-                          getPrimaryLanguage(settingsState.languageDataList), 
-                          "pick something more original"
-                        ),                        
-                        
                       );
-                    } else if (checkForBadWords(_userNameController.text.toLowerCase())) {
-                      _showBadNameDialog(
-                        context, 
-                        Helpers().translateDemoSequence(
-                          getPrimaryLanguage(settingsState.languageDataList), 
-                          "Hey! No bad words!"
-                        ),   
-                      );
-                    } else {
-                      // settings.setUser(_userNameController.text.toLowerCase());
-                      AuthService().updateUsername(AuthService().currentUser!.uid, _userNameController.text.toLowerCase());
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MenuScreen()
-                        )
-                      );                    
                     }
-                    
-                    
-                  },
-                  style: ElevatedButton.styleFrom(
-                    // backgroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
-                    // foregroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_text"),
-                    backgroundColor: palette.optionButtonBgColor,
-                    foregroundColor: palette.optionButtonTextColor,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    )
+                  ),              
+                  ElevatedButton(
+                    onPressed: () {
+                      
+                      if (forbiddenNames.contains(_userNameController.text.toLowerCase())) {
+                        _showBadNameDialog(
+                          context,
+                          Helpers().translateWelcomeText(
+                            getPrimaryLanguage(settingsState.languageDataList), 
+                            "Pick something more original"
+                          ),                        
+                          
+                        );
+                      } else if (checkForBadWords(_userNameController.text.toLowerCase())) {
+                        _showBadNameDialog(
+                          context, 
+                          Helpers().translateWelcomeText(
+                            getPrimaryLanguage(settingsState.languageDataList), 
+                            "Hey! No bad words!"
+                          ),   
+                        );
+                      } else if (_userNameController.text.toLowerCase() == "") {
+                        _showBadNameDialog(
+                          context, 
+                          Helpers().translateWelcomeText(
+                            getPrimaryLanguage(settingsState.languageDataList), 
+                            "Pick something more original"
+                          ),   
+                        );                        
+
+                      } else if (_userNameController.text.toLowerCase().length  < 3) {
+                        _showBadNameDialog(
+                          context, 
+                          Helpers().translateWelcomeText(
+                            getPrimaryLanguage(settingsState.languageDataList), 
+                            "Pick something more original"
+                          ),   
+                        );                        
+
+                      } else {
+                        // settings.setUser(_userNameController.text.toLowerCase());
+                        AuthService().updateUsername(AuthService().currentUser!.uid, _userNameController.text.toLowerCase());
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const MenuScreen()
+                          )
+                        );                    
+                      }
+                      
+                      
+                    },
+                    style: ElevatedButton.styleFrom(
+                      // backgroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
+                      // foregroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_text"),
+                      backgroundColor: palette.optionButtonBgColor,
+                      foregroundColor: palette.optionButtonTextColor,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      )
+                    ),
+                    child: Text(
+                      Helpers().translateWelcomeText(
+                        getPrimaryLanguage(settingsState.languageDataList), 
+                        "Save"
+                      ),                     
+                      
+                    ),
                   ),
-                  child: Text(
-                    Helpers().translateDemoSequence(
-                      getPrimaryLanguage(settingsState.languageDataList), 
-                      "Save"
-                    ),                     
-                    
-                  ),
-                ),
-                const Expanded(flex: 3, child: SizedBox()),             
-              ],
+                  const Expanded(flex: 3, child: SizedBox()),             
+                ],
+              ),
             ),            
 
           )

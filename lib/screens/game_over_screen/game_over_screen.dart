@@ -150,9 +150,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
   //   return currentHighScore;
   // }
 
-  Widget displayScores(
-      SettingsState settings, ColorPalette palette, int currentScore) {
+  Widget displayScores( SettingsState settings, ColorPalette palette, int currentScore) {
     String currentLanguage = settings.userData['parameters']['currentLanguage'];
+    double sizeFactor = settings.sizeFactor;
 
     late int currentHighScore = 0;
     if (settings.userData['highScores'][currentLanguage] != null) {
@@ -162,26 +162,48 @@ class _GameOverScreenState extends State<GameOverScreen> {
     if (currentScore > currentHighScore) {
       return Column(
         children: [
-          Center(
-            child: SizedBox(
-              child: Text(
-                Helpers().translateText(currentLanguage, "New High Score:"),
-                
-                style: TextStyle(fontSize: 32, color: palette.textColor3),
+          Row(
+            children: [
+              const Expanded(flex: 1, child: SizedBox(),),
+              Icon(
+                Icons.emoji_events,
+                size: 36*sizeFactor,
+                color: palette.textColor2,
               ),
-            ),
-          ),
-          Center(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                currentScore.toString(),
-                style: TextStyle(color: palette.textColor3, fontSize: 42),
+              const Expanded(flex: 3, child: SizedBox(),),                 
+              Column(
+                children: [
+                  Center(
+                    child: SizedBox(
+                      child: Text(
+                        Helpers().translateText(currentLanguage, "New High Score"),
+                        
+                        style: TextStyle(fontSize: 32*sizeFactor, color: palette.textColor3),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        currentScore.toString(),
+                        style: TextStyle(color: palette.textColor3, fontSize: 42*sizeFactor),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
+              const Expanded(flex: 1, child: SizedBox(),),
+              Icon(
+                Icons.emoji_events,
+                size: 36*sizeFactor,
+                color: palette.textColor2,
+              ),
+              const Expanded(flex: 3, child: SizedBox(),),                         
+            ],
           ),
-          const SizedBox(
-            height: 15,
+          SizedBox(
+            height: 15*sizeFactor,
           ),
           Center(
             child: FittedBox(
@@ -189,7 +211,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
               child: Text(
                 
                 "${Helpers().translateText(currentLanguage, "Previous High Score:")} $currentHighScore",
-                style: TextStyle(color: palette.textColor3, fontSize: 24),
+                style: TextStyle(color: palette.textColor3, fontSize: 24*sizeFactor),
               ),
             ),
           ),
@@ -202,7 +224,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
             child: Text(
               // Helpers().translateText(currentLanguage, "Score:")
               "${Helpers().translateText(currentLanguage, "Score")}: ${currentScore.toString()}",
-              style: TextStyle(color: palette.textColor3, fontSize: 42),
+              style: TextStyle(color: palette.textColor3, fontSize: 42*sizeFactor),
             ),
           ),
           Center(
@@ -219,7 +241,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                 Text(
                   // Helpers().translateText(currentLanguage, "High Score:")
                   "${Helpers().translateText(currentLanguage, "High Score:")} $currentHighScore",
-                  style: TextStyle(color: palette.textColor3, fontSize: 18),
+                  style: TextStyle(color: palette.textColor3, fontSize: 18*sizeFactor),
                 ),
               ],
             ),
@@ -233,11 +255,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
   Widget build(BuildContext context) {
     late ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: false);
-    late SettingsState settings =
-        Provider.of<SettingsState>(context, listen: false);
     late GamePlayState gamePlayState =
         Provider.of<GamePlayState>(context, listen: false);
-
+    late SettingsState settingsState =
+        Provider.of<SettingsState>(context, listen: false);
+        
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -245,10 +267,10 @@ class _GameOverScreenState extends State<GameOverScreen> {
         : PopScope(
             onPopInvoked: (details) {
               gamePlayState.endGame();
-              FirestoreMethods().updateSettingsState(
-                  settings, AuthService().currentUser!.uid);
+              FirestoreMethods().updateSettingsState(settingsState, AuthService().currentUser!.uid);
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const MenuScreen()));
+                MaterialPageRoute(builder: (context) => const MenuScreen())
+              );
             },
             child: Scaffold(
               body: Stack(children: [
@@ -267,8 +289,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                               flex: 2,
                               child: SizedBox(),
                             ),
-                            displayScores(settings, palette,
-                                gamePlayState.endOfGameData['points']),
+                            displayScores(settingsState, palette, gamePlayState.endOfGameData['points']),
                             const Expanded(
                               flex: 1,
                               child: SizedBox(),
@@ -291,44 +312,49 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                       GameLogic().formatTime(gamePlayState
                                           .endOfGameData['duration']),
                                       Icon(Icons.timer,
-                                          size: 22, color: palette.textColor3),
-                                      palette),
+                                          size: 22*settingsState.sizeFactor, color: palette.textColor3),
+                                      palette, settingsState.sizeFactor),
                                   rowStatItem(
                                       Helpers().translateText(gamePlayState.currentLanguage, "Level",),
                                       gamePlayState.endOfGameData['level']
                                           .toString(),
                                       Icon(Icons.bar_chart_rounded,
-                                          size: 22, color: palette.textColor3),
-                                      palette),
+                                          size: 22*settingsState.sizeFactor, color: palette.textColor3),
+                                      palette,
+                                      settingsState.sizeFactor),
                                   rowStatItem(
                                       Helpers().translateText(gamePlayState.currentLanguage, "Longest Streak",),
                                       gamePlayState
                                           .endOfGameData['longestStreak']
                                           .toString(),
                                       Icon(Icons.electric_bolt,
-                                          size: 22, color: palette.textColor3),
-                                      palette),
+                                          size: 22*settingsState.sizeFactor, color: palette.textColor3),
+                                      palette,
+                                      settingsState.sizeFactor),
                                   rowStatItem(
                                       Helpers().translateText(gamePlayState.currentLanguage, "Cross Words",),
                                       gamePlayState.endOfGameData['crossWords']
                                           .toString(),
                                       Icon(Icons.close,
-                                          size: 22, color: palette.textColor3),
-                                      palette),
+                                          size: 22*settingsState.sizeFactor, color: palette.textColor3),
+                                      palette,
+                                      settingsState.sizeFactor),
                                   rowStatItem(
                                       Helpers().translateText(gamePlayState.currentLanguage, "Most Points",),
                                       gamePlayState.endOfGameData['mostPoints']
                                           .toString(),
                                       Icon(Icons.star,
-                                          size: 22, color: palette.textColor3),
-                                      palette),
+                                          size: 22*settingsState.sizeFactor, color: palette.textColor3),
+                                      palette,
+                                      settingsState.sizeFactor),
                                   rowStatItem(
                                       Helpers().translateText(gamePlayState.currentLanguage, "Most Words",),
                                       gamePlayState.endOfGameData['mostWords']
                                           .toString(),
                                       Icon(Icons.my_library_books_sharp,
-                                          size: 22, color: palette.textColor3),
-                                      palette),
+                                          size: 22*settingsState.sizeFactor, color: palette.textColor3),
+                                      palette,
+                                      settingsState.sizeFactor),
                                 ],
                               ),
                             ),
@@ -342,80 +368,204 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          Helpers().translateText(gamePlayState.currentLanguage, "Summary of Points",),
-                                          style: TextStyle(
-                                              color: palette.textColor3),
+                                      return Dialog(
+                                        
+                                        insetPadding: const EdgeInsets.all(0),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
                                         ),
-                                        scrollable: true,
-                                        backgroundColor:
-                                            palette.optionButtonBgColor,
-                                        content: SizedBox(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height:
-                                              MediaQuery.of(context).size.width,
-                                          child: SingleChildScrollView(
-                                            child: Table(
-                                              columnWidths: const <int, TableColumnWidth>{
-                                                0: FlexColumnWidth(1),
-                                                1: FlexColumnWidth(5),
-                                                2: FlexColumnWidth(2),
-                                              },
-                                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                                              children: <TableRow>[
-                                                TableRow(
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        "#",
-                                                        style: TextStyle(color: palette.textColor2, fontSize: 20),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment: Alignment.centerLeft,
-                                                      child: Text(
-                                                        Helpers().translateText(gamePlayState.currentLanguage, "Word",),
-                                                        style: TextStyle(color: palette.textColor2, fontSize: 20),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment: Alignment.centerRight,
-                                                      child: Text(
-                                                        Helpers().translateText(gamePlayState.currentLanguage, "Points"),
-                                                        style: TextStyle(color: palette.textColor2, fontSize: 20),
-                                                        textAlign: TextAlign.right,
-                                                      ),
-                                                    ),
-                                                  ]
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                          child: Container(
+                                            width: MediaQuery.of(context).size.width * 0.85,
+                                            height: MediaQuery.of(context).size.height * 0.65,
+                                            decoration: BoxDecoration(
+                                                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                                                color: palette.optionButtonBgColor
+                                                // color: Color.fromARGB(125, 71, 65, 65)
                                                 ),
-                                                for (int i=0; i< summary.length; i++)
-                                                Helpers().scoreSummaryTableRow(i, palette,summary[i], context, gamePlayState.currentLanguage),
-                                              ]
-                                            ),                                              
+                                            child: Column(
+                                              children: <Widget>[
+                                                // TextButton(onPressed: changeBackToZero, child: Text("change")),
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(24.0, 8.0, 4.0, 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: Text(
+                                                          Helpers().translateText(gamePlayState.currentLanguage, "Summary of Points",),
+                                                          style: TextStyle(
+                                                            fontSize: 24*settingsState.sizeFactor,
+                                                            color: palette.textColor2
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const Expanded(child: SizedBox()),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        }, 
+                                                        icon: Icon(
+                                                          Icons.close,
+                                                          size: 24 * settingsState.sizeFactor,
+                                                          color: palette.textColor2,
+                                                        )
+                                                      )
+                                                    ],
+                                                  )
+                                                ),
+
+                                                Expanded(
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      children: [
+                                                        Padding(
+                                                          // padding: EdgeInsets.symmetric(horizontal: 18.0 * settingsState.sizeFactor),
+                                                          padding: EdgeInsets.zero,
+                                                          child: Table(
+                                                            columnWidths: const <int, TableColumnWidth>{
+                                                              0: FlexColumnWidth(1),
+                                                              1: FlexColumnWidth(5),
+                                                              2: FlexColumnWidth(2),
+                                                            },
+                                                            border: TableBorder(
+                                                              horizontalInside: BorderSide(
+                                                                width: 0.5, 
+                                                                color: palette.textColor2, 
+                                                                style: BorderStyle.solid
+                                                              )
+                                                            ),     
+                                                            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                                            children: <TableRow>[
+                                                              TableRow(
+                                                                decoration: BoxDecoration(
+                                                                ),
+                                                                children: [
+                                                                  Align(
+                                                                    alignment: Alignment.centerLeft,
+                                                                    child: Text(
+                                                                      "#",
+                                                                      style: TextStyle(color: palette.textColor2, fontSize: 22*settingsState.sizeFactor),
+                                                                    ),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment: Alignment.centerLeft,
+                                                                    child: Text(
+                                                                      Helpers().translateText(gamePlayState.currentLanguage, "Word",),
+                                                                      style: TextStyle(color: palette.textColor2, fontSize: 22*settingsState.sizeFactor),
+                                                                    ),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment: Alignment.centerRight,
+                                                                    child: Padding(
+                                                                      padding: EdgeInsets.symmetric(horizontal: 4.0*settingsState.sizeFactor),
+                                                                      child: Text(
+                                                                        Helpers().translateText(gamePlayState.currentLanguage, "Points"),
+                                                                        style: TextStyle(color: palette.textColor2, fontSize: 22*settingsState.sizeFactor),
+                                                                        textAlign: TextAlign.right,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ]
+                                                              ),
+                                                              for (int i=0; i< summary.length; i++)
+                                                              Helpers().scoreSummaryTableRow2(
+                                                                i, 
+                                                                palette,
+                                                                summary[i], 
+                                                                context, 
+                                                                gamePlayState.currentLanguage, 
+                                                                settingsState.sizeFactor
+                                                              ),                                                          
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        actions: <Widget>[
-                                          InkWell(
-                                            child: Text(
-                                              Helpers().translateText(gamePlayState.currentLanguage, "Close"),
-                                              style: TextStyle(
-                                                  color: palette.textColor3),
-                                            ),
-                                            onTap: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
+                                      );                                      
+                                      // return AlertDialog(
+                                      //   title: Text(
+                                      //     Helpers().translateText(gamePlayState.currentLanguage, "Summary of Points",),
+                                      //     style: TextStyle(
+                                      //         color: palette.textColor3,
+                                      //         fontSize: 22*settingsState.sizeFactor),
+                                      //   ),
+                                      //   scrollable: true,
+                                      //   backgroundColor:
+                                      //       palette.optionButtonBgColor,
+                                      //   content: SizedBox(
+                                      //     width:
+                                      //         MediaQuery.of(context).size.width,
+                                      //     height:
+                                      //         MediaQuery.of(context).size.width,
+                                      //     child: SingleChildScrollView(
+                                      //       child: Table(
+                                      //         columnWidths: const <int, TableColumnWidth>{
+                                      //           0: FlexColumnWidth(1),
+                                      //           1: FlexColumnWidth(5),
+                                      //           2: FlexColumnWidth(2),
+                                      //         },
+                                      //         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                      //         children: <TableRow>[
+                                      //           TableRow(
+                                      //             children: [
+                                      //               Center(
+                                      //                 child: Text(
+                                      //                   "#",
+                                      //                   style: TextStyle(color: palette.textColor2, fontSize: 20*settingsState.sizeFactor),
+                                      //                 ),
+                                      //               ),
+                                      //               Align(
+                                      //                 alignment: Alignment.centerLeft,
+                                      //                 child: Text(
+                                      //                   Helpers().translateText(gamePlayState.currentLanguage, "Word",),
+                                      //                   style: TextStyle(color: palette.textColor2, fontSize: 20*settingsState.sizeFactor),
+                                      //                 ),
+                                      //               ),
+                                      //               Align(
+                                      //                 alignment: Alignment.centerRight,
+                                      //                 child: Text(
+                                      //                   Helpers().translateText(gamePlayState.currentLanguage, "Points"),
+                                      //                   style: TextStyle(color: palette.textColor2, fontSize: 20*settingsState.sizeFactor),
+                                      //                   textAlign: TextAlign.right,
+                                      //                 ),
+                                      //               ),
+                                      //             ]
+                                      //           ),
+                                      //           for (int i=0; i< summary.length; i++)
+                                      //           Helpers().scoreSummaryTableRow2(i, palette,summary[i], context, gamePlayState.currentLanguage, settingsState.sizeFactor ),
+                                      //         ]
+                                      //       ),                                              
+                                      //     ),
+                                      //   ),
+                                      //   actions: <Widget>[
+                                      //     InkWell(
+                                      //       child: Text(
+                                      //         Helpers().translateText(gamePlayState.currentLanguage, "Close"),
+                                      //         style: TextStyle(
+                                      //             color: palette.textColor3,
+                                      //             fontSize: 22*settingsState.sizeFactor),
+                                      //       ),
+                                      //       onTap: () {
+                                      //         Navigator.of(context).pop();
+                                      //       },
+                                      //     ),
+                                      //   ],
+                                      // );
                                     });
                               },
                               child: Text(
                                 Helpers().translateText(gamePlayState.currentLanguage, "View points summary"),
                                 style: TextStyle(
                                   color: palette.textColor2,
-                                  fontSize: 24,
+                                  fontSize: 24*settingsState.sizeFactor,
                                   fontStyle: FontStyle.italic
                                 ),
                               ),
@@ -449,14 +599,13 @@ class _GameOverScreenState extends State<GameOverScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: palette.optionButtonBgColor,
                                 foregroundColor: palette.textColor1,
-                                shadowColor:
-                                    const Color.fromRGBO(123, 123, 123, 0.7),
+                                shadowColor:const Color.fromRGBO(123, 123, 123, 0.7),
                                 elevation: 3.0,
-                                minimumSize: const Size(double.infinity, 50),
-                                padding: const EdgeInsets.all(4.0),
-                                textStyle: const TextStyle(
-                                  fontSize: 22,
-                                ),
+                                minimumSize: Size(double.infinity, 50 * settingsState.sizeFactor),
+                                padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
+                                // textStyle: TextStyle(
+                                //   fontSize: 22*settingsState.sizeFactor,
+                                // ),
                                 shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10.0)),
@@ -465,7 +614,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                               onPressed: () {
                                 gamePlayState.endGame();
                                 FirestoreMethods().updateSettingsState(
-                                    settings, AuthService().currentUser!.uid);
+                                    settingsState, AuthService().currentUser!.uid);
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (context) =>
@@ -475,6 +624,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                 Helpers().translateText(gamePlayState.currentLanguage, "Main Menu"),
                                 style: TextStyle(
                                   color: palette.textColor3,
+                                  fontSize: 22* settingsState.sizeFactor
                                 ),
                               ),
                             ),
@@ -501,8 +651,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
   }
 }
 
-TableRow rowStatItem(
-    String text, String data, Icon icon, ColorPalette palette) {
+TableRow rowStatItem(String text, String data, Icon icon, ColorPalette palette, double sizeFactor) {
   // final ColorPalette palette = context.read<ColorPalette?>();
 
   return TableRow(children: <Widget>[
@@ -512,14 +661,14 @@ TableRow rowStatItem(
       alignment: Alignment.centerLeft,
       child: Text(
         text,
-        style: TextStyle(fontSize: 18, color: palette.textColor3),
+        style: TextStyle(fontSize: 18*sizeFactor, color: palette.textColor3),
       ),
     ),
     Align(
       alignment: Alignment.centerRight,
       child: Text(
         data.toString(),
-        style: TextStyle(fontSize: 18, color: palette.textColor3),
+        style: TextStyle(fontSize: 18*sizeFactor, color: palette.textColor3),
       ),
     ),
   ]);

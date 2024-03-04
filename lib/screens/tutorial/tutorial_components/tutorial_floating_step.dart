@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -120,6 +121,8 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
     
   @override
   Widget build(BuildContext context) {
+
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
 
@@ -139,7 +142,7 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
                 top: MediaQuery.of(context).size.height*(currentStep['height'] as double),
                 left: getLeftOrRightEnter(currentStep, _slideEnterAnimation2)['left'],
                 right: getLeftOrRightEnter(currentStep, _slideEnterAnimation2)['right'],
-                child: cardContainer(tutorialState,_animationState,currentStep,palette,MediaQuery.of(context).size.width*0.8),
+                child: cardContainer(tutorialState,_animationState,currentStep,palette,MediaQuery.of(context).size.width*0.8, settingsState.sizeFactor),
                 // child: cardContainer(
                 //   next, 
                 //   tutorialState,
@@ -169,7 +172,8 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
                   _animationState,
                   getTargetStepState(next,previousStep,nextStep),
                   palette,
-                  MediaQuery.of(context).size.width*0.8
+                  MediaQuery.of(context).size.width*0.8,
+                  settingsState.sizeFactor
                 ),
               );
             },
@@ -182,7 +186,7 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
 }
 
 
-Widget cardContainer(TutorialState tutorialState, AnimationState animationState, Map<String,dynamic> currentStep, ColorPalette palette, double width) {
+Widget cardContainer(TutorialState tutorialState, AnimationState animationState, Map<String,dynamic> currentStep, ColorPalette palette, double width, double sizeFactor) {
 // Widget cardContainer(
 //   bool next,
 //   TutorialState tutorialState, 
@@ -204,22 +208,22 @@ Widget cardContainer(TutorialState tutorialState, AnimationState animationState,
           child: Container(
             decoration: getBoxDecoration(currentStep),
             child:Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10.0*sizeFactor),
               child: Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Flexible(
                     child: DefaultTextStyle(
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: (20*sizeFactor),
                       ),
                       child: Text(
                         currentStep['text']
                       )
                     ),
                   ),
-                  iconButton(tutorialState,animationState,currentStep,palette),
+                  iconButton(tutorialState,animationState,currentStep,palette, sizeFactor),
                 ],
               ),  
             ),
@@ -232,7 +236,7 @@ Widget cardContainer(TutorialState tutorialState, AnimationState animationState,
 BoxDecoration getBoxDecoration(Map<String,dynamic> stepDetails) {
   if (stepDetails['left']) {
     return BoxDecoration(
-      color: Colors.grey.withOpacity(0.5),
+      color: const Color.fromARGB(255, 85, 85, 85).withOpacity(0.5),
       borderRadius: const BorderRadius.only(
         bottomRight: Radius.circular(10.0),
         topRight: Radius.circular(10.0),
@@ -240,7 +244,7 @@ BoxDecoration getBoxDecoration(Map<String,dynamic> stepDetails) {
     );     
   } else {
     return BoxDecoration(
-      color: Colors.grey.withOpacity(0.5),
+      color: const Color.fromARGB(255, 85, 85, 85).withOpacity(0.5),
       borderRadius: const BorderRadius.only(
         bottomLeft: Radius.circular(10.0),
         topLeft: Radius.circular(10.0),
@@ -249,7 +253,7 @@ BoxDecoration getBoxDecoration(Map<String,dynamic> stepDetails) {
   }
 }
 
-Widget iconButton(TutorialState tutorialState, AnimationState animationState, Map<String,dynamic> currentStep, ColorPalette palette) {
+Widget iconButton(TutorialState tutorialState, AnimationState animationState, Map<String,dynamic> currentStep, ColorPalette palette, double sizeFactor) {
   if (currentStep['complete']) {    
     return IconButton(
       onPressed : () {
@@ -263,7 +267,7 @@ Widget iconButton(TutorialState tutorialState, AnimationState animationState, Ma
       },
       padding: EdgeInsets.zero,
       color: palette.tileBgColor,
-      iconSize: 36,
+      iconSize: 36*sizeFactor,
       icon: const Icon(
         Icons.navigate_next_sharp,
       ),

@@ -4,6 +4,7 @@ import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class TimerWidget extends StatefulWidget {
@@ -92,6 +93,7 @@ class _TimerWidgetState extends State<TimerWidget>
   @override
   Widget build(BuildContext context) {
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
     
 
@@ -106,7 +108,7 @@ class _TimerWidgetState extends State<TimerWidget>
               // "level",
               "$levelText ${gamePlayState.currentLevel}",
               style: TextStyle(
-                fontSize: 22,
+                fontSize: (22 * settingsState.sizeFactor),
                 color: palette.textColor1,
               ),
             ),
@@ -131,7 +133,7 @@ class _TimerWidgetState extends State<TimerWidget>
                                   gamePlayState.duration.inSeconds),
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: (22 * settingsState.sizeFactor),
                                 // color: const Color.fromARGB(255, 224, 224, 224),
                                 color: palette.textColor1,
                               ),
@@ -144,6 +146,7 @@ class _TimerWidgetState extends State<TimerWidget>
                           Icons.timer,
                           // color: GameLogic().getColor(widget.darkTheme, widget.palette, "timer_text"),
                           color: palette.textColor1,
+                          size: (22 * settingsState.sizeFactor),
                         ),
                       ],
                     ),

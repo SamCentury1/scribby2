@@ -224,4 +224,14 @@ class AnimationState with ChangeNotifier {
   }    
 
 
+  bool _shouldRunTilePressedAnimation = false;
+  bool get shouldRunTilePressedAnimation =>
+      _shouldRunTilePressedAnimation;
+
+  void setShouldRunTilePressedAnimation(bool value) {
+    _shouldRunTilePressedAnimation = value;
+    notifyListeners();
+  }      
+
+
 }

@@ -18,7 +18,7 @@ class FirestoreMethods {
       final Map<String, dynamic>? docData = docSnap.data();
       res = docData;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("caught an error running 'getUserData()' ${e.toString()}");
     }
     return res;
   }
@@ -75,7 +75,7 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("caught an error running 'saveHighScore()' ${e.toString()}");
     }
   }
 
@@ -166,7 +166,7 @@ class FirestoreMethods {
       }
       res = userList;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("caught an error running 'getDataForLeaderboards()' ${e.toString()}");
     }
     return res;
   }
@@ -277,21 +277,24 @@ class FirestoreMethods {
 
       res = alphabetDoc['alphabet'];
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("caught an error running 'getAlphabet()' ${e.toString()}");
     }
 
     return res;
   }
 
-  Future<void> saveAlphabetToLocalStorage(
-      String uid, SettingsController settings) async {
+  Future<void> saveAlphabetToLocalStorage(String uid, SettingsController settings) async {
+
     try {
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final docSnap = await docRef.get();
-      final Map<String, dynamic> docData =
-          docSnap.data() as Map<String, dynamic>;
+      final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
 
-      String language = docData['parameters']['currentLanguage'];
+      late String language = 'english';
+      
+      if (docData['parameters']['currentLanguage'] != "") {
+        language = docData['parameters']['currentLanguage'];
+      } 
 
       QuerySnapshot qSnap = await _firestore
           .collection("alphabets")
@@ -306,17 +309,15 @@ class FirestoreMethods {
         documents.add(alphabetData);
       }
 
-      Map<String, dynamic> alphabetDoc =
-          documents.firstWhere((element) => element['language'] == language);
+      Map<String, dynamic> alphabetDoc = documents.firstWhere((element) => element['language'] == language);
 
       settings.setAlphabet(alphabetDoc);
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("caught an error running 'saveAlphabetToLocalStorage()' ${e.toString()}");
     }
   }
 
-  Future<void> selectLanguage(
-      String uid, String currentLanguage, List<String> languages) async {
+  Future<void> selectLanguage(String uid, String currentLanguage, List<String> languages) async {
     try {
       final docRef = _firestore.collection('users').doc(uid);
       // final docSnap = await docRef.get();
@@ -339,7 +340,7 @@ class FirestoreMethods {
       await docRef.update({"parameters.currentLanguage": currentLanguage});
       await docRef.update({"parameters.languages": languages});
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("caught an error running 'selectLanguage()' ${e.toString()}");
     }
   }
 
@@ -390,14 +391,17 @@ class FirestoreMethods {
 
       await docRef.update({"parameters": parameters});
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("caught an error running 'updateParameters()' ${e.toString()}");
     }
   }
 
   Future<void> updateSettingsState(SettingsState settings, String uid) async {
-    Map<String, dynamic> userData =
-        await getUserData(uid) as Map<String, dynamic>;
-    settings.updateUserData(userData);
+    try {
+      Map<String, dynamic> userData = await getUserData(uid) as Map<String, dynamic>;
+      settings.updateUserData(userData);
+    } catch (e) {
+      debugPrint("caught an error running 'updateSettingsState()' ${e.toString()}");
+    }
   }
 
   // Future<void> executeEndTutorial(String uid) async {

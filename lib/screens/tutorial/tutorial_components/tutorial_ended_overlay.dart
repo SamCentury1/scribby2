@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
@@ -27,6 +28,7 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     late SettingsController settings = Provider.of<SettingsController>(context, listen: false);
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
@@ -65,7 +67,7 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                         child: DefaultTextStyle(
                           style: TextStyle(
                             color: palette.textColor2,
-                            fontSize: 28
+                            fontSize: 28*settingsState.sizeFactor
                           ), 
                           child: Text(
                             Helpers().translateText(gamePlayState.currentLanguage, "Congratulations!")
@@ -78,7 +80,7 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                           child: DefaultTextStyle(
                             style: TextStyle(
                               color: palette.textColor2,
-                              fontSize: 22,
+                              fontSize: 22*settingsState.sizeFactor,
                               
                             ), 
                             child: Center(
@@ -116,13 +118,16 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                                 side: BorderSide(
                                   // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
                                   color: palette.optionButtonBgColor,
-                                  width: 1,
+                                  width: 1*settingsState.sizeFactor,
                                   style: BorderStyle.solid
                                 ), 
                               ),                            
                             ),
                             child: Text(
                               Helpers().translateText(gamePlayState.currentLanguage, "Start Game!"),
+                              style: TextStyle(
+                                fontSize: 16*settingsState.sizeFactor
+                              ),                              
                               ),
                           ),
                           ElevatedButton(
@@ -138,13 +143,16 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                                 side: BorderSide(
                                   // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
                                   color: palette.optionButtonBgColor,
-                                  width: 1,
+                                  width: 1*settingsState.sizeFactor,
                                   style: BorderStyle.solid
                                 ), 
                               ),                            
                             ),
                             child: Text(
-                              Helpers().translateText(gamePlayState.currentLanguage, "Restart Tutorial")
+                              Helpers().translateText(gamePlayState.currentLanguage, "Restart Tutorial"),
+                              style: TextStyle(
+                                fontSize: 16*settingsState.sizeFactor
+                              ),
                             ),
                           ),                          
                         ],

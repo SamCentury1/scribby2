@@ -1,5 +1,15 @@
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 
+Map<int,dynamic> tileKeys = {
+  0 :   "1_1",  1 :   "1_2",  2 :   "1_3",  3 :   "1_4",  4 :   "1_5",  5 :   "1_6",
+  6 :   "2_1",  7 :   "2_2",  8 :   "2_3",  9 :   "2_4",  10 :  "2_5",  11 :  "2_6",
+  12 :  "3_1",  13 :  "3_2",  14 :  "3_3",  15 :  "3_4",  16 :  "3_5",  17 :  "3_6",
+  18 :  "4_1",  19 :  "4_2",  20 :  "4_3",  21 :  "4_4",  22 :  "4_5",  23 :  "4_6",
+  24 :  "5_1",  25 :  "5_2",  26 :  "5_3",  27 :  "5_4",  28 :  "5_5",  29 :  "5_6",
+  30 :  "6_1",  31 :  "6_2",  32 :  "6_3",  33 :  "6_4",  34 :  "6_5",  35 :  "6_6",
+};
+
+
 List<Map<String, dynamic>> initialBoardState = [
   // ROW 1
   {"tileId": "1_1","row": 1,"column": 1,"letter": "","active": false,"alive": true},
@@ -2361,7 +2371,7 @@ List<Map<String, dynamic>> tutorialDetails = [
     'isPaused':   false,
     'isGameStarted': true,
     'isGameEnded': false,
-    'height': 0.25,
+    'height': 0.15,
     'left': true,    
     'board': [],     
   },      

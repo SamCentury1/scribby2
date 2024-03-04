@@ -7,6 +7,7 @@ import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_help_screen.dart';
@@ -63,6 +64,7 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
   Widget build(BuildContext context) {
     // late AnimationState animationState =Provider.of<AnimationState>(context, listen: false);
     late ColorPalette palette =Provider.of<ColorPalette>(context, listen: false);
+    late SettingsState settingsState =Provider.of<SettingsState>(context, listen: false);
     final GamePlayState gamePlayState = context.read<GamePlayState>();
     // late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
     // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
@@ -98,82 +100,96 @@ class _TutorialPauseOverlayState extends State<TutorialPauseOverlay> {
 
 
                         // gamePlayState.isGamePaused ? changeBackToZero() : null;
-                Dialog(
-                  insetPadding: const EdgeInsets.all(0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.85,
-                      height: MediaQuery.of(context).size.height * 0.55,
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-                          color: palette.optionButtonBgColor
-                          // color: Color.fromARGB(125, 71, 65, 65)
-                          ),
-                      child: Column(
-                        children: <Widget>[
-                          // TextButton(onPressed: changeBackToZero, child: Text("change")),
-                          Expanded(
-                            child: DisplayPauseOverlayWidget(animation: widget.animation, language: gamePlayState.currentLanguage),
-                          ),
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
+                Positioned(
+                  bottom: 10,
+                  left: (MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width * 0.85))/2,
+                  // alignment: Alignment.bottomLeft,
+                  child: Dialog(
+                    insetPadding: const EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: MediaQuery.of(context).size.height * 0.70,
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                            color: palette.optionButtonBgColor
+                            // color: Color.fromARGB(125, 71, 65, 65)
                             ),
-                            child: AnimatedBuilder(
-                              animation: widget.animation,
-                              builder: (context, child) {             
-                                return BottomNavigationBar(
-                                  currentIndex: convertIconNameToIndex(currentStep['callbackTarget']) ?? 0,
-                                  onTap: (index) {},
-                                  type: BottomNavigationBarType.shifting,
-                                  // type: BottomNavigationBarType.fixed,
-                                  selectedItemColor: palette.tileBgColor,
-                                  unselectedItemColor: palette.optionButtonTextColor,
-                                  items: [
-                                    BottomNavigationBarItem(
-                                      icon: const Icon(
-                                        Icons.gamepad,
-                                        // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'summary_icon', widget.animation),
-                                        
-                                      ),
-                                      label:  Helpers().translateText(gamePlayState.currentLanguage, 'Summary') ,
-                                      backgroundColor: palette.optionButtonBgColor2
-                                    ),
-                                    BottomNavigationBarItem(
-                                      icon: const Icon(
-                                        Icons.help,
-                                        // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'help_icon', widget.animation),
-                                      ),
-                                      label: Helpers().translateText(gamePlayState.currentLanguage, 'Help') ,
-                                      backgroundColor: palette.optionButtonBgColor2
-                                    ),
-                                    BottomNavigationBarItem(
-                                      icon: const Icon(
-                                        Icons.settings,
-                                        // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'settings_icon', widget.animation),
-                                      ),
-                                      label: Helpers().translateText(gamePlayState.currentLanguage, 'Settings') ,
-                                      backgroundColor: palette.optionButtonBgColor2
-                                    ),
-                                    BottomNavigationBarItem(
-                                      icon: const Icon(
-                                        Icons.exit_to_app,
-                                        // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'exit_icon', widget.animation),
-                                      ),
-                                      label: Helpers().translateText(gamePlayState.currentLanguage, 'Quit') ,
-                                      backgroundColor: palette.optionButtonBgColor2
-                                    ),
-                                  ],
-                                );
-                              },
+                        child: Column(
+                          children: <Widget>[
+                            // TextButton(onPressed: changeBackToZero, child: Text("change")),
+                            Expanded(
+                              child: DisplayPauseOverlayWidget(animation: widget.animation, language: gamePlayState.currentLanguage),
                             ),
-                          ),
-                        ],
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                              child: AnimatedBuilder(
+                                animation: widget.animation,
+                                builder: (context, child) {             
+                                  return SizedBox(
+                                    height: (58.0 *settingsState.sizeFactor ),
+                                    child: BottomNavigationBar(
+                                      currentIndex: convertIconNameToIndex(currentStep['callbackTarget']) ?? 0,
+                                      onTap: (index) {},
+                                      type: BottomNavigationBarType.shifting,
+                                      // type: BottomNavigationBarType.fixed,
+                                      selectedItemColor: palette.tileBgColor,
+                                      unselectedItemColor: palette.optionButtonTextColor,
+                                      selectedFontSize: (12 * settingsState.sizeFactor),
+                                      items: [
+                                        BottomNavigationBarItem(
+                                          icon:  Icon(
+                                            Icons.gamepad,
+                                            // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'summary_icon', widget.animation),
+                                            size: (18*settingsState.sizeFactor),
+                                          ),
+                                          label:  Helpers().translateText(gamePlayState.currentLanguage, 'Summary') ,
+                                          backgroundColor: palette.optionButtonBgColor2,
+                                        ),
+                                        BottomNavigationBarItem(
+                                          icon:  Icon(
+                                            Icons.help,
+                                            size: (18*settingsState.sizeFactor),
+                                            // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'help_icon', widget.animation),
+                                          ),
+                                          label: Helpers().translateText(gamePlayState.currentLanguage, 'Help') ,
+                                          backgroundColor: palette.optionButtonBgColor2,
+                                          
+                                          
+                                        ),
+                                        BottomNavigationBarItem(
+                                          icon:  Icon(
+                                            Icons.settings,
+                                            size: (18*settingsState.sizeFactor),
+                                            // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'settings_icon', widget.animation),
+                                          ),
+                                          label: Helpers().translateText(gamePlayState.currentLanguage, 'Settings') ,
+                                          backgroundColor: palette.optionButtonBgColor2
+                                        ),
+                                        BottomNavigationBarItem(
+                                          icon:  Icon(
+                                            Icons.exit_to_app,
+                                            size: (18*settingsState.sizeFactor),
+                                            // color: TutorialHelpers().getGlowAnimationColor(currentStep,palette,'exit_icon', widget.animation),
+                                          ),
+                                          label: Helpers().translateText(gamePlayState.currentLanguage, 'Quit') ,
+                                          backgroundColor: palette.optionButtonBgColor2
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -305,6 +321,7 @@ class _TutorialDisplayScoreSummaryState extends State<TutorialDisplayScoreSummar
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     // late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
     // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
     return Consumer<TutorialState>(
@@ -346,7 +363,7 @@ class _TutorialDisplayScoreSummaryState extends State<TutorialDisplayScoreSummar
                   ]
                 ),
                 for (int i=0; i<gameSummary['summary'].length; i++)
-                scoreSummaryTableRow(i,palette,gameSummary['summary'][i], widget.language),
+                scoreSummaryTableRow(i,palette,gameSummary['summary'][i], widget.language, settingsState.sizeFactor),
               ]
             ),
             const Expanded(child: SizedBox(),),        
@@ -361,7 +378,7 @@ class _TutorialDisplayScoreSummaryState extends State<TutorialDisplayScoreSummar
   }
 }
 
-Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette) {
+Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette, double sizeFactor) {
 
   Color textColor = turn.isEven ? palette.textColor1 : palette.textColor3;
   late IconData iconItem;
@@ -374,31 +391,31 @@ Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette) {
   }
 
   return SizedBox(
-    width: 35,
+    width: 35*sizeFactor,
     child: Stack(
       children: [
         Icon(
           iconItem,
-          size: 16,
+          size: 16*sizeFactor,
           color: textColor,
         ),
         Positioned(
-          left: 14.0,
-          top:-3,
+          left: 14.0*sizeFactor,
+          top:-3*sizeFactor,
           child: Text.rich(
             TextSpan(
               children: <TextSpan>[
                 TextSpan(
                     text:"x",
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 10*sizeFactor,
                       color: textColor
                     )
                 ),
                 TextSpan(
                   text: data.toString(),
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14*sizeFactor,
                     color: textColor
                   )
                 ),
@@ -412,7 +429,7 @@ Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette) {
   );
 }
 
-TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, String language) {
+TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, String language, double sizeFactor) {
 
   Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
 
@@ -422,7 +439,7 @@ TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynami
         (index+1).toString(),
         style: TextStyle(
           color: textColor,
-          fontSize: 20
+          fontSize: 20*sizeFactor
         ),
       ),
     ),
@@ -432,21 +449,21 @@ TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynami
           TutorialHelpers().translateDemoWord(language, data['word'],),
           style: TextStyle(
             color: textColor,
-            fontSize: 20,
+            fontSize: 20*sizeFactor,
           ),
         ),
-        SizedBox(width: 10,),
+        SizedBox(width: 10*sizeFactor,),
         Expanded(child: SizedBox()),
-        data['wordMultiplier'] > 1 ? multiplierIcon('wordMultiplier',data['turn'], data['wordMultiplier'], palette) : const SizedBox(),
-        data['crosswordMultiplier'] > 1 ? multiplierIcon('crosswordMultiplier',data['turn'], data['crosswordMultiplier'], palette) : const SizedBox(),
-        data['streakMultiplier'] > 1 ? multiplierIcon('streakMultiplier',data['turn'], data['streakMultiplier'], palette) : const SizedBox(),
+        data['wordMultiplier'] > 1 ? multiplierIcon('wordMultiplier',data['turn'], data['wordMultiplier'], palette, sizeFactor) : const SizedBox(),
+        data['crosswordMultiplier'] > 1 ? multiplierIcon('crosswordMultiplier',data['turn'], data['crosswordMultiplier'], palette, sizeFactor) : const SizedBox(),
+        data['streakMultiplier'] > 1 ? multiplierIcon('streakMultiplier',data['turn'], data['streakMultiplier'], palette, sizeFactor) : const SizedBox(),
       ],
     ),
     Align(
       alignment: Alignment.centerRight,
       child: Text(
         data['points'].toString(),
-        style: TextStyle(color: textColor, fontSize: 20),
+        style: TextStyle(color: textColor, fontSize: 20*sizeFactor),
         textAlign: TextAlign.right,
       ),
     ),
@@ -474,6 +491,7 @@ class _TutorialDisplayGameSummaryState extends State<TutorialDisplayGameSummary>
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     
 
     return Consumer<TutorialState>(
@@ -496,32 +514,37 @@ class _TutorialDisplayGameSummaryState extends State<TutorialDisplayGameSummary>
                 tableRowItem(
                     Helpers().translateText(widget.language, "Score",),
                     tutorialState.tutorialSummaryData[widget.language]['score'].toString(),
-                    Icon(Icons.emoji_events,
-                        size: 22, color: palette.textColor2),
-                    palette),
+                    Icon(Icons.emoji_events,size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor
+                    ),
                 tableRowItem(
                     Helpers().translateText(widget.language, "Words",),
                     tutorialState.tutorialSummaryData[widget.language]['words'].toString(),
-                    Icon(Icons.book_sharp,
-                        size: 22, color: palette.textColor2),
-                    palette),                
+                    Icon(Icons.book_sharp,size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor              
+                    ),  
                 tableRowItem(
                     Helpers().translateText(widget.language, "Duration",),
                     "--",
-                    Icon(Icons.timer, size: 22, color: palette.textColor2),
-                    palette),
+                    Icon(Icons.timer, size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor
+                    ),
                 tableRowItem(
                     Helpers().translateText(widget.language, "Level",),
                     "1",
-                    Icon(Icons.bar_chart,
-                        size: 22, color: palette.textColor2),
-                    palette),
+                    Icon(Icons.bar_chart,size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor,
+                    ),
               ],
             ),
             const Expanded(child: SizedBox()),
             Text(
               Helpers().translateText(widget.language, "Summary",),
-              style: TextStyle(color: palette.textColor2, fontSize: 24),
+              style: TextStyle(color: palette.textColor2, fontSize: 24*settingsState.sizeFactor),
             ),
             Table(
               columnWidths: const <int, TableColumnWidth>{
@@ -534,24 +557,30 @@ class _TutorialDisplayGameSummaryState extends State<TutorialDisplayGameSummary>
                 tableRowItem(
                     Helpers().translateText(widget.language, "Longest Streak",),
                     tutorialState.tutorialSummaryData[widget.language]['longestStreak'].toString(),
-                    Icon(Icons.bolt, size: 22, color: palette.textColor2),
-                    palette),
+                    Icon(Icons.bolt, size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor,
+                    ),
                 tableRowItem(
                     Helpers().translateText(widget.language, "Cross Words",),
                     tutorialState.tutorialSummaryData[widget.language]['crosswords'].toString(),
-                    Icon(Icons.close, size: 22, color: palette.textColor2),
-                    palette),
+                    Icon(Icons.close, size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor,
+                    ),
                 tableRowItem(
                     Helpers().translateText(widget.language, "Most Points",),
                     tutorialState.tutorialSummaryData[widget.language]['mostPoints'].toString(),
-                    Icon(Icons.star, size: 22, color: palette.textColor2),
-                    palette),
+                    Icon(Icons.star, size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor,),
                 tableRowItem(
                     Helpers().translateText(widget.language, "Most Words",),
                     tutorialState.tutorialSummaryData[widget.language]['mostWords'].toString(),
-                    Icon(Icons.my_library_books,
-                        size: 22, color: palette.textColor2),
-                    palette),
+                    Icon(Icons.my_library_books,size: 22*settingsState.sizeFactor, color: palette.textColor2),
+                    palette,
+                    settingsState.sizeFactor,
+                    ),
               ],
             ),
             const Expanded(child: SizedBox()),
@@ -577,10 +606,11 @@ class _TutorialDisplayGameSummaryState extends State<TutorialDisplayGameSummary>
                   builder: (context, child) {   
                     return Text(
                       Helpers().translateText(widget.language, "View points summary",),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: palette.textColor2,
                         fontStyle: FontStyle.italic,
-                        fontSize: 22,
+                        fontSize: 22* settingsState.sizeFactor,
                         shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'view_score_summary', widget.animation)
                       ),
                     );
@@ -597,24 +627,26 @@ class _TutorialDisplayGameSummaryState extends State<TutorialDisplayGameSummary>
 }
 
 
-TableRow tableRowItem(
-    String textBody, String data, Icon icon, ColorPalette palette) {
+TableRow tableRowItem(String textBody, String data, Icon icon, ColorPalette palette, double sizeFactor) {
   return TableRow(children: [
     Center(
       child: icon,
     ),
-    FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Text(
-        textBody,
-        style: TextStyle(color: palette.textColor2, fontSize: 20),
+    Align(
+      alignment: Alignment.centerLeft,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          textBody,
+          style: TextStyle(color: palette.textColor2, fontSize: 20*sizeFactor),
+        ),
       ),
     ),
     Align(
       alignment: Alignment.centerRight,
       child: Text(
         data,
-        style: TextStyle(color: palette.textColor2, fontSize: 20),
+        style: TextStyle(color: palette.textColor2, fontSize: 20*sizeFactor),
         textAlign: TextAlign.right,
       ),
     ),
@@ -638,6 +670,7 @@ class TutorialExitPage extends StatefulWidget {
 class _TutorialExitPageState extends State<TutorialExitPage> {
   late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
   late TutorialState tutorialState = Provider.of<TutorialState>(context,listen: false);
+  late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
   late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
   Key? get key => null;
 
@@ -654,7 +687,7 @@ class _TutorialExitPageState extends State<TutorialExitPage> {
             Helpers().translateText(widget.language, "Would you like to leave?",),
             style: TextStyle(
               color: palette.textColor2,
-              fontSize: 22
+              fontSize: 22*settingsState.sizeFactor
             ),
           ),
           AnimatedBuilder(
@@ -666,11 +699,11 @@ class _TutorialExitPageState extends State<TutorialExitPage> {
                   foregroundColor: palette.textColor1,
                   shadowColor: TutorialHelpers().getGlowAnimationColor(currentStep, palette, 'exit_button', widget.animation),
                       // const Color.fromRGBO(123, 123, 123, 0.7),
-                  elevation: 3.0,
-                  minimumSize: const Size(double.infinity, 50),
-                  padding: const EdgeInsets.all(4.0),
-                  textStyle: const TextStyle(
-                    fontSize: 22,
+                  elevation: 3.0*settingsState.sizeFactor,
+                  minimumSize: Size(double.infinity, 50*settingsState.sizeFactor),
+                  padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
+                  textStyle: TextStyle(
+                    fontSize: 22*settingsState.sizeFactor,
                   ),
                   shape: const RoundedRectangleBorder(
                     borderRadius:BorderRadius.all(Radius.circular(10.0)),
@@ -694,7 +727,7 @@ class _TutorialExitPageState extends State<TutorialExitPage> {
             Helpers().translateText(widget.language, "Or simply restart?",),
             style: TextStyle(
               color: palette.textColor2,
-              fontSize: 22
+              fontSize: 22*settingsState.sizeFactor
             ),          
           ),
           TextButton(
@@ -703,11 +736,11 @@ class _TutorialExitPageState extends State<TutorialExitPage> {
               foregroundColor: palette.textColor1,
               shadowColor:
                   const Color.fromRGBO(123, 123, 123, 0.7),
-              elevation: 3.0,
-              minimumSize: const Size(double.infinity, 50),
-              padding: const EdgeInsets.all(4.0),
-              textStyle: const TextStyle(
-                fontSize: 22,
+              elevation: 3.0*settingsState.sizeFactor,
+              minimumSize:  Size(double.infinity, 50*settingsState.sizeFactor),
+              padding:  EdgeInsets.all(4.0*settingsState.sizeFactor),
+              textStyle:  TextStyle(
+                fontSize: 22*settingsState.sizeFactor,
               ),
               shape: const RoundedRectangleBorder(
                 borderRadius:

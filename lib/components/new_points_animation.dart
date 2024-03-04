@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 
 class NewPointsAnimation extends StatefulWidget {
   const NewPointsAnimation({
@@ -43,28 +44,32 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
     _animationState.addListener(_handleAnimationStateChange);
   }
 
-  Map<String, dynamic> getTileLocation(String tile) {
-    List<String> details = tile.split("_");
-    String row = details[0];
-    String col = details[1];
-    double sideLength = 330;
+  Map<String, dynamic> getTileLocation(String tile, double sideLength) {
+    if (tile != "") {
+      List<String> details = tile.split("_");
+      String row = details[0];
+      String col = details[1];
+      // double sideLength = 330;
 
-    late double posX;
-    late double posY;
+      late double posX;
+      late double posY;
 
-    if (int.parse(col) >= 4) {
-      posX = (sideLength / 6) * (int.parse(col) - 1);
+      if (int.parse(col) >= 4) {
+        posX = (sideLength / 6) * (int.parse(col) - 1);
+      } else {
+        posX = (sideLength / 6) * (int.parse(col) - 0);
+      }
+
+      if (int.parse(row) >= 4) {
+        posY = (sideLength / 6) * (int.parse(row) - 2);
+      } else {
+        posY = (sideLength / 6) * (int.parse(row) - 1);
+      }
+
+      return {"x": posX, "y": posY};
     } else {
-      posX = (sideLength / 6) * (int.parse(col) - 0);
+      return {"x": 0.0, "y": 0.0};
     }
-
-    if (int.parse(row) >= 4) {
-      posY = (sideLength / 6) * (int.parse(row) - 2);
-    } else {
-      posY = (sideLength / 6) * (int.parse(row) - 1);
-    }
-
-    return {"x": posX, "y": posY};
   }
 
   void _handleAnimationStateChange() {
@@ -267,11 +272,13 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
 
   @override
   Widget build(BuildContext context) {
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    final double sideLength = (MediaQuery.of(context).size.width*0.9) * settingsState.sizeFactor;
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return Positioned(
-            top: getTileLocation(gamePlayState.pressedTile)['y'],
-            left: getTileLocation(gamePlayState.pressedTile)['x'],
+            top: getTileLocation(gamePlayState.pressedTile, sideLength )['y'],
+            left: getTileLocation(gamePlayState.pressedTile, sideLength )['x'],
             child: AnimatedBuilder(
               animation: _newPointsPositionAnimation,
               builder: (context, child) {
@@ -281,15 +288,14 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
                     // "+${(widget.currentScore - widget.previousScore).toString()}",
                     getNewPointsValue(gamePlayState),
                     style: TextStyle(
-                        fontSize: 38 * _newPointsFontSizeAnimation.value,
+                        fontSize: (38 * settingsState.sizeFactor) * _newPointsFontSizeAnimation.value,
                         // fontSize:38,
                         color: _newPointsTextAnimation.value ?? Colors.black,
                         shadows: <Shadow>[
                           Shadow(
                             offset: const Offset(0.0, 0.0),
                             blurRadius: 30.0,
-                            color:
-                                _newPointsShadowAnimation.value ?? Colors.black,
+                            color: _newPointsShadowAnimation.value ?? Colors.black,
                           ),
                         ]),
                   ),

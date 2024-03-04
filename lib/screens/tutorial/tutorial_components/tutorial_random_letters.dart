@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -10,9 +11,11 @@ import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TutorialRandomLetters extends StatefulWidget {
   final Animation animation;
+  final double sizeFactor;
   const TutorialRandomLetters({
     super.key,
     required this.animation,
+    required this.sizeFactor,
   });
 
   @override
@@ -52,7 +55,7 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
   @override
   void initState() {
     super.initState();
-    initializeAnimations();
+    initializeAnimations(widget.sizeFactor);
     _animationState = Provider.of<AnimationState>(context, listen: false);
     _tutorialState = Provider.of<TutorialState>(context, listen: false);
     _animationState.addListener(_handleAnimationStateChange);
@@ -79,7 +82,7 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
   }
 
   // THIS FUNCTION TELLS THE CODE WHAT TO DO
-  void initializeAnimations() {
+  void initializeAnimations(double sizeFactor) {
 
     // final double width = MediaQuery.of(context).size.width *0.6;
     // final double side = width/3;
@@ -108,8 +111,8 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
         vsync: this, duration: const Duration(milliseconds: 500));
 
     _sizeAnimation = Tween<double>(
-      begin: 40, // 50,
-      end: 80 // 100,
+      begin: 40*sizeFactor, // 50,
+      end: 76*sizeFactor // 100,
     ).animate(CurvedAnimation(
         parent: _sizeAnimationController, curve: Curves.easeIn));
 
@@ -117,8 +120,8 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
         vsync: this, duration: const Duration(milliseconds: 500));
 
     _fontAnimation = Tween<double>(
-      begin: 22,
-      end: 42,
+      begin: 22*sizeFactor,
+      end: 42*sizeFactor,
     ).animate(CurvedAnimation(
         parent: _fontAnimationController, curve: Curves.easeIn));
 
@@ -189,10 +192,10 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
   Widget build(BuildContext context) {
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
-    final double width = MediaQuery.of(context).size.width *0.6;
+    final double width = MediaQuery.of(context).size.width *0.6*settingsState.sizeFactor;
     final double side = width/3;
 
     return Stack(
@@ -220,7 +223,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                   // color: Color.fromARGB(255, 220, 171, 230),
                   // width: double.infinity,
                   // height: 100,
-                  width: MediaQuery.of(context).size.width*0.8,
+                  width: MediaQuery.of(context).size.width*0.8*settingsState.sizeFactor,
                   height: side*1.2,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -270,7 +273,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                         strokeWidth: 5.0,
                                         strokeCap: StrokeCap.round,
                                         textStyle: TextStyle(
-                                            fontSize: 33.0,
+                                            fontSize: 33.0*settingsState.sizeFactor,
                                             // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
                                             color:  tutorialState.sequenceStep == 7 ? palette.tileBgColor : palette.screenBackgroundColor
                                           ),
@@ -334,7 +337,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                   color: palette.screenBackgroundColor,
                                   border: Border.all(
                                     color: getColor(palette,widget.animation, currentStep,'random_letter_1'),
-                                    width: 3
+                                    width: 3*settingsState.sizeFactor
                                   ),
                                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                                   boxShadow: [
@@ -359,7 +362,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                                 // GameLogic().displayRandomLetters(tutorialState.tutorialRandomLetterList,3),
                                                 currentStep['random_letter_3'],
                                               style: TextStyle(
-                                                fontSize: 44 * _shrinkAnimation.value,
+                                                fontSize: 36 *settingsState.sizeFactor * _shrinkAnimation.value,
                                                 color: palette.tileTextColor,
                                               ),
                                             )),
@@ -411,7 +414,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                       color: palette.screenBackgroundColor,
                                       border: Border.all(
                                         color: getColor(palette,widget.animation, currentStep,'random_letter_2'),
-                                        width: 3
+                                        width: 3*settingsState.sizeFactor
                                       ),
                                       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                                       boxShadow: [
@@ -419,7 +422,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                       ]
                                     ),                                         
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(8.0*settingsState.sizeFactor),
                                       child: Container(
                                         width: side *0.6, // 50,
                                         height: side *0.6, // 50,
@@ -431,7 +434,7 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                           child: Text(
                                             currentStep['random_letter_1'],
                                             style: TextStyle(
-                                              fontSize: 26,
+                                              fontSize: 22*settingsState.sizeFactor,
                                               color: palette.tileTextColor,
                                             ),
                                           ),

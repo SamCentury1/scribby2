@@ -139,268 +139,440 @@ class _MenuScreenState extends State<MenuScreen> {
   void initState() {
     super.initState();
 
-    _gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-    _palette = Provider.of<ColorPalette>(context, listen: false);
-    _settingsState = Provider.of<SettingsState>(context, listen: false);
-    _settings = Provider.of<SettingsController>(context, listen: false);
-    _audioController = Provider.of<AudioController>(context, listen: false);
+    // _gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+    // _palette = Provider.of<ColorPalette>(context, listen: false);
+    // _settingsState = Provider.of<SettingsState>(context, listen: false);
+    // _settings = Provider.of<SettingsController>(context, listen: false);
+    // _audioController = Provider.of<AudioController>(context, listen: false);
 
-    getUserFromFirebase(_gamePlayState);
+    // getUserFromFirebase(_gamePlayState);
     // _checkUsername();
   }
 
-  Future<void> getUserFromFirebase(GamePlayState gamePlayState) async {
-    final String uid = AuthService().currentUser!.uid;
-    setState(() {
-      isLoading = true;
-    });
-    final Map<String, dynamic>? userData = await FirestoreMethods().getUserData(uid);
-    if (userData!.isNotEmpty) {
+  // Future<void> getUserFromFirebase(GamePlayState gamePlayState) async {
+  //   print("hey you hit the menu screen!");
+  //   final String uid = AuthService().currentUser!.uid;
+  //   print("you have user id $uid ");
 
 
-      gamePlayState.setCurrentLanguage(userData['parameters']['currentLanguage']);
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   final Map<String, dynamic>? userData = await FirestoreMethods().getUserData(uid);
 
-      // saving a copy of the user data in firebase to a Provider class
-      _settingsState.updateUserData(userData);
+  //   print("user data $userData");
+  //   if (userData!.isNotEmpty) {
 
-      // saving the copy of the alphabet to the shared preferences
+  //     gamePlayState.setCurrentLanguage(userData['parameters']['currentLanguage']);
 
-      await FirestoreMethods().saveAlphabetToLocalStorage(uid, _settings);
+  //     // saving a copy of the user data in firebase to a Provider class
+  //     _settingsState.updateUserData(userData);
 
-      // Saving a copy of the user data to shared preferences
-      _settings.setUserData(userData);
+  //     // saving the copy of the alphabet to the shared preferences
+  //     await FirestoreMethods().saveAlphabetToLocalStorage(uid, _settings);
 
-      _palette.getThemeColors(userData['parameters']['darkMode']);
+  //     // Saving a copy of the user data to shared preferences
+  //     _settings.setUserData(userData);
+      
 
-      String currentLanguage = userData['parameters']['currentLanguage'];
+  //     // get the size factor
+  //     Helpers().getSizeFactor(_settingsState, MediaQuery.of(context).size.height);
 
-      List<String> listOfWords = await StorageMethods().downloadWordList(currentLanguage);
+  //     _palette.getThemeColors(userData['parameters']['darkMode']);
 
-      gamePlayState.setDictionary(listOfWords);
+  //     if (userData['username'] == "" || userData['parameters']['currentLanguage'] == "") {    
+  //       navigateToChooseLanguage();
+  //     }      
 
-      // log(listOfWords[4142].toString());
+  //     String currentLanguage = userData['parameters']['currentLanguage'];
 
-      setState(() {
-        // _userData = userData;
-        isLoading = false;
-        language = currentLanguage;
-      });
-      if (userData['username'] == "") {
-        navigateToChooseLanguage();
-        // Navigator.of(context).pushReplacement(
-        //   MaterialPageRoute(
-        //     builder: (context) => const ChooseLanguage()
-        //   )
-        // );
-      }
-    }
-  }
+  //     print("current language = $currentLanguage");
+
+  //     List<String> listOfWords = await StorageMethods().downloadWordList(currentLanguage);
+
+  //     gamePlayState.setDictionary(listOfWords);
+
+  //     // log(listOfWords[4142].toString());
+
+  //     setState(() {
+  //       // _userData = userData;
+  //       isLoading = false;
+  //       language = currentLanguage;
+  //     });
+  //     if (userData['username'] == "") {
+  //       setState(() {
+  //         // _userData = userData;
+  //         isLoading = false;
+  //         language = 'english';
+  //       });        
+  //       navigateToChooseLanguage();
+  //       // Navigator.of(context).pushReplacement(
+  //       //   MaterialPageRoute(
+  //       //     builder: (context) => const ChooseLanguage()
+  //       //   )
+  //       // );
+  //     }
+  //   }
+  // }
 
   void navigateToChooseLanguage() {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const ChooseLanguage()));
   }
 
-  // void navigateToTutorial() {
-  //   late TutorialState tutorialState = context.read<TutorialState>();
-  //   // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
-  //   TutorialHelpers().getFullTutorialStates2(tutorialState, tutorialDetails);
-  //   // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
-    
-  //   Navigator.of(context).pushReplacement(
-  //     MaterialPageRoute(
-  //       builder: (context) => const TutorialScreen1()
-  //     )
-  //   );
+
+
+
+
+
+  // Future<Map<dynamic, dynamic>> getDataFromStorage() async {
+  //   late Map<dynamic, dynamic> res = {};
+  //   try {
+  //     final Map<dynamic,dynamic> userData = (_settings.userData.value as Map<dynamic, dynamic>);
+  //     res = {"userData": userData, };
+
+  //   } catch(error) {
+  //     log(error.toString());
+  //   }
+  //   return res;
   // }
+
+  Future<void> getDataFromStorage() async {
+
+    _gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+    _palette = Provider.of<ColorPalette>(context, listen: false);
+    _settingsState = Provider.of<SettingsState>(context, listen: false);
+    _settings = Provider.of<SettingsController>(context, listen: false);
+    _audioController = Provider.of<AudioController>(context, listen: false);
+
+
+    try {
+
+      final String uid = AuthService().currentUser!.uid;
+
+      final Map<String, dynamic>? userData = await FirestoreMethods().getUserData(uid);
+      // final Map<String, dynamic>? userData = await FirestoreMethods().getUserData("caca");
+
+
+
+      if (userData != null) {
+
+        log("a user has that id - let's pull that data up");
+
+
+        // check if the user has any parameters 
+
+        if (userData['username'] == "" || userData['parameters']['currentLanguage'] == "") {    
+          navigateToChooseLanguage();
+
+          // String currentLanguage = userData['parameters']['currentLanguage'];
+
+          // print("current language = $currentLanguage");
+
+          // List<String> listOfWords = await StorageMethods().downloadWordList(currentLanguage);
+
+          // _gamePlayState.setDictionary(listOfWords);          
+        } else {
+          String currentLanguage = userData['parameters']['currentLanguage'];
+
+          language = currentLanguage;
+
+          List<String> listOfWords = await StorageMethods().downloadWordList(currentLanguage);
+          _gamePlayState.setDictionary(listOfWords);  
+
+          _gamePlayState.setCurrentLanguage(userData['parameters']['currentLanguage']);
+
+          // saving a copy of the user data in firebase to a Provider class
+          _settingsState.updateUserData(userData);
+
+          // saving the copy of the alphabet to the shared preferences
+          await FirestoreMethods().saveAlphabetToLocalStorage(uid, _settings);
+
+          // Saving a copy of the user data to shared preferences
+          _settings.setUserData(userData);
+          
+
+          // get the size factor
+          Helpers().getSizeFactor(_settingsState, MediaQuery.of(context).size.height);
+
+          _palette.getThemeColors(userData['parameters']['darkMode']);
+
+
+        }     
+
+      } else {
+        language = "english";
+        log("if this appears, there's a problem as new users are supposed to have a doc created in the main file");
+        _palette.getThemeColors(true);
+        navigateToChooseLanguage();
+
+
+      }
+
+      
+
+    } catch (error) {
+      log(error.toString());
+    }
+  }
 
   @override
   void dispose() {
     super.dispose();
   }
 
-  // final List<Map<String, dynamic>> translation = [
-  //   {
-  //     "phrase": "New Game",
-  //     "english": "New Game",
-  //     "french": "Nouvelle Partie",
-  //     "spanish": "Nuevo Juego",
-  //   },
-  //   {
-  //     "phrase": "Leaderboards",
-  //     "english": "Leaderboards",
-  //     "french": "Classement",
-  //     "spanish": "Tabla de clasificación",
-  //   },
-  //   {
-  //     "phrase": "Instructions",
-  //     "english": "Instructions",
-  //     "french": "Instructions",
-  //     "spanish": "Instrucciones",
-  //   },
-  //   {
-  //     "phrase": "Settings",
-  //     "english": "Settings",
-  //     "french": "Paramètres",
-  //     "spanish": "Ajustes",
-  //   },
-  // ];
 
-  // String translate(String source, String targetLanguage) {
-  //   late String match = translation
-  //       .firstWhere((element) => element['phrase'] == source)[targetLanguage];
-  //   return match;
-  // }
 
   @override
   Widget build(BuildContext context) {
     // final settings = context.watch<SettingsController>();
 
-    return isLoading ? const Center(child: CircularProgressIndicator(),):
+    // return isLoading ? const Center(child: CircularProgressIndicator(),):
 
 
-        Consumer<ColorPalette>(
-            builder: (context, palette, child) {
-              return Scaffold(
-                  appBar: AppBar(
-                    leading: const SizedBox(),
-                    title: Text(
-                      'Home',
-                      style: TextStyle(color: palette.textColor1),
-                    ),
-                    // backgroundColor: settings.darkTheme.value ? Colors.black : Colors.grey,
-                    backgroundColor: palette.appBarColor,
-                  ),
-                  body: Container(
-                    // color: settings.darkTheme.value ? palette.darkScreenBgColor : palette.lightScreenBgColor,
-                    // color: GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                    color: palette.screenBackgroundColor,
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Expanded(flex: 1, child: SizedBox()),
+        return FutureBuilder(
+          future: getDataFromStorage(),
+          builder:(context, snapshot) {
+            // print(snapshot.data);
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator(),);
+            } else if (snapshot.hasError ) {
+              return Center(child: Text("Error"),);
+            } else {
+              // print(snapshot.data!);
+              // String language = snapshot.data!['userData']['parameters']['currentLanguage'];
 
-                        const ScribbyLogoAnimation(),
-
-                        const Expanded(flex: 1, child: SizedBox()),
-
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                isLoading = true;
-                              });
-
-                              _audioController.playSfx(SfxType.optionSelected);
-
-
-                              if ((_settings.userData.value as Map<String, dynamic>)['parameters']['hasSeenTutorial'] ==false) {
-                                TutorialHelpers().navigateToTutorial(context);
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              } else {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const GameScreen()),
-                                );
-                                Helpers().getStates(_gamePlayState, _settings);
-
-                              }
-                            },
-                            child: menuButton( 
-                              palette, 
-                              Helpers().translateText(language, "New Game")
-                            )
+              final Map<String,dynamic> userData = (_settings.userData.value as Map<String, dynamic>);
+              return  Consumer<ColorPalette>(
+                  builder: (context, palette, child) {
+                    return SafeArea(
+                      child: Scaffold(
+                          appBar: AppBar(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                bottom: Radius.circular(30.0)
+                              )
+                            ),
+                            title: Text(
+                              Helpers().translateText(language, "Home"),
+                              style: TextStyle(color: palette.textColor1),
+                            ),
+                            backgroundColor: palette.appBarColor,
                           ),
+                          backgroundColor: palette.screenBackgroundColor,
+                          body: Container(
+                            color: palette.screenBackgroundColor,
+                            child: Column(
+                              children: [
+                                // const SizedBox(
+                                //   height: 10,
+                                // ),
 
-                        TextButton(
-                            onPressed: () {
-                              _audioController.playSfx(SfxType.optionSelected);
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const LeaderboardsScreen()),
-                              );
-                            },
-                            child: menuButton(
-                              palette,
-                              Helpers().translateText(language, "Leaderboards")
-                            )),
+                                const Expanded(
+                                  flex: 2,  
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(flex: 1, child: SizedBox(),),
+                                      Expanded(
+                                        flex: 4,
+                                        child: ScribbyLogoAnimation()
+                                      ),
+                                    ],
+                                  ),
+                                ),
 
-                        TextButton(
-                            onPressed: () {
-                              _audioController.playSfx(SfxType.optionSelected);
+                      
+                                
 
-                              Helpers().getStates(_gamePlayState, _settings);
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
 
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const InstructionsScreen()),
-                              );
-                            },
-                            child: menuButton(
-                              palette,
-                              Helpers().translateText(language, "Instructions")
-                            )),
+                                      MenuButtonWidget(
+                                        settingsState: _settingsState, 
+                                        palette: palette, 
+                                        language: language,
+                                        body: Helpers().translateText(language, "New Game"),
+                                        onPressed: () {  
+                                          _audioController.playSfx(SfxType.optionSelected);
+                                          if (userData['parameters']['hasSeenTutorial'] == false) {
+                                            TutorialHelpers().navigateToTutorial(context);
+                                          } else {
+                                            Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                builder: (context) => const GameScreen()
+                                              ),
+                                            );
+                                            Helpers().getStates(_gamePlayState, _settings);         
+                                          }
+                                        },
+                                      ),
+                                      MenuButtonWidget(
+                                        settingsState: _settingsState, 
+                                        palette: palette, 
+                                        language: language,
+                                        body: Helpers().translateText(language, "Leaderboards"),
+                                        onPressed: () {
+                                          _audioController.playSfx(SfxType.optionSelected);
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LeaderboardsScreen()),
+                                          );
+                                        },
+                                      ),
+                                      MenuButtonWidget(
+                                        settingsState: _settingsState, 
+                                        palette: palette, 
+                                        language: language,
+                                        body: Helpers().translateText(language, "Instructions"),
+                                        onPressed: () {
+                                          _audioController.playSfx(SfxType.optionSelected);
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const InstructionsScreen()),
+                                          );
+                                        },
+                                      ),
+                                      MenuButtonWidget(
+                                        settingsState: _settingsState, 
+                                        palette: palette, 
+                                        language: language,
+                                        body: Helpers().translateText(language, "Settings"),
+                                        onPressed: () {
+                                          _audioController.playSfx(SfxType.optionSelected);
+                          
+                                          Helpers().getStates(_gamePlayState, _settings);
+                          
+                                          bool darkMode = (_settings.userData.value as Map<String, dynamic>)['parameters']['darkMode'];
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) => SettingsScreen(darkMode: darkMode),
+                                            ),
+                                                
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                ),
 
-                        TextButton(
-                            onPressed: () {
-                              _audioController.playSfx(SfxType.optionSelected);
-
-                              Helpers().getStates(_gamePlayState, _settings);
-
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SettingsScreen()),
-                              );
-                            },
-                            child: menuButton(
-                              palette,
-                              Helpers().translateText(language, "Settings")
-                            )),
-
-
-                        const Expanded(flex: 1, child: SizedBox()),
-                      ],
-                    ),
-                  ));
-            },
-          );
+                                const SizedBox(height: 15,),
+                              ],
+                            ),
+                          )),
+                    );
+                  },
+                );
+            }
+          }         
+        );
     //   },
     // );
   }
 }
 
-Widget menuButton(ColorPalette palette, String body) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-    child: Container(
-      width: double.infinity,
-      height: 50,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
+
+
+class MenuButtonWidget extends StatelessWidget {
+  final SettingsState settingsState;
+  final ColorPalette palette;
+  final String language;
+  final String body;
+  final void Function()? onPressed;
+  const MenuButtonWidget({
+    super.key,
+    required this.settingsState,
+    required this.palette,
+    required this.language,
+    required this.body,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        16.0 * settingsState.sizeFactor,
+        8.0 * settingsState.sizeFactor,
+        16.0 * settingsState.sizeFactor,
+        8.0 * settingsState.sizeFactor,
+      ),
+      child: TextButton(
+          // decoration: const BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topLeft,
+          //         end: Alignment.bottomRight,
+          //         colors: <Color>[
+          //           Color.fromARGB(255, 87, 87, 87),
+          //           Color.fromARGB(255, 87, 87, 87),
+          //           // const Color.fromARGB(255, 148, 148, 148),
+          //         ],
+          //         tileMode: TileMode.mirror),
+          //     border: Border(),
+          //     borderRadius: BorderRadius.all(Radius.circular(12.0))),        
+        // style: ElevatedButton.styleFrom(
+        //   backgroundColor: palette.optionButtonBgColor,
+        //   foregroundColor: palette.textColor1,
+        //   shadowColor:palette.textColor3,
+        //   elevation: 3.0,
+        //   minimumSize:  Size(double.infinity, 50*settingsState.sizeFactor),
+        //   padding: const EdgeInsets.all(8.0),
+          
+        //   shape: const RoundedRectangleBorder(
+        //     borderRadius:
+        //       BorderRadius.all(Radius.circular(10.0)
+        //     ),
+        //   ),
+        // ),
+        onPressed: onPressed,
+        child: Container(
+          constraints: BoxConstraints(
+            minHeight: 50 * settingsState.sizeFactor
+          ),
+          decoration: BoxDecoration(
+          
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                palette.optionButtonBgColor,
-                palette.optionButtonBgColor
+                palette.optionButtonBgColor2,
+                palette.optionButtonBgColor3,
+                palette.optionButtonBgColor3,
+                palette.optionButtonBgColor3,
+                palette.optionButtonBgColor3,
               ],
               tileMode: TileMode.mirror),
-          border: const Border(),
-          borderRadius: const BorderRadius.all(Radius.circular(12.0))),
-      child: Align(
-          alignment: Alignment.center,
-          child: Text(
-            body,
-            style:
-                TextStyle(fontSize: 24, color: palette.optionButtonTextColor),
-          )),
-    ),
-  );
+                
+              borderRadius: BorderRadius.all(Radius.circular(10.0 * settingsState.sizeFactor)),  
+              boxShadow: const [
+                BoxShadow(color: Color.fromARGB(139, 0, 0, 0), offset: Offset(3.0, 3.0), blurRadius: 5.0,)
+              ]               
+            ),
+            
+
+
+
+          
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              body,
+              style: TextStyle(
+                fontSize: (24*settingsState.sizeFactor), 
+                color: palette.optionButtonTextColor
+              ),
+            )
+          ),
+        ),                                    
+      ),
+    );
+  }
 }
+
 
 

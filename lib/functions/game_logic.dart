@@ -215,7 +215,7 @@ class GameLogic {
     List<Map<String, dynamic>> validStringObjects = [];
     List<String> dictionary = gamePlayState.dictionary;
 
-    print(dictionary[0]);
+    // print(dictionary[0]);
 
     for (Map<String, dynamic> stringCombo in stringCombinations) {
 
@@ -360,8 +360,6 @@ class GameLogic {
 
   // this returns data to be displayed in the pause menu or game over view
   Map<String, dynamic> getGameSummaryData( List<Map<String, dynamic>> turnSummaryData) {
-
-    print("turn summary data = ${turnSummaryData.length}");
 
     int turns = turnSummaryData.length;
     int points = getTotalPoints(turnSummaryData);
@@ -1128,16 +1126,16 @@ class GameLogic {
     }
   }
 
-  void pressTile(BuildContext context, int row, int column,
-      GamePlayState gamePlayState, AudioController audioController) async {
+  // void pressTile(BuildContext context, int row, int column, GamePlayState gamePlayState, AudioController audioController) async {
+  void pressTile(BuildContext context, int index,GamePlayState gamePlayState, AudioController audioController) async {    
     late AnimationState animationState = context.read<AnimationState>();
 
     // get the tile id as a string
-    String tileKey = "${row}_$column";
+    // String tileKey = "${row}_$column";
+    String tileKey = tileKeys[index];
 
     // check whether the board has a letter in that spot
-    bool isTileOpen =
-        GameLogic().isTileOpen(gamePlayState.visualTileState, tileKey);
+    bool isTileOpen = GameLogic().isTileOpen(gamePlayState.visualTileState, tileKey);
 
     if (isTileOpen && !gamePlayState.isAnimating) {
       gamePlayState.setPressedTile(tileKey);
@@ -1146,13 +1144,10 @@ class GameLogic {
       animationState.setShouldRunAnimation(true);
 
       // get the new random letter
-      late Map<String, dynamic> randomLetterData = GameLogic()
-          .generateRandomLetterData(
-              gamePlayState.alphabetState, gamePlayState.randomLetterList);
+      late Map<String, dynamic> randomLetterData = GameLogic().generateRandomLetterData(gamePlayState.alphabetState, gamePlayState.randomLetterList);
 
       // get the new alphabet state (now that a letter has been taken out of the "bag")
-      late List<Map<String, dynamic>> newAlphabetState =
-          randomLetterData["randomState"];
+      late List<Map<String, dynamic>> newAlphabetState = randomLetterData["randomState"];
       gamePlayState.setAlphabetState(newAlphabetState);
 
       // get the new list of random letters
@@ -1160,42 +1155,39 @@ class GameLogic {
       gamePlayState.setRandomLetterList(newRandomLetterList);
 
       // get the newly created letter
-      late String newLetter =
-          newRandomLetterList[newRandomLetterList.length - 3];
+      late String newLetter = newRandomLetterList[newRandomLetterList.length - 3];
 
-      executeTilePlacement(
-          context, gamePlayState, audioController, newLetter, tileKey);
+      executeTilePlacement(context, gamePlayState, audioController, newLetter, tileKey);
     }
+    // print(" ============== TILE STATE =================");
+    // debugPrint(gamePlayState.visualTileState.toString());
   }
 
-  void dropTile(BuildContext context, int row, int column,
-      GamePlayState gamePlayState, AudioController audioController) async {
+  // void dropTile(BuildContext context, int row, int column, GamePlayState gamePlayState, AudioController audioController) async {
+    void dropTile(BuildContext context, int index, GamePlayState gamePlayState, AudioController audioController) async {
     // late AnimationState _animationState = context.read<AnimationState>();
 
     // get the tile id as a string
-    String tileKey = "${row}_$column";
+    // String tileKey = "${row}_$column";
+    String tileKey = tileKeys[index];
 
     // check whether the board has a letter in that spot
-    bool isTileOpen =
-        GameLogic().isTileOpen(gamePlayState.visualTileState, tileKey);
+    bool isTileOpen = GameLogic().isTileOpen(gamePlayState.visualTileState, tileKey);
 
     if (isTileOpen && !gamePlayState.isAnimating) {
       gamePlayState.setPressedTile(tileKey);
 
       String newLetter = gamePlayState.draggedReserveTile["body"];
 
-      List<Map<String, dynamic>> updatedReserveTiles = removeFromReserves(
-          gamePlayState.reserveTiles, gamePlayState.draggedReserveTile);
+      List<Map<String, dynamic>> updatedReserveTiles = removeFromReserves(gamePlayState.reserveTiles, gamePlayState.draggedReserveTile);
 
       gamePlayState.setReserveTiles(updatedReserveTiles);
 
-      executeTilePlacement(
-          context, gamePlayState, audioController, newLetter, tileKey);
+      executeTilePlacement(context, gamePlayState, audioController, newLetter, tileKey);
     }
   }
 
-  void executeTilePlacement(BuildContext context, GamePlayState gamePlayState,
-      AudioController audioController, String newLetter, String tileKey) {
+  void executeTilePlacement(BuildContext context, GamePlayState gamePlayState, AudioController audioController, String newLetter, String tileKey) {
     late AnimationState animationState = context.read<AnimationState>();
     // update the state of the board to reflect the letter going to that tile
     late List<Map<String, dynamic>> newBoardState = GameLogic()
@@ -1401,35 +1393,60 @@ class GameLogic {
 
   }
 
+  // List<Map<String,dynamic>> getPointsSummary(GamePlayState gamePlayState) {
+  //   late List<Map<String,dynamic>> log = gamePlayState.gameSummaryLog;
+  //   final filteredLog = log.where((element) => element['points'] > 0).toList() ;
+
+    
+  //   List<Map<String,dynamic>> res = [];
+    
+  //   for (int i=0; i<filteredLog.length; i++) {
+  //     final Map<String,dynamic> item = filteredLog[i];
+  //     final List<Map<String,dynamic>> words = item['words'];
+
+  //     for (int j=0; j<words.length; j++) {
+  //       late Map<String,dynamic> word = words[j];
+  //       int wordScore = word['points'] * item['crossword'] * item['streak'] * item['count'] ;
+
+  //       res.add({
+  //         "turn" : i, 
+  //         "word": word['word'], 
+  //         "points": wordScore, 
+  //         "crosswords": item['crossword'] , 
+  //         "streak": item['streak'] , 
+  //         "count":item['count']
+  //       });
+  //     }
+  //   }
+
+  //   return res;
+
+  // }
+
   List<Map<String,dynamic>> getPointsSummary(GamePlayState gamePlayState) {
-    late List<Map<String,dynamic>> log = gamePlayState.gameSummaryLog;
-    final filteredLog = log.where((element) => element['points'] > 0).toList() ;
 
-    
-    List<Map<String,dynamic>> res = [];
-    
-    for (int i=0; i<filteredLog.length; i++) {
-      final Map<String,dynamic> item = filteredLog[i];
-      final List<Map<String,dynamic>> words = item['words'];
+    int count = 1;
 
-      for (int j=0; j<words.length; j++) {
-        late Map<String,dynamic> word = words[j];
-        int wordScore = word['points'] * item['crossword'] * item['streak'] * item['count'] ;
+    late List<Map<String,dynamic>> res  = [];
+    for (int i=0; i<gamePlayState.gameSummaryLog.length; i++) {
+      Map<String,dynamic> item = gamePlayState.gameSummaryLog[i];
+      if (item['points'] > 0) {
 
-        res.add({
-          "turn" : i, 
-          "word": word['word'], 
-          "points": wordScore, 
-          "crosswords": item['crossword'] , 
-          "streak": item['streak'] , 
-          "count":item['count']
-        });
+        for (Map<String,dynamic> word in item['words']) {
+          int totalScore = word['points'] * item['crossword'] * item['streak'] * item['count'];
+          word['totalScore'] = totalScore;
+          word['index'] = count;
+          count++;
+        }
+
+        item['index'] = i;
+        res.add(item);
       }
     }
 
     return res;
-
   }
+
 
   // String getWordDefinition(String word) {
   //   List<Map<String,dynamic>> allDefs = defs+definitions;

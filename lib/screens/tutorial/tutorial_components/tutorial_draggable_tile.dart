@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
@@ -44,28 +45,6 @@ class TutorialDraggableTile extends StatelessWidget {
     return res;
   }
 
-
-  // Color getBoxShadow(Map<String, dynamic> tileObject,TutorialState tutorialState, ColorPalette palette, String widgetId) {
-  //   final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-  //   Color res = Colors.transparent;
-
-  //   // print(stepDetails);
-  //   if (stepDetails['targets'].contains(widgetId)) {
-  //     // if (tileObject['letter'] == "") {
-  //       res = Color.fromRGBO(
-  //         palette.focusedTutorialTile.red,
-  //         palette.focusedTutorialTile.green,
-  //         palette.focusedTutorialTile.blue,
-  //         0.3
-  //       );
-  //     // } else {
-  //     //   res = Colors.transparent;
-  //     // }
-  //   } else {
-  //     res = Colors.transparent;
-  //   }
-  //   return res;
-  // }
 
   BoxShadow getBoxShadow(TutorialState tutorialState, ColorPalette palette, String widgetId, Animation animation) {
     final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
@@ -170,6 +149,7 @@ class TutorialDraggableTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     // final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     final int tileId = tileState['id']; 
     return Consumer<TutorialState>(
@@ -196,7 +176,7 @@ class TutorialDraggableTile extends StatelessWidget {
                     border: Border.all(
                         color: getColor(tileObject,palette, animation, currentStep),
                         // color: colorTileBorder(tileObject,currentStep,palette, animation ),
-                        width: 3,
+                        width: 3*settingsState.sizeFactor,
                     ), // colorTileBorder(tileObject, palette), width: 3),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     boxShadow: [
@@ -209,7 +189,7 @@ class TutorialDraggableTile extends StatelessWidget {
                     ],                    
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
                     child: Container(
                       decoration: getInnerTileBoxDecoration(tutorialState, palette, widgetId, animation),
                       // decoration: BoxDecoration(
@@ -225,12 +205,17 @@ class TutorialDraggableTile extends StatelessWidget {
                         child: AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 200),
                           style: TextStyle(
-                            fontSize: tileObject["body"] == "" ? 0 : 26,
+                            fontSize: tileObject["body"] == "" ? 0 : 22*settingsState.sizeFactor,
                             color: tileObject["body"] == ""
                                 ? Colors.transparent
                                 : palette.tileTextColor,
                           ),
-                          child: Text(tileObject["body"]),
+                          child: Text(
+                            tileObject["body"],
+                            style: TextStyle(
+                              fontSize: 22*settingsState.sizeFactor
+                            ),
+                          ),
                         ),
                       ),
                     ),

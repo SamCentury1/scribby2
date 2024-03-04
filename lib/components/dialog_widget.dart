@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class DialogWidget extends StatelessWidget {
@@ -18,19 +19,19 @@ class DialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
     return Column(
       children: [
         Expanded(
             flex: 1,
-            child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: palette.optionButtonBgColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: palette.optionButtonBgColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +41,7 @@ class DialogWidget extends StatelessWidget {
                         child: Text(
                           title,
                           style: TextStyle(
-                            fontSize: 32,
+                            fontSize: (32*settingsState.sizeFactor),
                             color: palette.textColor2,
                           ),
                         ),
@@ -50,16 +51,14 @@ class DialogWidget extends StatelessWidget {
                         height: 2,
                       )
                     ],
-                  ),
-                ))),
+                  )),
+            )),
         Expanded(
             flex: 5,
             child: Container(
                 width: double.infinity,
                 color: palette.optionButtonBgColor,
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: content))),
+                child: content)),
         button ?? const SizedBox()
       ],
     );

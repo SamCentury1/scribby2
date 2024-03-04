@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
+import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
@@ -13,79 +15,107 @@ class LeaderboardsScreen extends StatefulWidget {
   State<LeaderboardsScreen> createState() => _LeaderboardsScreenState();
 }
 
-class _LeaderboardsScreenState extends State<LeaderboardsScreen>
-    with TickerProviderStateMixin {
-  late bool isLoading = false;
-  late List<Map<String, dynamic>> _pointsList = [];
-  late Map<String, dynamic> _userData = {};
+class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProviderStateMixin {
 
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
 
-  Future<void> getData() async {
-    setState(() {
-      isLoading = true;
-    });
+  // late bool isLoading = false;
+  // late List<Map<String, dynamic>> _pointsList = [];
+  // late Map<String, dynamic> _userData = {};
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // getData();
+  // }
+
+  Future<Map<String,dynamic>> getData() async {
+    // setState(() {
+    //   isLoading = true;
+    // });
+
+    late Map<String,dynamic> res = {};
 
     try {
-      final userData = await FirestoreMethods()
-          .getUserData(AuthService().currentUser!.uid) as Map<String, dynamic>;
+      final userData = await FirestoreMethods().getUserData(AuthService().currentUser!.uid) as Map<String, dynamic>;
       final List<Map<String, dynamic>> leaderboard = await FirestoreMethods()
-              .getDataForLeaderboards(userData['parameters']['currentLanguage'])
-          as List<Map<String, dynamic>>;
+        .getDataForLeaderboards(userData['parameters']['currentLanguage']) as List<Map<String, dynamic>>;
 
-      setState(() {
-        _pointsList = leaderboard;
-        _userData = userData;
-        isLoading = false;
-      });
+      // setState(() {
+        // _pointsList = leaderboard;
+        // _userData = userData;
+        // isLoading = false;
+      // });
+
+      res = {"leaderboard" : leaderboard, 'userData': userData};
     } catch (e) {
       debugPrint(e.toString());
     }
+    return res;
   }
 
   @override
   Widget build(BuildContext context) {
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
-    return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const MenuScreen(),
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    final GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+
+    // return isLoading
+        // ? const Center(child: CircularProgressIndicator(),): 
+        return FutureBuilder(
+          future: getData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator(),);
+            } else if (snapshot.hasError ) {
+              return Center(child: Text("Error"),);
+            } else if (snapshot.data!.isEmpty) {
+              return Center(child: Text("Error"),);
+            } else {
+              return SafeArea(
+                child: Scaffold(
+                    appBar: AppBar(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(30.0)
+                        )
+                      ),                      
+                      leading: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const MenuScreen(),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: palette.textColor1,
+                          size: 24*settingsState.sizeFactor,
+                        )
                       ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: palette.textColor1,
-                  )),
-              title: Text(
-                "Leaderboard (${Helpers().capitalize(_userData['parameters']['currentLanguage'])})",
-                style: TextStyle(
-                  color: palette.textColor2,
-                ),
-              ),
-              backgroundColor: palette.modalNavigationBarBgColor,
-            ),
-            body: Container(
-              color: palette.screenBackgroundColor,
-              child: getLeaderboard(_pointsList, palette, _userData),
-            ));
+                      title: Text(
+                        Helpers().translateText(gamePlayState.currentLanguage, "Leaderboard"),
+                        // "Leaderboard",
+                        style: TextStyle(
+                          color: palette.textColor2,
+                          fontSize: 26*settingsState.sizeFactor
+                        ),
+                      ),
+                      backgroundColor: palette.appBarColor,
+                    ),
+                    backgroundColor: palette.screenBackgroundColor,
+                    body: Container(
+                      color: palette.screenBackgroundColor,
+                      child: getLeaderboard(snapshot.data!['leaderboard'], palette, snapshot.data!['userData'], gamePlayState.currentLanguage, settingsState.sizeFactor),
+                    )),
+              );
+            }         
+          },
+        );
   }
 }
 
-Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
-    Map<String, dynamic> user) {
+Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map<String, dynamic> user, String language, double sizeFactor) {
   bool checkIfUser(Map<String, dynamic> user, Map<String, dynamic> item) {
     late bool res = false;
     if (user['uid'] == item['user']) res = true;
@@ -97,23 +127,42 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
     child: Column(
       children: [
         Container(
-          height: 80,
+          height: 80*sizeFactor,
           width: double.infinity,
           color: Colors.transparent,
           child: Row(
             children: [
+              const Expanded(flex: 3, child: SizedBox(),),
               Icon(
                 Icons.emoji_events,
-                size: 22,
+                size: 36*sizeFactor,
                 color: palette.textColor2,
               ),
-              const SizedBox(
-                width: 10,
+              // const SizedBox(
+              //   width: 10,
+              // ),
+              const Expanded(flex: 1, child: SizedBox(),),
+              Column(
+                children: [
+                  Text(
+                    "${Helpers().translateText(language, "High Score:")}",
+                    // "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
+                    style: TextStyle(fontSize: 22*sizeFactor, color: palette.textColor2),
+                  ),
+                  Text(
+                    "${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
+                    // "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
+                    style: TextStyle(fontSize: 22*sizeFactor, color: palette.textColor2),
+                  ),                  
+                ],
               ),
-              Text(
-                "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
-                style: TextStyle(fontSize: 22, color: palette.textColor2),
-              )
+              const Expanded(flex: 1, child: SizedBox(),),
+              Icon(
+                Icons.emoji_events,
+                size: 36*sizeFactor,
+                color: palette.textColor2,
+              ),
+              const Expanded(flex: 3, child: SizedBox(),),             
             ],
           ),
         ),
@@ -125,7 +174,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
           columnWidths: const {
             0: FlexColumnWidth(1),
             1: FlexColumnWidth(3),
-            3: FlexColumnWidth(2),
+            3: FlexColumnWidth(3),
           },
           children: [
             TableRow(
@@ -140,9 +189,10 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
                     padding: const EdgeInsets.all(4.0),
                     child: Center(
                         child: Text(
-                      "Rank",
+                      // "Rank",
+                      Helpers().translateText(language, "Rank"),
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 18*sizeFactor,
                           color: palette.textColor2,
                           fontWeight: FontWeight.bold),
                     )),
@@ -153,9 +203,10 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
                         child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Username",
+                              Helpers().translateText(language, "Username"),
+                              // "Username",
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 18*sizeFactor,
                                   color: palette.textColor2,
                                   fontWeight: FontWeight.bold),
                             ))),
@@ -166,9 +217,10 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
                         child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              "Score",
+                              // "Score",
+                              Helpers().translateText(language, "Score"),
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 18*sizeFactor,
                                   color: palette.textColor2,
                                   fontWeight: FontWeight.bold),
                             ))),
@@ -203,7 +255,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
                                   child: Text(
                                 (i + 1).toString(),
                                 style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 18*sizeFactor,
                                     color: palette.textColor2,
                                     fontWeight: checkIfUser(user, list[i])
                                         ? FontWeight.w800
@@ -219,7 +271,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
                                     Helpers()
                                         .capitalizeName(list[i]['username']),
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 18*sizeFactor,
                                         color: palette.textColor2,
                                         fontWeight: checkIfUser(user, list[i])
                                             ? FontWeight.w800
@@ -235,7 +287,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette,
                                   child: Text(
                                     list[i]["points"].toString(),
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 18*sizeFactor,
                                         color: palette.textColor2,
                                         fontWeight: checkIfUser(user, list[i])
                                             ? FontWeight.w800

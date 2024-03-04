@@ -1,62 +1,62 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:scribby_flutter_v2/settings/settings.dart';
+// // import 'package:provider/provider.dart';
+// // import 'package:scribby_flutter_v2/settings/settings.dart';
 
-class Palette {
-  /// ===================== LIGHT PALETTE ==================================
-  /// Admin Screens
-  Color get lightScreenBgColor => const Color.fromARGB(255, 231, 216, 255);
-  Color get lightOptionButtonBgColor =>
-      const Color.fromARGB(255, 209, 209, 209);
-  Color get lightOptionButtonTextColor => const Color.fromARGB(255, 45, 0, 117);
+// class Palette {
+//   /// ===================== LIGHT PALETTE ==================================
+//   /// Admin Screens
+//   Color get lightScreenBgColor => const Color.fromARGB(255, 231, 216, 255);
+//   Color get lightOptionButtonBgColor =>
+//       const Color.fromARGB(255, 209, 209, 209);
+//   Color get lightOptionButtonTextColor => const Color.fromARGB(255, 45, 0, 117);
 
-  /// Game Screen
-  Color get lightTileBgColor => const Color.fromARGB(255, 117, 13, 187);
-  Color get lightTileBorderColor => const Color.fromARGB(255, 117, 13, 187);
-  Color get lightTileTextColor => const Color.fromARGB(255, 249, 181, 255);
-  Color get lightTimerTextColor => const Color.fromARGB(255, 211, 211, 211);
+//   /// Game Screen
+//   Color get lightTileBgColor => const Color.fromARGB(255, 117, 13, 187);
+//   Color get lightTileBorderColor => const Color.fromARGB(255, 117, 13, 187);
+//   Color get lightTileTextColor => const Color.fromARGB(255, 249, 181, 255);
+//   Color get lightTimerTextColor => const Color.fromARGB(255, 211, 211, 211);
 
-  Color get lightBottomNavigationBarColor =>
-      const Color.fromARGB(255, 75, 3, 117);
-  Color get lightBottomNavigationBarItemColor =>
-      const Color.fromARGB(255, 204, 204, 204);
+//   Color get lightBottomNavigationBarColor =>
+//       const Color.fromARGB(255, 75, 3, 117);
+//   Color get lightBottomNavigationBarItemColor =>
+//       const Color.fromARGB(255, 204, 204, 204);
 
-  Color get lightModalBgColor => const Color.fromARGB(255, 37, 1, 85);
-  Color get lightModalTextColor => const Color.fromARGB(255, 212, 211, 211);
+//   Color get lightModalBgColor => const Color.fromARGB(255, 37, 1, 85);
+//   Color get lightModalTextColor => const Color.fromARGB(255, 212, 211, 211);
 
-  Color get lightModalNavigationBarBgColor =>
-      const Color.fromARGB(255, 78, 78, 78);
-  Color get lightModalNavigationBarItemColor =>
-      const Color.fromARGB(255, 253, 214, 40);
+//   Color get lightModalNavigationBarBgColor =>
+//       const Color.fromARGB(255, 78, 78, 78);
+//   Color get lightModalNavigationBarItemColor =>
+//       const Color.fromARGB(255, 253, 214, 40);
 
-  /// ===================== DARK PALETTE ==================================
-  /// Admin Screens
-  Color get darkScreenBgColor => const Color.fromARGB(255, 15, 8, 54);
-  Color get darkOptionButtonBgColor => const Color.fromARGB(255, 66, 66, 66);
-  Color get darkOptionButtonTextColor =>
-      const Color.fromARGB(255, 209, 209, 209);
+//   /// ===================== DARK PALETTE ==================================
+//   /// Admin Screens
+//   Color get darkScreenBgColor => const Color.fromARGB(255, 15, 8, 54);
+//   Color get darkOptionButtonBgColor => const Color.fromARGB(255, 66, 66, 66);
+//   Color get darkOptionButtonTextColor =>
+//       const Color.fromARGB(255, 209, 209, 209);
 
-  /// Game Screen
-  Color get darkTileBgColor => const Color.fromARGB(255, 249, 181, 255);
-  Color get darkTileBorderColor => const Color.fromARGB(255, 249, 181, 255);
-  Color get darkTileTextColor => const Color.fromARGB(255, 117, 13, 187);
-  Color get darkTimerTextColor => const Color.fromARGB(255, 230, 228, 228);
+//   /// Game Screen
+//   Color get darkTileBgColor => const Color.fromARGB(255, 249, 181, 255);
+//   Color get darkTileBorderColor => const Color.fromARGB(255, 249, 181, 255);
+//   Color get darkTileTextColor => const Color.fromARGB(255, 117, 13, 187);
+//   Color get darkTimerTextColor => const Color.fromARGB(255, 230, 228, 228);
 
-  Color get darkBottomNavigationBarColor =>
-      const Color.fromARGB(255, 63, 3, 97);
-  Color get darkBottomNavigationBarItemColor =>
-      const Color.fromARGB(255, 253, 214, 40);
+//   Color get darkBottomNavigationBarColor =>
+//       const Color.fromARGB(255, 63, 3, 97);
+//   Color get darkBottomNavigationBarItemColor =>
+//       const Color.fromARGB(255, 253, 214, 40);
 
-  Color get darkModalBgColor => const Color.fromARGB(255, 56, 4, 124);
-  Color get darkModalTextColor => const Color.fromARGB(255, 212, 211, 211);
+//   Color get darkModalBgColor => const Color.fromARGB(255, 56, 4, 124);
+//   Color get darkModalTextColor => const Color.fromARGB(255, 212, 211, 211);
 
-  Color get darkModalNavigationBarBgColor =>
-      const Color.fromARGB(255, 78, 78, 78);
-  Color get darkModalNavigationBarItemColor =>
-      const Color.fromARGB(255, 218, 218, 218);
+//   Color get darkModalNavigationBarBgColor =>
+//       const Color.fromARGB(255, 78, 78, 78);
+//   Color get darkModalNavigationBarItemColor =>
+//       const Color.fromARGB(255, 218, 218, 218);
 
-  /// =============================
-}
+//   /// =============================
+// }
 
 class ColorPalette with ChangeNotifier {
   late Color _screenBackgroundColor = Colors.transparent;
@@ -144,8 +144,7 @@ class ColorPalette with ChangeNotifier {
         _tileTextColor = const Color.fromARGB(255, 39, 39, 39);
         _timerTextColor = const Color.fromARGB(255, 230, 228, 228);
         _bottomNavigationBarColor = const Color.fromARGB(255, 15, 8, 54);
-        _bottomNavigationBarItemColor =
-            const Color.fromARGB(255, 196, 196, 196);
+        _bottomNavigationBarItemColor =const Color.fromARGB(255, 196, 196, 196);
         _modalBgColor = const Color.fromARGB(255, 56, 4, 124);
         _modalTextColor = const Color.fromARGB(255, 212, 211, 211);
         _modalNavigationBarBgColor = const Color.fromARGB(255, 78, 78, 78);
@@ -160,13 +159,13 @@ class ColorPalette with ChangeNotifier {
         _confettiColor3 = const Color.fromARGB(255, 64, 52, 233);
         _confettiColor4 = const Color.fromARGB(255, 161, 59, 245);
 
-        _focusedTutorialTile = Color.fromARGB(255, 226, 226, 226);
+        _focusedTutorialTile = Color.fromARGB(255, 255, 255, 255);
         break;
       case false:
-        _screenBackgroundColor = const Color.fromARGB(255, 186, 217, 231);
-        _optionButtonBgColor = const Color.fromARGB(255, 209, 209, 209);
-        _optionButtonBgColor2 = const Color.fromARGB(255, 228, 227, 227);
-        _optionButtonBgColor3 = const Color.fromARGB(255, 209, 209, 209);
+        _screenBackgroundColor = const Color.fromRGBO(236, 242, 255,1);
+        _optionButtonBgColor = const Color.fromRGBO(255, 255, 255, 1);
+        _optionButtonBgColor2 = Color.fromARGB(255, 179, 195, 255);
+        _optionButtonBgColor3 = Color.fromARGB(255, 138, 165, 255);
         _optionButtonTextColor = const Color.fromARGB(255, 46, 46, 46);
         _tileBgColor = const Color.fromARGB(255, 35, 42, 141);
         _tileBorderColor = const Color.fromARGB(255, 35, 42, 141);
@@ -176,23 +175,50 @@ class ColorPalette with ChangeNotifier {
         _bottomNavigationBarItemColor = const Color.fromARGB(255, 3, 48, 143);
         _modalBgColor = const Color.fromARGB(255, 173, 228, 238);
         _modalTextColor = const Color.fromARGB(255, 99, 99, 99);
-        _modalNavigationBarBgColor = const Color.fromARGB(255, 96, 105, 121);
+        _modalNavigationBarBgColor = Color.fromARGB(255, 184, 185, 187);
         _modalNavigationBarItemColor = const Color.fromARGB(255, 235, 235, 235);
         _textColor1 = const Color.fromARGB(255, 32, 32, 32);
         _textColor2 = const Color.fromARGB(255, 71, 71, 71);
         _textColor3 = const Color.fromARGB(255, 88, 88, 88);
-        _appBarColor = const Color.fromARGB(255, 165, 165, 165);
+        _appBarColor = const Color.fromRGBO(181, 199, 255, 1);
 
         _confettiColor1 = const Color.fromARGB(255, 41, 125, 252);
         _confettiColor2 = const Color.fromARGB(255, 100, 10, 10);
         _confettiColor3 = const Color.fromARGB(255, 43, 11, 102);
         _confettiColor4 = const Color.fromARGB(255, 120, 151, 207);
 
-        _focusedTutorialTile = Color.fromARGB(255, 130, 224, 118);
+        _focusedTutorialTile = Color.fromARGB(255, 255, 255, 255);
         break;
     }
     notifyListeners();
   }
+
+
+
+  // dark color palette
+  Color get dark_screenBackgroundColor => const Color.fromARGB(255, 15, 8, 54);
+  Color get dark_optionButtonBgColor => const Color.fromARGB(255, 66, 66, 66);
+  Color get dark_textColor1 => const Color.fromARGB(255, 247, 247, 247);
+  Color get dark_textColor2 => const Color.fromARGB(255, 211, 211, 211);
+  Color get dark_appBarColor => const Color.fromARGB(255, 39, 39, 39);
+
+
+
+
+// light color theme
+  Color get light_screenBackgroundColor => const Color.fromRGBO(236, 242, 255,1);
+  Color get light_optionButtonBgColor => const Color.fromRGBO(255, 255, 255, 1);
+  Color get light_textColor1 => const Color.fromARGB(255, 32, 32, 32);
+  Color get light_textColor2 => const Color.fromARGB(255, 71, 71, 71);
+  Color get light_appBarColor => const Color.fromRGBO(181, 199, 255, 1);
+
+
+
+
+
+
+
+
 }
 
 

@@ -44,5 +44,13 @@ class SettingsState with ChangeNotifier {
   void updateUserData(Map<String, dynamic> newData) {
     _userData = newData;
     notifyListeners();
-  }  
+  }
+
+  double _sizeFactor = 1.0; 
+  double get sizeFactor => _sizeFactor;
+
+  void setSizeFactor(double value) {
+    _sizeFactor = value;
+    notifyListeners();
+  }
 }

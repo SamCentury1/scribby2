@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 // import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_dialog.dart';
 // import 'package:scribby_flutter_v2/providers/game_state.dart';
@@ -15,6 +16,8 @@ class GameOverOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
 
     return Consumer<GamePlayState>(
@@ -41,7 +44,7 @@ class GameOverOverlay extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     height: double.infinity,
                     child: Center(
@@ -50,7 +53,7 @@ class GameOverOverlay extends StatelessWidget {
                         child: Text(
                           "Game Over",
                           style: TextStyle(
-                            fontSize: 42,
+                            fontSize: 42 * settingsState.sizeFactor,
                             color: Colors.white,
                           ),
                         ),

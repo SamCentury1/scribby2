@@ -722,8 +722,12 @@ class TutorialHelpers {
         color: Colors.transparent, blurRadius: 0, spreadRadius: 0);
     if (currentStep['targets'].contains(widgetId)) {
       res = BoxShadow(
-        color: Color.fromRGBO(palette.textColor2.red, palette.textColor2.green,
-            palette.textColor2.blue, (animation.value * 0.5)),
+        color: Color.fromRGBO(
+          palette.focusedTutorialTile.red, 
+          palette.focusedTutorialTile.green,
+          palette.focusedTutorialTile.blue, 
+          (animation.value * 0.5)
+        ),
         blurRadius: 10.0 * (animation.value * 0.5),
         spreadRadius: 10.0 * (animation.value * 0.5),
       );

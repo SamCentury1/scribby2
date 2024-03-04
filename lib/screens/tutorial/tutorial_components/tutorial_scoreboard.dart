@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -34,6 +35,7 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
   Widget build(BuildContext context) {
     final GamePlayState gamePlayState = context.read<GamePlayState>();
     String language = gamePlayState.currentLanguage;    
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) { 
         
@@ -43,20 +45,20 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all((4.0)*settingsState.sizeFactor),
               child: Row(
                 children: [
                   AnimatedBuilder(
                     animation: widget.animation,
                     builder: (context, child) {
-                      return scoreWidget(palette, widget.animation, currentStep, 'points', language);
+                      return scoreWidget(palette, widget.animation, currentStep, 'points', language, settingsState.sizeFactor);
                     },
                   ),
 
                   AnimatedBuilder(
                     animation: widget.animation,
                     builder: (context, child) {
-                      return newPointsWidget(palette, widget.animation, currentStep, 'new_points', language);
+                      return newPointsWidget(palette, widget.animation, currentStep, 'new_points', language, settingsState.sizeFactor);
                     },
                   ),
                   const Expanded(flex: 1, child: SizedBox()),
@@ -64,7 +66,7 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
                   AnimatedBuilder(
                     animation: widget.animation,
                     builder: (context, child) {
-                      return newWordsWidget(palette, widget.animation, currentStep, 'new_words');
+                      return newWordsWidget(palette, widget.animation, currentStep, 'new_words', settingsState.sizeFactor);
                     },
                   ),
 
@@ -72,7 +74,7 @@ class _TutorialScoreboardState extends State<TutorialScoreboard>
                     animation: widget.animation,
                     builder: (context, child) {
                       // int current = _highlightComponentAnimation.value;
-                      return wordsWidget(palette, widget.animation, currentStep, 'words');
+                      return wordsWidget(palette, widget.animation, currentStep, 'words',settingsState.sizeFactor);
                     },
                   ),
                 ],
@@ -103,33 +105,15 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
   return res;
 }
 
-// BoxShadow getBoxShadow(TutorialState tutorialState, ColorPalette palette, int widgetId, Animation animation) {
-//   final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-//   BoxShadow res = const BoxShadow(color: Colors.transparent, blurRadius: 0, spreadRadius: 0);
-//   if (stepDetails['targets'].contains(widgetId)) {
-//     res = BoxShadow(
-//       color: Color.fromRGBO(
-//         palette.textColor2.red,
-//         palette.textColor2.green,
-//         palette.textColor2.blue,
-//         (animation.value*0.5)
-//       ),
-//       blurRadius: 4.0 * (animation.value*0.6),
-//       spreadRadius: 4.0 * (animation.value*0.6),
-//     );
-    
-//   }
-//   return res;
-// }
 
-Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, String language) {
+Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, String language, double sizeFactor) {
   return Container(
     // height: 30,
     decoration: BoxDecoration(
       color: palette.screenBackgroundColor,
       border: Border.all(
         color: getColor(palette, animation, currentStep, widgetId),
-        width: 3
+        width: (3*sizeFactor)
       ),
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       boxShadow: [
@@ -137,13 +121,14 @@ Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic
       ]
     ),
     child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0*sizeFactor),
       child: Row(
         children: [
           Icon(
             Icons.star,
             color: getColor(palette, animation, currentStep, widgetId),
-            shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
+            shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation),
+            size: 22*sizeFactor
           ),
           // Expanded(flex: 1, child: Center(),),
           const SizedBox(
@@ -153,7 +138,7 @@ Widget scoreWidget(ColorPalette palette, Animation animation, Map<String,dynamic
             duration: const Duration(milliseconds: 200),
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 22,
+              fontSize: (22*sizeFactor),
               color: getColor(palette, animation, currentStep, widgetId),
               shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
             ),
@@ -176,15 +161,15 @@ String translateValue(String language, String points, String stat) {
 }
 
 
-Widget newPointsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, String language) {
+Widget newPointsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, String language, double sizeFactor) {
   return Container(
     child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all((8.0*sizeFactor)),
       child:AnimatedDefaultTextStyle(
         duration: const Duration(milliseconds: 200),
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 22,
+          fontSize: (22*sizeFactor),
           color: getColor(palette, animation, currentStep, widgetId),
           shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
         ),
@@ -195,26 +180,31 @@ Widget newPointsWidget(ColorPalette palette, Animation animation, Map<String,dyn
     ),
   );
 }
-Widget newWordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
+Widget newWordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, double sizeFactor) {
   return Container(
     child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0*sizeFactor),
       child:AnimatedDefaultTextStyle(
         duration: const Duration(milliseconds: 200),
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 22,
+          fontSize: (22*sizeFactor),
           color: getColor(palette, animation, currentStep, widgetId),
           shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
         ),
-        child: Text("+${currentStep['newWords']}"),
+        child: Text(
+          "+${currentStep['newWords']}",
+          style: TextStyle(
+            fontSize: 22*sizeFactor
+          ),
+        ),
       ),
     ),
   );
 }
 
 
-Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId) {
+Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic> currentStep, String widgetId, double sizeFactor) {
   return Container(
     // height: 30,
     decoration: BoxDecoration(
@@ -222,7 +212,7 @@ Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic
       // color: const Color.fromRGBO(0, 0, 0, 0),
       border: Border.all(
         color: getColor(palette, animation, currentStep, widgetId),
-        width: 3
+        width: (3*sizeFactor)
       ),
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       boxShadow: [
@@ -230,13 +220,14 @@ Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic
       ]      
     ),
     child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0*sizeFactor),
       child: Row(
         children: [
           Icon(
             Icons.library_books,
             color: getColor(palette, animation, currentStep, widgetId),
-            shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
+            shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation),
+            size: 22*sizeFactor,
           ),
           const SizedBox(
             width: 15,
@@ -245,7 +236,7 @@ Widget wordsWidget(ColorPalette palette, Animation animation, Map<String,dynamic
             duration: const Duration(milliseconds: 200),
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 22,
+              fontSize: (22*sizeFactor),
               color: getColor(palette, animation, currentStep, widgetId),
               shadows: TutorialHelpers().getTextShadow(currentStep, palette, widgetId, animation)
             ),

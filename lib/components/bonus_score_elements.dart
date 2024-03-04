@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class BonusScoreElements extends StatefulWidget {
@@ -139,7 +140,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
     _streakSlideEnterAnimation = Tween<Offset>(
       // streakSlideEnterTweenSequence
-      begin: const Offset(-1.2, 0.0),
+      begin: const Offset(-1.5, 0.0),
       end: const Offset(0.0, 0.0),
     ).animate(_streakSlideEnterController);
 
@@ -486,193 +487,207 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
 
   @override
   Widget build(BuildContext context) {
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     return Consumer<GamePlayState>(builder: (context, gamePlayState, child) {
       return Stack(
         children: [
           Row(
             children: [
-              gamePlayState.gameSummaryLog.isEmpty
-                  ? const SizedBox()
-                  : gamePlayState.gameSummaryLog[
-                                  gamePlayState.gameSummaryLog.length - 1]
-                              ['streak'] >
-                          1
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              AnimatedBuilder(
-                                animation: _streakSlideEnterAnimation,
-                                builder: (context, child) {
-                                  return SlideTransition(
-                                    position: _streakSlideEnterAnimation,
-                                    // child: Expanded(
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 75,
-                                          child: AnimatedBuilder(
-                                            animation: _streakTextAnimation,
-                                            builder: (context, child) {
-                                              return Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.electric_bolt,
-                                                      color: _streakTextAnimation.value ?? palette.tileBgColor,
-                                                    ),
-                                                    const Expanded(
-                                                      flex: 1,
-                                                      child: Center(),
-                                                    ),
-                                                    Text(
-                                                      // "${widget.activeStreak.toString()}x",
-                                                      "${gamePlayState.activeStreak.toString()}x",
-                                                      style: TextStyle(
-                                                        fontStyle:FontStyle.italic,
-                                                        fontSize: 22,
-                                                        color: _streakTextAnimation.value ?? palette.tileBgColor,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              )
-                            ],
-                          ))
-                      : const SizedBox(),
-              gamePlayState.gameSummaryLog.isEmpty
-                  ? const SizedBox()
-                  : gamePlayState.gameSummaryLog[
-                                  gamePlayState.gameSummaryLog.length - 1]
-                              ['count'] >
-                          0
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              AnimatedBuilder(
-                                animation: _multiSlideAnimation,
-                                builder: (context, child) {
-                                  return SlideTransition(
-                                    position: _multiSlideAnimation,
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 75,
-                                          child: AnimatedBuilder(
-                                            animation: _multiTextAnimation,
-                                            builder: (context, child) {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.bookmarks_outlined,
-                                                      color: _multiTextAnimation
-                                                              .value ??
-                                                          palette.tileBgColor,
-                                                    ),
-                                                    const Expanded(
-                                                      flex: 1,
-                                                      child: Center(),
-                                                    ),
-                                                    Text(
-                                                      "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['count'].toString()}x",
-                                                      style: TextStyle(
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          fontSize: 22,
-                                                          color: _multiTextAnimation
-                                                                  .value ??
-                                                              palette
-                                                                  .tileBgColor),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        // Expanded(flex:1, child: Center())
-                                      ],
-                                    ),
-                                  );
-                                },
-                              )
-                            ],
-                          ))
-                      : const SizedBox(),
-              gamePlayState.gameSummaryLog.isEmpty
-                  ? const SizedBox()
-                  : gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'] > 1 ? 
-                    Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              AnimatedBuilder(
-                                animation: _cwSlideAnimation,
-                                builder: (context, child) {
-                                  return SlideTransition(
-                                    position: _cwSlideAnimation,
-                                    // child: Expanded(
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 75,
-                                          child: AnimatedBuilder(
-                                            animation: _cwTextAnimation,
-                                            builder: (context, child) {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.close,
-                                                      color: _cwTextAnimation
-                                                              .value ??
-                                                          palette.tileBgColor,
-                                                    ),
-                                                    const Expanded(
-                                                      flex: 1,
-                                                      child: Center(),
-                                                    ),
-                                                    Text(
-                                                      // "${widget.activeStreak.toString()}x",
-                                                      "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'].toString()}x",
-                                                      style: TextStyle(
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        fontSize: 22,
-                                                        color: _cwTextAnimation
-                                                                .value ??
-                                                            palette.tileBgColor,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              )
-                            ],
-                          ))
-                      : const SizedBox(),
+              bonusItem(
+                gamePlayState, 
+                settingsState.sizeFactor, 
+                _streakTextAnimation, 
+                _streakSlideEnterAnimation,
+                'streak',
+                1,
+                // gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['streak'] > 1, 
+                palette),
+              // gamePlayState.gameSummaryLog.isEmpty
+              //     ? const SizedBox()
+              //     : gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['streak'] > 1
+              //         ? Padding(
+              //             padding: EdgeInsets.all((4.0 * settingsState.sizeFactor)),
+              //             child: Row(
+              //               children: [
+              //                 AnimatedBuilder(
+              //                   animation: _streakSlideEnterAnimation,
+              //                   builder: (context, child) {
+              //                     return SlideTransition(
+              //                       position: _streakSlideEnterAnimation,
+              //                       // child: Expanded(
+              //                       child: Row(
+              //                         children: [
+              //                           SizedBox(
+              //                             width: (75*settingsState.sizeFactor),
+              //                             child: AnimatedBuilder(
+              //                               animation: _streakTextAnimation,
+              //                               builder: (context, child) {
+              //                                 return Padding(
+              //                                   padding:  EdgeInsets.all(4.0 * settingsState.sizeFactor),
+              //                                   child: Row(
+              //                                     children: [
+              //                                       Icon(
+              //                                         Icons.electric_bolt,
+              //                                         color: _streakTextAnimation.value ?? palette.tileBgColor,
+              //                                         size: (22 * settingsState.sizeFactor)
+              //                                       ),
+              //                                       const Expanded(
+              //                                         flex: 1,
+              //                                         child: Center(),
+              //                                       ),
+              //                                       Text(
+              //                                         // "${widget.activeStreak.toString()}x",
+              //                                         "${gamePlayState.activeStreak.toString()}x",
+              //                                         style: TextStyle(
+              //                                           fontStyle:FontStyle.italic,
+              //                                           fontSize: (22 * settingsState.sizeFactor),
+              //                                           color: _streakTextAnimation.value ?? palette.tileBgColor,
+              //                                         ),
+              //                                       ),
+              //                                     ],
+              //                                   ),
+              //                                 );
+              //                               },
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     );
+              //                   },
+              //                 )
+              //               ],
+              //             ))
+              //         : const SizedBox(),
+
+              bonusItem(
+                gamePlayState, 
+                settingsState.sizeFactor, 
+                _multiTextAnimation, 
+                _multiSlideAnimation, 
+                'count', 
+                0, 
+                palette
+              ),
+              // gamePlayState.gameSummaryLog.isEmpty
+              //     ? const SizedBox()
+              //     : gamePlayState.gameSummaryLog[ gamePlayState.gameSummaryLog.length - 1]['count'] > 0
+              //         ? Padding(
+              //             padding: EdgeInsets.all(4.0 * settingsState.sizeFactor),
+              //             child: Row(
+              //               children: [
+              //                 AnimatedBuilder(
+              //                   animation: _multiSlideAnimation,
+              //                   builder: (context, child) {
+              //                     return SlideTransition(
+              //                       position: _multiSlideAnimation,
+              //                       child: Row(
+              //                         children: [
+              //                           SizedBox(
+              //                             width: (75*settingsState.sizeFactor),
+              //                             child: AnimatedBuilder(
+              //                               animation: _multiTextAnimation,
+              //                               builder: (context, child) {
+              //                                 return Padding(
+              //                                   padding:EdgeInsets.all(4.0 * settingsState.sizeFactor),
+              //                                   child: Row(
+              //                                     children: [
+              //                                       Icon(
+              //                                         Icons.bookmarks_outlined,
+              //                                         color: _multiTextAnimation.value ?? palette.tileBgColor,
+              //                                         size: (22 * settingsState.sizeFactor)
+              //                                       ),
+              //                                       const Expanded(
+              //                                         flex: 1,
+              //                                         child: Center(),
+              //                                       ),
+              //                                       Text(
+              //                                         "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['count'].toString()}x",
+              //                                         style: TextStyle(
+              //                                             fontStyle:FontStyle.italic,
+              //                                             fontSize: (22 * settingsState.sizeFactor),
+              //                                             color: _multiTextAnimation.value ??palette.tileBgColor),
+              //                                       ),
+              //                                     ],
+              //                                   ),
+              //                                 );
+              //                               },
+              //                             ),
+              //                           ),
+              //                           // Expanded(flex:1, child: Center())
+              //                         ],
+              //                       ),
+              //                     );
+              //                   },
+              //                 )
+              //               ],
+              //             ))
+              //         : const SizedBox(),
+
+              bonusItem(
+                gamePlayState, 
+                settingsState.sizeFactor, 
+                _cwTextAnimation, 
+                _cwSlideAnimation, 
+                'crossword', 
+                1, 
+                palette
+              ),
+              // gamePlayState.gameSummaryLog.isEmpty
+              //     ? const SizedBox()
+              //     : gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'] > 1 ? 
+              //       Padding(
+              //             padding: EdgeInsets.all(4.0 * settingsState.sizeFactor),
+              //             child: Row(
+              //               children: [
+              //                 AnimatedBuilder(
+              //                   animation: _cwSlideAnimation,
+              //                   builder: (context, child) {
+              //                     return SlideTransition(
+              //                       position: _cwSlideAnimation,
+              //                       // child: Expanded(
+              //                       child: Row(
+              //                         children: [
+              //                           SizedBox(
+              //                             width: (75*settingsState.sizeFactor),
+              //                             child: AnimatedBuilder(
+              //                               animation: _cwTextAnimation,
+              //                               builder: (context, child) {
+              //                                 return Padding(
+              //                                   padding:EdgeInsets.all(4.0 * settingsState.sizeFactor),
+              //                                   child: Row(
+              //                                     children: [
+              //                                       Icon(
+              //                                         Icons.close,
+              //                                         color: _cwTextAnimation.value ?? palette.tileBgColor,
+              //                                         size: (22 * settingsState.sizeFactor),
+              //                                       ),
+              //                                       const Expanded(
+              //                                         flex: 1,
+              //                                         child: Center(),
+              //                                       ),
+              //                                       Text(
+              //                                         // "${widget.activeStreak.toString()}x",
+              //                                         "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'].toString()}x",
+              //                                         style: TextStyle(
+              //                                           fontStyle: FontStyle.italic,
+              //                                           fontSize: (22 * settingsState.sizeFactor),
+              //                                           color: _cwTextAnimation.value ?? palette.tileBgColor,
+              //                                         ),
+              //                                       ),
+              //                                     ],
+              //                                   ),
+              //                                 );
+              //                               },
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     );
+              //                   },
+              //                 )
+              //               ],
+              //             ))
+              //         : const SizedBox(),
             ],
           ),
           // gamePlayState.displayLevelChange == false ? const SizedBox() :
@@ -689,7 +704,7 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
                     child: Text(
                         "${Helpers().translateText(gamePlayState.currentLanguage, "Level")} ${gamePlayState.currentLevel.toString()}",
                         style: TextStyle(
-                            fontSize: 42,
+                            fontSize: (42 * settingsState.sizeFactor),//(42 * settingsState.sizeFactor),
                             color: getLevelUpWidgetColor(
                                 palette, _newLevelOpacityAnimation.value)
                             )),
@@ -702,4 +717,122 @@ class _BonusScoreElementsState extends State<BonusScoreElements>
       );
     });
   }
+}
+
+
+Widget bonusItem(
+  GamePlayState gamePlayState, 
+  double sizeFactor, 
+  Animation textAnimation, 
+  Animation<Offset> slideAnimation,
+  String bonusItem,
+  int bonusItemFactor,
+  // bool condition,
+  ColorPalette palette) {
+
+
+    late double opacity = 0.0;
+
+    Color getOpacityFactor(Animation animation, double opacity) {
+      Color res = Color.fromRGBO(
+        animation.value.red, 
+        animation.value.green, 
+        animation.value.blue, 
+        animation.value.opacity
+      );
+      return res;
+    }
+
+    IconData getIcon(String bonusItem) {
+      if (bonusItem == 'streak') {
+        return Icons.bolt;
+      } else if (bonusItem == 'count') {
+        return Icons.my_library_books_sharp;
+      } else if (bonusItem == 'crossword') {
+        return Icons.close;
+      } else {
+        return Icons.abc;
+      }
+    }
+
+    String getBonusItemString(String bonusItem, GamePlayState gamePlayState) {
+      String res = "";
+      if (bonusItem == 'streak') {
+        res = "${gamePlayState.activeStreak.toString()}x";
+      } else if (bonusItem == 'count') {
+        if (gamePlayState.gameSummaryLog.isNotEmpty) {
+          res = "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['count'].toString()}x";
+        } else {
+          res = "0";
+        }
+      } else if (bonusItem == 'crossword') {
+        if (gamePlayState.gameSummaryLog.isNotEmpty) {
+          res = "${gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1]['crossword'].toString()}x";
+        } else {
+          res = "0";
+        }
+      }
+      return res;
+    }
+
+    if (gamePlayState.gameSummaryLog.isNotEmpty) {
+      bool condition = gamePlayState.gameSummaryLog[gamePlayState.gameSummaryLog.length - 1][bonusItem] > bonusItemFactor;
+      if (condition) {
+        opacity = 1.0;
+      }
+    }    
+
+    return Padding(
+      padding: EdgeInsets.all((4.0 * sizeFactor)),
+      child: Row(
+        children: [
+          AnimatedBuilder(
+            animation: slideAnimation,
+            builder: (context, child) {
+              return SlideTransition(
+                position: slideAnimation,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: (75*sizeFactor),
+                      // width: double.infinity,
+                      child: AnimatedBuilder(
+                        animation: textAnimation,
+                        builder: (context, child) {
+                          return Padding(
+                            padding:  EdgeInsets.all(4.0 * sizeFactor),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  getIcon(bonusItem), //Icons.electric_bolt,
+                                  color: getOpacityFactor(textAnimation,opacity), //textAnimation.value ?? palette.tileBgColor,
+                                  size: (22 * sizeFactor)
+                                ),
+                                const Expanded(
+                                  flex: 1,
+                                  child: Center(),
+                                ),
+                                Text(
+                                  getBonusItemString(bonusItem,gamePlayState), // "${gamePlayState.activeStreak.toString()}x",
+                                  style: TextStyle(
+                                    fontStyle:FontStyle.italic,
+                                    fontSize: (22 * sizeFactor),
+                                    color: getOpacityFactor(textAnimation,opacity),//textAnimation.value ?? palette.tileBgColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          )
+        ],
+      )
+    );    
+
 }

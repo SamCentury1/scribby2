@@ -58,6 +58,8 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
     if (dataList.where((element) => element['primary'] == true).toList().isNotEmpty) {
       res = dataList.firstWhere((element) => element['primary'] == true)['body'];
     } 
+
+    print("getPrimaryLanguage = $res");
     return res;
   }
 
@@ -151,69 +153,70 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
 
         List<String> allLanguagesList = allLanguagesStringList(settingsState.languageDataList);
 
-        return Scaffold(
-          body: Container(
-            width: double.infinity,
-            // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "screen_background"),
-            color : palette.screenBackgroundColor,
-            child: Column(
-              children: [
-                const Expanded(flex: 3, child: SizedBox()),
-
-                // getAllSelectedLanguages(settingsState.languageDataList).isEmpty ? SizedBox() :
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 500),
-                  opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
-                  child: DropdownMenu<String>(
-                    width: screenWidth*0.5,
-                    label: Text(
-                      Helpers().translateDemoSequence(getPrimaryLanguage(settingsState.languageDataList), "Primary Language"),
-                      style: TextStyle(
+        return SafeArea(
+          child: Scaffold(
+            body: Container(
+              width: double.infinity,
+              // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "screen_background"),
+              color : palette.screenBackgroundColor,
+              child: Column(
+                children: [
+                  const Expanded(flex: 3, child: SizedBox()),
+          
+                  // getAllSelectedLanguages(settingsState.languageDataList).isEmpty ? SizedBox() :
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 500),
+                    opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
+                    child: DropdownMenu<String>(
+                      width: screenWidth*0.5,
+                      label: Text(
+                        Helpers().translateWelcomeText(getPrimaryLanguage(settingsState.languageDataList), "Primary Language"),
+                        style: TextStyle(
+                          // color: Colors.white
+                          color: palette.textColor2,
+                        ),
+                      ),
+                      textStyle: TextStyle(
                         // color: Colors.white
-                        color: palette.textColor2,
+                        color: palette.textColor2
                       ),
+                      initialSelection: getPrimaryLanguage(settingsState.languageDataList),
+                      onSelected: (value) {
+                        changePrimaryLanguage(settingsState, value!);
+                      },
+                      inputDecorationTheme: InputDecorationTheme(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                        constraints: BoxConstraints.tight(const 
+                        Size.fromHeight(60)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),                                    
+                      dropdownMenuEntries: allLanguagesList.map<DropdownMenuEntry<String>>((String value) {
+                        return DropdownMenuEntry<String>(
+                              
+                          value: value, 
+                          label: value,                                       
+                        );
+                      }).toList(),
                     ),
-                    textStyle: TextStyle(
-                      // color: Colors.white
-                      color: palette.textColor2
-                    ),
-                    initialSelection: getPrimaryLanguage(settingsState.languageDataList),
-                    onSelected: (value) {
-                      changePrimaryLanguage(settingsState, value!);
-                    },
-                    inputDecorationTheme: InputDecorationTheme(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                      constraints: BoxConstraints.tight(const 
-                      Size.fromHeight(60)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),                                    
-                    dropdownMenuEntries: allLanguagesList.map<DropdownMenuEntry<String>>((String value) {
-                      return DropdownMenuEntry<String>(
-                            
-                        value: value, 
-                        label: value,                                       
-                      );
-                    }).toList(),
                   ),
-                ),
-
-                const Expanded(flex: 1, child: SizedBox()),
-
-                // allLanguagesList.isEmpty ? SizedBox() :
-                
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 500),
-                  opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0 ,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0,2.0,12.0,2.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          Helpers().translateDemoSequence(
+          
+                  const Expanded(flex: 1, child: SizedBox()),
+          
+                  // allLanguagesList.isEmpty ? SizedBox() :
+                  
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 500),
+                    opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0 ,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        
+                        padding: const EdgeInsets.fromLTRB(12.0,2.0,12.0,2.0),
+                        child: Text(
+                          Helpers().translateWelcomeText(
                             getPrimaryLanguage(settingsState.languageDataList), 
                             "Select all languages you would play with"
                           ),
@@ -223,76 +226,76 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                             color: palette.textColor2
                           ),
                         ),
+                      ),
+                    ),
+                  ),                
+                  const Expanded(flex: 1, child: SizedBox()),
+          
+                  SizedBox(
+                    width: double.infinity,
+                    height: screenWidth,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        for (int i=0; i<settingsState.languageDataList .length; i++)
+                          
+                          LanguageButton(
+                            angle:((360/settingsState.languageDataList.length)*i) ,
+                            size: screenWidth,
+                            langData: settingsState.languageDataList[i],
+                            settingsState: settingsState,
+                          ),
+          
+                                  
                       ],
                     ),
                   ),
-                ),                
-                const Expanded(flex: 1, child: SizedBox()),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: screenWidth,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      for (int i=0; i<settingsState.languageDataList .length; i++)
-                        
-                        LanguageButton(
-                          angle:((360/settingsState.languageDataList.length)*i) ,
-                          size: screenWidth,
-                          langData: settingsState.languageDataList[i],
-                          settingsState: settingsState,
+          
+          
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 500),
+                    opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 60,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            processLanguageSelection(settingsState);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            // backgroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"), //olor.fromARGB(255, 248, 175, 175) ,
+                            // foregroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_text"),
+                            backgroundColor: palette.optionButtonBgColor , 
+                            foregroundColor: palette.optionButtonTextColor,
+                            shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
+                            shape:  RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                              side: BorderSide(
+                                // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
+                                color: palette.optionButtonBgColor,
+                                width: 1,
+                                style: BorderStyle.solid
+                              ), 
+                            ),                            
+                          ),
+                          child: Text(
+                            Helpers().translateWelcomeText(
+                              getPrimaryLanguage(settingsState.languageDataList), 
+                              "Proceed"
+                            ),                          
+                          ),
                         ),
-
-                                
-                    ],
-                  ),
-                ),
-
-
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 500),
-                  opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          processLanguageSelection(settingsState);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          // backgroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"), //olor.fromARGB(255, 248, 175, 175) ,
-                          // foregroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_text"),
-                          backgroundColor: palette.optionButtonBgColor , 
-                          foregroundColor: palette.optionButtonTextColor,
-                          shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
-                          shape:  RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                            side: BorderSide(
-                              // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
-                              color: palette.optionButtonBgColor,
-                              width: 1,
-                              style: BorderStyle.solid
-                            ), 
-                          ),                            
-                        ),
-                        child: Text(
-                          Helpers().translateDemoSequence(
-                            getPrimaryLanguage(settingsState.languageDataList), 
-                            "Proceed"
-                          ),                          
-                        ),
+                      
                       ),
-                    
                     ),
                   ),
-                ),
-                const Expanded(flex: 1, child: SizedBox()),                                                                             
-              ],
+                  const Expanded(flex: 1, child: SizedBox()),                                                                             
+                ],
+              )
             )
-          )
+          ),
         );
       },
     );
@@ -484,8 +487,10 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
         
         
                     Container(
-                      width:  90 ,
-                      height: 90 ,
+                      // width:  90 ,
+                      // height: 90 ,
+                      width: widget.size*0.25,
+                      height: widget.size*0.25,
                       decoration: BoxDecoration(
                         // color: Colors.green,
                         borderRadius: const BorderRadius.all(Radius.circular(50.0)),
@@ -498,12 +503,14 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
                     ),
                 
                     Positioned(
-                      left: 10,
-                      top: 10,
+                      left: (((widget.size*0.30)-(widget.size*0.25))/2),
+                      top: (((widget.size*0.30)-(widget.size*0.25))/2),
                       child: Container(
                         // child: Text(body),
-                        width: 70,
-                        height: 70,
+                        // width: 70,
+                        // height: 70,
+                        width: widget.size*0.2,
+                        height: widget.size*0.2,                        
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: const BorderRadius.all(Radius.circular(50.0)),

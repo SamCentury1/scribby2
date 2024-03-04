@@ -4,21 +4,27 @@ import 'package:scribby_flutter_v2/functions/game_logic.dart';
 
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
+import 'package:scribby_flutter_v2/utils/states.dart';
 
 class Tile extends StatefulWidget {
   // final bool selectedTile;
   // final Map<String,dynamic> tileState;
-  final int row;
-  final int column;
+  // final int row;
+  // final int column;
+  final int index;
+  final double tileSize;
 
   const Tile({
     super.key,
     // required this.selectedTile,
     // required this.tileState,
-    required this.row,
-    required this.column,
+    // required this.row,
+    // required this.column,
+    required this.index,
+    required this.tileSize
   });
 
   @override
@@ -41,17 +47,29 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
   late AnimationController _tileSizeController;
   late Animation<double> _tileSizeAnimation;
 
+
+  late AnimationController _tilePressedSizeController;
+  late Animation<double> _tilePressedSizeAnimation; 
+
+    late AnimationController _tilePressedOutSizeController;
+  late Animation<double> _tilePressedOutSizeAnimation;  
+
   late AnimationController _letterTextColorController;
   late Animation<Color?> _letterTextColorAnimation;
 
   late ColorPalette palette;
+  late SettingsState settingsState;
+  
   // late Map<String,dynamic> tileState;
 
   @override
   void initState() {
     super.initState();
     palette = Provider.of<ColorPalette>(context, listen: false);
-    initializeAnimations(palette);
+    settingsState = Provider.of<SettingsState>(context, listen: false);
+    
+    
+    initializeAnimations(palette, settingsState, widget.tileSize);
     _animationState = Provider.of<AnimationState>(context, listen: false);
     // _gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     _animationState.addListener(_handleAnimationStateChange);
@@ -64,22 +82,26 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
       _runAnimations();
     }
 
-    // if (_gamePlayState.isGamePaused) {
-    //   _letterBorderColorController2.reset();
-    //   _tileSizeController.reset();
-    //   _letterPlacedFontSizeController.reset();
-    //   _letterTextColorController.reset();
-    // }
+
+    if (_animationState.shouldRunTilePressedAnimation) {
+      _runTilePressedAnimation();
+    }
+
+    if (_animationState.shouldRunAnimation) {
+      _runTilePressedOutAnimation();
+    }
+
   }
 
-  // void _animationListener() {
-  //   if (_letterBorderColorController2.status == AnimationStatus.completed) {
-  //     _letterBorderColorController2.reset();
-  //     _tileSizeController.reset();
-  //     _letterPlacedFontSizeController.reset();
-  //     _letterTextColorController.reset();
-  //   }
-  // }
+  void _runTilePressedAnimation() {
+    _tilePressedSizeController.reset();
+    _tilePressedSizeController.forward();
+  }
+
+  void _runTilePressedOutAnimation() {
+    _tilePressedOutSizeController.reset();
+    _tilePressedOutSizeController.forward();
+  }
 
   void _runAnimations() {
     // reset animations
@@ -94,32 +116,15 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
     _letterTextColorController.forward();
   }
 
-  void initializeAnimations(ColorPalette palette) {
+  void initializeAnimations(ColorPalette palette, SettingsState settingsState, double tileSize) {
+
+    
+
     // WHEN CLICKED, MAKE THE FONT SIZE GO FROM 0 TO 22 OR WHATEVER
     _letterPlacedFontSizeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
-
-    // final List<TweenSequenceItem<double>> fontSizeTweenSequence = [
-    //   TweenSequenceItem(
-    //     tween: Tween(begin: 22, end: 22),
-    //     weight: 60,
-    //   ),
-    //   TweenSequenceItem(
-    //     tween: Tween(begin: 22, end: 0),
-    //     weight: 10,
-    //   ),
-    //   TweenSequenceItem(
-    //     tween: Tween(begin: 0, end: 0),
-    //     weight: 30,
-    //   ),
-
-    // ];
-
-    // _letterPlacedFontSizeAnimation = TweenSequence<double>(
-    //   fontSizeTweenSequence,
-    // ).animate(_letterPlacedFontSizeController);
 
     _letterBorderColorController2 = AnimationController(
       vsync: this,
@@ -184,16 +189,6 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
       colorTweenSequenceItems,
     ).animate(_letterBorderColorController2);
 
-    // _letterPlacedBgColorController = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 200)
-    // );
-
-    // _letterPlacedBgColorAnimation = Tween<Color?>(
-    //   // streakSlideEnterTweenSequence
-    //   begin: const Color.fromARGB(0, 0, 0, 0),
-    //   end: const Color.fromRGBO(202, 176, 228, 1),
-    // ).animate(_letterPlacedBgColorController);
 
     _letterTextColorController = AnimationController(
       vsync: this,
@@ -263,11 +258,11 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
 
     final List<TweenSequenceItem<double>> tileSizeTweenSequence = [
       TweenSequenceItem(
-        tween: Tween(begin: 50, end: 50),
+        tween: Tween(begin: tileSize, end: tileSize),
         weight: 50,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 50, end: 0),
+        tween: Tween(begin: tileSize, end: 0),
         weight: 10,
       ),
       TweenSequenceItem(
@@ -275,7 +270,7 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
         weight: 20,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 0, end: 50),
+        tween: Tween(begin: 0, end: tileSize),
         weight: 20,
       ),
     ];
@@ -283,6 +278,49 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
     _tileSizeAnimation = TweenSequence<double>(
       tileSizeTweenSequence,
     ).animate(_tileSizeController);
+
+
+    _tilePressedSizeController = AnimationController(
+    vsync: this, duration: const Duration(milliseconds: 100));
+
+    _tilePressedSizeAnimation = Tween<double>(
+      // streakSlideEnterTweenSequence
+      begin:  1.0,
+      end: 0.7,
+    ).animate(_tilePressedSizeController);  
+
+
+    _tilePressedOutSizeController = AnimationController(
+    vsync: this, duration: const Duration(milliseconds: 350));
+
+    // _tilePressedOutSizeAnimation = Tween<double>(
+    //   // streakSlideEnterTweenSequence
+    //   begin:  0.8,
+    //   end: 1.0,
+    // ).animate(_tilePressedOutSizeController);     
+    //
+    final List<TweenSequenceItem<double>> tilePressedOutSizeTweenSequence = [
+      TweenSequenceItem(
+        tween: Tween(begin: 0.7, end: 1.1),
+        weight: 25,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 1.1, end: 0.8),
+        weight: 25,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 0.8, end: 1.05),
+        weight: 25,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 0.9, end: 1.0),
+        weight: 25,
+      ),      
+    ];  
+
+    _tilePressedOutSizeAnimation = TweenSequence<double>(
+      tilePressedOutSizeTweenSequence,
+    ).animate(_tilePressedOutSizeController);     
   }
 
   @override
@@ -291,13 +329,16 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
     _letterBorderColorController2.dispose();
     _tileSizeController.dispose();
     _letterTextColorController.dispose();
+    _tilePressedSizeController.dispose();
+    _letterPlacedFontSizeController.dispose();
     super.dispose();
   }
 
-  Map<String, dynamic> findTileState(GamePlayState gamePlayState) {
+  Map<String, dynamic> findTileState(GamePlayState gamePlayState, int index) {
     Map<String, dynamic> tileState = {};
-    tileState = GameLogic().getTileState(gamePlayState.visualTileState,
-        "${(widget.row).toString()}_${(widget.column).toString()}");
+    String tileKey = tileKeys[index];
+    // tileState = GameLogic().getTileState(gamePlayState.visualTileState, "${(widget.row).toString()}_${(widget.column).toString()}");
+    tileState = GameLogic().getTileState(gamePlayState.visualTileState, tileKey);
     return tileState;
   }
 
@@ -321,6 +362,27 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
     return color;
   }
 
+  double getTileSize(Animation animation, double size, Map<String,dynamic> tileState, GamePlayState gamePlayState, Animation pressedSizeFactor, Animation pressedOutSizeFactor) {
+    double res = size;
+
+    if (gamePlayState.isTileTapped == null) {
+      if (tileState["active"]) {
+        res = _tileSizeAnimation.value;
+      }
+      if (tileState['tileId'] == gamePlayState.pressedTile) {
+        res = size*pressedOutSizeFactor.value;
+      }
+    } else {
+      String pressedTileId = tileKeys[gamePlayState.isTileTapped];
+      if (pressedTileId == tileState['tileId']) {
+        res = size*pressedSizeFactor.value * pressedOutSizeFactor.value;
+      }
+
+
+    }
+    return res;
+  }
+
   Color colorTileBorder(Map<String, dynamic> tileObject, bool darkTheme,
       ColorPalette palette, Color? animatedColor) {
     late Color color = const Color.fromRGBO(0, 0, 0, 0);
@@ -328,8 +390,7 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
       color = animatedColor!;
     } else {
       if (tileObject["alive"]) {
-        color =
-            palette.tileBorderColor; //const Color.fromRGBO(202, 176, 228, 1);
+        color = palette.tileBorderColor; //const Color.fromRGBO(202, 176, 228, 1);
       } else {
         color = const Color.fromRGBO(0, 0, 0, 0);
       }
@@ -344,25 +405,29 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
     // final Palette palette = Provider.of<Palette>(context, listen: false);
     final ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState =
+        Provider.of<SettingsState>(context, listen: false);        
 
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         // final Map<String, dynamic> tileState = GameLogic().getTileState(gamePlayState.visualTileState,"${(widget.row+1).toString()}_${(widget.column+1).toString()}" );
-        late Map<String, dynamic> tileState = findTileState(gamePlayState);
+        late Map<String, dynamic> tileState = findTileState(gamePlayState, widget.index);
 
         return AnimatedBuilder(
-            animation: _letterBorderColorAnimation2,
+            animation: Listenable.merge([_letterBorderColorAnimation2,_tilePressedSizeAnimation, _tilePressedOutSizeAnimation]),
             builder: (context, child) {
               return Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(2.0),
+                  padding:  EdgeInsets.all(2.0 * settingsState.sizeFactor),
                   child: Container(
-                      width: tileState["active"]
-                          ? _tileSizeAnimation.value
-                          : 50, // widget.tileState["active"] ? _tileSizeAnimation.value : 50,
-                      height: tileState["active"]
-                          ? _tileSizeAnimation.value
-                          : 50, // widget.tileState["active"] ? _tileSizeAnimation.value : 50,
+                    width: getTileSize(_tileSizeAnimation, widget.tileSize, tileState, gamePlayState, _tilePressedSizeAnimation,_tilePressedOutSizeAnimation),
+                    height: getTileSize(_tileSizeAnimation, widget.tileSize, tileState, gamePlayState, _tilePressedSizeAnimation,_tilePressedOutSizeAnimation),
+                      // width: tileState["active"]
+                      //     ? _tileSizeAnimation.value
+                      //     : widget.tileSize, //50, // widget.tileState["active"] ? _tileSizeAnimation.value : 50,
+                      // height: tileState["active"]
+                      //     ? _tileSizeAnimation.value
+                      //     : widget.tileSize, //50, // widget.tileState["active"] ? _tileSizeAnimation.value : 50,
                       decoration: BoxDecoration(
                         // color:  widget.tileState["active"] ?  Color.fromRGBO(0, 0, 0, 0) : widget.tileState["letter"] == "" ? Color.fromRGBO(0, 0, 0, 0)  : Color.fromRGBO(202, 176, 228, 1),
                         // color:  tileState["active"] ?  Color.fromRGBO(0, 0, 0, 0) : tileState["letter"] == "" ? Color.fromRGBO(0, 0, 0, 0)  : Color.fromRGBO(202, 176, 228, 1),
@@ -376,7 +441,7 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
                                 settings.darkTheme.value,
                                 palette,
                                 _letterBorderColorAnimation2.value),
-                            width: 3),
+                            width: (3 * settingsState.sizeFactor)),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                       ),
@@ -386,7 +451,7 @@ class _TileState extends State<Tile> with TickerProviderStateMixin {
                           style: TextStyle(
                             // fontSize: GameLogic().getFontSize(widget.selectedTile, widget.tileState, _letterPlacedFontSizeAnimation.value),
                             // fontSize: widget.tileState["letter"] == "" ? 0 : 26 ,
-                            fontSize: tileState["letter"] == "" ? 0 : 26,
+                            fontSize: tileState["letter"] == "" ? 0 : (26 * settingsState.sizeFactor),
                             // color: widget.tileState["active"] ?  _letterTextColorAnimation.value ?? Color.fromRGBO(0, 0, 0, 1) : Color.fromRGBO(0, 0, 0, 1),
                             color: tileState["active"]
                                 ? _letterTextColorAnimation.value ??

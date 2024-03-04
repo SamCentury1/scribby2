@@ -123,19 +123,20 @@ class MyApp extends StatelessWidget {
           },
           dispose: (context, audio) => audio.dispose(),
         ),
-        Provider(create: (context) => Palette()),
+        // Provider(create: (context) => Palette()),
         // Provider(create: (context) => LightPalette()),
         // Provider(create: (context) => DarkPalette()),
       ],
       child: Builder(builder: (context) {
         // SettingsController settings = Provider.of<SettingsController>(context, listen:  false);
         // print(context.watch<SettingsController>().darkTheme.value);
-        return const MaterialApp(
+        return MaterialApp(
           title: 'Flutter Demo',
-          // theme: ThemeData(
-          //   // colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 32, 12, 65)),
-          //   useMaterial3: true,
-          // ),
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(3, 29, 68, 1)),
+            // colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 66, 218, 52)),
+            useMaterial3: true,
+          ),
           // darkTheme: ThemeData(
           //   colorScheme: defaultDarkColorScheme,
           //   scaffoldBackgroundColor: Palette().darkScreenBgColor,

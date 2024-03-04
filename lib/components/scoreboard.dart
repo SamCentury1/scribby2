@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_sequence_animation/flutter_sequence_animation.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 // import 'package:scribby_flutter_v2/providers/game_state.dart';
 // import 'package:scribby_flutter_v2/providers/timer_state.dart';
@@ -47,6 +48,7 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
     super.initState();
     // displayFormattedTime(0);
     palette = Provider.of<ColorPalette>(context, listen: false);
+    
     initializeAnimations(palette);
 
     // formattedTime = GameLogic().formatTime(timeInSeconds)
@@ -284,115 +286,112 @@ class _ScoreboardState extends State<Scoreboard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  AnimatedBuilder(
-                    animation: _scoreTextAnimation,
-                    builder: (context, child) {
-                      // int current = _scoreTextAnimation.value;
-                      return Transform.scale(
-                        scale: _scoreScaleAnimation.value,
-                        child: Container(
-                          // height: 30,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(0, 0, 0, 0),
-                            border: Border.all(
-                                color: _scoreBorderAnimation.value ??
-                                    palette.tileBgColor,
-                                width: 3),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: _scoreTextAnimation.value ??
-                                      palette.tileBgColor,
-                                ),
-                                // Expanded(flex: 1, child: Center(),),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                AnimatedDefaultTextStyle(
-                                  duration: const Duration(milliseconds: 200),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    color: _scoreTextAnimation.value ??
-                                        palette.tileBgColor,
-                                  ),
-                                  child: Text(
-                                      // widget.turnScore.toString(),
-                                      gamePlayState.turnScore.toString()),
-                                )
-                              ],
+            Row(
+              children: [
+                AnimatedBuilder(
+                  animation: _scoreTextAnimation,
+                  builder: (context, child) {
+                    // int current = _scoreTextAnimation.value;
+                    return Transform.scale(
+                      scale: _scoreScaleAnimation.value,
+                      child: Container(
+                        // height: 30,
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(0, 0, 0, 0),
+                          border: Border.all(
+                              color: _scoreBorderAnimation.value ?? palette.tileBgColor,
+                              width: (3 * settingsState.sizeFactor)
                             ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all((8.0 * settingsState.sizeFactor)),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.star,
+                                color: _scoreTextAnimation.value ?? palette.tileBgColor,
+                                size: 22* settingsState.sizeFactor,
+                              ),
+                              // Expanded(flex: 1, child: Center(),),
+                              SizedBox(
+                                width: (15 * settingsState.sizeFactor),
+                              ),
+                              AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 200),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: (22 * settingsState.sizeFactor),
+                                  color: _scoreTextAnimation.value ?? palette.tileBgColor,
+                                ),
+                                child: Text(
+                                    // widget.turnScore.toString(),
+                                    gamePlayState.turnScore.toString()),
+                              )
+                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
-                  const Expanded(flex: 1, child: SizedBox()),
-                  AnimatedBuilder(
-                    animation: _scoreTextAnimation,
-                    builder: (context, child) {
-                      // int current = _scoreTextAnimation.value;
-                      return Transform.scale(
-                        scale: _scoreScaleAnimation.value,
-                        child: Container(
-                          // height: 30,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(0, 0, 0, 0),
-                            border: Border.all(
-                                color: _scoreBorderAnimation.value ??
-                                    palette.tileBgColor,
-                                width: 3),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.library_books,
+                      ),
+                    );
+                  },
+                ),
+                const Expanded(flex: 1, child: SizedBox()),
+                AnimatedBuilder(
+                  animation: _scoreTextAnimation,
+                  builder: (context, child) {
+                    // int current = _scoreTextAnimation.value;
+                    return Transform.scale(
+                      scale: _scoreScaleAnimation.value,
+                      child: Container(
+                        // height: 30,
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(0, 0, 0, 0),
+                          border: Border.all(
+                              color: _scoreBorderAnimation.value ??
+                                  palette.tileBgColor,
+                              width: (3 * settingsState.sizeFactor)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all((8.0 * settingsState.sizeFactor)),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.library_books,
+                                color: _scoreTextAnimation.value ?? palette.tileBgColor,
+                                size: 22 * settingsState.sizeFactor,
+                              ),
+                              SizedBox(
+                                width: (15 * settingsState.sizeFactor),
+                              ),
+                              AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 200),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: (22 * settingsState.sizeFactor),
                                   color: _scoreTextAnimation.value ??
-                                      palette.tileBgColor,
+                                      const Color.fromRGBO(0, 0, 0, 0),
                                 ),
-                                const SizedBox(
-                                  width: 15,
+                                child: Text(
+                                  // widget.turnWords.toString(),
+                                  gamePlayState.turnWords.toString(),
                                 ),
-                                AnimatedDefaultTextStyle(
-                                  duration: const Duration(milliseconds: 200),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    color: _scoreTextAnimation.value ??
-                                        const Color.fromRGBO(0, 0, 0, 0),
-                                  ),
-                                  child: Text(
-                                    // widget.turnWords.toString(),
-                                    gamePlayState.turnWords.toString(),
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         );

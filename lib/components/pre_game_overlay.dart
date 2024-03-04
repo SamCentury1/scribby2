@@ -40,14 +40,25 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                         gamePlayState.setIsGameStarted(true);
                       }),
                 ),
-                Center(
-                  child: DefaultTextStyle(
-                    style: const TextStyle(
-                        fontSize: 32,
-                        color: Colors.white,
-                        fontStyle: FontStyle.italic),
-                    child: Text(
-                      Helpers().translateText(gamePlayState.currentLanguage, "Tap to Start",),
+                GestureDetector(
+                  onTap: () {
+                    gamePlayState.setIsGameStarted(true);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Center(
+                      child: DefaultTextStyle(
+                        style: const TextStyle(
+                            fontSize: 32,
+                            color: Colors.white,
+                            fontStyle: FontStyle.italic),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            Helpers().translateText(gamePlayState.currentLanguage, "Tap to Start",),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
