@@ -107,7 +107,7 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                         },
                         type: BottomNavigationBarType.shifting,
                         // type: BottomNavigationBarType.fixed,
-                        selectedItemColor: palette.tileBgColor,
+                        selectedItemColor: palette.bottomNavigationBarItemColor,
                         unselectedItemColor: palette.optionButtonTextColor,
                         selectedFontSize: (12 * settingsState.sizeFactor),
                         

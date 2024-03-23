@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -44,8 +45,7 @@ class Helpers {
   }
 
   void getStates(GamePlayState gamePlayState, SettingsController settings) {
-    final Map<String, dynamic> alphabetDocumnet =
-        (settings.alphabet.value as Map<String, dynamic>);
+    final Map<String, dynamic> alphabetDocumnet = (settings.alphabet.value as Map<String, dynamic>);
     final List<dynamic> alphabet = alphabetDocumnet['alphabet'];
 
     if (alphabet.isNotEmpty) {
@@ -66,6 +66,13 @@ class Helpers {
       debugPrint("something went wrong retrieving the alphabet from storage");
     }
   }
+
+  Map<String,dynamic> getTileObject(GamePlayState gamePlayState, int index) {
+    late Map<String,dynamic> tileObject = gamePlayState.visualTileState.firstWhere((element) => element["index"] == index);
+    return tileObject;
+  }
+
+
 
 
   Widget multiplierIcon(String stat, int turn, int data, ColorPalette palette, double sizeFactor) {
@@ -124,8 +131,8 @@ class Helpers {
 
 
   TableRow scoreSummaryTableRow2(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context, String language, double sizeFactor) {
-    Color textColor = index.isEven ? palette.textColor1 : palette.textColor3;
-    Color rowColor = index.isEven ? palette.optionButtonBgColor2 : palette.optionButtonBgColor3;
+    Color textColor = index.isEven ? palette.textColor1 : palette.textColor1;
+    Color rowColor = index.isEven ? palette.optionButtonBgColor : palette.optionButtonBgColor2;
     List<Map<String,dynamic>> words = data["words"];
 
     return TableRow(
@@ -144,18 +151,19 @@ class Helpers {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     word['index'].toString(),
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18*sizeFactor
-                    ),
+                    style: customTextStyle(textColor, 18* sizeFactor),
+                    // style: TextStyle(
+                    //   color: textColor,
+                    //   fontSize: 18*sizeFactor
+                    // ),
                   )
                 )
               ],
             ),
           ),
         ),
-        Row(
-          children: [
+        // Row(
+          // children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -165,10 +173,11 @@ class Helpers {
                   child: GestureDetector(
                     child: Text(
                       word['word'],
-                      style: TextStyle(
-                        color: textColor,
-                        fontSize: (18 * sizeFactor),
-                      ),
+                      style: customTextStyle(textColor, 18* sizeFactor),
+                      // style: TextStyle(
+                      //   color: textColor,
+                      //   fontSize: (18 * sizeFactor),
+                      // ),
                     ),
                     onTap: () {
                       showDialog(
@@ -178,53 +187,15 @@ class Helpers {
                             future: GameLogic().fetchDefinition(word["word"], language),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
-                                return AlertDialog(
-                                  backgroundColor: palette.optionButtonBgColor,
-                                  title: Text(
-                                    word['word'],
-                                    style: TextStyle(
-                                      color: palette.textColor2,
-                                      fontSize: 18 * sizeFactor
-                                    ),
-                                  ),
-                                  content:SizedBox()  //Text("Fetching definition..."),
-                                );
+                                return wordDefinitionDialog(palette, sizeFactor,word['word'],translateText(language, "loading..."));
                               } else if (snapshot.hasError) {
-                                return AlertDialog(
-                                  backgroundColor: palette.optionButtonBgColor,
-                                  title: Text(
-                                    word['word'],
-                                    style: TextStyle(
-                                      color: palette.textColor2,
-                                      fontSize: 18 * sizeFactor
-                                    ),
-                                  ),
-                                  content: Text(
-                                    "Error fetching definition",
-                                    style: TextStyle(
-                                      color: palette.textColor2,
-                                      fontSize: 18 * sizeFactor
-                                    ),                            
-                                  ),
-                                );
+                                return wordDefinitionDialog(palette, sizeFactor,word['word'],translateText(language,"Error fetching definition"));
                               } else {
-                                return AlertDialog(
-                                  backgroundColor: palette.optionButtonBgColor,
-                                  title: Text(
-                                    word['word'],
-                                    style: TextStyle(
-                                      color: palette.textColor2,
-                                      fontSize: 18 * sizeFactor
-                                    ),
-                                  ),
-                                  content: Text(
-                                    snapshot.data ?? "No definition available",
-                                    style: TextStyle(
-                                      color: palette.textColor2,
-                                      fontSize: 18  * sizeFactor
-                                    ),                            
-                                  ),
-                                );
+                                if (snapshot.data != null) {
+                                  return wordDefinitionDialog(palette, sizeFactor,word['word'], snapshot.data!);
+                                } else {
+                                  return wordDefinitionDialog(palette, sizeFactor,word['word'],translateText(language, "No definition available at this time"));
+                                }
                               }                    
                             },
               
@@ -233,21 +204,50 @@ class Helpers {
                       );
                     },
                   ),
-                )
-              ],
-            ),
-            const Expanded(child: SizedBox(),),
-            Row(
-              children: [
-                data['count'] > 1 ? multiplierIcon('count',index, data['count'], palette, sizeFactor) : const SizedBox(),
-                data['crossword'] > 1 ? multiplierIcon('crosswords',index, data['crossword'], palette, sizeFactor) : const SizedBox(),
-                data['streak'] > 1 ? multiplierIcon('streak',index, data['streak'], palette, sizeFactor) : const SizedBox(),
-
-              ],
-            ),
-            const Expanded(child: SizedBox(),),          
+                // )
+              // ],
+            ),       
           ],
         ),
+
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              for (Map<String,dynamic> word in words)
+              Text(
+                data['streak'].toString(),
+                style: customTextStyle(textColor, 18* sizeFactor),
+              )
+            ],
+          ),
+        ),
+
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              for (Map<String,dynamic> word in words)
+              Text(
+                data['count'].toString(),
+                style: customTextStyle(textColor, 18* sizeFactor),
+              )
+            ],
+          ),
+        ),
+
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              for (Map<String,dynamic> word in words)
+              Text(
+                data['crossword'].toString(),
+                style: customTextStyle(textColor, 18* sizeFactor),
+              )
+            ],
+          ),
+        ),                
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Align(
@@ -259,10 +259,11 @@ class Helpers {
                   alignment: Alignment.centerRight,
                   child: Text(
                     word['totalScore'].toString(),
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18*sizeFactor
-                    ),
+                    style: customTextStyle(textColor, 18* sizeFactor),
+                    // style: TextStyle(
+                    //   color: textColor,
+                    //   fontSize: 18*sizeFactor
+                    // ),
                   )
                 )
               ],
@@ -292,113 +293,113 @@ class Helpers {
       ]
     );
   }
-  TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context, String language, double sizeFactor) {
+  // TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context, String language, double sizeFactor) {
 
-    Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
-    String word = data["word"];
+  //   Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
+  //   String word = data["word"];
 
 
-    return TableRow(children: [
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "${(index+1).toString()}.",
-          style: TextStyle(
-            color: textColor,
-            fontSize: (20 * sizeFactor)
-          ),
-        ),
-      ),
-      Row(
-        children: [
-          GestureDetector(
-            child: Text(
-              data['word'],
-              style: TextStyle(
-                color: textColor,
-                fontSize: (20 * sizeFactor),
-              ),
-            ),
-            onTap: () {
-              showDialog(
-                context: context, 
-                builder:(context) {
-                  return FutureBuilder<String>(
-                    future: GameLogic().fetchDefinition(data["word"], language),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return AlertDialog(
-                          backgroundColor: palette.optionButtonBgColor,
-                          title: Text(
-                            word,
-                            style: TextStyle(
-                              color: palette.textColor2,
-                              fontSize: 18 * sizeFactor
-                            ),
-                          ),
-                          content:SizedBox()  //Text("Fetching definition..."),
-                        );
-                      } else if (snapshot.hasError) {
-                        return AlertDialog(
-                          backgroundColor: palette.optionButtonBgColor,
-                          title: Text(
-                            word,
-                            style: TextStyle(
-                              color: palette.textColor2,
-                              fontSize: 18 * sizeFactor
-                            ),
-                          ),
-                          content: Text(
-                            "Error fetching definition",
-                            style: TextStyle(
-                              color: palette.textColor2,
-                              fontSize: 18 * sizeFactor
-                            ),                            
-                          ),
-                        );
-                      } else {
-                        return AlertDialog(
-                          backgroundColor: palette.optionButtonBgColor,
-                          title: Text(
-                            word,
-                            style: TextStyle(
-                              color: palette.textColor2,
-                              fontSize: 18 * sizeFactor
-                            ),
-                          ),
-                          content: Text(
-                            snapshot.data ?? "No definition available",
-                            style: TextStyle(
-                              color: palette.textColor2,
-                              fontSize: 18  * sizeFactor
-                            ),                            
-                          ),
-                        );
-                      }                    
-                    },
+  //   return TableRow(children: [
+  //     Align(
+  //       alignment: Alignment.centerLeft,
+  //       child: Text(
+  //         "${(index+1).toString()}.",
+  //         style: TextStyle(
+  //           color: textColor,
+  //           fontSize: (20 * sizeFactor)
+  //         ),
+  //       ),
+  //     ),
+  //     Row(
+  //       children: [
+  //         GestureDetector(
+  //           child: Text(
+  //             data['word'],
+  //             style: TextStyle(
+  //               color: textColor,
+  //               fontSize: (20 * sizeFactor),
+  //             ),
+  //           ),
+  //           onTap: () {
+  //             showDialog(
+  //               context: context, 
+  //               builder:(context) {
+  //                 return FutureBuilder<String>(
+  //                   future: GameLogic().fetchDefinition(data["word"], language),
+  //                   builder: (context, snapshot) {
+  //                     if (snapshot.connectionState == ConnectionState.waiting) {
+  //                       return AlertDialog(
+  //                         backgroundColor: palette.optionButtonBgColor,
+  //                         title: Text(
+  //                           word,
+  //                           style: TextStyle(
+  //                             color: palette.textColor2,
+  //                             fontSize: 18 * sizeFactor
+  //                           ),
+  //                         ),
+  //                         content:SizedBox()  //Text("Fetching definition..."),
+  //                       );
+  //                     } else if (snapshot.hasError) {
+  //                       return AlertDialog(
+  //                         backgroundColor: palette.optionButtonBgColor,
+  //                         title: Text(
+  //                           word,
+  //                           style: TextStyle(
+  //                             color: palette.textColor2,
+  //                             fontSize: 18 * sizeFactor
+  //                           ),
+  //                         ),
+  //                         content: Text(
+  //                           "Error fetching definition",
+  //                           style: TextStyle(
+  //                             color: palette.textColor2,
+  //                             fontSize: 18 * sizeFactor
+  //                           ),                            
+  //                         ),
+  //                       );
+  //                     } else {
+  //                       return AlertDialog(
+  //                         backgroundColor: palette.optionButtonBgColor,
+  //                         title: Text(
+  //                           word,
+  //                           style: TextStyle(
+  //                             color: palette.textColor2,
+  //                             fontSize: 18 * sizeFactor
+  //                           ),
+  //                         ),
+  //                         content: Text(
+  //                           snapshot.data ?? "No definition available",
+  //                           style: TextStyle(
+  //                             color: palette.textColor2,
+  //                             fontSize: 18  * sizeFactor
+  //                           ),                            
+  //                         ),
+  //                       );
+  //                     }                    
+  //                   },
       
-                  );
-                },
-              );
-            },
-          ),
-          SizedBox(width: 10,),
-          Expanded(child: SizedBox()),
-          // data['count'] > 1 ? multiplierIcon('count',data['turn'], data['count'], palette) : const SizedBox(),
-          // data['crosswords'] > 1 ? multiplierIcon('crosswords',data['turn'], data['crosswords'], palette) : const SizedBox(),
-          // data['streak'] > 1 ? multiplierIcon('streak',data['turn'], data['streak'], palette) : const SizedBox(),
-        ],
-      ),
-      Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          data['points'].toString(),
-          style: TextStyle(color: textColor, fontSize: (20 * sizeFactor)),
-          textAlign: TextAlign.right,
-        ),
-      ),
-    ]);
-  }
+  //                 );
+  //               },
+  //             );
+  //           },
+  //         ),
+  //         SizedBox(width: 10,),
+  //         Expanded(child: SizedBox()),
+  //         // data['count'] > 1 ? multiplierIcon('count',data['turn'], data['count'], palette) : const SizedBox(),
+  //         // data['crosswords'] > 1 ? multiplierIcon('crosswords',data['turn'], data['crosswords'], palette) : const SizedBox(),
+  //         // data['streak'] > 1 ? multiplierIcon('streak',data['turn'], data['streak'], palette) : const SizedBox(),
+  //       ],
+  //     ),
+  //     Align(
+  //       alignment: Alignment.centerRight,
+  //       child: Text(
+  //         data['points'].toString(),
+  //         style: TextStyle(color: textColor, fontSize: (20 * sizeFactor)),
+  //         textAlign: TextAlign.right,
+  //       ),
+  //     ),
+  //   ]);
+  // }
 
 
   String translateWelcomeText(String languageRaw, String originalString,) {
@@ -415,15 +416,12 @@ class Helpers {
       "Nederlands" : "dutch",
     };
 
-    print("language $languageRaw");
     if (languageRaw == "") {
       res = "";
     } else {
       String language = translationMap[languageRaw];
-      print("languageMap['data'][language.toLowerCase()] = ${languageMap['data'][language.toLowerCase()]}");
       res = languageMap['data'][language.toLowerCase()];
     }
-    print("translateText = $res");
     // return languageMap['data'][language];
     return res;    
   }
@@ -449,7 +447,6 @@ class Helpers {
   }
 
   String translateDemoSequence(String language, String originalString,) {
-    print("language = $language");
     if (language == "") {
       return "";
     } else {
@@ -464,20 +461,58 @@ class Helpers {
   }
 
 
-  void getSizeFactor(SettingsState settingsState, double screenHeight) {
+  double getSizeFactor(double screenHeight) {
     double res = 1.0;
     if (screenHeight <= 801 ) {
       res = 0.75;
     }
-
-    settingsState.setSizeFactor(res);
+    return res;
   }
 
 
 
 
+  bool checkForBadWords(String name) {
+    List<String> badWords = ["faggot", "faggit", "fagot","nigger","retard","nigga","bitch","cunt"];
+    bool badWordFound = false;
+    for (String word in badWords) {
+      if (name.contains(word)) {
+        badWordFound = true;
+      }
+    }
+    return badWordFound;
+  }
+
+  Widget wordDefinitionDialog(ColorPalette palette, double sizeFactor, String wordText, String textBody ) {
+    return AlertDialog(
+      backgroundColor: palette.optionButtonBgColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15.0*sizeFactor))
+      ),                                  
+      title: Text(
+        wordText,
+        style: TextStyle(
+          color: palette.textColor2,
+          fontSize: 18 * sizeFactor
+        ),
+      ),
+      content: Text(
+        textBody,
+        style: TextStyle(
+          color: palette.textColor2,
+          fontSize: 18  * sizeFactor
+        ),                            
+      ),                        
+    );    
+  }
 
 
+  TextStyle customTextStyle(Color textColor, double fontSize) {
+    return GoogleFonts.roboto(
+      color: textColor,
+      fontSize: fontSize
+    );
+  }
 
 
 

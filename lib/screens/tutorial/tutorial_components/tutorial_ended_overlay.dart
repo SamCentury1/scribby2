@@ -66,11 +66,12 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                         padding: const EdgeInsets.all(16.0),
                         child: DefaultTextStyle(
                           style: TextStyle(
-                            color: palette.textColor2,
+                            color: const Color.fromARGB(255, 221, 220, 220),
                             fontSize: 28*settingsState.sizeFactor
                           ), 
                           child: Text(
-                            Helpers().translateText(gamePlayState.currentLanguage, "Congratulations!")
+                            Helpers().translateText(gamePlayState.currentLanguage, "Congratulations!"),
+
                           )
                         ),
                       ),
@@ -79,7 +80,7 @@ class _TutorialEndedOverlayState extends State<TutorialEndedOverlay> {
                         child: Center(
                           child: DefaultTextStyle(
                             style: TextStyle(
-                              color: palette.textColor2,
+                              color: const Color.fromARGB(255, 221, 220, 220),
                               fontSize: 22*settingsState.sizeFactor,
                               
                             ), 

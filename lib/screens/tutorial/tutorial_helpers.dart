@@ -281,9 +281,9 @@ class TutorialHelpers {
     final Map<String,dynamic> correspondingLetters = tutorialLetters[language];
     late List<String> newLetters = [];
     for (String letterId in letterIds) {
-      print(letterId);
+      // print(letterId);
       String letter = correspondingLetters[letterId];
-      print("should be converted to $letter");
+      // print("should be converted to $letter");
       newLetters.add(letter);
     }
 
@@ -315,11 +315,19 @@ class TutorialHelpers {
   //   return states;
   // }
 
+  // List<Map<String, dynamic>> makeCopyOfTutorialSteps(List<Map<String, dynamic>> steps,) {
+  //   late List<Map<String, dynamic>> res = [];
+  //   for (Map<String, dynamic> step in steps) {
+  //     res.add(step);
+  //   }
+  //   return res;
+  // }
+
   void getFullTutorialStates3(TutorialState tutorialState, List<Map<String, dynamic>> steps, String currentLanguage) {
     late List<Map<String, dynamic>> states = [];
 
     late List<String> letters = translateLetter(currentLanguage,tutorialState.tutorialLettersToAdd);
-
+    // List<Map<String, dynamic>> stepsCopy = makeCopyOfTutorialSteps(steps);
     // late List<Map<String, dynamic>> newReserves = tutorialState.reserveTiles;    
 
     for (var currentStep in steps) {
@@ -368,10 +376,11 @@ class TutorialHelpers {
     
       String translatedText = translateTutorialStep(currentLanguage, currentStep['text']);
 
-      currentStep.update('text', (value) => translatedText);
+      // currentStep.update('text', (value) => translatedText);
       // currentStep['random_letter_3'] = letters[tutorialState.tutorialMove];
       // currentStep['random_letter_2'] = letters[tutorialState.tutorialMove + 1];
       // currentStep['random_letter_1'] = letters[tutorialState.tutorialMove + 2];
+      currentStep['translated_text'] = translatedText;
       currentStep['random_letter_3'] = letters[currentStep['turn']];
       currentStep['random_letter_2'] = letters[currentStep['turn'] + 1];
       currentStep['random_letter_1'] = letters[currentStep['turn'] + 2];      
@@ -754,13 +763,16 @@ class TutorialHelpers {
     return res;
   }
 
-  void navigateToTutorial(BuildContext context) {
-    late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
-    late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+  void navigateToTutorial(BuildContext context, String language) {
+    // late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
+    // late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+      late TutorialState tutorialState = context.read<TutorialState>();
 
+      print("tutorial step = ${tutorialState.sequenceStep}");
+      tutorialState.setSequenceStep(0);
 
       // TutorialHelpers().saveStateHistory(tutorialState, tutorialDetails);
-      getFullTutorialStates3(tutorialState, tutorialDetails, gamePlayState.currentLanguage);
+      getFullTutorialStates3(tutorialState, tutorialDetails, language);
       // getFullTutorialStates2(tutorialState, tutorialDetails, gamePlayState.currentLanguage);
       // TutorialHelpers().getFullTutorialStates(tutorialState, tutorialDetails);
       
@@ -781,7 +793,7 @@ class TutorialHelpers {
   String translateTutorialStep(String language, String originalString,) {
     String res = "";
 
-    
+    debugPrint("translateTutorialStep : $originalString");
     String translatedBody = Helpers().translateText(language, originalString);
     late Map<String,dynamic> dynamicLetters = tutorialLetters[language];
     dynamicLetters.forEach((key, value) {

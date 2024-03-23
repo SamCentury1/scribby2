@@ -53,4 +53,11 @@ class SettingsState with ChangeNotifier {
     _sizeFactor = value;
     notifyListeners();
   }
+
+  late Map<String,dynamic> _screenSizeData = {"width" : 0.0, "height" : 0.0};
+  Map<String,dynamic> get screenSizeData => _screenSizeData;
+  void setScreensizedata(Map<String,dynamic> value) {
+    _screenSizeData = value;
+    notifyListeners();
+  }  
 }

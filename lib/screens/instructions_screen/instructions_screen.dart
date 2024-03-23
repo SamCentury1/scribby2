@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:scribby_flutter_v2/styles/styles.dart';
@@ -93,12 +94,12 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                       ),
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const MenuScreen()));
+                            builder: (context) => const WelcomeUser()));
                       },
                     ),                  
                     title: Text(
                       Helpers().translateText(language, "Instructions"),
-                      style: TextStyle(color: palette.textColor1),
+                      style: Helpers().customTextStyle(palette.textColor1, 30*settingsState.sizeFactor) // TextStyle(color: palette.textColor1),
                     ),
                     backgroundColor: palette.appBarColor,
               
@@ -148,7 +149,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                     _gap(25*settingsState.sizeFactor),
                                     TextButton(
                                       onPressed: () {
-                                        TutorialHelpers().navigateToTutorial(context);
+                                        TutorialHelpers().navigateToTutorial(context, language);
                                       }, 
                                       child: Padding(
                                         padding:  EdgeInsets.fromLTRB(16.0*settingsState.sizeFactor, 4.0*settingsState.sizeFactor, 16.0*settingsState.sizeFactor, 4.0*settingsState.sizeFactor),
@@ -157,15 +158,21 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                           height: 50*settingsState.sizeFactor,
                                           decoration: BoxDecoration(
                                               gradient: LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
+                                                  // stops: [10.0, 1.0, 1.0, 1.0, 3.0],
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
                                                   colors: <Color>[
-                                                    palette.optionButtonBgColor,
-                                                    palette.optionButtonBgColor
+                                                    palette.optionButtonBgColor2,
+                                                    palette.optionButtonBgColor2,
+                                                    // palette.optionButtonBgColor2,
+                                                    // palette.optionButtonBgColor2,
+                                                    // palette.optionButtonBgColor,
+                                                    // Colors.black
+
                                                   ],
                                                   tileMode: TileMode.mirror),
                                               border: const Border(),
-                                              borderRadius: const BorderRadius.all(Radius.circular(12.0))),
+                                              borderRadius: BorderRadius.all(Radius.circular(12.0*settingsState.sizeFactor))),
                                           child: Padding(
                                             padding: EdgeInsets.all(8.0*settingsState.sizeFactor),
                                             child: Align(
@@ -397,10 +404,11 @@ Widget textHeading(Color color, String body, double sizeFactor) {
     padding: EdgeInsets.symmetric(vertical: 8.0*sizeFactor),
     child: Text(
       body,
-      style: GoogleFonts.roboto(
-        fontSize: 32*sizeFactor, 
-        color: color
-      ),
+      style: Helpers().customTextStyle(color, 32*sizeFactor),
+      // style: GoogleFonts.roboto(
+      //   fontSize: 32*sizeFactor, 
+      //   color: color
+      // ),
     ),
   );
 }
@@ -408,9 +416,10 @@ Widget textHeading(Color color, String body, double sizeFactor) {
 Widget textBody(Color color, String body, double sizeFactor) {
   return Text(
     body,
-    style: GoogleFonts.roboto(
-      fontSize: 18*sizeFactor, color: color
-    ),
+    style: Helpers().customTextStyle(color, 18*sizeFactor),
+    // style: GoogleFonts.roboto(
+    //   fontSize: 18*sizeFactor, color: color
+    // ),
   );
 }
 
@@ -419,11 +428,12 @@ Widget textBodyBulletHeading(Color color, String body, double sizeFactor) {
     padding: EdgeInsets.only(left: 30*sizeFactor),
     child: Text(
       body,
-      style: GoogleFonts.roboto(
-          fontSize: 18*sizeFactor, 
-          color: color, 
-          fontWeight: FontWeight.bold
-        ),
+      style: Helpers().customTextStyle(color, 18*sizeFactor),
+      // style: GoogleFonts.roboto(
+      //     fontSize: 18*sizeFactor, 
+      //     color: color, 
+      //     fontWeight: FontWeight.bold
+      //   ),
     ),
   );
 }
@@ -433,10 +443,11 @@ Widget textBodyBullet(Color color, String body, double sizeFactor) {
     padding: EdgeInsets.only(left: 30*sizeFactor),
     child: Text(
       body,
-      style: GoogleFonts.roboto(
-        fontSize: 14*sizeFactor, 
-        color: color
-      ),
+      style: Helpers().customTextStyle(color, 14*sizeFactor),
+      // style: GoogleFonts.roboto(
+      //   fontSize: 14*sizeFactor, 
+      //   color: color
+      // ),
     ),
   );
 }

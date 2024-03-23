@@ -121,9 +121,11 @@ class _TutorialScreen1State extends State<TutorialScreen1>
             Scaffold(            
               backgroundColor: palette.screenBackgroundColor,
               appBar: PreferredSize(
+                
                 preferredSize: Size(double.infinity, 58.0*settingsState.sizeFactor,),
 
                 child: AppBar(
+                  leading: null,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
                       bottom: Radius.circular(30.0)

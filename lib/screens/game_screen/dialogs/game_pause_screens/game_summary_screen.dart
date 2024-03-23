@@ -147,9 +147,12 @@ class _ShowWordsViewState extends State<ShowWordsView> {
 
                         child: Table(
                           columnWidths: const <int, TableColumnWidth>{
-                            0: FlexColumnWidth(1),
-                            1: FlexColumnWidth(7),
-                            2: FlexColumnWidth(2),
+                            0: FlexColumnWidth(2),
+                            1: FlexColumnWidth(6),
+                            2: FlexColumnWidth(1),
+                            3: FlexColumnWidth(1),
+                            4: FlexColumnWidth(1),
+                            5: FlexColumnWidth(4),
                           },
                           border: TableBorder(horizontalInside: BorderSide(width: 0.5, color: widget.palette.textColor2, style: BorderStyle.solid)),                          
                           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -162,34 +165,60 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       "#",
-                                      style: TextStyle(
-                                        color: widget.palette.textColor2, 
-                                        fontSize: (20 * widget.settingsState.sizeFactor),
-                                      )
+                                      style: Helpers().customTextStyle(widget.palette.textColor2, (20 * widget.settingsState.sizeFactor))
+                                      // style: TextStyle(
+                                      //   color: widget.palette.textColor2, 
+                                      //   fontSize: (20 * widget.settingsState.sizeFactor),
+                                      // )
                                     ),
                                   ),
                                 ),
                                 Align(
-                                  alignment: Alignment.center,
+                                  alignment: Alignment.centerLeft,
                                   child: Text(
                                     Helpers().translateText(gamePlayState.currentLanguage,"Word"),
-                                    
-                                    style: TextStyle(
-                                      color: widget.palette.textColor2, 
-                                      fontSize: (18 * widget.settingsState.sizeFactor)
-                                    ),
+                                    style: Helpers().customTextStyle(widget.palette.textColor2, (18 * widget.settingsState.sizeFactor))
+                                    // style: TextStyle(
+                                    //   color: widget.palette.textColor2, 
+                                    //   fontSize: (18 * widget.settingsState.sizeFactor)
+                                    // ),
                                   ),
                                 ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.bolt,
+                                    size: 22*widget.settingsState.sizeFactor,
+                                    color: widget.palette.textColor2,
+                                  )
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.library_books_outlined,
+                                    size: 22*widget.settingsState.sizeFactor,
+                                    color: widget.palette.textColor2,
+                                  )
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 22*widget.settingsState.sizeFactor,
+                                    color: widget.palette.textColor2,
+                                  )
+                                ),                                                                                                
                                 Padding(
                                   padding: EdgeInsets.only(right: 8.0 * widget.settingsState.sizeFactor),
                                   child: Align(
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       Helpers().translateText(gamePlayState.currentLanguage,"Points"),
-                                      style: TextStyle(
-                                        color: widget.palette.textColor2, 
-                                        fontSize: (18 * widget.settingsState.sizeFactor)
-                                      ),
+                                      style: Helpers().customTextStyle(widget.palette.textColor2, (18 * widget.settingsState.sizeFactor)),
+                                      // style: TextStyle(
+                                      //   color: widget.palette.textColor2, 
+                                      //   fontSize: (18 * widget.settingsState.sizeFactor)
+                                      // ),
                                       textAlign: TextAlign.right,
                                     ),
                                   ),
@@ -218,10 +247,11 @@ class _ShowWordsViewState extends State<ShowWordsView> {
                       padding: EdgeInsets.symmetric(horizontal: 10.0 * widget.settingsState.sizeFactor),
                       child: Text(
                         Helpers().translateText(gamePlayState.currentLanguage, "Hide"),
-                        style: TextStyle(
-                          fontSize: (24 * widget.settingsState.sizeFactor),
-                          color: widget.palette.textColor2,
-                        ),
+                        style: Helpers().customTextStyle(widget.palette.textColor2, (24 * widget.settingsState.sizeFactor)),
+                        // style: TextStyle(
+                        //   fontSize: (24 * widget.settingsState.sizeFactor),
+                        //   color: widget.palette.textColor2,
+                        // ),
                       ),
                     )
                   ],
@@ -301,10 +331,11 @@ class _GameSummaryViewState extends State<GameSummaryView> {
         const Expanded(child: SizedBox()),
         Text(
           Helpers().translateText(widget.gamePlayState.currentLanguage, "Summary",),
-          style: TextStyle(
-            color: widget.palette.textColor2, 
-            fontSize: (24 * widget.settingsState.sizeFactor)
-          ),
+          style: Helpers().customTextStyle(widget.palette.textColor2, (24 *widget.settingsState.sizeFactor)),
+          // style: TextStyle(
+          //   color: widget.palette.textColor2, 
+          //   fontSize: (24 * widget.settingsState.sizeFactor)
+          // ),
         ),
         Table(
           columnWidths: const <int, TableColumnWidth>{
@@ -356,11 +387,12 @@ class _GameSummaryViewState extends State<GameSummaryView> {
                 child: Text(
                   Helpers().translateText(widget.gamePlayState.currentLanguage, "View points summary"),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: (20 * widget.settingsState.sizeFactor),
-                      color: widget.palette.textColor3,
-                      fontStyle: FontStyle.italic
-                  ),
+                  style: Helpers().customTextStyle(widget.palette.textColor2, (20 *widget.settingsState.sizeFactor)),
+                  // style: TextStyle(
+                  //     fontSize: (20 * widget.settingsState.sizeFactor),
+                  //     color: widget.palette.textColor3,
+                  //     fontStyle: FontStyle.italic
+                  // ),
                 ),
                 // child: Text.rich(
                 //   TextSpan(
@@ -396,19 +428,21 @@ TableRow tableRowItem( String textBody, String data, Icon icon, ColorPalette pal
     ),
     Text(
       textBody,
-      style: TextStyle(
-        color: palette.textColor2, 
-        fontSize: ( 20 * sizeFactor)
-      ),
+      style: Helpers().customTextStyle(palette.textColor2, (20 *sizeFactor)),
+      // style: TextStyle(
+      //   color: palette.textColor2, 
+      //   fontSize: ( 20 * sizeFactor)
+      // ),
     ),
     Align(
       alignment: Alignment.centerRight,
       child: Text(
         data,
-        style: TextStyle(
-          color: palette.textColor2, 
-          fontSize: (20 * sizeFactor)
-        ),
+        style: Helpers().customTextStyle(palette.textColor2, (20 *sizeFactor)),
+        // style: TextStyle(
+        //   color: palette.textColor2, 
+        //   fontSize: (20 * sizeFactor)
+        // ),
         textAlign: TextAlign.right,
       ),
     ),

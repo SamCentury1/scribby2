@@ -679,79 +679,82 @@ class _TutorialExitPageState extends State<TutorialExitPage> {
     return DialogWidget(
       key,
       Helpers().translateText(widget.language, "Exit",),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Expanded(flex: 2, child: SizedBox(),),
-          Text(
-            Helpers().translateText(widget.language, "Would you like to leave?",),
-            style: TextStyle(
-              color: palette.textColor2,
-              fontSize: 22*settingsState.sizeFactor
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal:  8.0*settingsState.sizeFactor),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Expanded(flex: 2, child: SizedBox(),),
+            Text(
+              Helpers().translateText(widget.language, "Would you like to leave?",),
+              style: TextStyle(
+                color: palette.textColor2,
+                fontSize: 22*settingsState.sizeFactor
+              ),
             ),
-          ),
-          AnimatedBuilder(
-            animation: widget.animation,
-            builder: (context, child) {              
-              return TextButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: palette.optionButtonBgColor3,
-                  foregroundColor: palette.textColor1,
-                  shadowColor: TutorialHelpers().getGlowAnimationColor(currentStep, palette, 'exit_button', widget.animation),
-                      // const Color.fromRGBO(123, 123, 123, 0.7),
-                  elevation: 3.0*settingsState.sizeFactor,
-                  minimumSize: Size(double.infinity, 50*settingsState.sizeFactor),
-                  padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
-                  textStyle: TextStyle(
-                    fontSize: 22*settingsState.sizeFactor,
+            AnimatedBuilder(
+              animation: widget.animation,
+              builder: (context, child) {              
+                return TextButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: palette.optionButtonBgColor3,
+                    foregroundColor: palette.textColor1,
+                    shadowColor: TutorialHelpers().getGlowAnimationColor(currentStep, palette, 'exit_button', widget.animation),
+                        // const Color.fromRGBO(123, 123, 123, 0.7),
+                    elevation: 3.0*settingsState.sizeFactor,
+                    minimumSize: Size(double.infinity, 50*settingsState.sizeFactor),
+                    padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
+                    textStyle: TextStyle(
+                      fontSize: 22*settingsState.sizeFactor,
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:BorderRadius.all(Radius.circular(10.0)),
+                      
+                    ),
                   ),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius:BorderRadius.all(Radius.circular(10.0)),
-                    
-                  ),
+                  onPressed: () {}, 
+                  child: Text(
+                    Helpers().translateText(widget.language, "Exit",),
+                    style: TextStyle(
+                      color: TutorialHelpers().getGlowAnimationColor(currentStep, palette, 'exit_button', widget.animation),
+                      shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'exit_button', widget.animation)
+                    ),
+                  )
+                );
+              },
+            ),
+        
+            const Expanded(flex: 1, child: SizedBox(),),
+            Text(
+              Helpers().translateText(widget.language, "Or simply restart?",),
+              style: TextStyle(
+                color: palette.textColor2,
+                fontSize: 22*settingsState.sizeFactor
+              ),          
+            ),
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.optionButtonBgColor3,
+                foregroundColor: palette.textColor1,
+                shadowColor:
+                    const Color.fromRGBO(123, 123, 123, 0.7),
+                elevation: 3.0*settingsState.sizeFactor,
+                minimumSize:  Size(double.infinity, 50*settingsState.sizeFactor),
+                padding:  EdgeInsets.all(4.0*settingsState.sizeFactor),
+                textStyle:  TextStyle(
+                  fontSize: 22*settingsState.sizeFactor,
                 ),
-                onPressed: () {}, 
-                child: Text(
-                  Helpers().translateText(widget.language, "Exit",),
-                  style: TextStyle(
-                    color: TutorialHelpers().getGlowAnimationColor(currentStep, palette, 'exit_button', widget.animation),
-                    shadows: TutorialHelpers().getTextShadow(currentStep, palette, 'exit_button', widget.animation)
-                  ),
-                )
-              );
-            },
-          ),
-      
-          const Expanded(flex: 1, child: SizedBox(),),
-          Text(
-            Helpers().translateText(widget.language, "Or simply restart?",),
-            style: TextStyle(
-              color: palette.textColor2,
-              fontSize: 22*settingsState.sizeFactor
-            ),          
-          ),
-          TextButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: palette.optionButtonBgColor3,
-              foregroundColor: palette.textColor1,
-              shadowColor:
-                  const Color.fromRGBO(123, 123, 123, 0.7),
-              elevation: 3.0*settingsState.sizeFactor,
-              minimumSize:  Size(double.infinity, 50*settingsState.sizeFactor),
-              padding:  EdgeInsets.all(4.0*settingsState.sizeFactor),
-              textStyle:  TextStyle(
-                fontSize: 22*settingsState.sizeFactor,
-              ),
-              shape: const RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.all(Radius.circular(10.0)),
-              ),
-            ),            
-            onPressed: () {}, 
-            child: Text(Helpers().translateText(widget.language, "Restart",),)
-          ),       
-          const Expanded(flex: 3, child: SizedBox(),),
-        ],
+                shape: const RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(10.0)),
+                ),
+              ),            
+              onPressed: () {}, 
+              child: Text(Helpers().translateText(widget.language, "Restart",),)
+            ),       
+            const Expanded(flex: 3, child: SizedBox(),),
+          ],
+        ),
       ),
       null
     );

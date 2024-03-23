@@ -231,6 +231,37 @@ class AnimationState with ChangeNotifier {
   void setShouldRunTilePressedAnimation(bool value) {
     _shouldRunTilePressedAnimation = value;
     notifyListeners();
+  }
+
+
+
+  /// ==========================================
+  ///  =========== GAME OVER ======================
+  /// ==========================================
+
+  bool _shouldRunGameOverPointsCounting = false;
+  bool get shouldRunGameOverPointsCounting => _shouldRunGameOverPointsCounting;
+
+  void setShouldRunGameOverPointsCounting(bool value) {
+    _shouldRunGameOverPointsCounting = value;
+    notifyListeners();
+  }
+
+  bool _shouldRunGameOverPointsFinishedCounting = false;
+  bool get shouldRunGameOverPointsFinishedCounting => _shouldRunGameOverPointsFinishedCounting;
+
+  void setShouldRunGameOverPointsFinishedCounting(bool value) {
+    _shouldRunGameOverPointsFinishedCounting = value;
+    notifyListeners();
+  }    
+
+
+  bool _shouldRunNewHighScore = false;
+  bool get shouldRunNewHighScore => _shouldRunNewHighScore;
+
+  void setShouldRunNewHighScore(bool value) {
+    _shouldRunNewHighScore = value;
+    notifyListeners();
   }      
 
 

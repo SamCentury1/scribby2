@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
@@ -40,10 +41,11 @@ class DialogWidget extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           title,
-                          style: TextStyle(
-                            fontSize: (32*settingsState.sizeFactor),
-                            color: palette.textColor2,
-                          ),
+                          style: Helpers().customTextStyle(palette.textColor2,28*settingsState.sizeFactor),
+                          // style: TextStyle(
+                          //   fontSize: (32*settingsState.sizeFactor),
+                          //   color: palette.textColor2,
+                          // ),
                         ),
                       ),
                       Divider(

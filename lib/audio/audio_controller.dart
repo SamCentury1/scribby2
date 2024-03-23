@@ -96,7 +96,6 @@ class AudioController {
   }
 
   void playSfx(SfxType type) async {
-
     await _lock.synchronized(() {
       final muted = _settings?.muted.value ?? true;
       if (muted) {
@@ -116,8 +115,32 @@ class AudioController {
       _currentSfxPlayer = (_currentSfxPlayer + 1) % _sfxPlayers.length; // removing this prevents sounds from playing simultaneously
       debugPrint(" ====== AUDIO ======  audio/sfx/$fileName executed");
     });
+  }
 
+  late AudioPlayer _gameOverAudioPlayer = AudioPlayer();
 
+  void playLoopSfx() async {
+    await _lock.synchronized(()  {
+      final muted = _settings?.muted.value ?? true;
+      if (muted) {
+        // ignoring the playing sound
+        return;
+      }
+      final soundsOn = _settings?.soundsOn.value ?? false;
+      if (!soundsOn) {
+        // ignoring the playing sound
+        return;
+      }
+      _gameOverAudioPlayer.setReleaseMode(ReleaseMode.loop);
+      _gameOverAudioPlayer.play(AssetSource('audio/sfx/game-over-score-tally.mp3'));
+      
+    });
+  }
+
+  void stopLoopSfx() async {
+    await _lock.synchronized(()  {
+      _gameOverAudioPlayer.stop();
+    });
   }
 
   void _handleAppLifecycle() {

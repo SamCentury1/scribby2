@@ -138,6 +138,15 @@ class GamePlayState with ChangeNotifier {
     notifyListeners();
   }
 
+
+
+  List<Map<String,dynamic>> _validIds = [];
+  List<Map<String,dynamic>> get validIds => _validIds;
+  void setValidIds(List<Map<String,dynamic>> value) {
+    _validIds = value;
+    notifyListeners();
+  }  
+
   List<Map<String, dynamic>> _reserveTiles = [
     {"id": 0, "body": ""},
     {"id": 1, "body": ""},
@@ -145,9 +154,7 @@ class GamePlayState with ChangeNotifier {
     {"id": 3, "body": ""},
     {"id": 4, "body": ""},
   ];
-
   List<Map<String, dynamic>> get reserveTiles => _reserveTiles;
-
   void setReserveTiles(List<Map<String, dynamic>> value) {
     _reserveTiles = value;
     notifyListeners();
@@ -160,6 +167,14 @@ class GamePlayState with ChangeNotifier {
     _draggedReserveTile = value;
     notifyListeners();
   }
+
+  late Map<String, dynamic> _reserveTileTapped = {};
+  Map<String, dynamic> get reserveTileTapped => _reserveTileTapped;
+
+  void setReserveTileTapped(Map<String, dynamic> value) {
+    _reserveTileTapped = value;
+    notifyListeners();
+  }  
 
   int _currentLevel = 1;
   int get currentLevel => _currentLevel;
@@ -365,13 +380,21 @@ class GamePlayState with ChangeNotifier {
   // Duration get cdDuration => _cdDuration;
   // Timer get cdTimer => _cdTimer!;
 
-  int? _isTileTapped;
-  int? get isTileTapped => _isTileTapped;
+  // late int _isTileTapped = -1;
+  // int get isTileTapped => _isTileTapped;
 
-  void setIsTiletapped(int? value) {
-    _isTileTapped = value;
+  // void setIsTileTapped(int value) {
+  //   _isTileTapped = value;
+  //   notifyListeners();
+  // }
+
+  int _selectedTileIndex = -1;
+  int get selectedTileIndex => _selectedTileIndex;
+
+  void setSelectedTileIndex(int value) {
+    _selectedTileIndex = value;
     notifyListeners();
-  }
+  }    
 
 
 

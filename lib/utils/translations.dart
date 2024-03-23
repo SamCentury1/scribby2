@@ -1070,6 +1070,20 @@ final List<Map<String,dynamic>> translations = [
     }    
   },
 
+  {
+    "key": "Not sure how to play?",
+    "data": {
+      "english": "Not sure how to play?",
+      "french": "Vous ne savez pas comment jouer ?",
+      "spanish": "¿No estás segure de cómo jugar?",
+      "german" : "Nicht sicher, wie man spielt?",
+      "italian" : "Non sai come giocare?",
+      "portuguese" : "Não sabe como jogar?",
+      "greek" : "Δεν είστε σίγουροι πώς να παίξετε;",
+      "dutch" : "Weet je niet zeker hoe je moet spelen?",
+    }    
+  },
+
 
   {
     "key": "Game Summary",
@@ -1274,6 +1288,48 @@ final List<Map<String,dynamic>> translations = [
       "dutch" : "Hulp",
     }    
   },
+
+  {
+    "key": "No definition available at this time",
+    "data": {
+      "english": "No definition available at this time",
+      "french": "Aucune définition disponible pour le moment",
+      "spanish": "No hay ninguna definición disponible en este momento",
+      "german" : "Derzeit ist keine Definition verfügbar",
+      "italian" : "Nessuna definizione disponibile al momento",
+      "portuguese" : "Nenhuma definição disponível neste momento",
+      "greek" : "Δεν υπάρχει διαθέσιμος ορισμός αυτήν τη στιγμή",
+      "dutch" : "Er is momenteel geen definitie beschikbaar",
+    }    
+  },  
+
+  {
+    "key": "loading...",
+    "data": {
+      "english": "loading...",
+      "french": "chargement...",
+      "spanish": "cargando...",
+      "german" : "Wird geladen...",
+      "italian" : "caricamento...",
+      "portuguese" : "carregando...",
+      "greek" : "φόρτωση...",
+      "dutch" : "bezig met laden...",
+    }    
+  },
+
+  {
+    "key": "Error fetching definition",
+    "data": {
+      "english": "Error fetching definition",
+      "french": "Erreur lors de la récupération de la définition",
+      "spanish": "Error al obtener la definición",
+      "german" : "Fehler beim Abrufen der Definition",
+      "italian" : "Errore durante il recupero della definizione",
+      "portuguese" : "Erro ao buscar definição",
+      "greek" : "Σφάλμα κατά την ανάκτηση του ορισμού",
+      "dutch" : "Fout bij ophalen van definitie",
+    }    
+  },  
 
 
    {
@@ -1868,6 +1924,36 @@ final List<Map<String,dynamic>> translations = [
       "dutch" : "Welkom bij Scribby! Wil je de tutorial doorlopen?",
     }    
   },
+
+
+  {
+    "key": "Welcome to Scribby! This interactive tutorial will demonstrate how this game works and how to do well!",
+    "data": {
+      "english": "Welcome to Scribby! This interactive tutorial will demonstrate how this game works and how to do well!",
+      "french": "Bienvenue sur Scribby ! Ce didacticiel interactif vous montrera comment fonctionne ce jeu et comment réussir !",
+      "spanish": "¡Bienvenidos a Scribby! ¡Este tutorial interactivo demostrará cómo funciona este juego y cómo hacerlo bien!",
+      "german" : "Willkommen bei Scribby! Dieses interaktive Tutorial zeigt, wie dieses Spiel funktioniert und wie man es gut macht!",
+      "italian" : "Benvenuto su Scribby! Questo tutorial interattivo dimostrerà come funziona questo gioco e come farlo bene!",
+      "portuguese" : "Bem-vindo ao Scribby! Este tutorial interativo demonstrará como este jogo funciona e como se sair bem!",
+      "greek" : "Καλώς ήρθατε στο Scribby! Αυτό το διαδραστικό σεμινάριο θα δείξει πώς λειτουργεί αυτό το παιχνίδι και πώς να τα πηγαίνετε καλά!",
+      "dutch" : "Welkom bij Scribby! Deze interactieve tutorial laat zien hoe dit spel werkt en hoe je het goed kunt doen!",
+    }    
+  },  
+
+  {
+    "key": "Tap anywhere on the screen to start",
+    "data": {
+      "english": "Tap anywhere on the screen to start",
+      "french": "Appuyez n'importe où sur l'écran pour commencer",
+      "spanish": "Toque en cualquier lugar de la pantalla para comenzar",
+      "german" : "Tippen Sie zum Starten auf eine beliebige Stelle auf dem Bildschirm",
+      "italian" : "Tocca un punto qualsiasi dello schermo per iniziare",
+      "portuguese" : "Toque em qualquer lugar da tela para começar",
+      "greek" : "Πατήστε οπουδήποτε στην οθόνη για να ξεκινήσετε",
+      "dutch" : "Tik ergens op het scherm om te starten",
+    }    
+  },
+
 
   {
     "key": "Proceed",

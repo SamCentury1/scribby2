@@ -256,6 +256,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -311,6 +312,7 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                   child: GestureDetector(
                     onTap: () {
                       // tutorialState.setIsStep1Complete(true);
+                      tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
                     },
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
@@ -320,87 +322,111 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                     ),
                   ),
                 ),
-                Container(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Expanded(flex: 3, child: SizedBox()),
-                      Padding(
-                        padding: EdgeInsets.all(16.0*settingsState.sizeFactor),
-                        child: DefaultTextStyle(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: palette.focusedTutorialTile,
-                            fontSize: 28*settingsState.sizeFactor
-                          ), 
-                          child: Text(
-                            Helpers().translateText(gamePlayState.currentLanguage, "Welcome to Scribby! Would you like to go through the tutorial?"),
-                            
-                          )
-                        ),
-                      ),
-                      Expanded(flex: 1, child: SizedBox()),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-
-                          ElevatedButton(
-                            onPressed: () {
-                              tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: palette.optionButtonBgColor , 
-                              foregroundColor: palette.optionButtonTextColor,
-                              shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
-                              shape:  RoundedRectangleBorder(
-                                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                side: BorderSide(
-                                  // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
-                                  color: palette.optionButtonBgColor,
-                                  width: 1,
-                                  style: BorderStyle.solid
-                                ), 
-                              ),                            
-                            ),
+                GestureDetector(
+                  onTap: () {
+                    tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Expanded(flex: 3, child: SizedBox()),
+                        Padding(
+                          padding: EdgeInsets.all(16.0*settingsState.sizeFactor),
+                          child: DefaultTextStyle(
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: palette.focusedTutorialTile,
+                              fontSize: 28*settingsState.sizeFactor
+                            ), 
                             child: Text(
-                              Helpers().translateText(gamePlayState.currentLanguage, "Proceed")
-                            ),
+                              Helpers().translateText(
+                                gamePlayState.currentLanguage, 
+                                "Welcome to Scribby! This interactive tutorial will demonstrate how this game works and how to do well!"
+                              ),
+                            )
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              FirestoreMethods().updateParameters(AuthService().currentUser!.uid,'hasSeenTutorial',true);
-
-                              Helpers().getStates(gamePlayState, settings);
-
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const GameScreen()
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: palette.optionButtonBgColor , 
-                              foregroundColor: palette.optionButtonTextColor,
-                              shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
-                              shape:  RoundedRectangleBorder(
-                                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                side: BorderSide(
-                                  // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
-                                  color: palette.optionButtonBgColor,
-                                  width: 1,
-                                  style: BorderStyle.solid
-                                ), 
-                              ),                            
-                            ),
+                        ),
+                        Expanded(flex: 1, child: SizedBox()),
+                        Padding(
+                          padding: EdgeInsets.all(16.0*settingsState.sizeFactor),
+                          child: DefaultTextStyle(
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: palette.focusedTutorialTile,
+                              fontSize: 25*settingsState.sizeFactor,
+                              fontStyle: FontStyle.italic
+                            ), 
                             child: Text(
-                              Helpers().translateText(gamePlayState.currentLanguage, "Skip Tutorial")
-                            ),
-                          ),                          
-                        ],
-                      ),
-                      Expanded(flex: 3, child: SizedBox()),
-
-                    ],
+                              Helpers().translateText(
+                                gamePlayState.currentLanguage, 
+                                "Tap anywhere on the screen to start"
+                              ),
+                            )
+                          ),
+                        ),                      
+                        // Column(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //   children: [
+                  
+                        //     ElevatedButton(
+                        //       onPressed: () {
+                        //         tutorialState.setSequenceStep(tutorialState.sequenceStep+1);
+                        //       },
+                        //       style: ElevatedButton.styleFrom(
+                        //         backgroundColor: palette.optionButtonBgColor , 
+                        //         foregroundColor: palette.optionButtonTextColor,
+                        //         shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
+                        //         shape:  RoundedRectangleBorder(
+                        //           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                        //           side: BorderSide(
+                        //             // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
+                        //             color: palette.optionButtonBgColor,
+                        //             width: 1,
+                        //             style: BorderStyle.solid
+                        //           ), 
+                        //         ),                            
+                        //       ),
+                        //       child: Text(
+                        //         Helpers().translateText(gamePlayState.currentLanguage, "Proceed")
+                        //       ),
+                        //     ),
+                        //     ElevatedButton(
+                        //       onPressed: () {
+                        //         FirestoreMethods().updateParameters(AuthService().currentUser!.uid,'hasSeenTutorial',true);
+                  
+                        //         Helpers().getStates(gamePlayState, settings);
+                  
+                        //         Navigator.of(context).pushReplacement(
+                        //           MaterialPageRoute(
+                        //               builder: (context) => const GameScreen()
+                        //           ),
+                        //         );
+                        //       },
+                        //       style: ElevatedButton.styleFrom(
+                        //         backgroundColor: palette.optionButtonBgColor , 
+                        //         foregroundColor: palette.optionButtonTextColor,
+                        //         shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
+                        //         shape:  RoundedRectangleBorder(
+                        //           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                        //           side: BorderSide(
+                        //             // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
+                        //             color: palette.optionButtonBgColor,
+                        //             width: 1,
+                        //             style: BorderStyle.solid
+                        //           ), 
+                        //         ),                            
+                        //       ),
+                        //       child: Text(
+                        //         Helpers().translateText(gamePlayState.currentLanguage, "Skip Tutorial")
+                        //       ),
+                        //     ),                          
+                        //   ],
+                        // ),
+                        Expanded(flex: 3, child: SizedBox()),
+                  
+                      ],
+                    ),
                   ),
                 )
 

@@ -198,6 +198,7 @@ class ColorPalette with ChangeNotifier {
   // dark color palette
   Color get dark_screenBackgroundColor => const Color.fromARGB(255, 15, 8, 54);
   Color get dark_optionButtonBgColor => const Color.fromARGB(255, 66, 66, 66);
+  Color get dark_optionButtonBgColor2 => const Color.fromARGB(255, 43, 43, 43);
   Color get dark_textColor1 => const Color.fromARGB(255, 247, 247, 247);
   Color get dark_textColor2 => const Color.fromARGB(255, 211, 211, 211);
   Color get dark_appBarColor => const Color.fromARGB(255, 39, 39, 39);
@@ -208,6 +209,7 @@ class ColorPalette with ChangeNotifier {
 // light color theme
   Color get light_screenBackgroundColor => const Color.fromRGBO(236, 242, 255,1);
   Color get light_optionButtonBgColor => const Color.fromRGBO(255, 255, 255, 1);
+  Color get light_optionButtonBgColor2 => Color.fromARGB(255, 182, 198, 233);
   Color get light_textColor1 => const Color.fromARGB(255, 32, 32, 32);
   Color get light_textColor2 => const Color.fromARGB(255, 71, 71, 71);
   Color get light_appBarColor => const Color.fromRGBO(181, 199, 255, 1);

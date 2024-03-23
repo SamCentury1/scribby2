@@ -4,6 +4,7 @@ import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/styles/buttons.dart';
 
 class NewPointsAnimation extends StatefulWidget {
   const NewPointsAnimation({
@@ -17,16 +18,18 @@ class NewPointsAnimation extends StatefulWidget {
 class _NewPointsAnimationState extends State<NewPointsAnimation>
     with TickerProviderStateMixin {
   late AnimationState _animationState;
-  late AnimationController _newPointsTextController;
+  late AnimationController _newPointsAnimationController;
+
+  // late AnimationController _newPointsTextController;
   late Animation<Color?> _newPointsTextAnimation;
 
-  late AnimationController _newPointsPositionController;
+  // late AnimationController _newPointsPositionController;
   late Animation<Offset> _newPointsPositionAnimation;
 
-  late AnimationController _newPointsShadowController;
+  // late AnimationController _newPointsShadowController;
   late Animation<Color?> _newPointsShadowAnimation;
 
-  late AnimationController _newPointsFontSizeController;
+  // late AnimationController _newPointsFontSizeController;
   late Animation<double> _newPointsFontSizeAnimation;
 
   late bool isAnimate = false;
@@ -37,10 +40,11 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
     initializeAnimations();
 
     _animationState = Provider.of<AnimationState>(context, listen: false);
-    _newPointsTextController.addListener(_animationListener);
-    _newPointsPositionController.addListener(_animationListener);
-    _newPointsShadowController.addListener(_animationListener);
-    _newPointsFontSizeController.addListener(_animationListener);
+    _newPointsAnimationController.addListener(_animationListener);
+    // _newPointsTextController.addListener(_animationListener);
+    // _newPointsPositionController.addListener(_animationListener);
+    // _newPointsShadowController.addListener(_animationListener);
+    // _newPointsFontSizeController.addListener(_animationListener);
     _animationState.addListener(_handleAnimationStateChange);
   }
 
@@ -79,174 +83,109 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
   }
 
   void _animationListener() {
-    if (_newPointsTextController.status == AnimationStatus.completed) {
-      _newPointsTextController.reset();
+    if (_newPointsAnimationController.status == AnimationStatus.completed) {
+      _newPointsAnimationController.reset();
     }
-    if (_newPointsPositionController.status == AnimationStatus.completed) {
-      _newPointsPositionController.reset();
-    }
-    if (_newPointsShadowController.status == AnimationStatus.completed) {
-      _newPointsShadowController.reset();
-    }
-    if (_newPointsFontSizeController.status == AnimationStatus.completed) {
-      _newPointsFontSizeController.reset();
-    }
+    // if (_newPointsTextController.status == AnimationStatus.completed) {
+    //   _newPointsTextController.reset();
+    // }
+    // if (_newPointsPositionController.status == AnimationStatus.completed) {
+    //   _newPointsPositionController.reset();
+    // }
+    // if (_newPointsShadowController.status == AnimationStatus.completed) {
+    //   _newPointsShadowController.reset();
+    // }
+    // if (_newPointsFontSizeController.status == AnimationStatus.completed) {
+    //   _newPointsFontSizeController.reset();
+    // }
   }
 
   void _runAnimations() {
-    _newPointsTextController.reset();
-    _newPointsPositionController.reset();
-    _newPointsShadowController.reset();
-    _newPointsFontSizeController.reset();
+    _newPointsAnimationController.reset();
+    _newPointsAnimationController.forward();
+    // _newPointsTextController.reset();
+    // _newPointsPositionController.reset();
+    // _newPointsShadowController.reset();
+    // _newPointsFontSizeController.reset();
 
-    _newPointsTextController.forward();
-    _newPointsPositionController.forward();
-    _newPointsShadowController.forward();
-    _newPointsFontSizeController.forward();
+    // _newPointsTextController.forward();
+    // _newPointsPositionController.forward();
+    // _newPointsShadowController.forward();
+    // _newPointsFontSizeController.forward();
   }
 
   void initializeAnimations() {
-    _newPointsTextController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1500));
+    late GamePlayState gamePlayState = context.read<GamePlayState>();
+    // _newPointsTextController = AnimationController(
+    //   vsync: this, duration: const Duration(milliseconds: 1500)
+    // );
+    _newPointsAnimationController = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1500)
+    );
+
+    Color color_0 = Colors.transparent;
+    Color color_1 = const Color.fromRGBO(255, 4, 4, 1);
+    Color color_2 = const Color.fromRGBO(255, 212, 18, 1);
+    Color color_4 = Colors.black;
 
     final List<TweenSequenceItem<Color?>> newPointsTextSequence = [
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(0, 0, 0, 0),
-            end: const Color.fromRGBO(255, 4, 4, 1),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(228, 0, 0, 1),
-            end: const Color.fromRGBO(255, 212, 18, 1),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(255, 232, 28, 1),
-            end: const Color(0xFFFF1212),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(228, 0, 0, 1),
-            end: const Color.fromRGBO(255, 212, 18, 1),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(228, 0, 0, 1),
-            end: const Color.fromRGBO(255, 212, 18, 1),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(255, 232, 28, 1),
-            end: const Color(0xFFFF1212),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(228, 0, 0, 1),
-            end: const Color.fromRGBO(255, 212, 18, 1),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(255, 232, 28, 1),
-            end: const Color(0xFFFF1212),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(228, 0, 0, 1),
-            end: const Color.fromRGBO(255, 212, 18, 1),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(255, 224, 47, 1),
-            end: const Color.fromRGBO(0, 0, 0, 0),
-          ),
-          weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_0,end: color_1,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_1,end: color_2,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_2,end: color_1,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_1,end: color_2,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_1,end: color_2,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_2,end: color_1,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_1,end: color_2,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_2,end: color_1,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_1,end: color_2,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_2,end: color_0,),weight: 0.1),
     ];
 
     _newPointsTextAnimation = TweenSequence<Color?>(newPointsTextSequence)
-        .animate(_newPointsTextController);
+        .animate(_newPointsAnimationController);
 
-    _newPointsPositionController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
+    // _newPointsPositionController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 1500),
+    // );
 
     final List<TweenSequenceItem<Offset>> newPointsPositionSequence = [
       TweenSequenceItem<Offset>(
           tween: Tween(begin: Offset.zero, end: const Offset(0.0, -1.0)),
           weight: 1.0),
-      // TweenSequenceItem<Offset>(tween: Tween(begin: Offset.zero, end: Offset.zero), weight: 0.7),
-      // TweenSequenceItem<Offset>(tween: Tween(begin: Offset.zero, end: Offset(0.0, -1.0)), weight: 0.1),
     ];
 
     _newPointsPositionAnimation =
         TweenSequence<Offset>(newPointsPositionSequence)
-            .animate(_newPointsPositionController);
+            .animate(_newPointsAnimationController);
 
-    _newPointsShadowController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1500));
+    // _newPointsShadowController = AnimationController(
+    //     vsync: this, duration: const Duration(milliseconds: 1500));
 
     final List<TweenSequenceItem<Color?>> newPointsShadowSequence = [
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(0, 0, 0, 0),
-            end: const Color.fromRGBO(0, 0, 0, 1),
-          ),
-          weight: 0.1),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(0, 0, 0, 1),
-            end: const Color.fromRGBO(0, 0, 0, 1),
-          ),
-          weight: 0.8),
-      TweenSequenceItem<Color?>(
-          tween: ColorTween(
-            begin: const Color.fromRGBO(0, 0, 0, 1),
-            end: const Color.fromRGBO(0, 0, 0, 0),
-          ),
-          weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_0,end: color_4,),weight: 0.1),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_4,end: color_4,),weight: 0.8),
+      TweenSequenceItem<Color?>(tween: ColorTween(begin: color_4,end: color_0,),weight: 0.1),
     ];
 
     _newPointsShadowAnimation = TweenSequence<Color?>(newPointsShadowSequence)
-        .animate(_newPointsShadowController);
+        .animate(_newPointsAnimationController);
 
     /// ============= FONT SIZE =====================
-    _newPointsFontSizeController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1500));
+    // _newPointsFontSizeController = AnimationController(
+    //     vsync: this, duration: const Duration(milliseconds: 1500));
 
     final List<TweenSequenceItem<double>> newPointsFontSizeSequence = [
-      TweenSequenceItem<double>(
-          tween: Tween(
-            begin: 0.0,
-            end: 1.0,
-          ),
-          weight: 0.01),
-      TweenSequenceItem<double>(
-          tween: Tween(
-            begin: 1.0,
-            end: 1.0,
-          ),
-          weight: 0.98),
-      TweenSequenceItem<double>(
-          tween: Tween(
-            begin: 1.0,
-            end: 0.0,
-          ),
-          weight: 0.01),
+      TweenSequenceItem<double>(tween: Tween(begin: 0.0,end: 1.0,),weight: 0.01),
+      TweenSequenceItem<double>(tween: Tween(begin: 1.0,end: 1.0,),weight: 0.98),
+      TweenSequenceItem<double>(tween: Tween(begin: 1.0,end: 0.0,),weight: 0.01),
     ];
 
-    _newPointsFontSizeAnimation =
-        TweenSequence<double>(newPointsFontSizeSequence)
-            .animate(_newPointsFontSizeController);
+    _newPointsFontSizeAnimation =TweenSequence<double>(newPointsFontSizeSequence).animate(_newPointsAnimationController);
+
+
+
+
   }
 
   String getNewPointsValue(state) {
@@ -263,10 +202,11 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
   @override
   void dispose() {
     _animationState.removeListener(_handleAnimationStateChange);
-    _newPointsTextController.dispose();
-    _newPointsPositionController.dispose();
-    _newPointsShadowController.dispose();
-    _newPointsFontSizeController.dispose();
+    _newPointsAnimationController.dispose();
+    // _newPointsTextController.dispose();
+    // _newPointsPositionController.dispose();
+    // _newPointsShadowController.dispose();
+    // _newPointsFontSizeController.dispose();
     super.dispose();
   }
 
@@ -280,7 +220,12 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
             top: getTileLocation(gamePlayState.pressedTile, sideLength )['y'],
             left: getTileLocation(gamePlayState.pressedTile, sideLength )['x'],
             child: AnimatedBuilder(
-              animation: _newPointsPositionAnimation,
+              animation: Listenable.merge([
+                _newPointsTextAnimation,
+                _newPointsPositionAnimation,
+                _newPointsShadowAnimation,
+                _newPointsFontSizeAnimation
+              ]),
               builder: (context, child) {
                 return SlideTransition(
                   position: _newPointsPositionAnimation,
@@ -288,7 +233,7 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
                     // "+${(widget.currentScore - widget.previousScore).toString()}",
                     getNewPointsValue(gamePlayState),
                     style: TextStyle(
-                        fontSize: (38 * settingsState.sizeFactor) * _newPointsFontSizeAnimation.value,
+                        fontSize: getTextSize(_newPointsFontSizeAnimation,settingsState.sizeFactor,gamePlayState), //(38 * settingsState.sizeFactor) * _newPointsFontSizeAnimation.value,
                         // fontSize:38,
                         color: _newPointsTextAnimation.value ?? Colors.black,
                         shadows: <Shadow>[
@@ -305,4 +250,12 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
       },
     );
   }
+}
+
+double getTextSize(Animation animation, double sizeFactor, GamePlayState gamePlayState) {
+  double res = (38 *sizeFactor) * animation.value;
+  if (gamePlayState.validIds.isEmpty) {
+    res = 0;
+  }
+  return res;
 }

@@ -118,6 +118,14 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
     return step;
   }
 
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationState.removeListener(_handleAnimationStateChange);
+    super.dispose();
+  }
+
     
   @override
   Widget build(BuildContext context) {
@@ -208,7 +216,7 @@ Widget cardContainer(TutorialState tutorialState, AnimationState animationState,
           child: Container(
             decoration: getBoxDecoration(currentStep),
             child:Padding(
-              padding: EdgeInsets.all(10.0*sizeFactor),
+              padding: EdgeInsets.all(8.0*sizeFactor),
               child: Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -219,7 +227,7 @@ Widget cardContainer(TutorialState tutorialState, AnimationState animationState,
                         fontSize: (20*sizeFactor),
                       ),
                       child: Text(
-                        currentStep['text']
+                        currentStep['translated_text']
                       )
                     ),
                   ),
@@ -234,6 +242,11 @@ Widget cardContainer(TutorialState tutorialState, AnimationState animationState,
 }
 
 BoxDecoration getBoxDecoration(Map<String,dynamic> stepDetails) {
+  if (stepDetails['isGameEnded']) {
+    return BoxDecoration(
+      color: const Color.fromARGB(255, 85, 85, 85).withOpacity(0),
+    );     
+  }
   if (stepDetails['left']) {
     return BoxDecoration(
       color: const Color.fromARGB(255, 85, 85, 85).withOpacity(0.5),

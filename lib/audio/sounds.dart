@@ -26,7 +26,11 @@ List<String> soundTypeToFileName(SfxType type) {
     case SfxType.superPoints:
       return const [
         'super-points.mp3'
-      ];        
+      ];  
+    case SfxType.gameOverScoreCount:
+      return const [
+        'game-over-score-count.mp3'
+      ];              
     // case SfxType.placeTile:
     //   return const [
     //     'place-tile.mp3'
@@ -35,7 +39,12 @@ List<String> soundTypeToFileName(SfxType type) {
     case SfxType.placeReserve:
       return const [
         'place-reserve.mp3'
-      ];                              
+      ];
+
+    case SfxType.tada1:
+      return const [
+        'tada1.mp3'
+      ];                                    
     // case SfxType.wordFoundStreak:
     //   return const [];
     case SfxType.optionSelected:
@@ -56,6 +65,8 @@ enum SfxType {
   placeReserve,
   optionSelected,
   superPoints,
+  tada1,
+  gameOverScoreCount
   // wordFoundStreak,
   // optionSelected,
 }

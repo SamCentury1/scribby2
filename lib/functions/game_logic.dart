@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/components/level_change_overlay.dart';
 // import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
@@ -18,6 +19,7 @@ import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/game_over_screen.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 // import 'package:scribby_flutter_v2/utils/definitions.dart';
 // import 'package:scribby_flutter_v2/utils/defs.dart';
 // import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -84,24 +86,27 @@ class GameLogic {
 
     for (Map<String, dynamic> tileObject in boardState) {
       if (tileObject["tileId"] == tileId) {
-        final Map<String, dynamic> newTileObject = {
-          "tileId": tileId,
-          "row": tileObject["row"],
-          "column": tileObject["column"],
-          "letter": newLetter,
-          "active": tileObject["active"],
-          "alive": tileObject["alive"]
-        };
-        newBoardState.add(newTileObject);
-      } else {
-        newBoardState.add(tileObject);
+        tileObject.update("letter", (value) => newLetter);
       }
+      //   final Map<String, dynamic> newTileObject = {
+      //     "tileId": tileId,
+      //     "row": tileObject["row"],
+      //     "column": tileObject["column"],
+      //     "letter": newLetter,
+      //     "active": tileObject["active"],
+      //     "alive": tileObject["alive"]
+      //   };
+      //   newBoardState.add(newTileObject);
+      // } else {
+      //   newBoardState.add(tileObject);
+      // }
+      newBoardState.add(tileObject);
     }
     return newBoardState;
   }
 
   // GENERATES A NEW RANDOM LETTER AND ADDS IT TO THE LIST OF RANDOM LETTERS AND UPDATES THE RANDOM LETTER STATE
-  void updateRandomLetters(List<Map<String, dynamic>> randomLetterState) {}
+  // void updateRandomLetters(List<Map<String, dynamic>> randomLetterState) {}
 
   // THIS TAKES IN THE ALPHABET AND THE CURRENT LIST OF PREVIOUSLY GENERATED RANDOM LETTERS
   // IT CHECKS WHETHER THE PREVIOUSLY GENERATE LETTER LIST IS SHORTER THAN 2 (START OF GAME)
@@ -138,23 +143,24 @@ class GameLogic {
     List<Map<String, dynamic>> newRandomLetterState = [];
     for (Map<String, dynamic> randomLetterObject in alphabet) {
       if (randomLetterObject["letter"] == randomLetter) {
-        late Map<String, dynamic> newAlphabetObject = {
-          "letter": randomLetterObject["letter"],
-          "type": randomLetterObject["type"],
-          "points": randomLetterObject["points"],
-          "count": randomLetterObject["count"] - 1,
-          "inPlay": randomLetterObject["inPlay"] + 1,
-        };
-        newRandomLetterState.add(newAlphabetObject);
-      } else {
-        newRandomLetterState.add(randomLetterObject);
+        randomLetterObject.update("count", (value) => randomLetterObject["count"] - 1);
+        randomLetterObject.update("inPlay", (value) => randomLetterObject["inPlay"] + 1);
       }
+      //   late Map<String, dynamic> newAlphabetObject = {
+      //     "letter": randomLetterObject["letter"],
+      //     "type": randomLetterObject["type"],
+      //     "points": randomLetterObject["points"],
+      //     "count": randomLetterObject["count"] - 1,
+      //     "inPlay": randomLetterObject["inPlay"] + 1,
+      //   };
+      //   newRandomLetterState.add(newAlphabetObject);
+      // } else {
+      //   newRandomLetterState.add(randomLetterObject);
+      // }
+      newRandomLetterState.add(randomLetterObject);
     }
 
-    final List<String> newRandomLettersList = [
-      ...randomLettersList,
-      randomLetter
-    ];
+    final List<String> newRandomLettersList = [...randomLettersList,randomLetter];
 
     final Map<String, dynamic> randomLetterData = {
       "randomList": newRandomLettersList,
@@ -204,6 +210,51 @@ class GameLogic {
     return res;
   }
 
+
+  // void validateString(GamePlayState gamePlayState) {
+  //   List<Map<String,dynamic>> validWords = [];
+  //   List<Map<String,dynamic>> ids = [];
+  //   for(List<int> combination in combinations) {
+  //     List<String> letters = [];
+  //     for (int index in combination) {
+  //       Map<String,dynamic> tileObject = Helpers().getTileObject(gamePlayState, index);
+  //       if (tileObject["body"] != "") {
+  //         letters.add(tileObject["body"]) ;
+  //       } else {
+  //         letters.add("-");
+  //       }
+  //     }
+  //     String string = letters.join("");
+
+      
+
+  //     if (dictionary.contains(string)) {
+  //       for (int item in combination) {
+  //         if (!ids.contains(item)) {
+  //           Map<String,dynamic> tileObject = Helpers().getTileObject(gamePlayState, item);
+  //           ids.add({"id" : item, "body" : tileObject["body"]});
+  //         }
+  //       }
+  //       validWords.add({"word" : string, "ids" : combination}); 
+  //     }
+  //   }
+  //   gamePlayState.setValidIds(ids);
+  //   gamePlayState.setValidStrings(validWords);
+    
+  // }  
+
+  List<Map<String,dynamic>> getUniqueValidIdsMaps(List<Map<String,dynamic>> items) {
+    List<int> indexes = [];
+    List<Map<String,dynamic>> filteredItems = [];
+    for (Map<String,dynamic> item in items) {
+      if (!indexes.contains(item["index"])) {
+        filteredItems.add(item);
+        indexes.add(item['index']);
+      }
+    }
+    return filteredItems;
+  }
+
   List<Map<String, dynamic>> getTurnSummaryData(
     List<Map<String, dynamic>> boardState,
     List<Map<String, dynamic>> randomLetterState,
@@ -217,34 +268,32 @@ class GameLogic {
 
     // print(dictionary[0]);
 
-    for (Map<String, dynamic> stringCombo in stringCombinations) {
+    for (List<int> comboIds in combinations) {
 
       List<Map<String, dynamic>> contents = [];
       List<String> letters = [];
-      final List<String> string = stringCombo["arr"];
+      // final List<String> string = stringCombo["arr"];
 
-      for (String tileId in string) {
-        Map<String, dynamic> correspondingTile = boardState.firstWhere((element) => element["tileId"] == tileId);
+      for (int comboId in comboIds) {
+        Map<String, dynamic> correspondingTile = boardState.firstWhere((element) => element["index"] == comboId);
         String correspondingTileContents = correspondingTile["letter"];
         if (correspondingTileContents == "") {
-          contents.add({"tileId": tileId, "content": "-"});
+          contents.add({"index": comboId, "tileId": correspondingTile["tileId"], "content": "-"});
           letters.add("-");
         } else {
-          contents
-              .add({"tileId": tileId, "content": correspondingTileContents});
+          contents.add({"index": comboId, "tileId": correspondingTile["tileId"], "content": correspondingTileContents});
           letters.add(correspondingTileContents);
         }
       }
 
       String totalString = letters.join();
-      if (!totalString.contains("-")) {
-        validStringObjects
-            .add({"string": letters.join(), "contents": contents});
+      if (!totalString.contains("-")) {validStringObjects.add({"string": letters.join(), "contents": contents});
       }
     }
 
     List<String> wordsList = [];
     List<String> uniqueIds = [];
+    List<Map<String,dynamic>> validIds = [];
     List<Map<String, dynamic>> validWordsList = [];
     num totalPoints = 0;
 
@@ -256,6 +305,7 @@ class GameLogic {
     for (Map<String, dynamic> stringObject in validStringObjects) {
       // print(stringObject["string"]);
       if (dictionary.contains(stringObject["string"])) {
+
         wordsList.add(stringObject["string"]);
 
         List<Map<String, dynamic>> stringContents = stringObject["contents"];
@@ -263,6 +313,7 @@ class GameLogic {
         int wordLength = stringContents.length;
 
         for (Map<String, dynamic> stringContent in stringContents) {
+          validIds.add(stringContent);
           String contentLetter = stringContent["content"];
           Map<String, dynamic> correspondingAlphabetObject = randomLetterState.firstWhere((element) => element["letter"] == contentLetter);
           wordPoints = wordPoints + correspondingAlphabetObject["points"];
@@ -306,6 +357,7 @@ class GameLogic {
     List<Map<String, dynamic>> newTurnSummaryState = summaryState;
     Map<String, dynamic> pointSummary = {};
 
+
     pointSummary = {
       "turn": turn,
       "points": finalTurnPoints,
@@ -314,6 +366,7 @@ class GameLogic {
       "crossword": finalTurnPoints == 0 ? 0 : crossWordMultiplier,
       "streak": finalTurnPoints == 0 ? activeStreak : (activeStreak + 1),
       "count": wordsList.length,
+      "validIds": getUniqueValidIdsMaps(validIds),
     };
 
     newTurnSummaryState.add(pointSummary);
@@ -386,50 +439,62 @@ class GameLogic {
       List<Map<String, dynamic>> turnSummaryData) {
     List<Map<String, dynamic>> updatedState = [];
 
-    Map<String, dynamic> latestPoints =
-        turnSummaryData[turnSummaryData.length - 1];
+    Map<String, dynamic> latestPoints = turnSummaryData[turnSummaryData.length - 1];
     List<String> targetIds = latestPoints["ids"];
 
     for (Map<String, dynamic> tileObject in boardState) {
       if (targetIds.contains(tileObject["tileId"])) {
-        updatedState.add({
-          "tileId": tileObject["tileId"],
-          "row": tileObject["row"],
-          "column": tileObject["column"],
-          "letter": tileObject["letter"],
-          // "letter" : "X",
-          "active": true,
-          "alive": tileObject["alive"],
-        });
-      } else {
-        updatedState.add(tileObject);
+        tileObject.update("active", (value) => true);
       }
+      //   updatedState.add({
+      //     "tileId": tileObject["tileId"],
+      //     "row": tileObject["row"],
+      //     "column": tileObject["column"],
+      //     "letter": tileObject["letter"],
+      //     // "letter" : "X",
+      //     "active": true,
+      //     "alive": tileObject["alive"],
+      //   });
+      // } else {
+      //   updatedState.add(tileObject);
+      // }
+      updatedState.add(tileObject);
     }
     return updatedState;
   }
 
-  List<Map<String, dynamic>> replaceTilesInFoundWords(
-      List<Map<String, dynamic>> letterBoardState,
-      List<Map<String, dynamic>> turnSummaryData) {
+  void setVisualTileStateForFoundWordAnimation(GamePlayState gamePlayState, List<Map<String, dynamic>> boardState, List<Map<String, dynamic>> turnSummaryData,) {
+    Map<String, dynamic> latestTurn = turnSummaryData[turnSummaryData.length - 1];
+    List<Map<String,dynamic>> targetIds = latestTurn["validIds"];
+
+
+
+    gamePlayState.setValidIds(targetIds);
+  }
+
+  List<Map<String, dynamic>> replaceTilesInFoundWords(List<Map<String, dynamic>> letterBoardState, List<Map<String, dynamic>> turnSummaryData) {
     List<Map<String, dynamic>> updatedState = [];
 
-    Map<String, dynamic> latestPoints =
-        turnSummaryData[turnSummaryData.length - 1];
+    Map<String, dynamic> latestPoints = turnSummaryData[turnSummaryData.length - 1];
     List<String> targetIds = latestPoints["ids"];
 
     for (Map<String, dynamic> tileObject in letterBoardState) {
       if (targetIds.contains(tileObject["tileId"])) {
-        updatedState.add({
-          "tileId": tileObject["tileId"],
-          "row": tileObject["row"],
-          "column": tileObject["column"],
-          "letter": "",
-          "active": false,
-          "alive": tileObject["alive"],
-        });
-      } else {
-        updatedState.add(tileObject);
+        tileObject.update("letter", (value) => "");
+        tileObject.update("active", (value) => false);
       }
+      //   updatedState.add({
+      //     "tileId": tileObject["tileId"],
+      //     "row": tileObject["row"],
+      //     "column": tileObject["column"],
+      //     "letter": "",
+      //     "active": false,
+      //     "alive": tileObject["alive"],
+      //   });
+      // } else {
+      //   updatedState.add(tileObject);
+      // }
+      updatedState.add(tileObject);
     }
     return updatedState;
   }
@@ -440,8 +505,7 @@ class GameLogic {
       List<Map<String, dynamic>> turnSummaryData) {
     List<Map<String, dynamic>> updatedRandomState = [];
 
-    Map<String, dynamic> latestPoints =
-        turnSummaryData[turnSummaryData.length - 1];
+    Map<String, dynamic> latestPoints =turnSummaryData[turnSummaryData.length - 1];
     List<String> targetIds = latestPoints["ids"];
 
     List<String> letterList = [];
@@ -459,29 +523,26 @@ class GameLogic {
       }
     }
 
-    List<Map<String, dynamic>> aggregateLetters = letterCounts.entries
-        .map((entry) => {"letter": entry.key, "count": entry.value})
-        .toList();
+    List<Map<String, dynamic>> aggregateLetters = letterCounts.entries.map((entry) => {"letter": entry.key, "count": entry.value}).toList();
 
     for (Map<String, dynamic> randomLetterObject in randomState) {
       String letter = randomLetterObject["letter"];
       if (letterList.contains(letter)) {
-        Map<String, dynamic> correspondingLetterCount = aggregateLetters
-            .firstWhere((element) => element["letter"] == letter);
 
+        Map<String, dynamic> correspondingLetterCount = aggregateLetters.firstWhere((element) => element["letter"] == letter);
+      
         late Map<String, dynamic> newAlphabetObject = {
           "letter": randomLetterObject["letter"],
           "type": randomLetterObject["type"],
           "points": randomLetterObject["points"],
-          "count":
-              randomLetterObject["count"] + correspondingLetterCount["count"],
-          "inPlay":
-              randomLetterObject["inPlay"] - correspondingLetterCount["count"],
+          "count": randomLetterObject["count"] + correspondingLetterCount["count"],
+          "inPlay":randomLetterObject["inPlay"] - correspondingLetterCount["count"],
         };
         updatedRandomState.add(newAlphabetObject);
       } else {
         updatedRandomState.add(randomLetterObject);
       }
+
     }
 
     return updatedRandomState;
@@ -515,33 +576,41 @@ class GameLogic {
     List<Map<String, dynamic>> alphabetState1 = [];
     for (Map<String, dynamic> letterObject in alphabetState) {
       if (letterObject["letter"] == randomLetter1) {
-        late Map<String, dynamic> newAlphabetObject = {
-          "letter": letterObject["letter"],
-          "type": letterObject["type"],
-          "points": letterObject["points"],
-          "count": letterObject["count"] - 1,
-          "inPlay": letterObject["inPlay"] + 1,
-        };
-        alphabetState1.add(newAlphabetObject);
-      } else {
-        alphabetState1.add(letterObject);
+        letterObject.update("count", (value) => letterObject["count"]-1);
+        letterObject.update("count", (value) => letterObject["count"]+1);
       }
+      //   late Map<String, dynamic> newAlphabetObject = {
+      //     "letter": letterObject["letter"],
+      //     "type": letterObject["type"],
+      //     "points": letterObject["points"],
+      //     "count": letterObject["count"] - 1,
+      //     "inPlay": letterObject["inPlay"] + 1,
+      //   };
+      //   alphabetState1.add(newAlphabetObject);
+      // } else {
+      //   alphabetState1.add(letterObject);
+      // }
+      alphabetState1.add(letterObject);
     }
 
     List<Map<String, dynamic>> alphabetState2 = [];
     for (Map<String, dynamic> letterObject in alphabetState1) {
       if (letterObject["letter"] == randomLetter2) {
-        late Map<String, dynamic> newAlphabetObject = {
-          "letter": letterObject["letter"],
-          "type": letterObject["type"],
-          "points": letterObject["points"],
-          "count": letterObject["count"] - 1,
-          "inPlay": letterObject["inPlay"] + 1,
-        };
-        alphabetState2.add(newAlphabetObject);
-      } else {
-        alphabetState2.add(letterObject);
+        letterObject.update("count", (value) => letterObject["count"]-1);
+        letterObject.update("count", (value) => letterObject["count"]+1);      
       }
+      //   late Map<String, dynamic> newAlphabetObject = {
+      //     "letter": letterObject["letter"],
+      //     "type": letterObject["type"],
+      //     "points": letterObject["points"],
+      //     "count": letterObject["count"] - 1,
+      //     "inPlay": letterObject["inPlay"] + 1,
+      //   };
+      //   alphabetState2.add(newAlphabetObject);
+      // } else {
+      //   alphabetState2.add(letterObject);
+      // }
+      alphabetState2.add(letterObject);
     }
 
     final Map<String, dynamic> startingRandomLetterData = {
@@ -631,35 +700,35 @@ class GameLogic {
     return res;
   }
 
-  double getFontPreference(String preference, String itemType) {
-    double res = 0;
-    if (itemType == 'random_1') {
-      if (preference == 'small') {
-        res = 50;
-      } else if (preference == 'medium') {
-        res = 60;
-      } else if (preference == 'large') {
-        res = 70;
-      }
-    } else if (itemType == 'random_2') {
-      if (preference == 'small') {
-        res = 22;
-      } else if (preference == 'medium') {
-        res = 26;
-      } else if (preference == 'large') {
-        res = 30;
-      }
-    } else if (itemType == 'tile') {
-      if (preference == 'small') {
-        res = 18;
-      } else if (preference == 'medium') {
-        res = 22;
-      } else if (preference == 'large') {
-        res = 28;
-      }
-    }
-    return res;
-  }
+  // double getFontPreference(String preference, String itemType) {
+  //   double res = 0;
+  //   if (itemType == 'random_1') {
+  //     if (preference == 'small') {
+  //       res = 50;
+  //     } else if (preference == 'medium') {
+  //       res = 60;
+  //     } else if (preference == 'large') {
+  //       res = 70;
+  //     }
+  //   } else if (itemType == 'random_2') {
+  //     if (preference == 'small') {
+  //       res = 22;
+  //     } else if (preference == 'medium') {
+  //       res = 26;
+  //     } else if (preference == 'large') {
+  //       res = 30;
+  //     }
+  //   } else if (itemType == 'tile') {
+  //     if (preference == 'small') {
+  //       res = 18;
+  //     } else if (preference == 'medium') {
+  //       res = 22;
+  //     } else if (preference == 'large') {
+  //       res = 28;
+  //     }
+  //   }
+  //   return res;
+  // }
 
   Map<String, dynamic> getTimeData(int currentSeconds) {
     late double hours = 0;
@@ -752,23 +821,23 @@ class GameLogic {
     return res;
   }
 
-  List<Map<String, dynamic>> resetTileState(
-      List<Map<String, dynamic>> tileState) {
-    late List<Map<String, dynamic>> newTileState = [];
-    for (Map<String, dynamic> letter in tileState) {
-      newTileState.add(
-        {
-          "tileId": letter['tileId'],
-          "row": letter['row'],
-          "column": letter['column'],
-          "letter": "",
-          "active": false,
-          "alive": letter["alive"],
-        },
-      );
-    }
-    return newTileState;
-  }
+  // List<Map<String, dynamic>> resetTileState(
+  //     List<Map<String, dynamic>> tileState) {
+  //   late List<Map<String, dynamic>> newTileState = [];
+  //   for (Map<String, dynamic> letter in tileState) {
+  //     newTileState.add(
+  //       {
+  //         "tileId": letter['tileId'],
+  //         "row": letter['row'],
+  //         "column": letter['column'],
+  //         "letter": "",
+  //         "active": false,
+  //         "alive": letter["alive"],
+  //       },
+  //     );
+  //   }
+  //   return newTileState;
+  // }
 
   void killTileSpot(GamePlayState gamePlayState, BuildContext context) {
     late AnimationState animationState = context.read<AnimationState>();
@@ -786,13 +855,10 @@ class GameLogic {
     animationState.setShouldRunAnimation(true);
 
     // get the new random letter
-    late Map<String, dynamic> randomLetterData = GameLogic()
-        .generateRandomLetterData(
-            gamePlayState.alphabetState, gamePlayState.randomLetterList);
+    late Map<String, dynamic> randomLetterData = GameLogic().generateRandomLetterData(gamePlayState.alphabetState, gamePlayState.randomLetterList);
 
     // get the new alphabet state (now that a letter has been taken out of the "bag")
-    late List<Map<String, dynamic>> newAlphabetState =
-        randomLetterData["randomState"];
+    late List<Map<String, dynamic>> newAlphabetState = randomLetterData["randomState"];
     gamePlayState.setAlphabetState(newAlphabetState);
 
     // get the new list of random letters
@@ -804,18 +870,9 @@ class GameLogic {
     late List<Map<String, dynamic>> updatedTileState = [];
     for (Map<String, dynamic> tileObject in boardState) {
       if (tileObject["tileId"] == randomTileObject["tileId"]) {
-        // print("${tileObject["tileId"]} ~~~ ${randomTileObject["tileId"]}");
-        updatedTileState.add({
-          "tileId": tileObject["tileId"],
-          "row": tileObject["row"],
-          "column": tileObject["column"],
-          "letter": "",
-          "active": false,
-          "alive": false,
-        });
-      } else {
-        updatedTileState.add(tileObject);
+        tileObject.update("alive", (value) => false);
       }
+      updatedTileState.add(tileObject);
     }
     gamePlayState.setVisualTileState(updatedTileState);
     audioController.playSfx(SfxType.bad);
@@ -823,14 +880,14 @@ class GameLogic {
     // makes the letter that was to be placed, visible in the tile that was tapped
 
     late List<Map<String, dynamic>> newTurnSummaryState = GameLogic()
-        .getTurnSummaryData(
-            updatedTileState,
-            gamePlayState.alphabetState,
-            gamePlayState.gameSummaryLog,
-            gamePlayState.currentTurn,
-            gamePlayState.activeStreak,
-            gamePlayState
-            );
+      .getTurnSummaryData(
+        updatedTileState,
+        gamePlayState.alphabetState,
+        gamePlayState.gameSummaryLog,
+        gamePlayState.currentTurn,
+        gamePlayState.activeStreak,
+        gamePlayState
+      );
 
     gamePlayState.countDownController.restart();
     // _audioController.playSfx(SfxType.tilePress);
@@ -865,12 +922,12 @@ class GameLogic {
   }
 
   void executeGameOver(GamePlayState gamePlayState, BuildContext context) {
-    if (gamePlayState.summaryData.isEmpty ||
-        gamePlayState.summaryData['uniqueWords'].isEmpty) {
+    if (gamePlayState.summaryData.isEmpty || gamePlayState.summaryData['uniqueWords'].isEmpty) {
       gamePlayState.setIsGameEnded(true);
+      gamePlayState.endGame();
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const MenuScreen()));
+            MaterialPageRoute(builder: (context) => const WelcomeUser()));
       });
     } else {
       late Map<String, dynamic> newGameData = {
@@ -886,9 +943,8 @@ class GameLogic {
         "level": gamePlayState.currentLevel,
         "language": gamePlayState.currentLanguage,
       };
-      FirestoreMethods()
-          .saveHighScore(AuthService().currentUser!.uid, newGameData);
-
+      FirestoreMethods().saveHighScore(AuthService().currentUser!.uid, newGameData);
+      clearTilesFromBoard(gamePlayState);
       gamePlayState.setEndOfGameData(newGameData);
       gamePlayState.setIsGameEnded(true);
       Future.delayed(const Duration(seconds: 1), () {
@@ -897,6 +953,17 @@ class GameLogic {
       });
     }
   }
+
+
+  void clearTilesFromBoard(GamePlayState gamePlayState) {
+    for (Map<String,dynamic> item in gamePlayState.visualTileState) {
+      item.update("letter", (value) => "");
+      item.update("alive", (value) => true);
+    }
+  }
+
+
+  
 
   // Color getColor(bool darkTheme, Palette palette, String element) {
   //   late Color res;
@@ -1126,9 +1193,22 @@ class GameLogic {
     }
   }
 
+  void tapDownBehavior(GamePlayState gamePlayState, AnimationState animationState, int index) {
+    Map<String,dynamic> tileObject = Helpers().getTileObject(gamePlayState, index);
+    if (tileObject["letter"] == "") {
+      animationState.setShouldRunTilePressedAnimation(true);
+      gamePlayState.setSelectedTileIndex(index);
+      gamePlayState.setPressedTile(tileKeys[index]);
+      // animationState.setShouldRunTilePressedAnimation(false);
+      // gamePlayState.setSelectedTileIndex(-1);      
+      // gamePlayState.setSelectedTileIndex(index);
+    }
+  }  
+
   // void pressTile(BuildContext context, int row, int column, GamePlayState gamePlayState, AudioController audioController) async {
-  void pressTile(BuildContext context, int index,GamePlayState gamePlayState, AudioController audioController) async {    
+  void pressTile(BuildContext context, int index,GamePlayState gamePlayState,) async {    
     late AnimationState animationState = context.read<AnimationState>();
+    late AudioController audioController = context.read<AudioController>();
 
     // get the tile id as a string
     // String tileKey = "${row}_$column";
@@ -1137,7 +1217,7 @@ class GameLogic {
     // check whether the board has a letter in that spot
     bool isTileOpen = GameLogic().isTileOpen(gamePlayState.visualTileState, tileKey);
 
-    if (isTileOpen && !gamePlayState.isAnimating) {
+    if (isTileOpen) {
       gamePlayState.setPressedTile(tileKey);
 
       // Set signal to animate the random letters changing, the tile being pressed
@@ -1164,7 +1244,7 @@ class GameLogic {
   }
 
   // void dropTile(BuildContext context, int row, int column, GamePlayState gamePlayState, AudioController audioController) async {
-    void dropTile(BuildContext context, int index, GamePlayState gamePlayState, AudioController audioController) async {
+    void dropTile(BuildContext context, int index, GamePlayState gamePlayState, AudioController audioController) {
     // late AnimationState _animationState = context.read<AnimationState>();
 
     // get the tile id as a string
@@ -1187,12 +1267,43 @@ class GameLogic {
     }
   }
 
+
+  void handleStreakBonusAnimation(AnimationState animationState,int streak, ) {
+    if (streak == 2) {
+      animationState.setShouldRunStreaksEnterAnimation(true);
+    }
+  }
+
+  void handleMultiWordBonusAnimation(AnimationState animationState,List<Map<String, dynamic>> turnSummary, ) {
+    if (turnSummary[turnSummary.length - 1]["crossword"] == 2) {
+      animationState.setShouldRunCrossWordAnimation(true);
+    }
+  }
+
+  void handleCrossWordBonusAnimation(AnimationState animationState,List<Map<String, dynamic>> turnSummary, ) {
+    if (turnSummary[turnSummary.length - 1]["count"] > 1) {
+      animationState.setShouldRunMultiWordAnimation(true);
+    }
+  }
+
+  void handleAllThreeBonusItemsAnimation(AnimationState animationState,List<Map<String, dynamic>> turnSummary, AudioController audioController, int streak) {
+    if (
+      streak >= 2 && 
+      turnSummary[turnSummary.length - 1]["crossword"] == 2 &&
+      turnSummary[turnSummary.length - 1]["count"] > 1
+      ) {
+        audioController.playSfx(SfxType.superPoints);
+    }
+  }
+
+
+
+
   void executeTilePlacement(BuildContext context, GamePlayState gamePlayState, AudioController audioController, String newLetter, String tileKey) {
     late AnimationState animationState = context.read<AnimationState>();
     // update the state of the board to reflect the letter going to that tile
-    late List<Map<String, dynamic>> newBoardState = GameLogic()
-        .updateBoardLetterState(
-            gamePlayState.visualTileState, newLetter, tileKey);
+    gamePlayState.setValidIds([]);
+    late List<Map<String, dynamic>> newBoardState = GameLogic().updateBoardLetterState(gamePlayState.visualTileState, newLetter, tileKey);
     // makes the letter that was to be placed, visible in the tile that was tapped
     gamePlayState.setVisualTileState(newBoardState);
 
@@ -1208,48 +1319,56 @@ class GameLogic {
     if (newTurnSummaryState[newTurnSummaryState.length - 1]["words"].length >0) {
       audioController.playSfx(SfxType.wordFound);
 
-      gamePlayState.setIsAnimating(true);
+      // gamePlayState.setIsAnimating(true);
 
       // this state updates target tiles with the "active" property set to true to know what tile gets an animation
-      List<Map<String, dynamic>> updatedTemporaryBoardState = GameLogic()
-          .startFoundWordAnimation(newBoardState, newTurnSummaryState);
-      gamePlayState.setVisualTileState(updatedTemporaryBoardState);
+      // List<Map<String, dynamic>> updatedTemporaryBoardState = GameLogic().startFoundWordAnimation(newBoardState, newTurnSummaryState);
+      // gamePlayState.setVisualTileState(updatedTemporaryBoardState);
 
-      List<Map<String, dynamic>> updateNewBoardState = GameLogic()
-          .replaceTilesInFoundWords(newBoardState, newTurnSummaryState);
+      setVisualTileStateForFoundWordAnimation(gamePlayState, newBoardState, newTurnSummaryState);
 
-      List<Map<String, dynamic>> updatedNewAlphabetState = GameLogic()
-          .updateRandomLetterState(
-              newBoardState, gamePlayState.alphabetState, newTurnSummaryState);
+      List<Map<String, dynamic>> updateNewBoardState = GameLogic().replaceTilesInFoundWords(newBoardState, newTurnSummaryState);
+
+      List<Map<String, dynamic>> updatedNewAlphabetState = GameLogic().updateRandomLetterState(newBoardState, gamePlayState.alphabetState, newTurnSummaryState);
       gamePlayState.setAlphabetState(updatedNewAlphabetState);
 
       // checks whether there's an active streak to account for
       int newStreak = GameLogic().getActiveStreak(newTurnSummaryState, gamePlayState.activeStreak);
-      if (newStreak == 2) {
-        // audioController.playSfx(SfxType.wordFound);
-        // audioController.playSfx(SfxType.levelUp);
-        animationState.setShouldRunStreaksEnterAnimation(true);
-      }
 
-      if (newTurnSummaryState[newTurnSummaryState.length - 1]["crossword"] == 2) {
-        animationState.setShouldRunCrossWordAnimation(true);
-      }
+      // run streak bonus animation if applies
+      handleStreakBonusAnimation(animationState,newStreak);
 
-      if (newTurnSummaryState[newTurnSummaryState.length - 1]["count"] > 1) {
-        animationState.setShouldRunMultiWordAnimation(true);
-      }
+      // run multi word bonus animation if it applies
+      handleMultiWordBonusAnimation(animationState,newTurnSummaryState);
 
-      if (
-        newStreak >= 2 && 
-        newTurnSummaryState[newTurnSummaryState.length - 1]["crossword"] == 2 &&
-        newTurnSummaryState[newTurnSummaryState.length - 1]["count"] > 1
-        ) {
-          audioController.playSfx(SfxType.superPoints);
-        }
+      // run crossword bonus animation if it applies
+      handleCrossWordBonusAnimation(animationState,newTurnSummaryState);
+
+      // run super points audio if all three bonus items are found
+      handleAllThreeBonusItemsAnimation(animationState,newTurnSummaryState,audioController,newStreak);
+
+      // if (newStreak == 2) {
+      //   animationState.setShouldRunStreaksEnterAnimation(true);
+      // }
+
+      // if (newTurnSummaryState[newTurnSummaryState.length - 1]["crossword"] == 2) {
+      //   animationState.setShouldRunCrossWordAnimation(true);
+      // }
+
+      // if (newTurnSummaryState[newTurnSummaryState.length - 1]["count"] > 1) {
+      //   animationState.setShouldRunMultiWordAnimation(true);
+      // }
+
+      // if (
+      //   newStreak >= 2 && 
+      //   newTurnSummaryState[newTurnSummaryState.length - 1]["crossword"] == 2 &&
+      //   newTurnSummaryState[newTurnSummaryState.length - 1]["count"] > 1
+      //   ) {
+      //     audioController.playSfx(SfxType.superPoints);
+      // }
 
       // update the score summary data
-      Map<String, dynamic> summary =
-          GameLogic().getGameSummaryData(newTurnSummaryState);
+      Map<String, dynamic> summary =GameLogic().getGameSummaryData(newTurnSummaryState);
       gamePlayState.setSummaryData(summary);
 
       // add the score to the tally
@@ -1284,14 +1403,13 @@ class GameLogic {
         gamePlayState.setVisualTileState(updateNewBoardState);
 
         gamePlayState.countDownController.restart(
-            duration:
-                GameLogic().getCountdownDuration(gamePlayState.currentLevel));
+            duration:GameLogic().getCountdownDuration(gamePlayState.currentLevel));
         // gamePlayState.setDisplayLevelChange(false);
         if (gamePlayState.isGamePaused) {
           gamePlayState.countDownController.pause();
         }
-
-        gamePlayState.setIsAnimating(false);
+        gamePlayState.setPressedTile(""); // might be useless
+        // gamePlayState.setIsAnimating(false);
       });
       animationState.setShouldRunWordAnimation(false);
       animationState.setShouldRunPointsAnimation(false);
@@ -1300,6 +1418,7 @@ class GameLogic {
       animationState.setShouldRunMultiWordAnimation(false);
       animationState.setShouldRunCrossWordAnimation(false);
       animationState.setShouldRunNewLevelAnimation(false);
+      
     } else {
       gamePlayState.countDownController.restart(
           duration:GameLogic().getCountdownDuration(gamePlayState.currentLevel)
@@ -1315,13 +1434,12 @@ class GameLogic {
       animationState.setShouldRunMultiWordAnimation(false);
       animationState.setShouldRunCrossWordAnimation(false);
       gamePlayState.setActiveStreak(0);
+      // gamePlayState.setPressedTile("");
 
-      Map<String, dynamic> summary =
-          GameLogic().getGameSummaryData(newTurnSummaryState);
+      Map<String, dynamic> summary = GameLogic().getGameSummaryData(newTurnSummaryState);
       gamePlayState.setSummaryData(summary);
 
-      bool isGameOver =
-          GameLogic().checkGameOver(gamePlayState.visualTileState);
+      bool isGameOver = GameLogic().checkGameOver(gamePlayState.visualTileState);
       if (isGameOver) {
         GameLogic().executeGameOver(gamePlayState, context);
       }
@@ -1353,6 +1471,7 @@ class GameLogic {
     late AudioController audioController = context.read<AudioController>();
 
     if (reserveSpot["body"] == "") {
+      gamePlayState.setPressedTile(""); 
       animationState.setShouldRunAnimation(true);
       // get the new random letter
       late Map<String, dynamic> randomLetterData = GameLogic()
@@ -1360,8 +1479,7 @@ class GameLogic {
               gamePlayState.alphabetState, gamePlayState.randomLetterList);
 
       // get the new alphabet state (now that a letter has been taken out of the "bag")
-      late List<Map<String, dynamic>> newAlphabetState =
-          randomLetterData["randomState"];
+      late List<Map<String, dynamic>> newAlphabetState = randomLetterData["randomState"];
       gamePlayState.setAlphabetState(newAlphabetState);
 
       // get the new list of random letters
@@ -1388,7 +1506,9 @@ class GameLogic {
               GameLogic().getCountdownDuration(gamePlayState.currentLevel));
 
       animationState.setShouldRunAnimation(false);
+      // might be useless
     }
+    gamePlayState.setDraggedReserveTile({});   
 
 
   }
@@ -1482,7 +1602,7 @@ class GameLogic {
         print(jsonResponse[0]['meanings'][0]['definitions'][0]['definition']);
         res = jsonResponse[0]['meanings'][0]['definitions'][0]['definition'];
       } else {
-        res = "no definition available";
+        res = Helpers().translateText(language, "No definition available at this time");
       }
     } else {
 
@@ -1503,7 +1623,7 @@ class GameLogic {
         print(jsonMap['data'][0][10]);
         res = jsonMap['data'][0];
       } else {
-        res = "no definition available";
+        res = Helpers().translateText(language, "No definition available at this time");
       }      
       // final Map<String,dynamic> futureMap = await StorageMethods().getWordDefinition(language, word);
 

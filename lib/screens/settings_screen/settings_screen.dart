@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
@@ -64,8 +65,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
     cardBgColorChangeAnimation = ColorTween(
       // streakSlideEnterTweenSequence
-      begin: darkMode ? palette.dark_optionButtonBgColor : palette.light_optionButtonBgColor,
-      end: darkMode ? palette.light_optionButtonBgColor : palette.dark_optionButtonBgColor,
+      begin: darkMode ? palette.dark_optionButtonBgColor2 : palette.light_optionButtonBgColor2,
+      end: darkMode ? palette.light_optionButtonBgColor2 : palette.dark_optionButtonBgColor2,
     ).animate(colorChangeController);  
 
     cardTextColorChangeAnimation = ColorTween(
@@ -177,7 +178,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return  const Center(child: CircularProgressIndicator());
               }
               var document = snapshot.data;
               String username = document?['username'];
@@ -187,11 +188,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
               var currentLanguage = document?['parameters']['currentLanguage'];
               List<dynamic> languages = document?['parameters']['languages'];
 
-              // if (darkMode) {
-              //   colorChangeController.reset();
-              //   colorChangeController.forward();
-              //   // colorChangeController.fling();
-              // }   
+
               return Consumer<ColorPalette>(
                 builder: (context, palette, child) {
                   return SafeArea(
@@ -212,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                      builder: (context) => const MenuScreen(),
+                                      builder: (context) => const WelcomeUser(),
                                     ),
                                   );
                                 },

@@ -9,7 +9,7 @@ import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
-import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/choose_username.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:vector_math/vector_math.dart' show radians;
 // import 'dart:math';
@@ -130,7 +130,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const WelcomeUser()
+        builder: (context) => const ChooseUsername()
       )
     );
   }
@@ -147,8 +147,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
     final palette = context.watch<ColorPalette>();
     final double screenWidth = MediaQuery.of(context).size.width; 
 
-    return isLoading ? const Center(child: CircularProgressIndicator(),) :    
-    Consumer<SettingsState>(
+    return Consumer<SettingsState>(
       builder: (context, settingsState, child) {
 
         List<String> allLanguagesList = allLanguagesStringList(settingsState.languageDataList);
@@ -284,7 +283,10 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                             Helpers().translateWelcomeText(
                               getPrimaryLanguage(settingsState.languageDataList), 
                               "Proceed"
-                            ),                          
+                            ),
+                            style: TextStyle(
+                              color: palette.textColor2,
+                            ),                         
                           ),
                         ),
                       

@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 import 'package:scribby_flutter_v2/app_lifecycle/app_lifecycle.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/firebase_options.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/player_progress/persistence/local_storage_player_progress_persistence.dart';
 import 'package:scribby_flutter_v2/player_progress/persistence/player_progress_persistence.dart';
 import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
@@ -19,6 +20,9 @@ import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 // import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/choose_language.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/choose_username.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 // import 'package:scribby_flutter_v2/screens/settings_screen/settings_screen.dart';
 // import 'package:scribby_flutter_v2/screens/welcome_user/choose_language.dart';
 // import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
@@ -33,7 +37,7 @@ void main() async {
   // List<String> devices = ["F15161A1A3551B95453C9007478173A7"];
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await AuthService().getOrCreateUser();
+  await AuthService().getOrCreateUser(); 
   await MobileAds.instance.initialize();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -53,7 +57,6 @@ void main() async {
     playerProgressPersistence: LocalStoragePlayerProgressPersistence(),
     settingsPersistence: LocalStorageSettingsPersistence(),
     adsController: adsController,
-    // settingsController: SettingsController(persistence: LocalStorageSettingsPersistence()),
   ));
 }
 
@@ -85,21 +88,11 @@ class MyApp extends StatelessWidget {
           progress.getLatestFromStore();
           return progress;
         }),
-        ChangeNotifierProvider(
-          create: (context) => AnimationState(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SettingsState(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => GamePlayState(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => TutorialState(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ColorPalette(),
-        ),
+        ChangeNotifierProvider(create: (context) => AnimationState(),),
+        ChangeNotifierProvider(create: (context) => SettingsState(),),
+        ChangeNotifierProvider(create: (context) => GamePlayState(),),
+        ChangeNotifierProvider(create: (context) => TutorialState(),),
+        ChangeNotifierProvider(create: (context) => ColorPalette(),),
 
         Provider<AdsController?>.value(value: adsController),
         Provider<SettingsController>(
@@ -127,25 +120,31 @@ class MyApp extends StatelessWidget {
         // Provider(create: (context) => LightPalette()),
         // Provider(create: (context) => DarkPalette()),
       ],
-      child: Builder(builder: (context) {
-        // SettingsController settings = Provider.of<SettingsController>(context, listen:  false);
-        // print(context.watch<SettingsController>().darkTheme.value);
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(3, 29, 68, 1)),
-            // colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 66, 218, 52)),
-            useMaterial3: true,
-          ),
-          // darkTheme: ThemeData(
-          //   colorScheme: defaultDarkColorScheme,
-          //   scaffoldBackgroundColor: Palette().darkScreenBgColor,
-          //   useMaterial3: true,
-          // ),
-          // themeMode: settings.darkTheme.value ? ThemeMode.light : ThemeMode.dark,
-          home: MenuScreen(),
-        );
-      }),
+      child: Builder(
+        builder: (context) {
+
+          // double screenHeight = MediaQuery.of(context).size.height;
+          // double sizeFactor = Helpers().getSizeFactor(screenHeight);
+
+          // SettingsState settingsState = Provider.of<SettingsState>(context, listen:  false);
+          // settingsState.setSizeFactor(sizeFactor);
+          // print(context.watch<SettingsController>().darkTheme.value);
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(3, 29, 68, 1)),
+              useMaterial3: true,
+            ),
+            // darkTheme: ThemeData(
+            //   colorScheme: defaultDarkColorScheme,
+            //   scaffoldBackgroundColor: Palette().darkScreenBgColor,
+            //   useMaterial3: true,
+            // ),
+            // themeMode: settings.darkTheme.value ? ThemeMode.light : ThemeMode.dark,
+            home: const WelcomeUser(),
+          );
+        }
+      ),
     ));
   }
 }

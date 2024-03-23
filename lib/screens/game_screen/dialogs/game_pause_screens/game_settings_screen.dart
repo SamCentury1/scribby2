@@ -55,7 +55,7 @@ class GameSettings extends StatelessWidget {
                                     
                                     style: TextStyle(
                                         fontSize: (20 * settingsState.sizeFactor), 
-                                        color: palette.textColor3
+                                        color: palette.textColor2
                                       ),
                                   ),
                                 ),
@@ -72,7 +72,7 @@ class GameSettings extends StatelessWidget {
                                         icon: soundsOn
                                             ?  Icon(Icons.volume_up, size: (22*settingsState.sizeFactor) ,)
                                             :  Icon(Icons.volume_off, size: (22*settingsState.sizeFactor) ),
-                                        color: palette.tileBgColor
+                                        color: palette.textColor2
                                         // color: soundsOn
                                         // ? const Color.fromRGBO(44, 222, 253, 1)
                                         // : const Color.fromRGBO(49, 49, 49, 1),

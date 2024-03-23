@@ -6,6 +6,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
+import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class LeaderboardsScreen extends StatefulWidget {
@@ -83,7 +84,7 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => const MenuScreen(),
+                              builder: (context) => const WelcomeUser(),
                             ),
                           );
                         },

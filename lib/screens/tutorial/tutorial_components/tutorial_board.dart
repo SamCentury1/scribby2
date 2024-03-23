@@ -508,7 +508,7 @@ Color getBorderColor(Map<String, dynamic> tileObject, ColorPalette palette, Anim
   return res;
 }
 Color getTextColor(Map<String, dynamic> tileObject,ColorPalette palette, Animation animation ) {
-  Color res = palette.optionButtonBgColor3;
+  Color res = palette.tileTextColor;
   if (!tileObject['alive']) {
       res = Colors.transparent;
   } else {
