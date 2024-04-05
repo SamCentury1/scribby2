@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,9 +9,9 @@ import 'dart:io';
 
 class StorageMethods {
 
-  Future<List<String>> downloadWordList(String language) async {
+  Future<List<String>> downloadWordList(String? language) async {
 
-    late String actualLanguage = 'english';
+    late String? actualLanguage = 'english';
     if  (language != '' || language != null) {
       actualLanguage = language;
     }
@@ -43,7 +43,7 @@ class StorageMethods {
 
 Future<Map<String,dynamic>> getWordDefinition(String language, String word) async {
   final FirebaseStorage storage = FirebaseStorage.instance;
-  final String fileName = '${word}.json';
+  final String fileName = '$word.json';
   final Directory appDocDir = await getApplicationDocumentsDirectory();
   final String filePath = '${appDocDir.path}/definitions/$language/$fileName';
   final File downloadToFile = File(filePath);
@@ -51,7 +51,7 @@ Future<Map<String,dynamic>> getWordDefinition(String language, String word) asyn
 
   try {
     // Ensure the directory exists before attempting to download the file
-    final directory = await Directory('${appDocDir.path}/definitions/$language').create(recursive: true);
+    // final directory = await Directory('${appDocDir.path}/definitions/$language').create(recursive: true);
 
     // Correct the reference to match the file's location in Firebase Storage
     final String storagePath = 'definitions/$language/$fileName';
@@ -62,7 +62,6 @@ Future<Map<String,dynamic>> getWordDefinition(String language, String word) asyn
     res = jsonMap;
   } catch (e) {
     // If an error occurs, print it to the console and return an empty map
-    print("Error reading JSON file: $e");
     return {};
   }
   return res;

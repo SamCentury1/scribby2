@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
@@ -9,7 +8,6 @@ import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TileWidget extends StatefulWidget {
   final int index;
@@ -60,7 +58,6 @@ class _TileWidgetState extends State<TileWidget> with TickerProviderStateMixin{
 
   void initializeWordFoundAnimations() {
     final ColorPalette palette = context.read<ColorPalette>();
-    final SettingsState settingsState = context.read<SettingsState>();
     late GamePlayState gamePlayState = context.read<GamePlayState>();
     // final double tileSize = settingsState.screenSizeData["width"]/6;
 

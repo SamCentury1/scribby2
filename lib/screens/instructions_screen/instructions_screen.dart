@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
-// import 'package:scribby_flutter_v2/player_progress/persistence/local_storage_player_progress_persistence.dart';
-// import 'package:scribby_flutter_v2/player_progress/persistence/player_progress_persistence.dart';
-// import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
-// import 'package:scribby_flutter_v2/resources/auth_service.dart';
-// import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
-import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
@@ -74,7 +67,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator(),);
         } else if (snapshot.hasError ) {
-          return Center(child: Text("Error"),);
+          return const Center(child: Text("Error"),);
         } else {
             late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
             String language = snapshot.data!['userData']['parameters']['currentLanguage'];

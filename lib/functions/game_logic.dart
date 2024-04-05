@@ -10,20 +10,12 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
-// import 'package:scribby_flutter_v2/components/level_change_overlay.dart';
-// import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
-import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/game_over_screen.dart';
-import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
-// import 'package:scribby_flutter_v2/utils/definitions.dart';
-// import 'package:scribby_flutter_v2/utils/defs.dart';
-// import 'package:scribby_flutter_v2/styles/palette.dart';
-// import 'package:scribby_flutter_v2/utils/dictionary.dart';
 import 'package:scribby_flutter_v2/utils/states.dart';
 
 class GameLogic {
@@ -1597,9 +1589,6 @@ class GameLogic {
       
       if (response.statusCode == 200) {
         dynamic jsonResponse = json.decode(response.body);
-        // res = response[0]
-        // late String sss = response.body[0].; // ['meanings'][0]['definitions'];
-        print(jsonResponse[0]['meanings'][0]['definitions'][0]['definition']);
         res = jsonResponse[0]['meanings'][0]['definitions'][0]['definition'];
       } else {
         res = Helpers().translateText(language, "No definition available at this time");
@@ -1617,32 +1606,17 @@ class GameLogic {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        dynamic jsonResponse = json.decode(response.body);
+        // dynamic jsonResponse = json.decode(response.body);
         final String decodedBody = utf8.decode(response.bodyBytes);
         final Map<String,dynamic> jsonMap = json.decode(decodedBody);
-        print(jsonMap['data'][0][10]);
         res = jsonMap['data'][0];
       } else {
         res = Helpers().translateText(language, "No definition available at this time");
       }      
-      // final Map<String,dynamic> futureMap = await StorageMethods().getWordDefinition(language, word);
-
-      // if (futureMap.isEmpty) {
-      //   res = "no definition available";
-      // } else {
-      //   res = futureMap['data'][0];
-      // }
-      // print(futureMap);
     }
 
-    print("result = $res");
     return res;
   }
 
-
-  // void getDefs() {
-  //   Map<String,dynamic> def = defs.firstWhere((element) => element['word'] == 'ROOT');
-  //   print(def);
-  // }
 
 }

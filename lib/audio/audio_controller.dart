@@ -132,7 +132,7 @@ class AudioController {
         return;
       }
       _gameOverAudioPlayer.setReleaseMode(ReleaseMode.loop);
-      _gameOverAudioPlayer.play(AssetSource('audio/sfx/game-over-score-tally.mp3'));
+      _gameOverAudioPlayer.play(AssetSource('audio/sfx/points-count-electronic.mp3'));
       
     });
   }

@@ -1,296 +1,7 @@
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:provider/provider.dart';
-// import 'package:scribby_flutter_v2/providers/animation_state.dart';
-// import 'package:scribby_flutter_v2/providers/settings_state.dart';
-// import 'package:scribby_flutter_v2/styles/palette.dart';
 
-// class ScoreWidget extends StatefulWidget {
-//   final int score;
-//   const ScoreWidget({super.key, required this.score});
+// import 'dart:math';
 
-//   @override
-//   State<ScoreWidget> createState() => _ScoreWidgetState();
-// }
-
-// class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin {
-
-//   late int count = 0;
-//   late int targetValue;
-//   // late bool isCounting = true;
-//   // late bool isFinalAnimationPlaying = false;
-
-//   late AnimationState animationState;
-
-//   late Animation<Color?> colorAnimation;
-//   late AnimationController colorController;
-
-//   late Animation<double> sizeAnimation;
-//   late AnimationController sizeController;  
-
-//   late Animation<double> endSizeAnimation;
-//   late AnimationController endSizeController;  
-
-//   late Animation<Color?> endColorAnimation;
-//   late AnimationController endColorController;
-
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     targetValue = widget.score;
-
-//     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-//      // widget.score;
-//     initializeAnimations(widget.score, palette);
-//     animationState = Provider.of<AnimationState>(context, listen: false);
-//     // startCounting(widget.score, colorController, sizeController, endColorController);
-
-//     animationState.addListener(_handleAnimationStateChange);
-//   }
-
-
-//   void initializeAnimations(int score, ColorPalette palette) {
-//     // Color color_0 =  palette.textColor1; 
-//     const Color color_1 =  Color.fromRGBO(255,0,0,1); 
-//     const Color color_2 =  Color.fromRGBO(255,90,0,1); 
-//     const Color color_3 =  Color.fromRGBO(255,154,0,1); 
-//     const Color color_4 =  Color.fromRGBO(255,206,0,1); 
-//     const Color color_5 =  Color.fromRGBO(255,232,6,1); 
-  
-//     // List<Color> colors = [color_1,color_2,color_3,color_4,color_5,];
-
-
-//     colorController = AnimationController(
-//     vsync: this, duration: const Duration(milliseconds: 100));
-
-//     final List<TweenSequenceItem<Color?>> colorTweenSequenceItems = [
-//       TweenSequenceItem(tween: ColorTween(begin: color_2, end: color_4), weight: 0.5),
-//       TweenSequenceItem(tween: ColorTween(begin: color_4, end: color_2), weight: 0.5),
-//     ];
-
-//     colorAnimation = TweenSequence<Color?>(
-//       colorTweenSequenceItems,
-//     ).animate(colorController);
-
-
-
-
-//     sizeController = AnimationController(
-//     vsync: this, duration: const Duration(milliseconds: 100));
-
-//     final List<TweenSequenceItem<double>> sizeTweenSequenceItems = [
-//       TweenSequenceItem(tween: Tween(begin: 1.0, end: 2.0), weight: 0.5),
-//       TweenSequenceItem(tween: Tween(begin: 2.0, end: 1.0), weight: 0.5),
-//     ];
-
-//     sizeAnimation = TweenSequence<double>(
-//       sizeTweenSequenceItems,
-//     ).animate(sizeController);
-
-//     // colorController.repeat();
-//     // sizeController.repeat();
-
-
-//     endSizeController = AnimationController(
-//     vsync: this, duration: const Duration(seconds: 2));
-
-//     // final List<TweenSequenceItem<double>> endSizeTweenSequenceItems = [
-//     //   TweenSequenceItem(tween: Tween(begin: 1.0, end: 2.0), weight: 0.5),
-//     //   TweenSequenceItem(tween: Tween(begin: 2.0, end: 1.0), weight: 0.5),
-//     // ];
-
-//     endSizeAnimation = Tween<double>(
-//       // sizeTweenSequenceItems,
-//       begin: 1.0, end: 0.0
-//     ).animate(endSizeController);
-
-
-
-//     endColorController = AnimationController(
-//     vsync: this, duration: const Duration(seconds: 1));
-
-
-//     final List<TweenSequenceItem<Color?>> endColorTweenSequenceItems = [
-//       TweenSequenceItem(tween: ColorTween(begin: color_1, end: color_1), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_1, end: color_2), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_2, end: color_3), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_3, end: color_4), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_4, end: color_5), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_5, end: color_4), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_4, end: color_3), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_3, end: color_2), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_2, end: color_1), weight: 0.1),
-//       TweenSequenceItem(tween: ColorTween(begin: color_1, end: color_1), weight: 0.1),
-
-//     ];
-
-//     endColorAnimation = TweenSequence<Color?>(
-//       endColorTweenSequenceItems,
-//     ).animate(endColorController);
-
-
-
-//   }
-
-
-//   void _handleAnimationStateChange() {
-//     if (animationState.shouldRunGameOverPointsCounting) {
-//       _runCountPointsAnimation();
-//     }
-
-//     if (animationState.shouldRunGameOverPointsFinishedCounting) {
-//       _runFinishedCountingAnimation();
-//     }
-//   }
-
-//   _runCountPointsAnimation() {
-//     startCounting(widget.score, colorController, sizeController, endColorController);
-//     colorController.repeat();
-//     sizeController.repeat();
-//   }
-
-//   _runFinishedCountingAnimation() {
-//     endSizeController.forward();
-//     endColorController.repeat();
-//   }
-
-
-
-//   void startCounting(int score, AnimationController colorController, AnimationController sizeController, AnimationController endColorController ) {
-//     int i = 0; // Initialize counter outside the recursive function
-
-//     void incrementCounter() {
-//       if (i < score) {
-//         setState(() {
-//           count = i + 1;
-//         });
-//         i = i+1; // Increment counter
-//         Future.delayed(const Duration(milliseconds: 10), incrementCounter); // Call the function recursively
-//       } else {
-//         animationState.setShouldRunGameOverPointsCounting(false);
-//         animationState.setShouldRunGameOverPointsFinishedCounting(true);
-
-//         Future.delayed(const Duration(seconds: 2), () {
-//           animationState.setShouldRunGameOverPointsFinishedCounting(false);
-//         });
-
-
-//       }
-//     }
-//     incrementCounter(); // Start the counting process
-
-
-//   }
-
-//   @override
-//   void dispose() {
-//     // TODO: implement dispose
-//     colorController.dispose();
-//     sizeController.dispose();
-//     super.dispose();
-//   }
-
-//   String displayScoreValue(AnimationState animationState, int count, int score) {
-//     if (animationState.shouldRunGameOverPointsCounting) {
-//       return count.toString();
-//     } else {
-//       return score.toString();
-//     }
-//   }
-
-//   double containerWidth(AnimationState animationState, Animation sizeAnimation, Animation endSizeAnimation) {
-//     double res = 5.0;
-//     if (animationState.shouldRunGameOverPointsCounting) {
-//       res = res * sizeAnimation.value;
-//     } else {
-//       res = res * endSizeAnimation.value;
-//     }
-//     return res;
-//   }
-
-//   Color getTextColor(AnimationState animationState, Animation colorAnimation, Animation endColorAnimation, ColorPalette palette) {
-//     Color res = palette.textColor2;
-//     if (animationState.shouldRunGameOverPointsCounting) {
-//       res = colorAnimation.value;
-//     } 
-    
-//     if (animationState.shouldRunGameOverPointsFinishedCounting) {
-//       res = endColorAnimation.value;
-//     }
-//     return res;
-//   }
-
-//   Color getContainerColor(AnimationState animationState, Animation colorAnimation, Animation endColorAnimation) {
-//     Color res = Colors.transparent;
-//     if (animationState.shouldRunGameOverPointsCounting) {
-//       res = colorAnimation.value;
-//     } 
-    
-//     if (animationState.shouldRunGameOverPointsFinishedCounting) {
-//       res = endColorAnimation.value;
-//     }
-//     return res;    
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-//     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-
-//         // const Expanded(child: SizedBox()),
-
-//     return Wrap(
-//       direction: Axis.vertical,
-//       crossAxisAlignment: WrapCrossAlignment.center,
-//       children: <Widget>[
-//         AnimatedBuilder(
-//           animation: Listenable.merge([colorAnimation, sizeAnimation, endSizeAnimation, endColorAnimation]),
-//           builder: (context, child) {
-//             return Stack(
-//               // mainAxisSize: MainAxisSize.min,
-//               // crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Container(
-//                   decoration: BoxDecoration(
-//                     border: Border.all(
-//                       color: getContainerColor(animationState,colorAnimation,endColorAnimation), // colorAnimation.value ?? Colors.transparent,
-//                       width:  containerWidth(animationState, sizeAnimation, endSizeAnimation) //5 * sizeAnimation.value
-//                     ),
-//                     borderRadius: BorderRadius.all(Radius.circular(14.0))
-//                   ),
-//                   child: Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
-//                     child: Text(
-//                       // score.toString(),
-//                       displayScoreValue(animationState, count, widget.score),
-
-//                       style: GoogleFonts.zenDots(
-//                         fontSize: 56 * settingsState.sizeFactor ,
-//                         color: getTextColor(animationState,colorAnimation,endColorAnimation, palette), // colorAnimation.value ?? Colors.orange,
-//                         letterSpacing: 0.0
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-                              
-//               ],
-//             );
-//           }
-//         ),
-//       ],
-    
-//     );     
-   
-
-//   }
-// }
-
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
@@ -299,54 +10,6 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-
-class GameOverScreen extends StatefulWidget {
-  final int score;
-  final bool newHs;
-  final int highScore;
-  const GameOverScreen({
-    super.key,
-    required this.score,
-    required this.newHs,
-    required this.highScore
-  });
-
-  @override
-  State<GameOverScreen> createState() => _GameOverScreenState();
-}
-
-class _GameOverScreenState extends State<GameOverScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: const Color.fromARGB(255, 5, 27, 46),
-        child: Column(
-          children: <Widget>[
-
-        
-            Expanded(
-              flex: 5, 
-
-
-              child: Container(
-                width: MediaQuery.of(context).size.width*0.9,
-                child: ScoreWidget(score: widget.score, newHs: widget.newHs, highScore: widget.highScore)
-              )
-
-
-            ),
-        
-            Expanded(flex: 5, child: Container(color: Color.fromARGB(255, 12, 9, 32),))
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 
 class ScoreWidget extends StatefulWidget {
   final int score;
@@ -508,30 +171,42 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
     decorationColorController.forward();
   }
 
-  void _playNewHighScoreSound(isCounting) {
-    final audioController = context.read<AudioController>();
-    if (isCounting) {
-      audioController.playLoopSfx();
-    } else {
-      audioController.stopLoopSfx();
+
+  int getIncrementFactor(int score) {
+    int res = 1;
+    if (score >= 0 && score < 200) {
+      res = 1;
+    } else if (score >= 220 && score < 1500) {
+      res = 5;
+    } else if (score >= 1500 && score < 3000) {
+      res = 10;
+    } else if (score >= 3000 && score < 5000) {
+      res = 15;
+    } else if (score >= 5000 && score < 10000) {
+      res = 20;
+    } else if (score >= 10000) {
+      res = 100;
     }
+    return res;
   }
 
 
 
 
   void startCounting(int score, AnimationState animationState, ) {
+
     final audioController = context.read<AudioController>();
     audioController.playLoopSfx();
 
+    int increment = getIncrementFactor(score);
 
     int i = 0; // Initialize counter outside the recursive function
     void incrementCounter() {
       if (i < score) {
         setState(() {
-          count = i + 1;
+          count = i + increment;
         });
-        i = i+1; // Increment counter
+        i = i+increment; // Increment counter
         Future.delayed(const Duration(milliseconds: 10), incrementCounter); // Call the function recursively
       } else {
         isCounting = false;
@@ -540,7 +215,6 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
         animationState.setShouldRunGameOverPointsFinishedCounting(true);
 
         if (widget.newHs) {
-          print("new hs reached, play it");
           animationState.setShouldRunNewHighScore(true);
           // _playNewHighScoreSound();
           audioController.playSfx(SfxType.highScore);
@@ -688,7 +362,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
       builder: (context, child) {
         return Column(
           children: [
-            isCounting ? Expanded(child: Container(width: 100, height: 20, color: Colors.red,)) : Expanded(child: SizedBox()),
+            // isCounting ? Expanded(child: Container(width: 100, height: 20, color: Colors.red,)) : Expanded(child: SizedBox()),
             Text(
               getLabelText(widget.newHs, language),
               style: TextStyle(
@@ -723,7 +397,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                                 color:   Colors.transparent,
                                 width:  containerWidth(animationState, sizeAnimation, endSizeAnimation) //5 * sizeAnimation.value
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(14.0))
+                              borderRadius: const BorderRadius.all(Radius.circular(14.0))
                             ),
                                   
                             child: Padding(
@@ -782,7 +456,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                                 color: getContainerColor(animationState,colorAnimation,endColorAnimation), // colorAnimation.value ?? Colors.transparent,
                                 width:  containerWidth(animationState, sizeAnimation, endSizeAnimation) //5 * sizeAnimation.value
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(14.0))
+                              borderRadius: const BorderRadius.all(Radius.circular(14.0))
                             ),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -824,7 +498,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                 fontSize: 18*settingsState.sizeFactor
               ),
             ),
-            Expanded(child: SizedBox()),
+            const Expanded(child: SizedBox()),
           ],
         );
       }

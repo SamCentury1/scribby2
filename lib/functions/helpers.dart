@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -214,7 +212,8 @@ class Helpers {
           alignment: Alignment.center,
           child: Column(
             children: [
-              for (Map<String,dynamic> word in words)
+              // for (Map<String,dynamic> word in words)
+              for (int i=0; i<words.length; i++)
               Text(
                 data['streak'].toString(),
                 style: customTextStyle(textColor, 18* sizeFactor),
@@ -227,7 +226,8 @@ class Helpers {
           alignment: Alignment.center,
           child: Column(
             children: [
-              for (Map<String,dynamic> word in words)
+              // for (Map<String,dynamic> word in words)
+              for (int i=0; i<words.length; i++)
               Text(
                 data['count'].toString(),
                 style: customTextStyle(textColor, 18* sizeFactor),
@@ -240,7 +240,8 @@ class Helpers {
           alignment: Alignment.center,
           child: Column(
             children: [
-              for (Map<String,dynamic> word in words)
+              // for (Map<String,dynamic> word in words)
+              for (int i=0; i<words.length; i++)
               Text(
                 data['crossword'].toString(),
                 style: customTextStyle(textColor, 18* sizeFactor),

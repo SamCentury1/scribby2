@@ -4,7 +4,6 @@ import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
-import 'package:scribby_flutter_v2/styles/buttons.dart';
 
 class NewPointsAnimation extends StatefulWidget {
   const NewPointsAnimation({
@@ -115,10 +114,6 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
   }
 
   void initializeAnimations() {
-    late GamePlayState gamePlayState = context.read<GamePlayState>();
-    // _newPointsTextController = AnimationController(
-    //   vsync: this, duration: const Duration(milliseconds: 1500)
-    // );
     _newPointsAnimationController = AnimationController(
       vsync: this, duration: const Duration(milliseconds: 1500)
     );
@@ -144,10 +139,6 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
     _newPointsTextAnimation = TweenSequence<Color?>(newPointsTextSequence)
         .animate(_newPointsAnimationController);
 
-    // _newPointsPositionController = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 1500),
-    // );
 
     final List<TweenSequenceItem<Offset>> newPointsPositionSequence = [
       TweenSequenceItem<Offset>(
@@ -159,8 +150,6 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
         TweenSequence<Offset>(newPointsPositionSequence)
             .animate(_newPointsAnimationController);
 
-    // _newPointsShadowController = AnimationController(
-    //     vsync: this, duration: const Duration(milliseconds: 1500));
 
     final List<TweenSequenceItem<Color?>> newPointsShadowSequence = [
       TweenSequenceItem<Color?>(tween: ColorTween(begin: color_0,end: color_4,),weight: 0.1),
@@ -172,8 +161,6 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
         .animate(_newPointsAnimationController);
 
     /// ============= FONT SIZE =====================
-    // _newPointsFontSizeController = AnimationController(
-    //     vsync: this, duration: const Duration(milliseconds: 1500));
 
     final List<TweenSequenceItem<double>> newPointsFontSizeSequence = [
       TweenSequenceItem<double>(tween: Tween(begin: 0.0,end: 1.0,),weight: 0.01),
@@ -182,9 +169,6 @@ class _NewPointsAnimationState extends State<NewPointsAnimation>
     ];
 
     _newPointsFontSizeAnimation =TweenSequence<double>(newPointsFontSizeSequence).animate(_newPointsAnimationController);
-
-
-
 
   }
 

@@ -1,15 +1,13 @@
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
-import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -597,6 +595,7 @@ Widget usernameCard(
                                     AuthService().updateUsername(
                                       AuthService().currentUser!.uid ,userNameController.text.toString()
                                     );
+                                    // TODO: translate this
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
@@ -606,7 +605,7 @@ Widget usernameCard(
                                             fontSize: 16 * settingsState.sizeFactor
                                           ),
                                         ),
-                                        duration: Duration(milliseconds: 3000),
+                                        duration: const Duration(milliseconds: 3000),
                                       )
                                     );                                
                                     Navigator.of(context).pop();
@@ -813,10 +812,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
 
     late List<Map<String, dynamic>> sortedList = [];
 
-    print("SELECTED  = $selected");
-    print("==============================");
-    print("UNSELECTED  = $unSelected");
-
     for (int i = 0; i < newList.length; i++) {
       Map<String, dynamic> newObject = newList[i];
       if (newObject['selected']) {
@@ -867,7 +862,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
     //   imposter.update('selected', (value) => false);
     // }
     late List<Map<String, dynamic>> newList = [...newSelected, ...newUnSelected];
-    print("new list = ${newList}");
+
 
     setState(() {
       currentSelection = newList;

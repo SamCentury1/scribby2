@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
-import 'package:scribby_flutter_v2/components/draggable_tile.dart';
 import 'package:scribby_flutter_v2/components/new_points_animation.dart';
-import 'package:scribby_flutter_v2/components/tile.dart';
 import 'package:scribby_flutter_v2/components/tile_widget.dart';
-import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
 
 class Board extends StatefulWidget {
   const Board({super.key});

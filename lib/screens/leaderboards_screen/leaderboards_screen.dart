@@ -5,7 +5,6 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
-import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
@@ -68,9 +67,9 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator(),);
             } else if (snapshot.hasError ) {
-              return Center(child: Text("Error"),);
+              return const Center(child: Text("Error"),);
             } else if (snapshot.data!.isEmpty) {
-              return Center(child: Text("Error"),);
+              return const Center(child: Text("Error"),);
             } else {
               return SafeArea(
                 child: Scaffold(
@@ -146,7 +145,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
               Column(
                 children: [
                   Text(
-                    "${Helpers().translateText(language, "High Score:")}",
+                    Helpers().translateText(language, "High Score:"),
                     // "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
                     style: TextStyle(fontSize: 22*sizeFactor, color: palette.textColor2),
                   ),

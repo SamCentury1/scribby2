@@ -1,13 +1,8 @@
 // import 'package:flutter/foundation.dart';
 import 'dart:io';
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/audio/audio_controller.dart';
-import 'package:scribby_flutter_v2/audio/sounds.dart';
-// import 'package:scribby_flutter_v2/ads/interstitial_ad_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
@@ -16,13 +11,9 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_over_score_widget.dart';
-// import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
-import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/confetti.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-
-// import '../../functions/helpers.dart';
 
 class GameOverScreen extends StatefulWidget {
   const GameOverScreen({super.key});
@@ -119,46 +110,20 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
   void validateHighScore(AnimationState animationState) {
     // SettingsState settings, ColorPalette palette, int currentScore
-    final settings = context.read<SettingsController>();
-    final audioController = context.read<AudioController>();
-    // final palette = context.read<ColorPalette>();
-    final gamePlayState = context.read<GamePlayState>();
-    final int currentScore = gamePlayState.endOfGameData['points'];
-    final Map<String, dynamic> userData = (settings.userData.value as Map<String, dynamic>);
+    // final settings = context.read<SettingsController>();
+    // // final palette = context.read<ColorPalette>();
+    // final gamePlayState = context.read<GamePlayState>();
+    // final int currentScore = gamePlayState.endOfGameData['points'];
+    // final Map<String, dynamic> userData = (settings.userData.value as Map<String, dynamic>);
 
-    String currentLanguage = userData['parameters']['currentLanguage'];
-    late int currentHighScore = 0;
-    if (userData['highScores'][currentLanguage] != null) {
-      currentHighScore = userData['highScores'][currentLanguage];
-    }
+    // String currentLanguage = userData['parameters']['currentLanguage'];
+    // late int currentHighScore = 0;
+    // if (userData['highScores'][currentLanguage] != null) {
+    //   currentHighScore = userData['highScores'][currentLanguage];
+    // }
 
     animationState.setShouldRunGameOverPointsCounting(true);
 
-    // if (animationState.shouldRunGameOverPointsFinishedCounting) {
-
-    //   print("current score = $currentScore || current high score = $currentHighScore ");
-
-    //   if (currentScore > currentHighScore) {
-
-
-
-    //     audioController.playSfx(SfxType.highScore);
-    //     animationState.setShouldRunNewHighScore(true);
-    //     // setState(() {
-    //     //   showConfetti = true;
-
-    //     // });
-
-    //     Future.delayed(const Duration(milliseconds: 2000), () {
-    //       animationState.setShouldRunNewHighScore(false);
-    //       animationState.setShouldRunGameOverPointsCounting(false);
-    //       // setState(() {
-    //       //   showConfetti = false;
-    //       // });
-    //     });
-    //   }
-
-    // }
 
   }
 
@@ -182,7 +147,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
   bool newHighScore(SettingsState settings, ColorPalette palette, int currentScore) {
     int highScore = currentHighScore(settings, palette, currentScore);
 
-    print("high score = $highScore  ||  current score = $currentScore");
+    // print("high score = $highScore  ||  current score = $currentScore");
     return  currentScore > highScore ;
   } 
 
@@ -501,8 +466,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                                         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                                                         children: <TableRow>[
                                                           TableRow(
-                                                            decoration: BoxDecoration(
-                                                            ),
+                                                            // decoration: BoxDecoration(
+                                                            // ),
                                                             children: [
                                                               Align(
                                                                 alignment: Alignment.centerLeft,
@@ -686,7 +651,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: palette.optionButtonBgColor2,
                             foregroundColor: palette.textColor1,
-                            shadowColor:const Color.fromRGBO(123, 123, 123, 0.7),
+                            shadowColor:const Color.fromRGBO(0, 0, 0, 0.7),
                             elevation: 3.0,
                             minimumSize: Size(double.infinity, 50 * settingsState.sizeFactor),
                             padding: EdgeInsets.all(4.0*settingsState.sizeFactor),

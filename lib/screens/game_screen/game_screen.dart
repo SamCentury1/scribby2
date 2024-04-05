@@ -1,27 +1,21 @@
 // import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 // import 'package:scribby_flutter_v2/ads/banner_ad_widget.dart';
-import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/components/board.dart';
 // import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/components/bonus_score_elements.dart';
-import 'package:scribby_flutter_v2/components/draggable_tile.dart';
 import 'package:scribby_flutter_v2/components/game_over_overlay.dart';
 // import 'package:scribby_flutter_v2/components/level_change_overlay.dart';
-import 'package:scribby_flutter_v2/components/new_points_animation.dart';
 import 'package:scribby_flutter_v2/components/pause_overlay.dart';
 import 'package:scribby_flutter_v2/components/pre_game_overlay.dart';
 import 'package:scribby_flutter_v2/components/random_letters.dart';
 import 'package:scribby_flutter_v2/components/reserve_tiles.dart';
 import 'package:scribby_flutter_v2/components/scoreboard.dart';
-import 'package:scribby_flutter_v2/components/tile.dart';
 import 'package:scribby_flutter_v2/components/timer_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
-import 'package:scribby_flutter_v2/providers/animation_state.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -30,7 +24,6 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 // import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
 // import 'package:scribby_flutter_v2/utils/dictionary.dart';
 // import 'package:scribby_flutter_v2/utils/states.dart';
 
@@ -44,7 +37,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   // late AnimationState _animationState;
   // late GameState _gameState;
-  late AudioController _audioController;
+  // late AudioController _audioController;
   // late GamePlayState gamePlayState;
   // late SettingsController _settings;
   // late AnimationState _animationState;
@@ -65,7 +58,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _audioController = Provider.of<AudioController>(context, listen: false);
+    // _audioController = Provider.of<AudioController>(context, listen: false);
     // gamePlayState = Provider.of<GamePlayState>(context, listen: false);
 
   }
@@ -92,11 +85,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     final ColorPalette palette =
         Provider.of<ColorPalette>(context, listen: false);
 
-    final AnimationState animationState =
-        Provider.of<AnimationState>(context, listen: false);     
+    // final AnimationState animationState =
+    //     Provider.of<AnimationState>(context, listen: false);     
 
-    final GamePlayState gamePlayState =
-        Provider.of<GamePlayState>(context, listen: false);                
+    // final GamePlayState gamePlayState =
+    //     Provider.of<GamePlayState>(context, listen: false);                
 
     // return isLoading ? const Center(child: CircularProgressIndicator(),): 
           return Consumer<GamePlayState>(
