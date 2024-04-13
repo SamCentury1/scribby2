@@ -716,8 +716,11 @@ class TutorialHelpers {
       ColorPalette palette, dynamic widgetId, Animation animation) {
     late Color color = const Color.fromRGBO(0, 0, 0, 0);
     if (currentStep["callbackTarget"] == widgetId) {
-      color = Color.fromRGBO(palette.textColor2.red, palette.textColor2.green,
-          palette.textColor2.blue, animation.value);
+      color = Color.fromRGBO(
+        palette.textColor2.red, 
+        palette.textColor2.green,
+        palette.textColor2.blue, 
+        animation.value);
     } else {
       color = palette.textColor2;
     }
@@ -732,9 +735,9 @@ class TutorialHelpers {
     if (currentStep['targets'].contains(widgetId)) {
       res = BoxShadow(
         color: Color.fromRGBO(
-          palette.focusedTutorialTile.red, 
-          palette.focusedTutorialTile.green,
-          palette.focusedTutorialTile.blue, 
+          palette.tileBgColor.red, 
+          palette.tileBgColor.green,
+          palette.tileBgColor.blue, 
           (animation.value * 0.5)
         ),
         blurRadius: 10.0 * (animation.value * 0.5),

@@ -24,7 +24,6 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 void main() async {
-  // List<String> devices = ["F15161A1A3551B95453C9007478173A7"];
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await AuthService().getOrCreateUser(); 
@@ -73,6 +72,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) {
           var progress = PlayerProgress(playerProgressPersistence);
           progress.getLatestFromStore();
+          print("progress = $progress");
           return progress;
         }),
         ChangeNotifierProvider(create: (context) => AnimationState(),),

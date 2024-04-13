@@ -109,31 +109,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
   }
 
   void validateHighScore(AnimationState animationState) {
-    // SettingsState settings, ColorPalette palette, int currentScore
-    // final settings = context.read<SettingsController>();
-    // // final palette = context.read<ColorPalette>();
-    // final gamePlayState = context.read<GamePlayState>();
-    // final int currentScore = gamePlayState.endOfGameData['points'];
-    // final Map<String, dynamic> userData = (settings.userData.value as Map<String, dynamic>);
-
-    // String currentLanguage = userData['parameters']['currentLanguage'];
-    // late int currentHighScore = 0;
-    // if (userData['highScores'][currentLanguage] != null) {
-    //   currentHighScore = userData['highScores'][currentLanguage];
-    // }
-
     animationState.setShouldRunGameOverPointsCounting(true);
-
-
   }
-
-  // int getCurrentHighScore(SettingsState settings) {
-  //   final String currentLanguage =
-  //       settings.userData['parameters']['currentLanguage'];
-  //   final int currentHighScore =
-  //       settings.userData['highScores'][currentLanguage] ?? 0;
-  //   return currentHighScore;
-  // }
 
   int currentHighScore(SettingsState settings, ColorPalette palette, int currentScore) {
     String currentLanguage = settings.userData['parameters']['currentLanguage'];
@@ -146,128 +123,15 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
   bool newHighScore(SettingsState settings, ColorPalette palette, int currentScore) {
     int highScore = currentHighScore(settings, palette, currentScore);
-
-    // print("high score = $highScore  ||  current score = $currentScore");
     return  currentScore > highScore ;
   } 
 
-  // Widget displayScores( SettingsState settings, ColorPalette palette, int currentScore) {
-  //   String currentLanguage = settings.userData['parameters']['currentLanguage'];
-  //   double sizeFactor = settings.sizeFactor;
-
-  //   late int currentHighScore = 0;
-  //   if (settings.userData['highScores'][currentLanguage] != null) {
-  //     currentHighScore = settings.userData['highScores'][currentLanguage];
-  //   }
-
-  //   if (currentScore > currentHighScore) {
-  //     return Column(
-  //       children: [
-  //         Row(
-  //           children: [
-  //             const Expanded(flex: 1, child: SizedBox(),),
-  //             Icon(
-  //               Icons.emoji_events,
-  //               size: 36*sizeFactor,
-  //               color: palette.textColor2,
-  //             ),
-  //             const Expanded(flex: 3, child: SizedBox(),),                 
-  //             Column(
-  //               children: [
-  //                 Center(
-  //                   child: SizedBox(
-  //                     child: Text(
-  //                       Helpers().translateText(currentLanguage, "New High Score"),
-                        
-  //                       style: TextStyle(fontSize: 32*sizeFactor, color: palette.textColor3),
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Center(
-  //                   child: FittedBox(
-  //                     fit: BoxFit.scaleDown,
-  //                     child: Text(
-  //                       currentScore.toString(),
-  //                       style: TextStyle(color: palette.textColor3, fontSize: 42*sizeFactor),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //             const Expanded(flex: 1, child: SizedBox(),),
-  //             Icon(
-  //               Icons.emoji_events,
-  //               size: 36*sizeFactor,
-  //               color: palette.textColor2,
-  //             ),
-  //             const Expanded(flex: 3, child: SizedBox(),),                         
-  //           ],
-  //         ),
-  //         SizedBox(
-  //           height: 15*sizeFactor,
-  //         ),
-  //         Center(
-  //           child: FittedBox(
-  //             fit: BoxFit.scaleDown,
-  //             child: Text(
-                
-  //               "${Helpers().translateText(currentLanguage, "Previous High Score:")} $currentHighScore",
-  //               style: TextStyle(color: palette.textColor3, fontSize: 24*sizeFactor),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //   } else {
-  //     // return Expanded(child: ScoreWidget(score: currentScore));
-  //     // return Column(
-  //     //   children: [
-  //     //     Center(
-  //     //       child: Text(
-  //     //         // Helpers().translateText(currentLanguage, "Score:")
-  //     //         "${Helpers().translateText(currentLanguage, "Score")}: ${currentScore.toString()}",
-  //     //         style: TextStyle(color: palette.textColor3, fontSize: 42*sizeFactor),
-  //     //       ),
-  //     //     ),
-  //     //     Center(
-  //     //       child: Row(
-  //     //         mainAxisAlignment: MainAxisAlignment.center,
-  //     //         children: [
-  //     //           Icon(
-  //     //             Icons.emoji_events,
-  //     //             color: palette.textColor3,
-  //     //           ),
-  //     //           const SizedBox(
-  //     //             width: 10,
-  //     //           ),
-  //     //           Text(
-  //     //             // Helpers().translateText(currentLanguage, "High Score:")
-  //     //             "${Helpers().translateText(currentLanguage, "High Score:")} $currentHighScore",
-  //     //             style: TextStyle(color: palette.textColor3, fontSize: 18*sizeFactor),
-  //     //           ),
-  //     //         ],
-  //     //       ),
-  //     //     ),
-  //     //   ],
-  //     // );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    late ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
-    late GamePlayState gamePlayState =
-        Provider.of<GamePlayState>(context, listen: false);
-    late SettingsState settingsState =
-        Provider.of<SettingsState>(context, listen: false);
+    late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
-    // late AnimationState animationState =
-    //     Provider.of<AnimationState>(context, listen: false);        
-
-    // late SettingsState settingsState =
-    //     Provider.of<SettingsState>(context, listen: false);        
-        
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -542,75 +406,6 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                       ),
                                     ),
                                   );                                      
-                                  // return AlertDialog(
-                                  //   title: Text(
-                                  //     Helpers().translateText(gamePlayState.currentLanguage, "Summary of Points",),
-                                  //     style: TextStyle(
-                                  //         color: palette.textColor3,
-                                  //         fontSize: 22*settingsState.sizeFactor),
-                                  //   ),
-                                  //   scrollable: true,
-                                  //   backgroundColor:
-                                  //       palette.optionButtonBgColor,
-                                  //   content: SizedBox(
-                                  //     width:
-                                  //         MediaQuery.of(context).size.width,
-                                  //     height:
-                                  //         MediaQuery.of(context).size.width,
-                                  //     child: SingleChildScrollView(
-                                  //       child: Table(
-                                  //         columnWidths: const <int, TableColumnWidth>{
-                                  //           0: FlexColumnWidth(1),
-                                  //           1: FlexColumnWidth(5),
-                                  //           2: FlexColumnWidth(2),
-                                  //         },
-                                  //         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                                  //         children: <TableRow>[
-                                  //           TableRow(
-                                  //             children: [
-                                  //               Center(
-                                  //                 child: Text(
-                                  //                   "#",
-                                  //                   style: TextStyle(color: palette.textColor2, fontSize: 20*settingsState.sizeFactor),
-                                  //                 ),
-                                  //               ),
-                                  //               Align(
-                                  //                 alignment: Alignment.centerLeft,
-                                  //                 child: Text(
-                                  //                   Helpers().translateText(gamePlayState.currentLanguage, "Word",),
-                                  //                   style: TextStyle(color: palette.textColor2, fontSize: 20*settingsState.sizeFactor),
-                                  //                 ),
-                                  //               ),
-                                  //               Align(
-                                  //                 alignment: Alignment.centerRight,
-                                  //                 child: Text(
-                                  //                   Helpers().translateText(gamePlayState.currentLanguage, "Points"),
-                                  //                   style: TextStyle(color: palette.textColor2, fontSize: 20*settingsState.sizeFactor),
-                                  //                   textAlign: TextAlign.right,
-                                  //                 ),
-                                  //               ),
-                                  //             ]
-                                  //           ),
-                                  //           for (int i=0; i< summary.length; i++)
-                                  //           Helpers().scoreSummaryTableRow2(i, palette,summary[i], context, gamePlayState.currentLanguage, settingsState.sizeFactor ),
-                                  //         ]
-                                  //       ),                                              
-                                  //     ),
-                                  //   ),
-                                  //   actions: <Widget>[
-                                  //     InkWell(
-                                  //       child: Text(
-                                  //         Helpers().translateText(gamePlayState.currentLanguage, "Close"),
-                                  //         style: TextStyle(
-                                  //             color: palette.textColor3,
-                                  //             fontSize: 22*settingsState.sizeFactor),
-                                  //       ),
-                                  //       onTap: () {
-                                  //         Navigator.of(context).pop();
-                                  //       },
-                                  //     ),
-                                  //   ],
-                                  // );
                                 });
                           },
                           child: Text(
@@ -621,27 +416,6 @@ class _GameOverScreenState extends State<GameOverScreen> {
                               fontStyle: FontStyle.italic
                             ),
                           ),
-                          // child: Text.rich(
-                          //   TextSpan(
-                          //     text: 'View all ',
-                          //     style: TextStyle(
-                          //         fontSize: 24,
-                          //         color: palette.textColor3,
-                          //         fontStyle: FontStyle.italic),
-                          //     children: <TextSpan>[
-                          //       TextSpan(
-                          //           text: gamePlayState
-                          //               .endOfGameData['uniqueWords']
-                          //               .toString(),
-                          //           style: TextStyle(
-                          //               decoration:
-                          //                   TextDecoration.underline,
-                          //               decorationColor: palette.textColor3,
-                          //               decorationThickness: 1.0)),
-                          //       const TextSpan(text: ' words'),
-                          //     ],
-                          //   ),
-                          // ),
                         ),
                         const Expanded(
                           flex: 3,
@@ -655,9 +429,6 @@ class _GameOverScreenState extends State<GameOverScreen> {
                             elevation: 3.0,
                             minimumSize: Size(double.infinity, 50 * settingsState.sizeFactor),
                             padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
-                            // textStyle: TextStyle(
-                            //   fontSize: 22*settingsState.sizeFactor,
-                            // ),
                             shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),

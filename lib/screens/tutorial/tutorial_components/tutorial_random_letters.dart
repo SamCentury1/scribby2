@@ -179,9 +179,9 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
   late Color res = Colors.transparent;
   if (active) {
     res = Color.fromRGBO(
-      palette.textColor2.red,
-      palette.textColor2.green,
-      palette.textColor2.blue,
+      palette.focusedTutorialTile.red,
+      palette.focusedTutorialTile.green,
+      palette.focusedTutorialTile.blue,
       animation.value  
     );
   }

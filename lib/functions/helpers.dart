@@ -212,7 +212,6 @@ class Helpers {
           alignment: Alignment.center,
           child: Column(
             children: [
-              // for (Map<String,dynamic> word in words)
               for (int i=0; i<words.length; i++)
               Text(
                 data['streak'].toString(),
@@ -226,7 +225,6 @@ class Helpers {
           alignment: Alignment.center,
           child: Column(
             children: [
-              // for (Map<String,dynamic> word in words)
               for (int i=0; i<words.length; i++)
               Text(
                 data['count'].toString(),
@@ -240,7 +238,6 @@ class Helpers {
           alignment: Alignment.center,
           child: Column(
             children: [
-              // for (Map<String,dynamic> word in words)
               for (int i=0; i<words.length; i++)
               Text(
                 data['crossword'].toString(),
@@ -261,146 +258,17 @@ class Helpers {
                   child: Text(
                     word['totalScore'].toString(),
                     style: customTextStyle(textColor, 18* sizeFactor),
-                    // style: TextStyle(
-                    //   color: textColor,
-                    //   fontSize: 18*sizeFactor
-                    // ),
                   )
                 )
               ],
-            ),          
-            // child: Text(
-            //   data['points'].toString(),
-            //   style: TextStyle(color: textColor, fontSize: (20 * sizeFactor)),
-            //   textAlign: TextAlign.right,
-            // ),
+            ),
+
           ),
         ),
-        // Table(
-        //   columnWidths: const <int, TableColumnWidth>{
-        //     0: FlexColumnWidth(1),
-        //     1: FlexColumnWidth(7),
-        //     2: FlexColumnWidth(2),
-        //   },
-        //   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        //   children: <TableRow>[
-        //     for (Map<String,dynamic> item in data['words'])
-        //     TableRow(
-
-        //     )
-        //   ]
-          
-        // )    
+ 
       ]
     );
   }
-  // TableRow scoreSummaryTableRow(int index, ColorPalette palette, Map<String,dynamic> data, BuildContext context, String language, double sizeFactor) {
-
-  //   Color textColor = data['turn'].isEven ? palette.textColor1 : palette.textColor3;
-  //   String word = data["word"];
-
-
-  //   return TableRow(children: [
-  //     Align(
-  //       alignment: Alignment.centerLeft,
-  //       child: Text(
-  //         "${(index+1).toString()}.",
-  //         style: TextStyle(
-  //           color: textColor,
-  //           fontSize: (20 * sizeFactor)
-  //         ),
-  //       ),
-  //     ),
-  //     Row(
-  //       children: [
-  //         GestureDetector(
-  //           child: Text(
-  //             data['word'],
-  //             style: TextStyle(
-  //               color: textColor,
-  //               fontSize: (20 * sizeFactor),
-  //             ),
-  //           ),
-  //           onTap: () {
-  //             showDialog(
-  //               context: context, 
-  //               builder:(context) {
-  //                 return FutureBuilder<String>(
-  //                   future: GameLogic().fetchDefinition(data["word"], language),
-  //                   builder: (context, snapshot) {
-  //                     if (snapshot.connectionState == ConnectionState.waiting) {
-  //                       return AlertDialog(
-  //                         backgroundColor: palette.optionButtonBgColor,
-  //                         title: Text(
-  //                           word,
-  //                           style: TextStyle(
-  //                             color: palette.textColor2,
-  //                             fontSize: 18 * sizeFactor
-  //                           ),
-  //                         ),
-  //                         content:SizedBox()  //Text("Fetching definition..."),
-  //                       );
-  //                     } else if (snapshot.hasError) {
-  //                       return AlertDialog(
-  //                         backgroundColor: palette.optionButtonBgColor,
-  //                         title: Text(
-  //                           word,
-  //                           style: TextStyle(
-  //                             color: palette.textColor2,
-  //                             fontSize: 18 * sizeFactor
-  //                           ),
-  //                         ),
-  //                         content: Text(
-  //                           "Error fetching definition",
-  //                           style: TextStyle(
-  //                             color: palette.textColor2,
-  //                             fontSize: 18 * sizeFactor
-  //                           ),                            
-  //                         ),
-  //                       );
-  //                     } else {
-  //                       return AlertDialog(
-  //                         backgroundColor: palette.optionButtonBgColor,
-  //                         title: Text(
-  //                           word,
-  //                           style: TextStyle(
-  //                             color: palette.textColor2,
-  //                             fontSize: 18 * sizeFactor
-  //                           ),
-  //                         ),
-  //                         content: Text(
-  //                           snapshot.data ?? "No definition available",
-  //                           style: TextStyle(
-  //                             color: palette.textColor2,
-  //                             fontSize: 18  * sizeFactor
-  //                           ),                            
-  //                         ),
-  //                       );
-  //                     }                    
-  //                   },
-      
-  //                 );
-  //               },
-  //             );
-  //           },
-  //         ),
-  //         SizedBox(width: 10,),
-  //         Expanded(child: SizedBox()),
-  //         // data['count'] > 1 ? multiplierIcon('count',data['turn'], data['count'], palette) : const SizedBox(),
-  //         // data['crosswords'] > 1 ? multiplierIcon('crosswords',data['turn'], data['crosswords'], palette) : const SizedBox(),
-  //         // data['streak'] > 1 ? multiplierIcon('streak',data['turn'], data['streak'], palette) : const SizedBox(),
-  //       ],
-  //     ),
-  //     Align(
-  //       alignment: Alignment.centerRight,
-  //       child: Text(
-  //         data['points'].toString(),
-  //         style: TextStyle(color: textColor, fontSize: (20 * sizeFactor)),
-  //         textAlign: TextAlign.right,
-  //       ),
-  //     ),
-  //   ]);
-  // }
 
 
   String translateWelcomeText(String languageRaw, String originalString,) {
@@ -423,26 +291,10 @@ class Helpers {
       String language = translationMap[languageRaw];
       res = languageMap['data'][language.toLowerCase()];
     }
-    // return languageMap['data'][language];
     return res;    
   }
 
   String translateText(String languageRaw, String originalString,) {
-    // print(originalString);
-    // String res = '';
-    // late Map<String,dynamic> languageMap = translations.firstWhere((element) => element['key'] == originalString);
-
-    // print("language $languageRaw");
-    // if (languageRaw == "") {
-    //   res = "";
-    // } else {
-    //   String language = translationMap[languageRaw];
-    //   print("languageMap['data'][language.toLowerCase()] = ${languageMap['data'][language.toLowerCase()]}");
-    //   res = languageMap['data'][language.toLowerCase()];
-    // }
-    // print("translateText = $res");
-    // // return languageMap['data'][language];
-    // return res;
     late Map<String,dynamic> languageMap = translations.firstWhere((element) => element['key'] == originalString);
     return languageMap['data'][languageRaw.toLowerCase()];
   }
@@ -470,8 +322,67 @@ class Helpers {
     return res;
   }
 
+  Future<void> showBadNameDialog(
+    BuildContext context, 
+    String titleText, 
+    String textBody,
+    String buttonText,   
+    ColorPalette palette
+    ) async {
+    
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
 
+     
 
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            // Set the background color of the AlertDialog
+            dialogBackgroundColor: palette.optionButtonBgColor,
+            // Set the text color of the AlertDialog
+            textTheme: const TextTheme().copyWith(
+              bodyMedium: TextStyle(color: palette.textColor1),
+            ),
+          ),      
+          child: AlertDialog(
+            title: Text(
+              titleText,
+              style: TextStyle(
+                color: palette.textColor2
+              ),
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    textBody,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  buttonText,
+                  style: TextStyle(
+                    color: palette.textColor2
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          )
+        );
+      },
+    );
+  }
 
   bool checkForBadWords(String name) {
     List<String> badWords = ["faggot", "faggit", "fagot","nigger","retard","nigga","bitch","cunt"];
@@ -479,8 +390,12 @@ class Helpers {
     for (String word in badWords) {
       if (name.contains(word)) {
         badWordFound = true;
-      }
+        
+      } 
     }
+    print("name ====== ${name}");
+    print(badWordFound);
+    
     return badWordFound;
   }
 

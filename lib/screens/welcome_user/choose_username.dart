@@ -239,40 +239,40 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                   ),              
                   ElevatedButton(
                     onPressed: () {
-                      
+                      String language = getPrimaryLanguage(settingsState.languageDataList);
                       if (forbiddenNames.contains(_userNameController.text.toLowerCase())) {
-                        _showBadNameDialog(
+                        Helpers().showBadNameDialog(
                           context,
-                          Helpers().translateWelcomeText(
-                            getPrimaryLanguage(settingsState.languageDataList), 
-                            "Pick something more original"
-                          ),                        
+                          Helpers().translateWelcomeText(language, "Hold On"),
+                          Helpers().translateWelcomeText(language, "Pick something more original"),
+                          Helpers().translateWelcomeText(language, "Okay"),
+                          palette,                   
                           
                         );
                       } else if (Helpers().checkForBadWords(_userNameController.text.toLowerCase())) {
-                        _showBadNameDialog(
-                          context, 
-                          Helpers().translateWelcomeText(
-                            getPrimaryLanguage(settingsState.languageDataList), 
-                            "Hey! No bad words!"
-                          ),   
+                        Helpers().showBadNameDialog(
+                          context,
+                          Helpers().translateWelcomeText(language, "Excuse me!"),
+                          Helpers().translateWelcomeText(language, "Hey! No bad words!"),
+                          Helpers().translateWelcomeText(language, "Okay"),
+                          palette,       
                         );
                       } else if (_userNameController.text.toLowerCase() == "") {
-                        _showBadNameDialog(
-                          context, 
-                          Helpers().translateWelcomeText(
-                            getPrimaryLanguage(settingsState.languageDataList), 
-                            "Pick something more original"
-                          ),   
+                        Helpers().showBadNameDialog(
+                          context,
+                          Helpers().translateWelcomeText(language, "Hold On"),
+                          Helpers().translateWelcomeText(language, "Pick something more original"),
+                          Helpers().translateWelcomeText(language, "Okay"),
+                          palette,      
                         );                        
 
                       } else if (_userNameController.text.toLowerCase().length  < 3) {
-                        _showBadNameDialog(
-                          context, 
-                          Helpers().translateWelcomeText(
-                            getPrimaryLanguage(settingsState.languageDataList), 
-                            "Pick something more original"
-                          ),   
+                        Helpers().showBadNameDialog(
+                          context,
+                          Helpers().translateWelcomeText(language, "Hold On"),
+                          Helpers().translateWelcomeText(language, "Pick something more original"),
+                          Helpers().translateWelcomeText(language, "Okay"),
+                          palette,        
                         );                        
 
                       } else {
@@ -319,49 +319,49 @@ class _ChooseUsernameState extends State<ChooseUsername> {
 
 
 
-Future<void> _showBadNameDialog(BuildContext context, String textBody,) async {
+// Future<void> _showBadNameDialog(BuildContext context, String textBody,) async {
   
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
+//   return showDialog<void>(
+//     context: context,
+//     barrierDismissible: false, // user must tap button!
+//     builder: (BuildContext context) {
 
-      return Theme(
-        data: ThemeData.dark().copyWith(
-          // Set the background color of the AlertDialog
-          dialogBackgroundColor: Colors.grey[800],
-          // Set the text color of the AlertDialog
-          textTheme: const TextTheme().copyWith(
-            bodyMedium: const TextStyle(color: Colors.white),
-          ),
-        ),      
-        child: AlertDialog(
-          title: const Text('Aye hold up'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  textBody,
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Okay'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        )
-      );
-    },
-  );
-}
+//       return Theme(
+//         data: ThemeData.dark().copyWith(
+//           // Set the background color of the AlertDialog
+//           dialogBackgroundColor: Colors.grey[800],
+//           // Set the text color of the AlertDialog
+//           textTheme: const TextTheme().copyWith(
+//             bodyMedium: const TextStyle(color: Colors.white),
+//           ),
+//         ),      
+//         child: AlertDialog(
+//           title: const Text('Aye hold up'),
+//           content: SingleChildScrollView(
+//             child: ListBody(
+//               children: <Widget>[
+//                 Text(
+//                   textBody,
+//                   style: const TextStyle(
+//                     fontSize: 18,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           actions: <Widget>[
+//             TextButton(
+//               child: Text('Okay'),
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         )
+//       );
+//     },
+//   );
+// }
 
 
 Widget languageButton(String body) {

@@ -2645,7 +2645,7 @@ List<Map<String, dynamic>> tutorialDetails = [
     "inputType":  'drag',
     'isTapped':   false,
     'isDrag':     true, //true,
-    'dragSource': 'reserve_2', //'reserve_1',
+    'dragSource': null, //'reserve_2', //'reserve_1',
     'tilesToRemove': [],
     'callbackTarget': null,
     'tilesInWord':  [15, 20, 21, 22, 27],

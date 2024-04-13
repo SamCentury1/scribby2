@@ -25,9 +25,9 @@ class TutorialDraggableTile extends StatelessWidget {
     late Color res = Colors.transparent;
     if (active) {
       res = Color.fromRGBO(
-        palette.textColor2.red,
-        palette.textColor2.green,
-        palette.textColor2.blue,
+        palette.focusedTutorialTile.red,
+        palette.focusedTutorialTile.green,
+        palette.focusedTutorialTile.blue,
         animation.value  
       );
     } else {
@@ -46,24 +46,24 @@ class TutorialDraggableTile extends StatelessWidget {
   }
 
 
-  BoxShadow getBoxShadow(TutorialState tutorialState, ColorPalette palette, String widgetId, Animation animation) {
-    final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-    BoxShadow res = const BoxShadow(color: Colors.transparent, blurRadius: 0, spreadRadius: 0);
-    if (stepDetails['targets'].contains(widgetId)) {
-      res = BoxShadow(
-        color: Color.fromRGBO(
-          palette.textColor2.red,
-          palette.textColor2.green,
-          palette.textColor2.blue,
-          (animation.value*0.5)
-        ),
-        blurRadius: 4.0 * (animation.value*0.6),
-        spreadRadius: 4.0 * (animation.value*0.6),
-      );
+  // BoxShadow getBoxShadow(TutorialState tutorialState, ColorPalette palette, String widgetId, Animation animation) {
+  //   final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
+  //   BoxShadow res = const BoxShadow(color: Colors.transparent, blurRadius: 0, spreadRadius: 0);
+  //   if (stepDetails['targets'].contains(widgetId)) {
+  //     res = BoxShadow(
+  //       color: Color.fromRGBO(
+  //         palette.textColor2.red,
+  //         palette.textColor2.green,
+  //         palette.textColor2.blue,
+  //         (animation.value*0.5)
+  //       ),
+  //       blurRadius: 4.0 * (animation.value*0.6),
+  //       spreadRadius: 4.0 * (animation.value*0.6),
+  //     );
       
-    }
-    return res;
-  }
+  //   }
+  //   return res;
+  // }
 
   BoxDecoration getInnerTileBoxDecoration(TutorialState tutorialState, ColorPalette palette, String widgetId, Animation animation) {
     final Map<String, dynamic> stepDetails = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
@@ -97,33 +97,7 @@ class TutorialDraggableTile extends StatelessWidget {
     }
     return res;
   }
-  // Color colorTileBorder(Map<String, dynamic> tileObject,Map<String, dynamic> stepDetails,ColorPalette palette,Animation animation) {
-  //   // Map<String, dynamic> stepDetails = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-  //   final String reserveId = "reserve_${tileObject['id']}";
-  //   // final int tileId = int.parse(tileObject['id'])
-  //   // final bool active = stepDetails['targets'].contains(reserveId);
-  //   Color res = Colors.transparent;
-  //   if (stepDetails['targets'].contains(reserveId)) {
-  //     int red = palette.focusedTutorialTile.red;
-  //     int green = palette.focusedTutorialTile.green;
-  //     int blue = palette.focusedTutorialTile.blue;
-  //     res = Color.fromRGBO(red, green, blue, animation.value);
-  //   } else {
-  //     if (tileObject['letter'] == "") {
-  //       int red = palette.tileBgColor.red;
-  //       int green = palette.tileBgColor.green;
-  //       int blue = palette.tileBgColor.blue;
-  //       res = Color.fromRGBO(red, green, blue, 0.5);
-  //     } else {
-  //       if (!tileObject['alive']) {
-  //         res = Colors.transparent;
-  //       } else {
-  //         res = palette.tileBgColor;
-  //       }
-  //     }
-  //   }
-  //   return res;
-  // }  
+
 
   Color colorTileBg(Map<String, dynamic> tileObject, ColorPalette palette,) {
     late Color color = const Color.fromRGBO(0, 0, 0, 0);
@@ -135,16 +109,7 @@ class TutorialDraggableTile extends StatelessWidget {
     return color;
   }
 
-  // Color colorTileBorder(Map<String, dynamic> tileObject, ColorPalette palette) {
-  //   late Color color = const Color.fromRGBO(0, 0, 0, 0);
 
-  //   if (tileObject["body"] == "") {
-  //     color = palette.tileBgColor;
-  //   } else {
-  //     color = const Color.fromRGBO(0, 0, 0, 0);
-  //   }
-  //   return color;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -180,27 +145,14 @@ class TutorialDraggableTile extends StatelessWidget {
                     ), // colorTileBorder(tileObject, palette), width: 3),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     boxShadow: [
-                      getBoxShadow(tutorialState, palette, widgetId, animation),
-                      // BoxShadow(
-                      //   // color: getBoxShadow(tileState, tutorialState, palette, widgetId),
-                      //   spreadRadius: 3,
-                      //   blurRadius: 4,
-                      // ),
+                      TutorialHelpers().getBoxShadow(currentStep, palette, widgetId, animation),
+
                     ],                    
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
                     child: Container(
                       decoration: getInnerTileBoxDecoration(tutorialState, palette, widgetId, animation),
-                      // decoration: BoxDecoration(
-                      //   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                      //   color: palette.screenBackgroundColor,
-                      //   boxShadow: [
-                      //     BoxShadow(
-                      //       color: palette.screenBackgroundColor, blurRadius: 2, spreadRadius: 2,
-                      //     )
-                      //   ]
-                      // ),
                       child: Center(
                         child: AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 200),

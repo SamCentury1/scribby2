@@ -130,7 +130,7 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                     borderRadius: BorderRadius.vertical(
                       bottom: Radius.circular(30.0)
                     )
-                  ),                  
+                  ),
                   backgroundColor: palette.appBarColor,
                   title: FittedBox(
                     fit: BoxFit.scaleDown,
@@ -149,12 +149,24 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
+                                  backgroundColor: palette.optionButtonBgColor,
                                   title: Text(
-                                    Helpers().translateText(gamePlayState.currentLanguage, "Start Game!"),
+                                    Helpers().translateText(gamePlayState.currentLanguage, "Skip Tutorial"),
+                                    style: TextStyle(
+                                      color: palette.textColor2,
+                                      fontSize: 22 * settingsState.sizeFactor
+                                    ),
                                   ),
                                   content: Text(
-                                      'Are you sure you want to skip the tutorial?'
+                                    Helpers().translateText(
+                                      gamePlayState.currentLanguage,
+                                      'Are you sure you want to skip the tutorial?',
                                     ),
+                                    style: TextStyle(
+                                      color: palette.textColor2,
+                                      fontSize: 18 * settingsState.sizeFactor
+                                    ),
+                                  ),
                                   actions: <TextButton>[
                                     TextButton(
                                         onPressed: () {
@@ -167,12 +179,26 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                                                 builder: (context) => const GameScreen()),
                                           );
                                         },
-                                        child: Text("Yes")),
+                                        child: Text(
+                                          Helpers().translateText(gamePlayState.currentLanguage, "Yes"),
+                                          style: TextStyle(
+                                            color: palette.textColor2,
+                                            fontSize: 18 * settingsState.sizeFactor
+                                          ),
+                                        ),
+                                    ),
                                     TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: Text("No"))
+                                        child: Text(
+                                          Helpers().translateText(gamePlayState.currentLanguage, "Cancel"),
+                                          style: TextStyle(
+                                            color: palette.textColor2,
+                                            fontSize: 18 * settingsState.sizeFactor
+                                          ),                                          
+                                        ),
+                                    )
                                   ],
                                 );
                               },
@@ -228,14 +254,11 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                       padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
                       child: Column(
                         children: [
-                          // Column(
-                          //   children: [
                           TutorialTimerWidget(animation: _textGlowAnimation, language: gamePlayState.currentLanguage),
                           TutorialScoreboard(animation: _textGlowAnimation),
                           TutorialBonusItems(animation: _textGlowAnimation),
                           const Expanded(flex: 10, child: SizedBox()),
                           TutorialRandomLetters(animation: _textGlowAnimation, sizeFactor: settingsState.sizeFactor,),
-                          // const Expanded(child: SizedBox()),
                           TutorialBoard(animation: _textGlowAnimation),
                           const Expanded(child: SizedBox()),
                           Container(
@@ -262,28 +285,16 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                               },
                             ),
                           ),
-                          // spaceForSteps(currentStep),
-                          // tutorialState.sequenceStep  >2  ? const SizedBox() : const SizedBox(height: 100,),
-                          // currentStep['isGameStarted']  !currentStep['isGameEnded'] ? const SizedBox(height: 100,) : const SizedBox(),
-                          //   ],
-                          // ),
-                          // TutorialPauseOverlay(),
-                          // const TutorialStep(),
                         ],
                       ),
                     ),
                   ),
-                  TutorialPauseOverlay(
-                    animation: _textGlowAnimation,
-                  ),
+                  // TutorialPauseOverlay(
+                  //   animation: _textGlowAnimation,
+                  // ),
                   // const TutorialOverlay(),
                 ],
               ),
-              // bottomNavigationBar:   currentStep['isGameStarted'] && !currentStep['isGameEnded'] ? const SizedBox() : const TutorialStep(),
-              // bottomNavigationBar:TutorialStep(), // displayTextBox(currentStep),
-
-              // const TutorialStep() :
-              // bottomNavigationBar: NavigationBar(destinations: const []),
             ),
             const TutorialEndedOverlay(),
             const PreGameOverlay(),

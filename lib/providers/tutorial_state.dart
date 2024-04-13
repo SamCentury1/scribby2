@@ -22,19 +22,7 @@ class TutorialState extends ChangeNotifier {
   final CountDownController _tutorialCountDownController =CountDownController();
   CountDownController get tutorialCountDownController =>_tutorialCountDownController;
 
-  // List<String> _tutorialRandomLetterList = [
-  //   "",
-  //   "",
-  //   "",
-  //   "T",
-  //   "A"
-  // ]; // tutorialRandomLetterListState;
-  // List<String> get tutorialRandomLetterList => _tutorialRandomLetterList;
 
-  // void setTutorialRandomLetterList(List<String> value) {
-  //   _tutorialRandomLetterList = value;
-  //   notifyListeners();
-  // }
 
   List<Map<String, dynamic>> _tutorialTileState = tutorialBoard_1; // startingTileState;
   List<Map<String, dynamic>> get tutorialTileState => _tutorialTileState;
@@ -89,35 +77,6 @@ class TutorialState extends ChangeNotifier {
       "letter_25" ,     
       "letter_26" ,     
       "letter_27" ,       
-    // "",
-    // "T",
-    // "L",
-    // "A",
-    // "C",
-    // "A",
-    // "E",
-    // "S",
-    // "P",
-    // "W", // 2
-    // "T", // 20
-    // "A", // 22
-    // "G", // 27
-    // "B", // 15,
-    // "P", // 5
-    // "N", // 24
-    // "S", // 4
-    // "H", // 17
-    // "I", // 18
-    // "N", // 29
-    // "T", // 30
-    // "U",
-    // // "V",
-    // "R",
-    // "Z",
-    // "E",
-    // "Y",
-    // "W",
-    // "O"
   ]; // tutorialLettersToAddState;
   List<String> get tutorialLettersToAdd => _tutorialLettersToAdd;
 
@@ -126,39 +85,13 @@ class TutorialState extends ChangeNotifier {
     notifyListeners();
   }
 
+  late Map<String, dynamic> _tutorialDraggedReserveTile = {};
+  Map<String, dynamic> get tutorialDraggedReserveTile => _tutorialDraggedReserveTile;
 
-  // List<String> _tutorialLettersToPlace = [
-  //   "",
-  //   "T",
-  //   "A",
-  //   "C",
-  //   "S",
-  //   "P",
-  //   "W",
-  //   "T",
-  //   "A",
-  //   "G",
-  //   "B",
-  //   "P",
-  //   "N",
-  //   "S",
-  //   "H",
-  //   "I",
-  //   "N",
-  //   "T",
-  //   "A",
-  //   "E",
-  //   "E",
-  //   "V",
-  //   "Z",
-  //   "R",
-  // ]; // tutorialLettersToPlaceState;
-  // List<String> get tutorialLettersToPlace => _tutorialLettersToPlace;
-
-  // void setTutorialLettersToPlace(List<String> value) {
-  //   _tutorialLettersToPlace = value;
-  //   notifyListeners();
-  // }
+  void setTutorialDraggedReserveTile(Map<String, dynamic> value) {
+    _tutorialDraggedReserveTile = value;
+    notifyListeners();
+  }  
 
 
 

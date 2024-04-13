@@ -463,6 +463,48 @@ final List<Map<String,dynamic>> translations = [
   },   
 
   {
+    "key": "username successfully updated",
+    "data": {
+      "english": "username successfully updated",
+      "french": "nom d'utilisateur mis à jour avec succès",
+      "spanish": "nombre de usuario actualizado exitosamente",
+      "german" : "Benutzername erfolgreich aktualisiert",
+      "italian" : "nome utente aggiornato con successo",
+      "portuguese" : "nome de usuário atualizado com sucesso",
+      "greek" : "όνομα χρήστη ενημερώθηκε με επιτυχία",
+      "dutch" : "gebruikersnaam succesvol bijgewerkt",
+    }    
+  },
+
+  {
+    "key": "Hold On",
+    "data": {
+      "english": "Hold On",
+      "french": "Attendez",
+      "spanish": "Esperar",
+      "german" : "Festhalten",
+      "italian" : "Aspettare",
+      "portuguese" : "Aguentar",
+      "greek" : "Περίμενε",
+      "dutch" : "Hou vol",
+    }    
+  },  
+
+  {
+    "key": "Excuse me!",
+    "data": {
+      "english": "Excuse me!",
+      "french": "Excusez-moi!",
+      "spanish": "¡Disculpe!",
+      "german" : "Verzeihung!",
+      "italian" : "Mi scusi!",
+      "portuguese" : "Com licença!",
+      "greek" : "Με συγχωρείς!",
+      "dutch" : "Pardon!",
+    }    
+  },  
+
+  {
     "key": "Save",
     "data": {
       "english": "Save",
@@ -1924,6 +1966,21 @@ final List<Map<String,dynamic>> translations = [
       "dutch" : "Welkom bij Scribby! Wil je de tutorial doorlopen?",
     }    
   },
+
+
+  {
+    "key": "Are you sure you want to skip the tutorial?",
+    "data": {
+      "english": "Are you sure you want to skip the tutorial?",
+      "french": "Êtes-vous sûr de vouloir ignorer le tutoriel ?",
+      "spanish": "¿Estás seguro(a) de que quieres saltar el tutorial?",
+      "german" : "Möchten Sie das Tutorial wirklich überspringen?",
+      "italian" : "Sei sicuro di voler saltare il tutorial?",
+      "portuguese" : "Tem certeza de que deseja pular o tutorial?",
+      "greek" : "Είστε βέβαιοι ότι θέλετε να παραλείψετε τον οδηγό;",
+      "dutch" : "Weet je zeker dat je de tutorial wilt overslaan?",
+    }    
+  },               
 
 
   {

@@ -11,6 +11,7 @@ import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   final bool darkMode;
@@ -365,22 +366,6 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                       cardBgColorChangeAnimation,
                                       cardTextColorChangeAnimation,                                      
                                     ),
-                                    parameterCard(
-                                      palette,
-                                      Helpers().translateText(currentLanguage, "Sound On",),
-                                      () {
-                                        updateParameter(
-                                            "soundOn", !soundOn, _palette);
-                                      },
-                                      [
-                                        Icon(Icons.music_note, size: (22*settingsState.sizeFactor) ,),
-                                        Icon(Icons.music_off, size: (22*settingsState.sizeFactor),),
-                                      ],
-                                      soundOn,
-                                      settingsState.sizeFactor,
-                                      cardBgColorChangeAnimation,
-                                      cardTextColorChangeAnimation,                                      
-                                    ),
                                     Text(
                                       Helpers().translateText(currentLanguage, "Language",),
                                       style: TextStyle(
@@ -431,6 +416,29 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                       ),
                                     ),
                                     SizedBox(height: 20*settingsState.sizeFactor,),
+
+                                    Text(
+                                      "Privacy Policy",
+                                      // Helpers().translateText(currentLanguage, "Privacy Policy",),
+                                      style: TextStyle(
+                                          fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
+                                    ),
+                                    parameterCard(
+                                      palette,
+                                      // Helpers().translateText(currentLanguage, "Sound On",),
+                                      "Link to privacy policy",
+                                      () {
+                                        _launchURL("https://nodamngoodstudios.com/games/scribby/privacy-policy");
+                                      },
+                                      [
+                                        Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
+                                        Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
+                                      ],
+                                      soundOn,
+                                      settingsState.sizeFactor,
+                                      cardBgColorChangeAnimation,
+                                      cardTextColorChangeAnimation,                                      
+                                    ),                                                                     
                                   ],
                                 ),
                               ),
@@ -554,12 +562,7 @@ Widget usernameCard(
                                     borderSide: BorderSide(
                                       color:  palette.textColor2
                                     )
-                                  ),                           
-                                  // border: OutlineInputBorder(
-                                  //   borderSide: BorderSide(
-                                  //     color: palette.textColor2
-                                  //   )
-                                  // ),
+                                  ),
                                   labelText: Helpers().translateText(currentLanguage,"Username",),
                                   labelStyle: TextStyle(
                                     color:textColor.value, //  palette.textColor2
@@ -576,45 +579,90 @@ Widget usernameCard(
                               const Expanded(child: SizedBox()),
                               Align(
                                 alignment: Alignment.centerLeft,
-                                child: IconButton(
+                                child: TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                     toggleUserNameEditView();
                                   },
-                                  icon: Icon(
-                                    Icons.close,
-                                    size: 22 * settingsState.sizeFactor,
-                                    color: textColor.value, // palette.textColor2,                                    
+                                  child: Text(
+                                    Helpers().translateText(currentLanguage, "Cancel"),
+                                    style: TextStyle(
+                                      fontSize: 18 * settingsState.sizeFactor,
+                                      color: textColor.value
+                                    ),                           
                                   ),
                                 ),
                               ),                              
                               Align(
                                 alignment: Alignment.centerRight,
-                                child: IconButton(
+                                child: TextButton(
                                   onPressed: () {
-                                    AuthService().updateUsername(
-                                      AuthService().currentUser!.uid ,userNameController.text.toString()
-                                    );
-                                    // TODO: translate this
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "username successfully updated to ${userNameController.text.toString()}",
-                                          style: TextStyle(
-                                            color: palette.textColor1,
-                                            fontSize: 16 * settingsState.sizeFactor
+                                    late List<String> forbiddenNames = [
+                                      "player", "user", "username",
+                                    ];
+
+
+                                    if (forbiddenNames.contains(userNameController.text.toLowerCase())) {
+                                      Helpers().showBadNameDialog(
+                                        context,
+                                        Helpers().translateText(currentLanguage, "Hold On"),
+                                        Helpers().translateText(currentLanguage, "Pick something more original"),
+                                        Helpers().translateText(currentLanguage, "Okay"),
+                                        palette
+
+                                      );
+                                    } else if (Helpers().checkForBadWords(userNameController.text.toLowerCase())) {
+                                      Helpers().showBadNameDialog(
+                                        context,
+                                        Helpers().translateText(currentLanguage, "Excuse me!"),
+                                        Helpers().translateText(currentLanguage, "Hey! No bad words!"),
+                                        Helpers().translateText(currentLanguage, "Okay"),
+                                        palette 
+                                      );
+                                    } else if (userNameController.text.toLowerCase() == "") {
+                                      Helpers().showBadNameDialog(
+                                        context,
+                                        Helpers().translateText(currentLanguage, "Hold On"),
+                                        Helpers().translateText(currentLanguage, "Pick something more original"),
+                                        Helpers().translateText(currentLanguage, "Okay"),
+                                        palette
+                                      );                        
+
+                                    } else if (userNameController.text.toLowerCase().length  < 3) {
+                                      Helpers().showBadNameDialog(
+                                        context,
+                                        Helpers().translateText(currentLanguage, "Hold On"),
+                                        Helpers().translateText(currentLanguage, "Pick something more original"),
+                                        Helpers().translateText(currentLanguage, "Okay"),
+                                        palette
+                                      );                        
+
+                                    } else {
+                                    
+                                      AuthService().updateUsername(AuthService().currentUser!.uid ,userNameController.text.toString());
+
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            Helpers().translateText(currentLanguage, "username successfully updated"),
+                                            style: TextStyle(
+                                              color: palette.focusedTutorialTile,
+                                              fontSize: 16 * settingsState.sizeFactor
+                                            ),
                                           ),
-                                        ),
-                                        duration: const Duration(milliseconds: 3000),
-                                      )
-                                    );                                
-                                    Navigator.of(context).pop();
-                                    toggleUserNameEditView();
+                                          duration: const Duration(milliseconds: 3000),
+                                        )
+                                      );                                
+                                      Navigator.of(context).pop();
+                                      toggleUserNameEditView();
+                                    }
                                   },
-                                  icon: Icon(
-                                    Icons.save,
-                                    size: 22 * settingsState.sizeFactor,
-                                    color: palette.textColor1, // palette.textColor2,
+                                  child: Text(
+                                    Helpers().translateText(currentLanguage, "Save"),
+                                    style: TextStyle(
+                                      fontSize: 18 * settingsState.sizeFactor,
+                                      color: textColor.value
+                                    ),                           
                                   ),
                                 ),
                               ),
@@ -1003,7 +1051,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
                           child: Container(
                             decoration: BoxDecoration(
                               color: getLanguageColor(language["change"],language["originalSelection"], widget.palette),
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
@@ -1053,16 +1101,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
                             ),
                           ),
                         )
-
-                        // Card(
-                        //   color: widget.palette.,
-                        //   child: Text(
-                        //     "Something $i",
-                        //     style: TextStyle(
-                        //       fontSize: 18 * settingsState.sizeFactor
-                        //     ),
-                        //   ),
-                        // )
                       ],
                     ),
                   ),
@@ -1076,8 +1114,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
                 TextButton(
                     onPressed: () {
                       cancelSelections(widget.languages, _settingsState);
-                      print(currentSelection);
-
 
                       Navigator.of(context).pop();
                     },
@@ -1106,83 +1142,14 @@ class _LanguageDialogState extends State<LanguageDialog> {
           ),
         ),
       ),
-
-      // title: Text(
-      //   Helpers().translateText(widget.currentLanguage, "Add / Remove Language",),
-      //   style: TextStyle(
-      //     color: widget.palette.optionButtonTextColor,
-      //     fontSize: 22 * settingsState.sizeFactor
-      //   ),
-      // ),
-      // // barrier
-      // backgroundColor: widget.palette.modalNavigationBarBgColor, //widget.palette.optionButtonBgColor,
-      // content: SizedBox(
-      //   width: MediaQuery.of(context).size.width * 0.9,
-      //   height: MediaQuery.of(context).size.width,
-      //   // height: MediaQuery.of(context).size.height *0.6,
-      //   child: ListView.builder(
-      //     itemCount: currentSelection.length,
-      //     itemBuilder: (BuildContext context, int index) {
-      //       final Map<String, dynamic> language = currentSelection[index];
-
-      //       return Card(
-      //         color: getLanguageColor(language["change"],language["originalSelection"], widget.palette),
-      //         child: ListTile(
-      //             leading: Container(
-      //               width: 20*settingsState.sizeFactor,
-      //               height: 20*settingsState.sizeFactor,
-      //               decoration: BoxDecoration(
-      //                 color: Colors.white,
-      //                 borderRadius:const BorderRadius.all(Radius.circular(50.0)),
-      //                 image: DecorationImage(
-      //                   image: NetworkImage(language['url']),
-      //                 ),
-      //               ),
-      //             ),
-      //             title: Text(
-      //               language['body'],
-      //               style:TextStyle(
-      //                 color: widget.palette.optionButtonTextColor,
-      //                 fontSize: 18 * settingsState.sizeFactor
-      //               ),
-      //             ),
-      //             trailing: IconButton(
-      //                 onPressed: () {
-      //                   updateList(currentSelection, language, widget.currentLanguage);
-      //                 },
-      //                 icon: Icon( 
-      //                   language['selected']
-      //                       ? Icons.remove_circle
-      //                       : Icons.add_circle,
-      //                   color: widget.palette.optionButtonTextColor,
-      //                   size: 30*settingsState.sizeFactor,
-      //                 ))),
-      //       );
-      //     },
-      //   ),
-      // ),
-      // actions: <Widget>[
-      //   TextButton(
-      //       onPressed: () {
-      //         cancelSelections(widget.languages, _settingsState);
-      //         print(currentSelection);
-
-
-      //         Navigator.of(context).pop();
-      //       },
-      //       child: Text(
-      //         Helpers().translateText(widget.currentLanguage, "Cancel"),
-      //         style: TextStyle(color: widget.palette.optionButtonTextColor),
-      //       )),
-      //   TextButton(
-      //       onPressed: () {
-      //         setUpdatedLanguages(currentSelection, widget.currentLanguage);
-      //       },
-      //       child: Text(
-      //         Helpers().translateText(widget.currentLanguage, "Save"),
-      //         style: TextStyle(color: widget.palette.optionButtonTextColor),
-      //       )),
-      // ],
     );
   }
+}
+
+Future<void> _launchURL(url_string) async {
+   final Uri url = Uri.parse(url_string);
+   print("okay go to $url");
+   if (!await launchUrl(url)) {
+        throw Exception('Could not launch privacy policy');
+    }
 }

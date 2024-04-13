@@ -20,15 +20,6 @@ class TutorialBoard extends StatefulWidget {
 }
 
 class _TutorialBoardState extends State<TutorialBoard> {
-  // late double boardWidth = 0;
-  // late double tileSide = 0;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   boardWidth = MediaQuery.of(context).size.width * 0.8;
-  //   tileSide = boardWidth / 7;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +29,14 @@ class _TutorialBoardState extends State<TutorialBoard> {
     late double boardWidth = (MediaQuery.of(context).size.width )*settingsState.sizeFactor*0.8;
     late double tileSide = boardWidth / 6;
 
-    
-
-    // late ColorPalette palette = Provider.of(context, listen: false);
+    // if is FALSE - display overlay to tap into
+    bool ignoreReserveOverlay(Map<String, dynamic> reserveState, Map<String,dynamic> currentStep) {
+      late bool res = true;
+      if (currentStep['dragSource'] == null) {
+        res = false;
+      }
+      return res;
+    }
 
     return Consumer<TutorialState>(builder: (context, tutorialState, child) {
       final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
@@ -63,8 +59,6 @@ class _TutorialBoardState extends State<TutorialBoard> {
                 return Builder(
                   builder: (BuildContext context) {
                   return TutorialTile(
-                      // tutorialState: tutorialState,
-                      // palette: palette,
                       index: i,
                       tileSide: tileSide,
                       animation: widget.animation,
@@ -73,7 +67,7 @@ class _TutorialBoardState extends State<TutorialBoard> {
               }),
             ),
           ),
-          // const Expanded(flex: 1, child: SizedBox()),
+
           SizedBox(height: 10*settingsState.sizeFactor,),
           Consumer<TutorialState>(
             builder: (context, tutorialState, child) {
@@ -82,49 +76,68 @@ class _TutorialBoardState extends State<TutorialBoard> {
                 height: (MediaQuery.of(context).size.width *settingsState.sizeFactor*0.8)/6,
                 // color: Colors.purple,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (Map<String, dynamic> reserve in currentStep['reserves'])
+                      
                       Stack(
                         children: [
+
                           Draggable(
-                            data: reserve["body"] == "" ? const SizedBox() : draggedTile(reserve["body"],Colors.red, tileSide), // draggedTile(reserve["body"], Colors.red),
-                            feedback: reserve["body"] =="" ? const SizedBox() : TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation,), // draggedTile(reserve["body"], const Color.fromARGB(255, 73, 54, 244)),
-                            childWhenDragging:
-                                reserve["body"] == ""
-                                    ? TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation)
+                            // data: reserve["body"] == "" ? const SizedBox() : draggedTile(reserve["body"],Colors.red, tileSide), // draggedTile(reserve["body"], Colors.red),
+                            data: "reserve_${reserve['id']}" != currentStep['dragSource'] 
+                              ? const SizedBox() 
+                              : TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation,), // d          
+                  
+                            
+                            // The widget being dragged (moves with mouse/finger)
+                            // feedback: reserve["body"] =="" ? const SizedBox() : TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation,), // draggedTile(reserve["body"], const Color.fromARGB(255, 73, 54, 244)),
+                            feedback: "reserve_${reserve['id']}" != currentStep['dragSource'] 
+                              ? SizedBox()
+                              : TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation,), // draggedTile(reserve["body"], const Color.fromARGB(255, 73, 54, 244)),
+                            
+                            // The static reserve tile spot
+                            childWhenDragging: 
+
+                                // reserve["body"] != ""
+
+                                "reserve_${reserve['id']}" != currentStep['dragSource'] 
+                                    ? TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation)
                                     : emptyTile(tileSide, palette),//TutorialDraggableTile(tileState: {"id":reserve["id"],"body": ""},tileSide:tileSide, animation: widget.animation),
-                            child: TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation), //draggedTile(reserve["body"], Colors.black),
+                            child: TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation), //draggedTile(reserve["body"], Colors.black),
                 
                             onDragStarted: () {
-                              if (reserve['body'] =="") {
-                                
-                                if (currentStep['callbackTarget'] == "reserve_${reserve['id']}") {
-                                  // reactToInput(tutorialState, animationState);
-                                  TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
-                                } else {}                                
-                                // TutorialHelpers().placeIntoReserves(context,tutorialState,reserve,tutorialDetails);
-                              } else {
+                              
 
-                                if (currentStep['targets'].contains("reserve_${reserve['id']}")) {
-  
-
-                                } else {
-
-                                }
-                                // tutorialState.setDraggedReserveTile(reserve);
+                              if ("reserve_${reserve['id']}" == currentStep['dragSource']) {
+                                tutorialState.setTutorialDraggedReserveTile(reserve);
                               }
                             },
                             onDragEnd: (details) {
-                                if (currentStep['dragSource'] == "reserve_${reserve['id']}") {
-                                  // print('drop me ');
-                                  // TutorialHelpers()
-                                  
-                                  // reactToInput(tutorialState, animationState);
-                                  TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
-                                } else {}     
+
+
+                              if (currentStep['callbackTarget'] == "reserve_${reserve['id']}") {
+                                TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
+                              }
+                            
+                              tutorialState.setTutorialDraggedReserveTile({});
                             },
                           ),
+                          IgnorePointer(
+                            ignoring: ignoreReserveOverlay(reserve,currentStep),
+                            child: SizedBox(
+                              width: tileSide*0.85,
+                              height: tileSide*0.85,
+                              child: GestureDetector(
+                                onTap: () {
+
+                                  if ("reserve_${reserve['id']}" == currentStep['callbackTarget']) {
+                                    TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
+                                  }
+                                },
+                              ),
+                            )
+                          ),                          
                         ],
                       )                      
                   ]
@@ -176,40 +189,14 @@ Widget emptyTile(double tileSide, ColorPalette palette) {
   );
 }
 
-// Widget tutorialTile(TutorialState tutorialState, ColorPalette palette,
-//     int index, double dimension) {
-//   // late double dimension2 = MediaQuery.of(context).size.width * 0.8;
-//   final Map<String, dynamic> tileState =
-//       TutorialHelpers().tutorialTileState(index, tutorialState);
-//   return Padding(
-//     padding: const EdgeInsets.all(2.0),
-//     child: Container(
-//       // color: Colors.blueAccent,
-//       decoration: BoxDecoration(
-//           border: Border.all(
-//             width: 3,
-//             color: palette.tileBgColor,
-//           ),
-//           borderRadius: const BorderRadius.all(Radius.circular(10.0))),
-//       child: Center(
-//           child: Text(
-//         tileState['letter'],
-//         style: TextStyle(fontSize: 32, color: palette.tileBgColor),
-//       )),
-//     ),
-//   );
-// }
+
 
 class TutorialTile extends StatefulWidget {
-  // final TutorialState tutorialState;
-  // final ColorPalette palette;
   final int index;
   final double tileSide;
   final Animation animation;
-  const TutorialTile(
-    {super.key,
-      // required this.tutorialState,
-      // required this.palette,
+  const TutorialTile({
+    super.key,
     required this.index,
     required this.tileSide,
     required this.animation,
@@ -235,9 +222,6 @@ class _TutorialTileState extends State<TutorialTile>
 
   void reactToInput(TutorialState tutorialState, AnimationState animationState) {
     tutorialState.setSequenceStep(tutorialState.sequenceStep + 1);
-    // late Map<String, dynamic> stepDetails = tutorialDetails.firstWhere((elem) => elem['step'] == tutorialState.sequenceStep);
-    // TutorialHelpers().updateTutorialTileState(tutorialState, widget.index, animationState, tutorialDetails);
-
   }
 
   Color colorTileBorder(Map<String, dynamic> tileObject,TutorialState tutorialState,ColorPalette palette,Animation animation) {
@@ -274,23 +258,9 @@ class _TutorialTileState extends State<TutorialTile>
     late TutorialState tutorialState = Provider.of<TutorialState>(context, listen: false);
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
-    // late Map<String, dynamic> tileState = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
-    // late Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
     final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-
-    // log("current step ${currentStep}");
-
-    // late Map<String, dynamic> tileState = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
     late Map<String, dynamic> tileState = currentStep['tileState'].firstWhere((element) => element['index'] == widget.index);
-
-    // log("full state history ${tutorialState.tutorialStateHistory2}");
-
-
     late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
-
-    // late Map<String, dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
-    // final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep(tutorialState);
-    // late Map<String,dynamic> currentTile = TutorialHelpers().tutorialTileState(widget.index, tutorialState);
 
     return GestureDetector(
       onTapUp: (details) {
@@ -307,23 +277,14 @@ class _TutorialTileState extends State<TutorialTile>
             return Stack(
               children: [
                 Container(
-                  // color: Colors.blueAccent,
                   decoration: BoxDecoration(
-                      // color: tileState['alive'] ? palette.screenBackgroundColor : const Color.fromARGB(255, 87, 87, 87),
                       color: colorTileBg(tileState, palette),
-                      // color:Color.fromARGB(167, 56, 56, 56) ,
                       border: Border.all(
                         width: (3*settingsState.sizeFactor),
-                        // color: colorTileBorder(tileState, tutorialState, palette, widget.animation),
                         color: getBorderColor(tileState, palette, widget.animation, currentStep)
                       ),
                       boxShadow: [
                         getBoxShadow(tutorialState, palette, widget.index, widget.animation)
-                        // BoxShadow(
-                        //   color: getBoxShadow(tileState, tutorialState, palette),
-                        //   spreadRadius: 4,
-                        //   blurRadius: 7,
-                        // ),
                       ],
                       borderRadius: const BorderRadius.all(Radius.circular(10.0))),
                   child: Align(
@@ -354,8 +315,15 @@ class _TutorialTileState extends State<TutorialTile>
                   ),
                 ),
                 DragTarget(
-                  onAccept: (details) {
-                    // TutorialHelpers().dropTile(context,widget.index, tutorialState, tutorialDetails);
+                  onAcceptWithDetails: (details) {
+                    if (tutorialState.tutorialDraggedReserveTile.isEmpty) {
+                    } else {
+                      if ("reserve_${tutorialState.tutorialDraggedReserveTile['id']}" == currentStep['dragSource']) {
+                        if (widget.index == currentStep['callbackTarget']) {
+                          TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
+                        } 
+                      } 
+                    }
                   }, 
                   builder: (BuildContext context, List<dynamic> accepted, List<dynamic> rejected) {
                     return draggedTile("", Colors.transparent, widget.tileSide);
@@ -426,11 +394,6 @@ BoxDecoration getInnerTileBoxDecoration(TutorialState tutorialState, ColorPalett
           color: palette.optionButtonBgColor2
         );        
       }    
-    // if (tileObject['letter'] != "") {
-    //   res = BoxDecoration(
-    //     color: palette.tileBgColor
-    //   );
-    // } 
   }
   return res;
 }
@@ -440,13 +403,13 @@ BoxShadow getBoxShadow(TutorialState tutorialState, ColorPalette palette, int wi
   if (stepDetails['targets'].contains(widgetId)) {
     res = BoxShadow(
       color: Color.fromRGBO(
-        palette.textColor2.red,
-        palette.textColor2.green,
-        palette.textColor2.blue,
+        palette.tileBgColor.red,
+        palette.tileBgColor.green,
+        palette.tileBgColor.blue,
         (animation.value*0.5)
       ),
-      blurRadius: 4.0 * (animation.value*0.6),
-      spreadRadius: 4.0 * (animation.value*0.6),
+      blurRadius: 10.0 * (animation.value*0.6),
+      spreadRadius: 10.0 * (animation.value*0.6),
     );
     
   }
@@ -472,27 +435,16 @@ Color colorTileBg(Map<String, dynamic> tileObject, ColorPalette palette,) {
 
 
 Color getBorderColor(Map<String, dynamic> tileObject, ColorPalette palette, Animation animation, Map<String,dynamic> currentStep) {
-  // final String reserveId = "reserve_${tileObject['id']}";
-  // final Map<String,dynamic> tileObject = stepDetails['tileState'].firstWhere((element) => element['index'] == widgetId);
   final bool active = currentStep['targets'].contains(tileObject['index']);
   late Color res = Colors.transparent;
   if (active) {
     // if (tileObject['alive']) {
       res = Color.fromRGBO(
-        palette.textColor2.red,
-        palette.textColor2.green,
-        palette.textColor2.blue,
+        palette.focusedTutorialTile.red,
+        palette.focusedTutorialTile.green,
+        palette.focusedTutorialTile.blue,
         animation.value  
       );
-    // }
-    // } else {
-    //   res = Color.fromRGBO(
-    //     palette.textColor2.red,
-    //     palette.textColor2.green,
-    //     palette.textColor2.blue,
-    //     animation.value  
-    //   );      
-    // }
   } else {
     if (tileObject["letter"] == "") {
       res = Color.fromRGBO(
