@@ -42,7 +42,6 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                         ),
                       ),
                       onTap: () {
-                        // print("start game");
                         gamePlayState.setIsGameStarted(true);
                       }),
                 ),

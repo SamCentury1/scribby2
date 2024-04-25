@@ -100,7 +100,6 @@ class _TimerWidgetState extends State<TimerWidget>
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         late String levelText = Helpers().translateText(gamePlayState.currentLanguage, "Level");
-        // print(levelText);
         return Row(
           children: [
             Text(

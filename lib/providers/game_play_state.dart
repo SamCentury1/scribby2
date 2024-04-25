@@ -287,6 +287,8 @@ class GamePlayState with ChangeNotifier {
     // notifyListeners();
   }
 
+
+
   // final Map<String,dynamic> startingRandomLetterData = {
   //   "list" : startingRandomLetterList,
   //   "state" : alphabetState2

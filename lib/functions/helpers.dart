@@ -393,8 +393,7 @@ class Helpers {
         
       } 
     }
-    print("name ====== ${name}");
-    print(badWordFound);
+
     
     return badWordFound;
   }

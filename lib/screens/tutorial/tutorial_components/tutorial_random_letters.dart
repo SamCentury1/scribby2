@@ -283,14 +283,6 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                         isTimerTextShown: true,
                                         autoStart: true,
                                         onStart: () {
-                                          // tutorialState.tutorialCountDownController.pause();
-                                          // if (currentStep['targets'].contains('countdown')) {
-                                          //   print('start countdowm');
-                                          //   // tutorialState.tutorialCountDownController.start();
-                                          //   tutorialState.tutorialCountDownController.restart(
-                                          //     duration: 10
-                                          //   );
-                                          // }
                                         },
                                         onComplete: () {
                                           if (currentStep['targets'].contains('countdown')) {

@@ -72,7 +72,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) {
           var progress = PlayerProgress(playerProgressPersistence);
           progress.getLatestFromStore();
-          print("progress = $progress");
           return progress;
         }),
         ChangeNotifierProvider(create: (context) => AnimationState(),),

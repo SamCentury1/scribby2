@@ -222,7 +222,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
           audioController.playSfx(SfxType.tada1);
         }
         Future.delayed(const Duration(seconds: 2), () {
-          animationState.setShouldRunGameOverPointsFinishedCounting(false);
+          // animationState.setShouldRunGameOverPointsFinishedCounting(false);
           animationState.setShouldRunNewHighScore(false);
           
         });

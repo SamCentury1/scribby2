@@ -80,7 +80,6 @@ void initState() {
       // log(user.toString());
 
       final String uid = AuthService().currentUser!.uid;
-      print("uid $uid");
 
       final Map<String, dynamic>? userData = await FirestoreMethods().getUserData(uid);
 

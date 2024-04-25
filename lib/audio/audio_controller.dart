@@ -113,7 +113,6 @@ class AudioController {
       final currentPlayer = _sfxPlayers[_currentSfxPlayer];
       currentPlayer.play(AssetSource('audio/sfx/$fileName'));
       _currentSfxPlayer = (_currentSfxPlayer + 1) % _sfxPlayers.length; // removing this prevents sounds from playing simultaneously
-      debugPrint(" ====== AUDIO ======  audio/sfx/$fileName executed");
     });
   }
 

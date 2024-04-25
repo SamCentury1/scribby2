@@ -18,7 +18,7 @@ class DraggableTile extends StatelessWidget {
         palette.tileBgColor.red,
         palette.tileBgColor.green,
         palette.tileBgColor.blue,
-        0.5
+        1.0
       );
     }
     return color;
@@ -33,7 +33,7 @@ class DraggableTile extends StatelessWidget {
         palette.tileBgColor.red,
         palette.tileBgColor.green,
         palette.tileBgColor.blue,
-        0.5
+        1.0
       );
     } else {
       color = const Color.fromRGBO(0, 0, 0, 0);

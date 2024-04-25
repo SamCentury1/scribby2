@@ -258,7 +258,6 @@ class GameLogic {
     List<Map<String, dynamic>> validStringObjects = [];
     List<String> dictionary = gamePlayState.dictionary;
 
-    // print(dictionary[0]);
 
     for (List<int> comboIds in combinations) {
 
@@ -295,7 +294,6 @@ class GameLogic {
     List<int> cols = [];
 
     for (Map<String, dynamic> stringObject in validStringObjects) {
-      // print(stringObject["string"]);
       if (dictionary.contains(stringObject["string"])) {
 
         wordsList.add(stringObject["string"]);
@@ -796,7 +794,7 @@ class GameLogic {
     late List<Map<String, dynamic>> startingTileState = [];
     late List<String> startingRandomLetterList = [];
 
-    // print("starting random letter data = $letterState ");
+
     late Map<String, dynamic> startingRandomLetterStates =
         startingRandomLetterData(letterState);
 
@@ -1231,8 +1229,6 @@ class GameLogic {
 
       executeTilePlacement(context, gamePlayState, audioController, newLetter, tileKey);
     }
-    // print(" ============== TILE STATE =================");
-    // debugPrint(gamePlayState.visualTileState.toString());
   }
 
   // void dropTile(BuildContext context, int row, int column, GamePlayState gamePlayState, AudioController audioController) async {
@@ -1389,7 +1385,6 @@ class GameLogic {
           audioController.playSfx(SfxType.levelUp);
         });        
       }
-      // print(levelUp);
 
       Future.delayed(const Duration(milliseconds: 1500), () {
         gamePlayState.setVisualTileState(updateNewBoardState);
@@ -1560,24 +1555,6 @@ class GameLogic {
   }
 
 
-  // String getWordDefinition(String word) {
-  //   List<Map<String,dynamic>> allDefs = defs+definitions;
-  //   List<String> wordsWithDefs = List.generate(allDefs.length, (index) => allDefs[index]['word']);
-  //   debugPrint(wordsWithDefs.toString());
-  //   String res = "";
-
-  //   if (wordsWithDefs.contains(word)) {
-  //     Map<String,dynamic>? wordObject = allDefs.firstWhere((element) => element['word'] == word ) ;
-  //     res = wordObject['data'][0]['meanings'][0]['definitions'][0];
-
-  //   } else {
-  //     res = "no definition at this time";
-  //   }
-
-  //   print(res);
-
-  //   return res;
-  // }
 
   Future<String> fetchDefinition(String word, String language) async {
 

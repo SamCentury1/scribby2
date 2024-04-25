@@ -74,104 +74,107 @@ class _MenuScreenState extends State<MenuScreen> {
 
               return  Consumer<ColorPalette>(
                   builder: (context, palette, child) {
-                    return SafeArea(
-                      child: Scaffold(
-                          backgroundColor: palette.screenBackgroundColor,
-                          body: Container(
-                            color: palette.screenBackgroundColor,
-                            child: Column(
-                              children: [
-
-                                const Expanded(
-                                  flex: 2,  
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(flex: 1, child: SizedBox(),),
-                                      Expanded(
-                                        flex: 4,
-                                        child: ScribbyLogoAnimation()
-                                      ),
-                                    ],
+                    return PopScope(
+                      canPop: false,
+                      child: SafeArea(
+                        child: Scaffold(
+                            backgroundColor: palette.screenBackgroundColor,
+                            body: Container(
+                              color: palette.screenBackgroundColor,
+                              child: Column(
+                                children: [
+                      
+                                  const Expanded(
+                                    flex: 2,  
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(flex: 1, child: SizedBox(),),
+                                        Expanded(
+                                          flex: 4,
+                                          child: ScribbyLogoAnimation()
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-
-                                Expanded(
-                                  flex: 3,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-
-                                      MenuButtonWidget(
-                                        settingsState: settingsState, 
-                                        palette: palette, 
-                                        language: language,
-                                        body: Helpers().translateText(language, "New Game"),
-                                        onPressed: () {  
-                                          audioController.playSfx(SfxType.optionSelected);
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) => const GameScreen()
-                                            ),
-                                          );
-                                          Helpers().getStates(gamePlayState, settings);         
-                                        },
-                                      ),
-                                      MenuButtonWidget(
-                                        settingsState: settingsState, 
-                                        palette: palette, 
-                                        language: language,
-                                        body: Helpers().translateText(language, "Leaderboards"),
-                                        onPressed: () {
-                                          audioController.playSfx(SfxType.optionSelected);
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const LeaderboardsScreen()),
-                                          );
-                                        },
-                                      ),
-                                      MenuButtonWidget(
-                                        settingsState: settingsState, 
-                                        palette: palette, 
-                                        language: language,
-                                        body: Helpers().translateText(language, "Instructions"),
-                                        onPressed: () {
-                                          audioController.playSfx(SfxType.optionSelected);
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const InstructionsScreen()),
-                                          );
-                                        },
-                                      ),
-                                      MenuButtonWidget(
-                                        settingsState: settingsState, 
-                                        palette: palette, 
-                                        language: language,
-                                        body: Helpers().translateText(language, "Settings"),
-                                        onPressed: () {
-                                          audioController.playSfx(SfxType.optionSelected);
-                          
-                                          Helpers().getStates(gamePlayState, settings);
-                          
-                                          bool darkMode = (settings.userData.value as Map<String, dynamic>)['parameters']['darkMode'];
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (context) => SettingsScreen(darkMode: darkMode),
-                                            ),
-                                                
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  )
-                                ),
-
-                                const SizedBox(height: 15,),
-                              ],
-                            ),
-                          )),
+                      
+                                  Expanded(
+                                    flex: 3,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                      
+                                        MenuButtonWidget(
+                                          settingsState: settingsState, 
+                                          palette: palette, 
+                                          language: language,
+                                          body: Helpers().translateText(language, "New Game"),
+                                          onPressed: () {  
+                                            audioController.playSfx(SfxType.optionSelected);
+                                            Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                builder: (context) => const GameScreen()
+                                              ),
+                                            );
+                                            Helpers().getStates(gamePlayState, settings);         
+                                          },
+                                        ),
+                                        MenuButtonWidget(
+                                          settingsState: settingsState, 
+                                          palette: palette, 
+                                          language: language,
+                                          body: Helpers().translateText(language, "Leaderboards"),
+                                          onPressed: () {
+                                            audioController.playSfx(SfxType.optionSelected);
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const LeaderboardsScreen()),
+                                            );
+                                          },
+                                        ),
+                                        MenuButtonWidget(
+                                          settingsState: settingsState, 
+                                          palette: palette, 
+                                          language: language,
+                                          body: Helpers().translateText(language, "Instructions"),
+                                          onPressed: () {
+                                            audioController.playSfx(SfxType.optionSelected);
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const InstructionsScreen()),
+                                            );
+                                          },
+                                        ),
+                                        MenuButtonWidget(
+                                          settingsState: settingsState, 
+                                          palette: palette, 
+                                          language: language,
+                                          body: Helpers().translateText(language, "Settings"),
+                                          onPressed: () {
+                                            audioController.playSfx(SfxType.optionSelected);
+                            
+                                            Helpers().getStates(gamePlayState, settings);
+                            
+                                            bool darkMode = (settings.userData.value as Map<String, dynamic>)['parameters']['darkMode'];
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) => SettingsScreen(darkMode: darkMode),
+                                              ),
+                                                  
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    )
+                                  ),
+                      
+                                  const SizedBox(height: 15,),
+                                ],
+                              ),
+                            )),
+                      ),
                     );
                   },
                 );

@@ -206,7 +206,6 @@ class _TileWidgetState extends State<TileWidget> with TickerProviderStateMixin{
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final double tileSize = settingsState.screenSizeData["width"]/6;
-    // print(tileSize);
     // late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     late AudioController audioController = Provider.of<AudioController>(context, listen: false);
 

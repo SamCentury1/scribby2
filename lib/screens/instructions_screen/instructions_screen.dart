@@ -49,15 +49,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
   }
 
 
-  // Future<Map<String, dynamic>> getAlphabet() async  {
-  //   late Map<String, dynamic> res = {};
-  //   try {
-  //     res = (settings.alphabet.value as Map<String, dynamic>);
-  //   } catch (error) {
-  //     debugPrint(error.toString());
-  //   }
-  //   return res;
-  // }  
+
 
   @override
   Widget build(BuildContext context) {

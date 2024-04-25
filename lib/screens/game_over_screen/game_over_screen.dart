@@ -1,6 +1,7 @@
 // import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
@@ -129,21 +130,24 @@ class _GameOverScreenState extends State<GameOverScreen> {
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-    late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+    // late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    // late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
 
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
           )
         : PopScope(
-            onPopInvoked: (details) {
-              gamePlayState.endGame();
-              FirestoreMethods().updateSettingsState(settingsState, AuthService().currentUser!.uid);
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const WelcomeUser())
-              );
-            },
+            canPop: false,
+
+            // onPopInvoked: (details) {
+            //   gamePlayState.endGame();
+            //   FirestoreMethods().updateSettingsState(settingsState, AuthService().currentUser!.uid);
+            //   Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(builder: (context) => const WelcomeUser())
+            //   );
+            // },
             child: Scaffold(
               body: Stack(children: [
                 Container(
@@ -164,6 +168,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                         Expanded(
                           flex: 6,
                           child: ScoreWidget(
+
                             score: gamePlayState.endOfGameData['points'], 
                             newHs: newHighScore(settingsState, palette, gamePlayState.endOfGameData['points']),
                             highScore: currentHighScore(settingsState, palette, gamePlayState.endOfGameData['points']),
@@ -421,34 +426,48 @@ class _GameOverScreenState extends State<GameOverScreen> {
                           flex: 3,
                           child: SizedBox(),
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: palette.optionButtonBgColor2,
-                            foregroundColor: palette.textColor1,
-                            shadowColor:const Color.fromRGBO(0, 0, 0, 0.7),
-                            elevation: 3.0,
-                            minimumSize: Size(double.infinity, 50 * settingsState.sizeFactor),
-                            padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                          ),
-                          onPressed: () {
-                            gamePlayState.endGame();
-                            FirestoreMethods().updateSettingsState( settingsState, AuthService().currentUser!.uid);
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const WelcomeUser()));
-                          },
-                          child: Text(
-                            Helpers().translateText(gamePlayState.currentLanguage, "Main Menu"),
-                            style: TextStyle(
-                              color: palette.textColor3,
-                              fontSize: 22* settingsState.sizeFactor
-                            ),
-                          ),
+                        Consumer<AnimationState>(
+                          builder: (context, animationState, child) {
+                            return IgnorePointer(
+                              ignoring: animationState.shouldRunGameOverPointsCounting,
+                              child: AnimatedOpacity(
+                                duration: const Duration(milliseconds: 500),
+                                opacity: animationState.shouldRunGameOverPointsFinishedCounting ? 1.0 : 0.0,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: palette.optionButtonBgColor2,
+                                    foregroundColor: palette.textColor1,
+                                    shadowColor:const Color.fromRGBO(0, 0, 0, 0.7),
+                                    elevation: 3.0,
+                                    minimumSize: Size(double.infinity, 50 * settingsState.sizeFactor),
+                                    padding: EdgeInsets.all(4.0*settingsState.sizeFactor),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    gamePlayState.endGame();
+                                    animationState.setShouldRunGameOverPointsFinishedCounting(false);
+                                    FirestoreMethods().updateSettingsState( settingsState, AuthService().currentUser!.uid);
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const WelcomeUser()
+                                          )
+                                        );
+                                  },
+                                  child: Text(
+                                    Helpers().translateText(gamePlayState.currentLanguage, "Main Menu"),
+                                    style: TextStyle(
+                                      color: palette.textColor3,
+                                      fontSize: 22* settingsState.sizeFactor
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                         ),
                           ],
                         );

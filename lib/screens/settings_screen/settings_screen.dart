@@ -89,38 +89,13 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   }
 
 
-
-  // Future<void> getUserFromFirebase() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   try {
-  //     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-  //     final Map<String, dynamic> userData = await FirestoreMethods().getUserData(AuthService().currentUser!.uid) as Map<String, dynamic>;
-
-  //     if (userData.isNotEmpty) {
-  //       settingsState.updateUserData(userData);
-  //       _palette.getThemeColors(userData['parameters']['darkMode']);
-
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
-
   void toggleUserNameEditView() {
     setState(() {
       userNameEditView = !userNameEditView;
     });
   }
 
-  // Future<void> toggleDarkTheme(ColorPalette palette, bool value) async {
-  //   await FirestoreMethods().toggleDarkTheme(AuthService().currentUser!.uid, value);
-  //   palette.getThemeColors(value);
-  // }
+
 
   Future<void> updateParameter( String parameter, dynamic parameterData, ColorPalette palette) async {
     if (parameter == 'darkMode') {
@@ -171,285 +146,273 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
     late SettingsState settingsState = Provider.of<SettingsState>(context,listen: false);
 
     // return isLoading? const Center(child: CircularProgressIndicator(),): 
-    return StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .doc("users/${AuthService().currentUser!.uid}")
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return  const Center(child: CircularProgressIndicator());
-              }
-              var document = snapshot.data;
-              String username = document?['username'];
-              var darkMode = document?['parameters']['darkMode'];
-              var soundOn = document?['parameters']['soundOn'];
-              var muted = document?['parameters']['muted'];
-              var currentLanguage = document?['parameters']['currentLanguage'];
-              List<dynamic> languages = document?['parameters']['languages'];
-
-
-              return Consumer<ColorPalette>(
-                builder: (context, palette, child) {
-                  return SafeArea(
-                    child: AnimatedBuilder(
-                      animation: screenBgColorChangeAnimation,
-                      builder: (context, child) {                        
-                        return Scaffold(
-                            appBar: AppBar(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(30.0)
-                                )
-                              ),
-                              leading: IconButton(
-                                icon: const Icon(Icons.arrow_back),
-                                iconSize: 24*settingsState.sizeFactor,
-                                color: textColorChangeAnimation.value, // palette.textColor2,
-                                onPressed: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) => const WelcomeUser(),
-                                    ),
-                                  );
-                                },
-                              ),                              
-                              title: Text(Helpers().translateText(currentLanguage, 'Settings',),
-                                style: TextStyle(
-                                  color: cardTextColorChangeAnimation.value, //palette.textColor2,
-                                  fontSize: 24*settingsState.sizeFactor
+    return PopScope(
+      canPop: false,
+    
+      // onPopInvoked: (details) {
+      //   Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => const WelcomeUser())
+      //   );
+      // },        
+      child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .doc("users/${AuthService().currentUser!.uid}")
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return  const Center(child: CircularProgressIndicator());
+                }
+                var document = snapshot.data;
+                String username = document?['username'];
+                var darkMode = document?['parameters']['darkMode'];
+                var soundOn = document?['parameters']['soundOn'];
+                var muted = document?['parameters']['muted'];
+                var currentLanguage = document?['parameters']['currentLanguage'];
+                List<dynamic> languages = document?['parameters']['languages'];
+      
+      
+                return Consumer<ColorPalette>(
+                  builder: (context, palette, child) {
+                    return SafeArea(
+                      child: AnimatedBuilder(
+                        animation: screenBgColorChangeAnimation,
+                        builder: (context, child) {                        
+                          return Scaffold(
+                              appBar: AppBar(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(30.0)
+                                  )
                                 ),
+                                leading: IconButton(
+                                  icon: const Icon(Icons.arrow_back),
+                                  iconSize: 24*settingsState.sizeFactor,
+                                  color: textColorChangeAnimation.value, // palette.textColor2,
+                                  onPressed: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) => const WelcomeUser(),
+                                      ),
+                                    );
+                                  },
+                                ),                              
+                                title: Text(Helpers().translateText(currentLanguage, 'Settings',),
+                                  style: TextStyle(
+                                    color: cardTextColorChangeAnimation.value, //palette.textColor2,
+                                    fontSize: 24*settingsState.sizeFactor
+                                  ),
+                                ),
+                                backgroundColor: appBarColorChangeAnimation.value,
                               ),
-                              backgroundColor: appBarColorChangeAnimation.value,
-                            ),
-                            backgroundColor: screenBgColorChangeAnimation.value,                          
-                            // appBar: AppBar(
-                            //   leading: IconButton(
-                            //     icon: const Icon(Icons.arrow_back),
-                            //     iconSize: 24*settingsState.sizeFactor,
-                            //     color: textColorChangeAnimation.value, // palette.textColor2,
-                            //     onPressed: () {
-                            //       Navigator.of(context).pushReplacement(
-                            //         MaterialPageRoute(
-                            //           builder: (context) => const MenuScreen(),
-                            //         ),
-                            //       );
-                            //     },
-                            //   ),
-                            //   title: Text(Helpers().translateText(currentLanguage, 'Settings',),
-                            //     style: TextStyle(
-                            //       color: cardTextColorChangeAnimation.value, //palette.textColor2,
-                            //       fontSize: 24*settingsState.sizeFactor
-                            //     ),
-                            //   ),
-                            //   backgroundColor: appBarColorChangeAnimation.value, //palette.appBarColor,
-                            // ),
-                            body: Container(
-                              // color: palette.screenBackgroundColor,
-                              color: screenBgColorChangeAnimation.value,
-                              height: double.infinity,
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 20*settingsState.sizeFactor,
-                                    ),
-                                    Text(
-                                      Helpers().translateText(
-                                        currentLanguage, "Username",
-                                      ),                               
-                                      style: TextStyle(
-                                          fontSize: (22 * settingsState.sizeFactor), 
-                                          color: textColorChangeAnimation.value, //_palette.textColor1
-                                        ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.fromLTRB(
-                                          16.0*settingsState.sizeFactor, 
-                                          4.0*settingsState.sizeFactor, 
-                                          16.0*settingsState.sizeFactor, 
-                                          4.0*settingsState.sizeFactor
-                                        ),
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        // height: 80,
-                                        child: Card(
-                                          color: cardBgColorChangeAnimation.value,  // palette.optionButtonBgColor,
-                                          child: Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                26.0*settingsState.sizeFactor, 
-                                                4.0*settingsState.sizeFactor, 
-                                                4.0*settingsState.sizeFactor, 
-                                                4.0*settingsState.sizeFactor
+                              backgroundColor: screenBgColorChangeAnimation.value,                          
+                              body: Container(
+                                // color: palette.screenBackgroundColor,
+                                color: screenBgColorChangeAnimation.value,
+                                height: double.infinity,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 20*settingsState.sizeFactor,
+                                      ),
+                                      Text(
+                                        Helpers().translateText(
+                                          currentLanguage, "Username",
+                                        ),                               
+                                        style: TextStyle(
+                                            fontSize: (22 * settingsState.sizeFactor), 
+                                            color: textColorChangeAnimation.value, //_palette.textColor1
+                                          ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            16.0*settingsState.sizeFactor, 
+                                            4.0*settingsState.sizeFactor, 
+                                            16.0*settingsState.sizeFactor, 
+                                            4.0*settingsState.sizeFactor
+                                          ),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          // height: 80,
+                                          child: Card(
+                                            color: cardBgColorChangeAnimation.value,  // palette.optionButtonBgColor,
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  26.0*settingsState.sizeFactor, 
+                                                  4.0*settingsState.sizeFactor, 
+                                                  4.0*settingsState.sizeFactor, 
+                                                  4.0*settingsState.sizeFactor
+                                                ),
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: usernameCard(
+                                                  userNameEditView,
+                                                  username,
+                                                  _userNameController,
+                                                  toggleUserNameEditView,
+                                                  palette,
+                                                  settingsState,
+                                                  currentLanguage,
+                                                  context,
+                                                  cardBgColorChangeAnimation,
+                                                  cardTextColorChangeAnimation,
+                                                )
                                               ),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: usernameCard(
-                                                userNameEditView,
-                                                username,
-                                                _userNameController,
-                                                toggleUserNameEditView,
-                                                palette,
-                                                settingsState,
-                                                currentLanguage,
-                                                context,
-                                                cardBgColorChangeAnimation,
-                                                cardTextColorChangeAnimation,
-                                              )
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 30*settingsState.sizeFactor,
-                                    ),
-                                    Text(
-                                      Helpers().translateText(
+                                      SizedBox(
+                                        height: 30*settingsState.sizeFactor,
+                                      ),
+                                      Text(
+                                        Helpers().translateText(
+                                          currentLanguage,
+                                          "Parameters",
+                                        ),
+                                        style: TextStyle(
+                                            fontSize: (22*settingsState.sizeFactor), 
+                                            color: textColorChangeAnimation.value, //_palette.textColor1
+                                          ),
+                                      ),
+                                      parameterCard(
+                                        palette,
+                                        Helpers().translateText(currentLanguage, "Color Theme",),
+                                        
+                                        () {
+                                          // toggleDarkTheme(_palette,!darkMode);
+                                          /// super complicated but basically, what happens without the nested if statement
+                                          /// is that when darkmode is initially true, then the first time changing the
+                                          /// theme doesn't work
+                                          if (darkMode) {
+                                            if (widget.darkMode) {
+                                              colorChangeController.reset();
+                                              colorChangeController.forward();                                            
+                                            } else {
+                                              colorChangeController.reverse();
+                                            }
+                                            // colorChangeController.forward();                                          
+                                          } else {
+                                            if (widget.darkMode) {
+                                              colorChangeController.reverse();
+                                            } else {
+                                              colorChangeController.reset();
+                                              colorChangeController.forward();
+                                            }
+                                            // colorChangeController.fling();
+                                          }
+                                          updateParameter("darkMode", !darkMode, _palette, );
+                                        },
+                                        [
+                                          Icon(Icons.nightlight, size: (22*settingsState.sizeFactor)),
+                                          Icon(Icons.sunny, size: (22*settingsState.sizeFactor)),
+                                        ],
+                                        darkMode,
+                                        settingsState.sizeFactor,
+                                        cardBgColorChangeAnimation,
+                                        cardTextColorChangeAnimation,                                      
+                                      ),
+                                      parameterCard(
+                                        palette,
+                                        Helpers().translateText(currentLanguage, "Muted",),
+                                        
+                                        () {
+                                          updateParameter("muted", !muted, _palette);
+                                        },
+                                        [
+                                          Icon(Icons.volume_mute, size: (22*settingsState.sizeFactor)),
+                                          Icon(Icons.volume_up, size: (22*settingsState.sizeFactor)),
+                                        ],
+                                        muted,
+                                        settingsState.sizeFactor,
+                                        cardBgColorChangeAnimation,
+                                        cardTextColorChangeAnimation,                                      
+                                      ),
+                                      Text(
+                                        Helpers().translateText(currentLanguage, "Language",),
+                                        style: TextStyle(
+                                            fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
+                                      ),
+                          
+                                      
+                                      languageCard(
+                                        palette,
+                                        Helpers().translateText(currentLanguage, "Current",),
                                         currentLanguage,
-                                        "Parameters",
+                                        languages,
+                                        currentLanguage,
+                                        settingsState.sizeFactor,
+                                        cardBgColorChangeAnimation,
+                                        cardTextColorChangeAnimation,                                       
                                       ),
-                                      style: TextStyle(
-                                          fontSize: (22*settingsState.sizeFactor), 
-                                          color: textColorChangeAnimation.value, //_palette.textColor1
-                                        ),
-                                    ),
-                                    parameterCard(
-                                      palette,
-                                      Helpers().translateText(currentLanguage, "Color Theme",),
+                          
                                       
-                                      () {
-                                        // toggleDarkTheme(_palette,!darkMode);
-                                        /// super complicated but basically, what happens without the nested if statement
-                                        /// is that when darkmode is initially true, then the first time changing the
-                                        /// theme doesn't work
-                                        if (darkMode) {
-                                          if (widget.darkMode) {
-                                            colorChangeController.reset();
-                                            colorChangeController.forward();                                            
-                                          } else {
-                                            colorChangeController.reverse();
-                                          }
-                                          // colorChangeController.forward();                                          
-                                        } else {
-                                          if (widget.darkMode) {
-                                            colorChangeController.reverse();
-                                          } else {
-                                            colorChangeController.reset();
-                                            colorChangeController.forward();
-                                          }
-                                          // colorChangeController.fling();
-                                        }
-                                        updateParameter("darkMode", !darkMode, _palette, );
-                                      },
-                                      [
-                                        Icon(Icons.nightlight, size: (22*settingsState.sizeFactor)),
-                                        Icon(Icons.sunny, size: (22*settingsState.sizeFactor)),
-                                      ],
-                                      darkMode,
-                                      settingsState.sizeFactor,
-                                      cardBgColorChangeAnimation,
-                                      cardTextColorChangeAnimation,                                      
-                                    ),
-                                    parameterCard(
-                                      palette,
-                                      Helpers().translateText(currentLanguage, "Muted",),
-                                      
-                                      () {
-                                        updateParameter("muted", !muted, _palette);
-                                      },
-                                      [
-                                        Icon(Icons.volume_mute, size: (22*settingsState.sizeFactor)),
-                                        Icon(Icons.volume_up, size: (22*settingsState.sizeFactor)),
-                                      ],
-                                      muted,
-                                      settingsState.sizeFactor,
-                                      cardBgColorChangeAnimation,
-                                      cardTextColorChangeAnimation,                                      
-                                    ),
-                                    Text(
-                                      Helpers().translateText(currentLanguage, "Language",),
-                                      style: TextStyle(
-                                          fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
-                                    ),
-                        
-                                    
-                                    languageCard(
-                                      palette,
-                                      Helpers().translateText(currentLanguage, "Current",),
-                                      currentLanguage,
-                                      languages,
-                                      currentLanguage,
-                                      settingsState.sizeFactor,
-                                      cardBgColorChangeAnimation,
-                                      cardTextColorChangeAnimation,                                       
-                                    ),
-                        
-                                    
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 26.0*settingsState.sizeFactor),
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  cardBgColorChangeAnimation.value,
-                                                  //palette.optionButtonBgColor,
-                                              foregroundColor:
-                                                  cardBgColorChangeAnimation.value,
-                                                  // palette.optionButtonTextColor,
-                                              shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10.0)),
-                                              )),
-                                          child: Text(
-                                            Helpers().translateText(currentLanguage, "Add / Remove Language",),
-                                            style: TextStyle(
-                                              fontSize: 16 * settingsState.sizeFactor,
-                                              color: cardTextColorChangeAnimation.value,
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 26.0*settingsState.sizeFactor),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    cardBgColorChangeAnimation.value,
+                                                    //palette.optionButtonBgColor,
+                                                foregroundColor:
+                                                    cardBgColorChangeAnimation.value,
+                                                    // palette.optionButtonTextColor,
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(10.0)),
+                                                )),
+                                            child: Text(
+                                              Helpers().translateText(currentLanguage, "Add / Remove Language",),
+                                              style: TextStyle(
+                                                fontSize: 16 * settingsState.sizeFactor,
+                                                color: cardTextColorChangeAnimation.value,
+                                              ),
                                             ),
+                                            onPressed: () {
+                                              displayLanguagesDialog(context, palette, languages, currentLanguage);  
+                                              updateSettingsState(languages, currentLanguage);
+                                            },
                                           ),
-                                          onPressed: () {
-                                            displayLanguagesDialog(context, palette, languages, currentLanguage);  
-                                            updateSettingsState(languages, currentLanguage);
-                                          },
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(height: 20*settingsState.sizeFactor,),
-
-                                    Text(
-                                      "Privacy Policy",
-                                      // Helpers().translateText(currentLanguage, "Privacy Policy",),
-                                      style: TextStyle(
-                                          fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
-                                    ),
-                                    parameterCard(
-                                      palette,
-                                      // Helpers().translateText(currentLanguage, "Sound On",),
-                                      "Link to privacy policy",
-                                      () {
-                                        _launchURL("https://nodamngoodstudios.com/games/scribby/privacy-policy");
-                                      },
-                                      [
-                                        Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
-                                        Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
-                                      ],
-                                      soundOn,
-                                      settingsState.sizeFactor,
-                                      cardBgColorChangeAnimation,
-                                      cardTextColorChangeAnimation,                                      
-                                    ),                                                                     
-                                  ],
+                                      SizedBox(height: 20*settingsState.sizeFactor,),
+                          
+                                      Text(
+                                        "Privacy Policy",
+                                        // Helpers().translateText(currentLanguage, "Privacy Policy",),
+                                        style: TextStyle(
+                                            fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
+                                      ),
+                                      parameterCard(
+                                        palette,
+                                        // Helpers().translateText(currentLanguage, "Sound On",),
+                                        "Link to privacy policy",
+                                        () {
+                                          _launchURL("https://nodamngoodstudios.com/games/scribby/privacy-policy");
+                                        },
+                                        [
+                                          Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
+                                          Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
+                                        ],
+                                        soundOn,
+                                        settingsState.sizeFactor,
+                                        cardBgColorChangeAnimation,
+                                        cardTextColorChangeAnimation,                                      
+                                      ),                                                                     
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                          );
-                      },
-                    ),
-                  );
-                },
-              );
-    });
+                              )
+                            );
+                        },
+                      ),
+                    );
+                  },
+                );
+      }),
+    );
   }
 }
 

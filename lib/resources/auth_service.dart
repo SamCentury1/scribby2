@@ -26,11 +26,6 @@ class AuthService {
         "createdAt": DateTime.now(),
         "highScores": {}
       });
-      // } on FirebaseAuthException catch (e) {
-      //   print(e.code);
-      // } catch (e) {
-      //   print(e.toString());
-      // }
     }
 
     return currentUser;
@@ -39,12 +34,5 @@ class AuthService {
   Future<void> updateUsername(String userId, String newName) async {
     final docRef = _firestore.collection("users").doc(userId);
     docRef.update({"username": newName});
-    // docRef.get().then(
-    //   (DocumentSnapshot doc) {
-    //     final data = doc.data() as Map<String, dynamic>;
-    //     print(data);
-    //   },
-    //   onError: (e) => print("Error getting document: $e"),
-    // );
   }
 }

@@ -57,7 +57,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     if (!mounted) return;
     if (_adLoadingState == _LoadingState.loading ||
         _adLoadingState == _LoadingState.disposing) {
-      debugPrint("ad is already being loaded or disposed. aborting");
       return;
     }
 
@@ -82,7 +81,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
               MediaQuery.of(context).size.width.truncate());
       if (adaptiveSize == null) {
-        debugPrint("unable to get height of anchored banner");
         size = AdSize.banner;
       } else {
         size = adaptiveSize;
@@ -113,15 +111,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           });
         },
         onAdFailedToLoad: (ad, error) {
-          debugPrint("ad failed to load");
           ad.dispose();
         },
-        // onAdImpression: (ad) {
-        //   _log.info('Ad impression registered');
-        // },
-        // onAdClicked: (ad) {
-        //   _log.info('Ad click registered');
-        // },
       ),
     );
     // return _bannerAd!.load();
@@ -155,7 +146,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
         if (_currentOrientation == orientation &&
             _bannerAd != null &&
             _adLoadingState == _LoadingState.loaded) {
-          debugPrint("good to go, show the ad");
           return SizedBox(
             width: _bannerAd!.size.width.toDouble(),
             height: _bannerAd!.size.height.toDouble(),
@@ -164,7 +154,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
         }
         // Reload the ad if the orientation changes
         if (_currentOrientation != orientation) {
-          debugPrint("orientation changed, relaod ad");
           _currentOrientation = orientation;
           _loadAd();
         }
