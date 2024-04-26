@@ -1,4 +1,6 @@
 // import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
@@ -25,20 +27,20 @@ class GamePauseDialog extends StatefulWidget {
 
 class _GamePauseDialogState extends State<GamePauseDialog> {
   final PageController _controller = PageController();
-  // late GamePlayState gamePlayState;
   int currentPage = 0;
+  late double bottomNavHeight = 0;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-  //   // gamePlayState.pageController.jumpToPage(0);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    bottomNavHeight = Platform.isIOS ? 68 : 50;
+  }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+    
   }
 
   @override
@@ -90,65 +92,68 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10),
                     ),
-                    child: SizedBox(
-                      height: (58 * settingsState.sizeFactor),
-                      child: BottomNavigationBar(
-                        currentIndex: currentPage,
-                        onTap: (index) {
-                          setState(() {
-                            currentPage = index;
-                            _controller.animateToPage(
-                              index,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                      
-                          });
-                        },
-                        type: BottomNavigationBarType.shifting,
-                        // type: BottomNavigationBarType.fixed,
-                        selectedItemColor: palette.bottomNavigationBarItemColor,
-                        unselectedItemColor: palette.optionButtonTextColor,
-                        selectedFontSize: (12 * settingsState.sizeFactor),
+                    child: SafeArea(
+                      child: SizedBox(
+                        // height: (58 * settingsState.sizeFactor),
+                        height: bottomNavHeight,
+                        child: BottomNavigationBar(
+                          currentIndex: currentPage,
+                          onTap: (index) {
+                            setState(() {
+                              currentPage = index;
+                              _controller.animateToPage(
+                                index,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.ease,
+                              );
                         
-                        items: [
-                          BottomNavigationBarItem(
-                            icon: const Icon(
-                              Icons.gamepad,
-                              size: (18),
+                            });
+                          },
+                          type: BottomNavigationBarType.shifting,
+                          // type: BottomNavigationBarType.fixed,
+                          selectedItemColor: palette.bottomNavigationBarItemColor,
+                          unselectedItemColor: palette.optionButtonTextColor,
+                          selectedFontSize: (12 * settingsState.sizeFactor),
+                          
+                          items: [
+                            BottomNavigationBarItem(
+                              icon: const Icon(
+                                Icons.gamepad,
+                                size: (18),
+                              ),
+                              label: "",
+                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Summary'),
+                              backgroundColor: palette.optionButtonBgColor2,
                             ),
-                            label: "",
-                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Summary'),
-                            backgroundColor: palette.optionButtonBgColor2,
-                          ),
-                          BottomNavigationBarItem(
-                            icon: const Icon(
-                              Icons.help,
-                              size: (18),
+                            BottomNavigationBarItem(
+                              icon: const Icon(
+                                Icons.help,
+                                size: (18),
+                              ),
+                              label: "",
+                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Help'),
+                              backgroundColor: palette.optionButtonBgColor2,
                             ),
-                            label: "",
-                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Help'),
-                            backgroundColor: palette.optionButtonBgColor2,
-                          ),
-                          BottomNavigationBarItem(
-                            icon: const Icon(
-                              Icons.settings,
-                              size: (18),
+                            BottomNavigationBarItem(
+                              icon: const Icon(
+                                Icons.settings,
+                                size: (18),
+                              ),
+                              label: "",
+                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Settings'),
+                              backgroundColor: palette.optionButtonBgColor2,
                             ),
-                            label: "",
-                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Settings'),
-                            backgroundColor: palette.optionButtonBgColor2,
-                          ),
-                          BottomNavigationBarItem(
-                            icon: const Icon(
-                              Icons.exit_to_app,
-                              size: (18),
+                            BottomNavigationBarItem(
+                              icon: const Icon(
+                                Icons.exit_to_app,
+                                size: (18),
+                              ),
+                              label: "",
+                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Quit'),
+                              backgroundColor: palette.optionButtonBgColor2,
                             ),
-                            label: "",
-                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Quit'),
-                            backgroundColor: palette.optionButtonBgColor2,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
