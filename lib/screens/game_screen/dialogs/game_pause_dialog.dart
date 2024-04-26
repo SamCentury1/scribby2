@@ -33,7 +33,7 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
   @override
   void initState() {
     super.initState();
-    bottomNavHeight = Platform.isIOS ? 68 : 50;
+    bottomNavHeight = Platform.isIOS ? 68 : 68;
   }
 
   @override
@@ -92,68 +92,67 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10),
                     ),
-                    child: SafeArea(
-                      child: SizedBox(
-                        // height: (58 * settingsState.sizeFactor),
-                        height: bottomNavHeight,
-                        child: BottomNavigationBar(
-                          currentIndex: currentPage,
-                          onTap: (index) {
-                            setState(() {
-                              currentPage = index;
-                              _controller.animateToPage(
-                                index,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.ease,
-                              );
+                    child: SizedBox(
+                      // height: (58 * settingsState.sizeFactor),
+                      // height: bottomNavHeight,
+                      // height: double.maxFinite,
+                      child: BottomNavigationBar(
+                        currentIndex: currentPage,
+                        onTap: (index) {
+                          setState(() {
+                            currentPage = index;
+                            _controller.animateToPage(
+                              index,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease,
+                            );
+                      
+                          });
+                        },
+                        type: BottomNavigationBarType.shifting,
+                        // type: BottomNavigationBarType.fixed,
+                        selectedItemColor: palette.bottomNavigationBarItemColor,
+                        unselectedItemColor: palette.optionButtonTextColor,
+                        selectedFontSize: (12 * settingsState.sizeFactor),
                         
-                            });
-                          },
-                          type: BottomNavigationBarType.shifting,
-                          // type: BottomNavigationBarType.fixed,
-                          selectedItemColor: palette.bottomNavigationBarItemColor,
-                          unselectedItemColor: palette.optionButtonTextColor,
-                          selectedFontSize: (12 * settingsState.sizeFactor),
-                          
-                          items: [
-                            BottomNavigationBarItem(
-                              icon: const Icon(
-                                Icons.gamepad,
-                                size: (18),
-                              ),
-                              label: "",
-                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Summary'),
-                              backgroundColor: palette.optionButtonBgColor2,
+                        items: [
+                          BottomNavigationBarItem(
+                            icon: const Icon(
+                              Icons.gamepad,
+                              size: (18),
                             ),
-                            BottomNavigationBarItem(
-                              icon: const Icon(
-                                Icons.help,
-                                size: (18),
-                              ),
-                              label: "",
-                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Help'),
-                              backgroundColor: palette.optionButtonBgColor2,
+                            label: "",
+                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Summary'),
+                            backgroundColor: palette.optionButtonBgColor2,
+                          ),
+                          BottomNavigationBarItem(
+                            icon: const Icon(
+                              Icons.help,
+                              size: (18),
                             ),
-                            BottomNavigationBarItem(
-                              icon: const Icon(
-                                Icons.settings,
-                                size: (18),
-                              ),
-                              label: "",
-                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Settings'),
-                              backgroundColor: palette.optionButtonBgColor2,
+                            label: "",
+                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Help'),
+                            backgroundColor: palette.optionButtonBgColor2,
+                          ),
+                          BottomNavigationBarItem(
+                            icon: const Icon(
+                              Icons.settings,
+                              size: (18),
                             ),
-                            BottomNavigationBarItem(
-                              icon: const Icon(
-                                Icons.exit_to_app,
-                                size: (18),
-                              ),
-                              label: "",
-                              // label: Helpers().translateText(gamePlayState.currentLanguage,'Quit'),
-                              backgroundColor: palette.optionButtonBgColor2,
+                            label: "",
+                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Settings'),
+                            backgroundColor: palette.optionButtonBgColor2,
+                          ),
+                          BottomNavigationBarItem(
+                            icon: const Icon(
+                              Icons.exit_to_app,
+                              size: (18),
                             ),
-                          ],
-                        ),
+                            label: "",
+                            // label: Helpers().translateText(gamePlayState.currentLanguage,'Quit'),
+                            backgroundColor: palette.optionButtonBgColor2,
+                          ),
+                        ],
                       ),
                     ),
                   ),
