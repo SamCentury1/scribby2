@@ -22,6 +22,8 @@ class _GameHelpScreenState extends State<GameHelpScreen> {
   late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
   // late SettingsController settings = Provider.of<SettingsController>(context, listen: false);
 
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GamePlayState>(
@@ -119,9 +121,34 @@ class _DemoBoardStateState extends State<DemoBoardState> {
   late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
   late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
+  final Map<int,dynamic> tileIds = {
+    0: "1_1",
+    1: "1_2",
+    2: "1_3",
+    3: "2_1",
+    4: "2_2",
+    5: "2_3",
+    6: "3_1",
+    7: "3_2",
+    8: "3_3",                            
+  };
+
+  double getTileSize(double currentScreenWidth , double sizeFactor) {
+    double res = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      res = 500;
+    }
+    return (res / 5) * sizeFactor;
+  }  
+
 
   @override
   Widget build(BuildContext context) {
+
+    late double tileSize = getTileSize(MediaQuery.of(context).size.width, settingsState.sizeFactor);
+    late String randomLetter1 = GameLogic().displayDemoTileLetter(widget.demoBoardState, "0_0", widget.language);
+    late String randomLetter2 = GameLogic().displayDemoTileLetter(widget.demoBoardState, "0_1", widget.language);
+
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -129,7 +156,7 @@ class _DemoBoardStateState extends State<DemoBoardState> {
           SizedBox(
             // height: 70,
             // width: 200,
-            width: MediaQuery.of(context).size.width*0.6,
+            // width: MediaQuery.of(context).size.width*0.6,
             child: Row(
               children: [
                 const Expanded(
@@ -140,8 +167,8 @@ class _DemoBoardStateState extends State<DemoBoardState> {
                   flex: 1,
                   child: Center(
                     child: Container(
-                      width: MediaQuery.of(context).size.width*0.18,
-                      height: MediaQuery.of(context).size.width*0.18,
+                      width: tileSize*1.3,
+                      height: tileSize*1.3,
                       // height: 70,
                       // width: 70,
                       decoration: BoxDecoration(
@@ -150,8 +177,7 @@ class _DemoBoardStateState extends State<DemoBoardState> {
                       ),
                       child: Center(
                         child: Text(
-                          GameLogic()
-                              .displayDemoTileLetter(widget.demoBoardState, "0_0", widget.language),
+                          randomLetter1,
                           style: TextStyle(
                               fontSize: (42 * settingsState.sizeFactor), color: palette.tileTextColor),
                         ),
@@ -163,16 +189,15 @@ class _DemoBoardStateState extends State<DemoBoardState> {
                   flex: 1,
                   child: Center(
                     child: Container(
-                      width: MediaQuery.of(context).size.width*0.13,
-                      height: MediaQuery.of(context).size.width*0.13,
+                      width: tileSize,
+                      height: tileSize,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: palette.tileBgColor,
                       ),
                       child: Center(
                         child: Text(
-                          GameLogic()
-                              .displayDemoTileLetter(widget.demoBoardState, "0_1", widget.language),
+                          randomLetter2,
                           style: TextStyle(
                               fontSize: (26 * settingsState.sizeFactor), color: palette.tileTextColor),
                         ),
@@ -190,63 +215,27 @@ class _DemoBoardStateState extends State<DemoBoardState> {
             // width: 200,
             // height: 170,
             margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-            child: Column(
-              children: [
-                for (var i = 0; i < 3; i++)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var j = 0; j < 3; j++)
-                        Center(
-                          child: Container(
-                              width: MediaQuery.of(context).size.width*0.13,
-                              height: MediaQuery.of(context).size.width*0.13,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: GameLogic().displayDemoTileLetter(
-                                        widget.demoBoardState, 
-                                        "${(i + 1).toString()}_${(j + 1).toString()}", 
-                                        widget.language
-                                      ) == ""
-                                        ? palette.tileBgColor
-                                        : const Color.fromRGBO(0, 0, 0, 0),
-                                    width: 2,
-                                  ),
-                                  color: GameLogic().displayDemoTileLetter(
-                                              widget.demoBoardState,
-                                              "${(i + 1).toString()}_${(j + 1).toString()}",
-                                              widget.language) ==
-                                          ""
-                                      ? const Color.fromRGBO(0, 0, 0, 0)
-                                      : GameLogic().getTileState(
-                                                  widget.demoBoardState,
-                                                  "${(i + 1).toString()}_${(j + 1).toString()}")[
-                                              "active"]
-                                          ? palette.screenBackgroundColor
-                                          : palette.tileBgColor,
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              margin: const EdgeInsets.all(2.0),
-                              child: Center(
-                                  child: Text(
-                                GameLogic().displayDemoTileLetter(
-                                    widget.demoBoardState,
-                                    "${(i + 1).toString()}_${(j + 1).toString()}",
-                                    widget.language),
-                                style: TextStyle(
-                                  fontSize: (22 * settingsState.sizeFactor),
-                                  color: GameLogic().getTileState(
-                                              widget.demoBoardState,
-                                              "${(i + 1).toString()}_${(j + 1).toString()}")[
-                                          "active"]
-                                      ? palette.tileBgColor
-                                      : palette.tileTextColor,
-                                ),
-                              ))),
-                        )
-                    ],
-                  )
-              ],
-            ),
+            // height: MediaQuery.of(context).size.width,
+            height: tileSize * 4,
+            width: MediaQuery.of(context).size.width ,          
+
+            child: Center(
+              child: GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                children: List.generate(9, (i) {
+                  return DemoTileWidget(
+                    tileSize: getTileSize(MediaQuery.of(context).size.width, settingsState.sizeFactor), 
+                    tileId: tileIds[i], 
+                    demoBoardState: widget.demoBoardState, 
+                    language: widget.language, 
+                    palette: palette, 
+                    sizeFactor: settingsState.sizeFactor
+                  );
+                }),
+              ),
+            ),            
+
           ),
         ],
       ),
@@ -286,4 +275,87 @@ Widget _instructionsText(ColorPalette palette, String body, String language, boo
       style: TextStyle(fontSize: (18*sizeFactor), color: palette.textColor2),
     ),
   );
+}
+
+
+Color getDemoTileBorderColor(String tileLetter,  ColorPalette palette) {
+  late Color res = Colors.transparent;
+  if (tileLetter == "") {
+    res = palette.tileBgColor;
+  }
+  return res;
+}
+
+Color getDemoTileColor(String tileLetter, ColorPalette palette, bool isActive) {
+
+  late Color res = Colors.transparent;
+  if (tileLetter != "") {
+    if (isActive) {
+      res = palette.screenBackgroundColor;
+    } else {
+      res = palette.tileBgColor;
+    }
+  }
+  return res;
+}
+Color getDemoTileTextColor(String tileLetter, ColorPalette palette, bool isActive) {
+  late Color res = palette.tileTextColor;
+  if (isActive) {
+    res = palette.tileBgColor;
+  }
+  return res;
+}
+
+
+class DemoTileWidget extends StatelessWidget {
+  final double tileSize;
+  final String tileId;
+  final List<Map<String, dynamic>> demoBoardState;
+  final String language;
+  final ColorPalette palette;
+  final double sizeFactor;
+  const DemoTileWidget({
+    super.key,
+    required this.tileSize,
+    required this.tileId,
+    required this.demoBoardState,
+    required this.language,
+    required this.palette,
+    required this.sizeFactor
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    String tileLetter = GameLogic().displayDemoTileLetter(demoBoardState,tileId,language);
+    Map<String,dynamic> tileState = GameLogic().getTileState(demoBoardState, tileId);
+    bool isActive = tileState["active"];
+    
+    Color borderColor = getDemoTileBorderColor(tileLetter,palette);
+    Color tileBgColor = getDemoTileColor(tileLetter,palette,isActive);
+    Color tileTextColor = getDemoTileTextColor(tileLetter,palette,isActive);
+
+
+    return Center(
+      child: Container(
+        width: tileSize,
+        height: tileSize,
+        decoration: BoxDecoration(
+          border: Border.all(color:borderColor,width: 2,),
+          color: tileBgColor,
+          borderRadius: BorderRadius.circular(10.0)
+        ),
+        margin: const EdgeInsets.all(2.0),
+        child: Center(
+          child: Text(
+            tileLetter,
+            style: TextStyle(
+              fontSize: (22 * sizeFactor),
+              color: tileTextColor,
+            ),
+          )
+        )
+      ),      
+    );
+  }
 }

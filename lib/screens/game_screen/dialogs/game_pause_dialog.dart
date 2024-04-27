@@ -42,6 +42,14 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
     super.dispose();
     
   }
+  
+  double getDialogWidth(double currentScreenWidth) {
+    late double res = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      res = 500;
+    }
+    return res * 0.85;
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +67,8 @@ class _GamePauseDialogState extends State<GamePauseDialog> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15.0),
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
+              // width: MediaQuery.of(context).size.width * 0.85,
+              width: getDialogWidth(MediaQuery.of(context).size.width),
               height: MediaQuery.of(context).size.height * 0.65,
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(15.0)),

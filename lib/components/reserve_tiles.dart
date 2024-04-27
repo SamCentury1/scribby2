@@ -14,7 +14,21 @@ class ReserveTiles extends StatefulWidget {
 
 class _ReserveTilesState extends State<ReserveTiles> {
 
+  double getTileSize(double currentScreenWidth, double sizeFactor) {
+    late double boardWidth = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      boardWidth = 500;
+    }
+    return (boardWidth/8)*sizeFactor;
+  }
 
+  double getBoardWidth(double currentScreenWidth,double sizeFactor) {
+    late double boardWidth = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      boardWidth = 500;
+    }
+    return boardWidth*sizeFactor;
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -23,14 +37,15 @@ class _ReserveTilesState extends State<ReserveTiles> {
     // late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     // late AudioController audioController = Provider.of<AudioController>(context, listen: false);
         
-    double tileSize = ((MediaQuery.of(context).size.width ) /8) * settingsState.sizeFactor;
+    double tileSize = getTileSize(MediaQuery.of(context).size.width, settingsState.sizeFactor);
 
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return FittedBox(
           fit: BoxFit.scaleDown,
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * settingsState.sizeFactor,
+            // width: MediaQuery.of(context).size.width * settingsState.sizeFactor,
+            width: getBoardWidth(MediaQuery.of(context).size.width,settingsState.sizeFactor),
             child: Padding(
               padding: const EdgeInsets.all(0.0),
               child: Row(

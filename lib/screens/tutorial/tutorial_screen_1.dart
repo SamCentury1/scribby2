@@ -105,12 +105,23 @@ class _TutorialScreen1State extends State<TutorialScreen1>
     return res;
   }
 
+  double getBoardWidth(double currentScreenWidth, double sizeFactor) {
+    late double res = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      res = 500;
+    }
+    return res * sizeFactor;
+  }   
+
   @override
   Widget build(BuildContext context) {
 
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    final double boardWidth = getBoardWidth(MediaQuery.of(context).size.width, settingsState.sizeFactor*0.8);
+    final double tileWidth = boardWidth/3;
+
     return Consumer<TutorialState>(
       builder: (context, tutorialState, child) {
         final Map<String, dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
@@ -258,8 +269,8 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                           TutorialScoreboard(animation: _textGlowAnimation),
                           TutorialBonusItems(animation: _textGlowAnimation),
                           const Expanded(flex: 10, child: SizedBox()),
-                          TutorialRandomLetters(animation: _textGlowAnimation, sizeFactor: settingsState.sizeFactor,),
-                          TutorialBoard(animation: _textGlowAnimation),
+                          TutorialRandomLetters(animation: _textGlowAnimation, sizeFactor: settingsState.sizeFactor, boardWidth: boardWidth, tileWidth: tileWidth),
+                          TutorialBoard(animation: _textGlowAnimation, boardWidth: boardWidth),
                           const Expanded(child: SizedBox()),
                           Container(
                             padding: EdgeInsets.only(bottom: 10.0*settingsState.sizeFactor),

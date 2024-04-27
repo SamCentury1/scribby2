@@ -196,7 +196,12 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
   void startCounting(int score, AnimationState animationState, ) {
 
     final audioController = context.read<AudioController>();
-    audioController.playLoopSfx();
+
+    // adding this bc if the score is too low, the loop may start 
+    // playing after score is done counting making it impossible to stop playing
+    if (score > 50) {
+      audioController.playLoopSfx();
+    }
 
     int increment = getIncrementFactor(score);
 

@@ -10,9 +10,11 @@ import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TutorialBoard extends StatefulWidget {
   final Animation animation;
+  final double boardWidth;
   const TutorialBoard({
     super.key,
     required this.animation,
+    required this.boardWidth,
   });
 
   @override
@@ -26,8 +28,8 @@ class _TutorialBoardState extends State<TutorialBoard> {
 
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
-    late double boardWidth = (MediaQuery.of(context).size.width )*settingsState.sizeFactor*0.8;
-    late double tileSide = boardWidth / 6;
+    // late double boardWidth = (MediaQuery.of(context).size.width )*settingsState.sizeFactor*0.8;
+    // late double tileSide = boardWidth / 6;
 
     // if is FALSE - display overlay to tap into
     bool ignoreReserveOverlay(Map<String, dynamic> reserveState, Map<String,dynamic> currentStep) {
@@ -38,16 +40,26 @@ class _TutorialBoardState extends State<TutorialBoard> {
       return res;
     }
 
+    // double getBoardWidth(double currentScreenWidth, double sizeFactor) {
+    //   late double res = currentScreenWidth;
+    //   if (currentScreenWidth > 500) {
+    //     res = 500;
+    //   }
+    //   return res * sizeFactor;
+    // } 
+
     return Consumer<TutorialState>(builder: (context, tutorialState, child) {
       final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
       late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
       late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-
+      // late double boardWidth = getBoardWidth(MediaQuery.of(context).size.width,settingsState.sizeFactor*0.8 );
+      late double tileSide = widget.boardWidth / 6;
+      
       return Column(
         children: [
           SizedBox(
-            width: boardWidth,
-            height: boardWidth,
+            width: widget.boardWidth,
+            height: widget.boardWidth,
             // color: Colors.yellow,
             child: GridView(
               physics: const NeverScrollableScrollPhysics(),

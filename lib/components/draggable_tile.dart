@@ -40,12 +40,19 @@ class DraggableTile extends StatelessWidget {
     }
     return color;
   }
-
+  double getTileSize(double currentScreenWidth, double sizeFactor) {
+    late double boardWidth = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      boardWidth = 500;
+    }
+    return (boardWidth/8)*sizeFactor;
+  }
   @override
   Widget build(BuildContext context) {
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of(context, listen: false);
-    double tileSize = ((MediaQuery.of(context).size.width ) /8) * settingsState.sizeFactor;
+    // double tileSize = ((MediaQuery.of(context).size.width ) /8) * settingsState.sizeFactor;
+    double tileSize = getTileSize(MediaQuery.of(context).size.width, settingsState.sizeFactor);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return Center(
@@ -54,6 +61,7 @@ class DraggableTile extends StatelessWidget {
             child: Container(
                 width: tileSize,
                 height: tileSize,
+                
                 decoration: BoxDecoration(
                   color: colorTileBg(tileState, palette),
                   border: Border.all(

@@ -40,8 +40,7 @@ class GameLogic {
     return res;
   }  
 
-  Map<String, dynamic> getTileState(
-      List<Map<String, dynamic>> letterState, String tileId) {
+  Map<String, dynamic> getTileState(List<Map<String, dynamic>> letterState, String tileId) {
     return letterState.firstWhere((element) => element["tileId"] == tileId);
   }
 

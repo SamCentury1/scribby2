@@ -21,6 +21,14 @@ class _BoardState extends State<Board> {
   late AudioController audioController = Provider.of<AudioController>(context, listen: false);
 
 
+  double getBoardWidth(double currentWidth, double sizeFactor) {
+    late double res = currentWidth;
+    if (currentWidth > 500) {
+      res = 500;
+    }
+    return res*sizeFactor;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GamePlayState>(
@@ -29,8 +37,11 @@ class _BoardState extends State<Board> {
           children: [
             Center(
               child: SizedBox(
-                height:(MediaQuery.of(context).size.width ) * settingsState.sizeFactor,
-                width:(MediaQuery.of(context).size.width ) * settingsState.sizeFactor, //330,
+                // height:(MediaQuery.of(context).size.width ) * settingsState.sizeFactor,
+                // width:(MediaQuery.of(context).size.width ) * settingsState.sizeFactor, //330,
+                height: getBoardWidth(MediaQuery.of(context).size.width,settingsState.sizeFactor) ,
+                width: getBoardWidth(MediaQuery.of(context).size.width,settingsState.sizeFactor),
+
                 child: GridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 6,

@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
       brightness: Brightness.dark,
       primarySwatch: const MaterialColor(20, {12: Colors.black}));
 
-  // This widget is the root sof your application.
+  // This widget is the root sof your application.  
   @override
   Widget build(BuildContext context) {
     return AppLifecycleObserver(
@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
         builder: (context) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
+            title: 'Scribby',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(3, 29, 68, 1)),
               useMaterial3: true,

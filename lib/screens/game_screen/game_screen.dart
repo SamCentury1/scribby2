@@ -65,11 +65,14 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   }
 
 
+  double getBoardWidth(double currentScreenWidth) {
+    double res = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      res = 500;
+    }
+    return res;
+  }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,15 +80,13 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     // adsController?.preloadAd();
 
     // final GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-    final SettingsController settings =
-        Provider.of<SettingsController>(context, listen: false);
+    final SettingsController settings =Provider.of<SettingsController>(context, listen: false);
 
-    final SettingsState settingsState =
-        Provider.of<SettingsState>(context, listen: false);        
+    final SettingsState settingsState =Provider.of<SettingsState>(context, listen: false);        
     // final Palette palette = Provider.of<Palette>(context, listen: false);
-    final ColorPalette palette =
-        Provider.of<ColorPalette>(context, listen: false);
+    final ColorPalette palette =Provider.of<ColorPalette>(context, listen: false);
 
+    final double tileSide = getBoardWidth(MediaQuery.of(context).size.width)/4;
     // final AnimationState animationState =
     //     Provider.of<AnimationState>(context, listen: false);     
 
@@ -160,7 +161,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               
                                   // RANDOM LETTERS LAYER
                                   const Expanded(flex: 1, child: SizedBox()),
-                                  RandomLetters(tileSize: MediaQuery.of(context).size.width *0.2, settingsState: settingsState,),
+                                  RandomLetters(
+                                    // tileSize: MediaQuery.of(context).size.width *0.2, 
+                                    tileSize: tileSide,
+                                    settingsState: settingsState,
+                                  ),
                                   
                                   const SizedBox(
                                     height: 10,
@@ -168,6 +173,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                   // Expanded(child: SizedBox()),
                                   const Board(),
                                   const ReserveTiles(),
+                                  const Expanded(child: SizedBox())
                                 ],
                               ),
                             ),

@@ -216,7 +216,8 @@ class MenuButtonWidget extends StatelessWidget {
         onPressed: onPressed,
         child: Container(
           constraints: BoxConstraints(
-            minHeight: 50 * settingsState.sizeFactor
+            minHeight: 50 * settingsState.sizeFactor,
+            maxWidth: 400
           ),
           decoration: BoxDecoration(
           

@@ -66,8 +66,7 @@ class _RandomLettersState extends State<RandomLetters>
     // Check if the level has changed
     if (_gamePlayState.currentLevel != _gamePlayState.previousLevel) {
       setState(() {
-        secondsLeft =
-            GameLogic().getCountdownDuration(_gamePlayState.currentLevel);
+        secondsLeft = GameLogic().getCountdownDuration(_gamePlayState.currentLevel);
       });
     }
   }
@@ -166,14 +165,23 @@ class _RandomLettersState extends State<RandomLetters>
     super.dispose();
   }
 
+  double getBoardWidth(double currentScreenWidth) {
+    double res = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      res = 500;
+    }
+    return res;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-    final double width = MediaQuery.of(context).size.width *0.6;
-    final double side = width/3.3;
+    final double width = getBoardWidth(MediaQuery.of(context).size.width);
+    final double side = width/3;
 
     return Stack(
       children: [
@@ -183,8 +191,9 @@ class _RandomLettersState extends State<RandomLetters>
             Consumer<GamePlayState>(
               builder: (context, gamePlayState, child) {
                 return SizedBox(
-                  width: MediaQuery.of(context).size.width * settingsState.sizeFactor,
-                  height: side*1.1,                  
+                  // width: getBoardWidth(MediaQuery.of(context).size.width) * settingsState.sizeFactor,
+                  width: width * settingsState.sizeFactor,
+                  height: widget.tileSize * settingsState.sizeFactor,                  
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,31 +207,24 @@ class _RandomLettersState extends State<RandomLetters>
                               Align(
                                 alignment: Alignment.center,
                                 child: CircularCountDownTimer(
-                                  duration: GameLogic().getCountdownDuration(
-                                      gamePlayState.currentLevel), // 5,
-                                  initialDuration: GameLogic()
-                                      .getCountdownDuration(
-                                          gamePlayState.currentLevel), // 5,
+                                  duration: GameLogic().getCountdownDuration(gamePlayState.currentLevel), // 5,
+                                  initialDuration: GameLogic().getCountdownDuration(gamePlayState.currentLevel), // 5,
                                   controller: gamePlayState.countDownController,
-                                  width: side * settingsState.sizeFactor,
-                                      // 70, // MediaQuery.of(context).size.width / 3,
+                                  width: side * settingsState.sizeFactor *0.7,
                                   height: side * settingsState.sizeFactor,// MediaQuery.of(context).size.height / 3,
-                                  // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
                                   ringColor: palette.tileBgColor,
                                   ringGradient: null,
-                                  fillColor: palette
-                                      .tileTextColor, // Colors.purpleAccent[100]!,
+                                  fillColor: palette.tileTextColor, // Colors.purpleAccent[100]!,
                                   fillGradient: null,
                                   // backgroundColor:GameLogic().getColor(settings.darkTheme.value, palette, "screen_background"),
-                                  backgroundColor:
-                                      palette.screenBackgroundColor,
+                                  backgroundColor:palette.screenBackgroundColor,
                                   backgroundGradient: null,
                                   strokeWidth: 5.0,
                                   strokeCap: StrokeCap.round,
                                   textStyle: TextStyle(
                                       fontSize: (33.0 * settingsState.sizeFactor),
-                                      // color: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),
-                                      color: palette.tileBgColor),
+                                      color: palette.tileBgColor
+                                  ),
                                   textFormat: CountdownTextFormat.S,
                                   isReverse: true,
                                   isReverseAnimation: false,
@@ -259,8 +261,8 @@ class _RandomLettersState extends State<RandomLetters>
                                 builder: (context, child) {
                                   return Center(
                                     child: Container(
-                                      width: (side * 1) * _shrinkAnimation.value,
-                                      height: (side * 1) * _shrinkAnimation.value,
+                                      width: (widget.tileSize * 1 * settingsState.sizeFactor) * _shrinkAnimation.value,
+                                      height: (widget.tileSize * 1 * settingsState.sizeFactor) * _shrinkAnimation.value,
                                       decoration: BoxDecoration(
                                           color: palette.tileBgColor,
                                           borderRadius: const BorderRadius.all(
@@ -285,8 +287,8 @@ class _RandomLettersState extends State<RandomLetters>
                                     position: _slideAnimation,
                                     child: Center(
                                       child: Container(
-                                        width:  (_sizeAnimation.value ),
-                                        height:  (_sizeAnimation.value ),
+                                        width:  (_sizeAnimation.value * settingsState.sizeFactor ),
+                                        height:  (_sizeAnimation.value * settingsState.sizeFactor ),
                                         decoration: BoxDecoration(
                                             color: palette.tileBgColor,
                                             borderRadius:
@@ -318,8 +320,8 @@ class _RandomLettersState extends State<RandomLetters>
                             position: _letter2Animation,
                             child: Center(
                                 child: Container(
-                                    width: (side*0.6),
-                                    height: (side*0.6),
+                                    width: (widget.tileSize*0.6 * settingsState.sizeFactor),
+                                    height: (widget.tileSize*0.6 * settingsState.sizeFactor),
                                     decoration: BoxDecoration(
                                         color: palette.tileBgColor,
                                         borderRadius: const BorderRadius.all(

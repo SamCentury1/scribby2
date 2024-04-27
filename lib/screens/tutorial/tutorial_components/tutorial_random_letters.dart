@@ -12,10 +12,14 @@ import 'package:scribby_flutter_v2/utils/states.dart';
 class TutorialRandomLetters extends StatefulWidget {
   final Animation animation;
   final double sizeFactor;
+  final double boardWidth;
+  final double tileWidth;
   const TutorialRandomLetters({
     super.key,
     required this.animation,
     required this.sizeFactor,
+    required this.boardWidth,
+    required this.tileWidth
   });
 
   @override
@@ -55,7 +59,7 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
   @override
   void initState() {
     super.initState();
-    initializeAnimations(widget.sizeFactor);
+    initializeAnimations(widget.tileWidth, widget.sizeFactor);
     _animationState = Provider.of<AnimationState>(context, listen: false);
     _tutorialState = Provider.of<TutorialState>(context, listen: false);
     _animationState.addListener(_handleAnimationStateChange);
@@ -82,7 +86,7 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
   }
 
   // THIS FUNCTION TELLS THE CODE WHAT TO DO
-  void initializeAnimations(double sizeFactor) {
+  void initializeAnimations(double tileWidth, double sizeFactor) {
 
     // final double width = MediaQuery.of(context).size.width *0.6;
     // final double side = width/3;
@@ -111,8 +115,8 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
         vsync: this, duration: const Duration(milliseconds: 500));
 
     _sizeAnimation = Tween<double>(
-      begin: 40*sizeFactor, // 50,
-      end: 76*sizeFactor // 100,
+      begin: 0.5, // 50,
+      end:  1.0// 100,
     ).animate(CurvedAnimation(
         parent: _sizeAnimationController, curve: Curves.easeIn));
 
@@ -188,6 +192,16 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
   return res;
 }
 
+  // double getBoardWidth(double currentScreenWidth) {
+  //   double res = currentScreenWidth;
+  //   if (currentScreenWidth > 500) {
+  //     res = 500;
+  //   }
+  //   return res;
+  // }
+
+
+
   @override
   Widget build(BuildContext context) {
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
@@ -195,8 +209,9 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
 
-    final double width = MediaQuery.of(context).size.width *0.6*settingsState.sizeFactor;
-    final double side = width/3;
+    // final double width = getBoardWidth(MediaQuery.of(context).size.width) * 0.6* settingsState.sizeFactor;
+    // final double side = width/3;
+    // final double side = widget.boardWidth/3;
 
     return Stack(
       children: [
@@ -223,8 +238,9 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                   // color: Color.fromARGB(255, 220, 171, 230),
                   // width: double.infinity,
                   // height: 100,
-                  width: MediaQuery.of(context).size.width*0.8*settingsState.sizeFactor,
-                  height: side*1.2,
+                  // width: getBoardWidth(MediaQuery.of(context).size.width)*0.8*settingsState.sizeFactor,
+                  width: widget.boardWidth,
+                  height: widget.tileWidth*1.2,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -257,9 +273,9 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                         duration: 0,
                                         initialDuration: 0,
                                         controller: tutorialState.tutorialCountDownController,
-                                        width: side*0.8,
+                                        width: widget.tileWidth*0.8,
                                             // 70, // MediaQuery.of(context).size.width / 3,
-                                        height: side*0.8,
+                                        height: widget.tileWidth*0.8,
                                             // 70, // MediaQuery.of(context).size.height / 3,
                                         // ringColor: GameLogic().getColor(settings.darkTheme.value, palette, "tile_bg"),  // Colors.grey[300]!,
                                         ringColor: tutorialState.sequenceStep == 7 ? palette.tileBgColor : palette.tileTextColor,
@@ -343,8 +359,8 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                       builder: (context, child) {
                                         return Center(
                                           child: Container(
-                                            width: (side*0.8) * _shrinkAnimation.value,
-                                            height: (side*0.8) * _shrinkAnimation.value,
+                                            width: (widget.tileWidth) * _shrinkAnimation.value,
+                                            height: (widget.tileWidth) * _shrinkAnimation.value,
                                             decoration: BoxDecoration(
                                                 color: palette.tileBgColor,
                                                 borderRadius: const BorderRadius.all(
@@ -369,8 +385,10 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                           position: _slideAnimation,
                                           child: Center(
                                             child: Container(
-                                              width: _sizeAnimation.value,
-                                              height: _sizeAnimation.value,
+                                              width: widget.tileWidth*_sizeAnimation.value,
+                                              height: widget.tileWidth*_sizeAnimation.value,
+                                              // width: _sizeAnimation.value,
+                                              // height: _sizeAnimation.value,
                                               decoration: BoxDecoration(
                                                 color: palette.tileBgColor,
                                                 borderRadius: const BorderRadius.all(Radius.circular(10))),
@@ -416,8 +434,8 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                                     child: Padding(
                                       padding: EdgeInsets.all(8.0*settingsState.sizeFactor),
                                       child: Container(
-                                        width: side *0.6, // 50,
-                                        height: side *0.6, // 50,
+                                        width: widget.tileWidth *0.6, // 50,
+                                        height: widget.tileWidth *0.6, // 50,
                                         decoration: BoxDecoration(
                                             color: palette.tileBgColor,
                                             borderRadius: const BorderRadius.all(
