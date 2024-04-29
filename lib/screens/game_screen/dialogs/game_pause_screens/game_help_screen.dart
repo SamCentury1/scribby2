@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
@@ -149,12 +150,16 @@ class _DemoBoardStateState extends State<DemoBoardState> {
     late String randomLetter1 = GameLogic().displayDemoTileLetter(widget.demoBoardState, "0_0", widget.language);
     late String randomLetter2 = GameLogic().displayDemoTileLetter(widget.demoBoardState, "0_1", widget.language);
 
+    print(tileSize);
+
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            // height: 70,
+          Container(
+            
             // width: 200,
             // width: MediaQuery.of(context).size.width*0.6,
             child: Row(
@@ -167,10 +172,8 @@ class _DemoBoardStateState extends State<DemoBoardState> {
                   flex: 1,
                   child: Center(
                     child: Container(
-                      width: tileSize*1.3,
-                      height: tileSize*1.3,
-                      // height: 70,
-                      // width: 70,
+                      width: tileSize,
+                      height: tileSize,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: palette.tileBgColor,
@@ -189,8 +192,8 @@ class _DemoBoardStateState extends State<DemoBoardState> {
                   flex: 1,
                   child: Center(
                     child: Container(
-                      width: tileSize,
-                      height: tileSize,
+                      width: tileSize*0.5,
+                      height: tileSize*0.5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: palette.tileBgColor,
@@ -211,29 +214,24 @@ class _DemoBoardStateState extends State<DemoBoardState> {
           const SizedBox(
             height: 10,
           ),
-          Container(
-            // width: 200,
-            // height: 170,
-            margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-            // height: MediaQuery.of(context).size.width,
-            height: tileSize * 4,
-            width: MediaQuery.of(context).size.width ,          
-
-            child: Center(
-              child: GridView.count(
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 3,
-                children: List.generate(9, (i) {
-                  return DemoTileWidget(
-                    tileSize: getTileSize(MediaQuery.of(context).size.width, settingsState.sizeFactor), 
-                    tileId: tileIds[i], 
-                    demoBoardState: widget.demoBoardState, 
-                    language: widget.language, 
-                    palette: palette, 
-                    sizeFactor: settingsState.sizeFactor
-                  );
-                }),
-              ),
+          SizedBox(
+            width:(tileSize*0.75)*3.1,
+            child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              children: List.generate(9, (i) {
+                return DemoTileWidget(
+                  // tileSize: getTileSize(MediaQuery.of(context).size.width, settingsState.sizeFactor), 
+                  tileSize: tileSize*0.75,
+                  tileId: tileIds[i], 
+                  demoBoardState: widget.demoBoardState, 
+                  language: widget.language, 
+                  palette: palette, 
+                  sizeFactor: settingsState.sizeFactor
+                );
+              }),
             ),            
 
           ),
@@ -345,7 +343,7 @@ class DemoTileWidget extends StatelessWidget {
           color: tileBgColor,
           borderRadius: BorderRadius.circular(10.0)
         ),
-        margin: const EdgeInsets.all(2.0),
+        // margin: const EdgeInsets.all(2.0),
         child: Center(
           child: Text(
             tileLetter,

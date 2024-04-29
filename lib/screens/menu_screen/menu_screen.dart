@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
@@ -30,6 +31,7 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
+    loadAsset();
 
   }
   void navigateToChooseLanguage() {
@@ -47,6 +49,10 @@ class _MenuScreenState extends State<MenuScreen> {
   void dispose() {
     super.dispose();
   }
+
+  Future<String> loadAsset() async {
+    return await rootBundle.loadString('assets/config.json');
+  }  
 
 
 
@@ -92,7 +98,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                         Expanded(flex: 1, child: SizedBox(),),
                                         Expanded(
                                           flex: 4,
-                                          child: ScribbyLogoAnimation()
+                                          child: Image(image: AssetImage('assets/images/scribby_label_1.png')),
+                                          // child: ScribbyLogoAnimation()
                                         ),
                                       ],
                                     ),

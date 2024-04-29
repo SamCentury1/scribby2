@@ -1,6 +1,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
@@ -206,205 +208,222 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                   ),
                                 ),
                                 backgroundColor: appBarColorChangeAnimation.value,
+                                // backgroundColor: Colors.transparent,
                               ),
                               backgroundColor: screenBgColorChangeAnimation.value,                          
-                              body: Container(
-                                // color: palette.screenBackgroundColor,
-                                color: screenBgColorChangeAnimation.value,
-                                height: double.infinity,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 20*settingsState.sizeFactor,
-                                      ),
-                                      Text(
-                                        Helpers().translateText(
-                                          currentLanguage, "Username",
-                                        ),                               
-                                        style: TextStyle(
-                                            fontSize: (22 * settingsState.sizeFactor), 
-                                            color: textColorChangeAnimation.value, //_palette.textColor1
+                              body: SingleChildScrollView(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 600
+                                    ),
+                                    child: Container(
+                                      color: screenBgColorChangeAnimation.value,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 20*settingsState.sizeFactor,
                                           ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            16.0*settingsState.sizeFactor, 
-                                            4.0*settingsState.sizeFactor, 
-                                            16.0*settingsState.sizeFactor, 
-                                            4.0*settingsState.sizeFactor
+                                          Text(
+                                            Helpers().translateText(
+                                              currentLanguage, "Username",
+                                            ),                               
+                                            style: TextStyle(
+                                                fontSize: (22 * settingsState.sizeFactor), 
+                                                color: textColorChangeAnimation.value, //_palette.textColor1
+                                              ),
                                           ),
-                                        child: SizedBox(
-                                          width: double.infinity,
-                                          // height: 80,
-                                          child: Card(
-                                            color: cardBgColorChangeAnimation.value,  // palette.optionButtonBgColor,
-                                            child: Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  26.0*settingsState.sizeFactor, 
-                                                  4.0*settingsState.sizeFactor, 
-                                                  4.0*settingsState.sizeFactor, 
-                                                  4.0*settingsState.sizeFactor
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                16.0*settingsState.sizeFactor, 
+                                                4.0*settingsState.sizeFactor, 
+                                                16.0*settingsState.sizeFactor, 
+                                                4.0*settingsState.sizeFactor
+                                              ),
+                                            child: Card(
+                                              color: cardBgColorChangeAnimation.value,  // palette.optionButtonBgColor,
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    26.0*settingsState.sizeFactor, 
+                                                    4.0*settingsState.sizeFactor, 
+                                                    4.0*settingsState.sizeFactor, 
+                                                    4.0*settingsState.sizeFactor
+                                                  ),
+                                                child: Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: usernameCard(
+                                                    userNameEditView,
+                                                    username,
+                                                    _userNameController,
+                                                    toggleUserNameEditView,
+                                                    palette,
+                                                    settingsState,
+                                                    currentLanguage,
+                                                    context,
+                                                    cardBgColorChangeAnimation,
+                                                    cardTextColorChangeAnimation,
+                                                  )
                                                 ),
-                                              child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: usernameCard(
-                                                  userNameEditView,
-                                                  username,
-                                                  _userNameController,
-                                                  toggleUserNameEditView,
-                                                  palette,
-                                                  settingsState,
-                                                  currentLanguage,
-                                                  context,
-                                                  cardBgColorChangeAnimation,
-                                                  cardTextColorChangeAnimation,
-                                                )
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 30*settingsState.sizeFactor,
-                                      ),
-                                      Text(
-                                        Helpers().translateText(
-                                          currentLanguage,
-                                          "Parameters",
-                                        ),
-                                        style: TextStyle(
-                                            fontSize: (22*settingsState.sizeFactor), 
-                                            color: textColorChangeAnimation.value, //_palette.textColor1
+                                          SizedBox(
+                                            height: 30*settingsState.sizeFactor,
                                           ),
-                                      ),
-                                      parameterCard(
-                                        palette,
-                                        Helpers().translateText(currentLanguage, "Color Theme",),
-                                        
-                                        () {
-                                          // toggleDarkTheme(_palette,!darkMode);
-                                          /// super complicated but basically, what happens without the nested if statement
-                                          /// is that when darkmode is initially true, then the first time changing the
-                                          /// theme doesn't work
-                                          if (darkMode) {
-                                            if (widget.darkMode) {
-                                              colorChangeController.reset();
-                                              colorChangeController.forward();                                            
-                                            } else {
-                                              colorChangeController.reverse();
-                                            }
-                                            // colorChangeController.forward();                                          
-                                          } else {
-                                            if (widget.darkMode) {
-                                              colorChangeController.reverse();
-                                            } else {
-                                              colorChangeController.reset();
-                                              colorChangeController.forward();
-                                            }
-                                            // colorChangeController.fling();
-                                          }
-                                          updateParameter("darkMode", !darkMode, _palette, );
-                                        },
-                                        [
-                                          Icon(Icons.nightlight, size: (22*settingsState.sizeFactor)),
-                                          Icon(Icons.sunny, size: (22*settingsState.sizeFactor)),
-                                        ],
-                                        darkMode,
-                                        settingsState.sizeFactor,
-                                        cardBgColorChangeAnimation,
-                                        cardTextColorChangeAnimation,                                      
-                                      ),
-                                      parameterCard(
-                                        palette,
-                                        Helpers().translateText(currentLanguage, "Muted",),
-                                        
-                                        () {
-                                          updateParameter("muted", !muted, _palette);
-                                        },
-                                        [
-                                          Icon(Icons.volume_mute, size: (22*settingsState.sizeFactor)),
-                                          Icon(Icons.volume_up, size: (22*settingsState.sizeFactor)),
-                                        ],
-                                        muted,
-                                        settingsState.sizeFactor,
-                                        cardBgColorChangeAnimation,
-                                        cardTextColorChangeAnimation,                                      
-                                      ),
-                                      Text(
-                                        Helpers().translateText(currentLanguage, "Language",),
-                                        style: TextStyle(
-                                            fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
-                                      ),
-                          
-                                      
-                                      languageCard(
-                                        palette,
-                                        Helpers().translateText(currentLanguage, "Current",),
-                                        currentLanguage,
-                                        languages,
-                                        currentLanguage,
-                                        settingsState.sizeFactor,
-                                        cardBgColorChangeAnimation,
-                                        cardTextColorChangeAnimation,                                       
-                                      ),
-                          
-                                      
-                                      Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 26.0*settingsState.sizeFactor),
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    cardBgColorChangeAnimation.value,
-                                                    //palette.optionButtonBgColor,
-                                                foregroundColor:
-                                                    cardBgColorChangeAnimation.value,
-                                                    // palette.optionButtonTextColor,
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(10.0)),
-                                                )),
-                                            child: Text(
-                                              Helpers().translateText(currentLanguage, "Add / Remove Language",),
-                                              style: TextStyle(
-                                                fontSize: 16 * settingsState.sizeFactor,
-                                                color: cardTextColorChangeAnimation.value,
-                                              ),
+                                          Text(
+                                            Helpers().translateText(
+                                              currentLanguage,
+                                              "Parameters",
                                             ),
-                                            onPressed: () {
-                                              displayLanguagesDialog(context, palette, languages, currentLanguage);  
-                                              updateSettingsState(languages, currentLanguage);
+                                            style: TextStyle(
+                                                fontSize: (22*settingsState.sizeFactor), 
+                                                color: textColorChangeAnimation.value, //_palette.textColor1
+                                              ),
+                                          ),
+                                          parameterCard(
+                                            palette,
+                                            Helpers().translateText(currentLanguage, "Color Theme",),
+                                            
+                                            () {
+                                              // toggleDarkTheme(_palette,!darkMode);
+                                              /// super complicated but basically, what happens without the nested if statement
+                                              /// is that when darkmode is initially true, then the first time changing the
+                                              /// theme doesn't work
+                                              if (darkMode) {
+                                                if (widget.darkMode) {
+                                                  colorChangeController.reset();
+                                                  colorChangeController.forward();                                            
+                                                } else {
+                                                  colorChangeController.reverse();
+                                                }
+                                                // colorChangeController.forward();                                          
+                                              } else {
+                                                if (widget.darkMode) {
+                                                  colorChangeController.reverse();
+                                                } else {
+                                                  colorChangeController.reset();
+                                                  colorChangeController.forward();
+                                                }
+                                                // colorChangeController.fling();
+                                              }
+                                              updateParameter("darkMode", !darkMode, _palette, );
                                             },
+                                            [
+                                              Icon(Icons.nightlight, size: (22*settingsState.sizeFactor)),
+                                              Icon(Icons.sunny, size: (22*settingsState.sizeFactor)),
+                                            ],
+                                            darkMode,
+                                            settingsState.sizeFactor,
+                                            cardBgColorChangeAnimation,
+                                            cardTextColorChangeAnimation,                                      
                                           ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 20*settingsState.sizeFactor,),
-                          
-                                      Text(
-                                        "Privacy Policy",
-                                        // Helpers().translateText(currentLanguage, "Privacy Policy",),
-                                        style: TextStyle(
-                                            fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
-                                      ),
-                                      parameterCard(
-                                        palette,
-                                        // Helpers().translateText(currentLanguage, "Sound On",),
-                                        "Link to privacy policy",
-                                        () {
-                                          _launchURL("https://nodamngoodstudios.com/games/scribby/privacy-policy");
-                                        },
-                                        [
-                                          Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
-                                          Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
+                                          parameterCard(
+                                            palette,
+                                            Helpers().translateText(currentLanguage, "Muted",),
+                                            
+                                            () {
+                                              updateParameter("muted", !muted, _palette);
+                                            },
+                                            [
+                                              Icon(Icons.volume_mute, size: (22*settingsState.sizeFactor)),
+                                              Icon(Icons.volume_up, size: (22*settingsState.sizeFactor)),
+                                            ],
+                                            muted,
+                                            settingsState.sizeFactor,
+                                            cardBgColorChangeAnimation,
+                                            cardTextColorChangeAnimation,                                      
+                                          ),
+                                          Text(
+                                            Helpers().translateText(currentLanguage, "Language",),
+                                            style: TextStyle(
+                                                fontSize: (22*settingsState.sizeFactor), color: textColorChangeAnimation.value),
+                                          ),
+                                                              
+                                          
+                                          languageCard(
+                                            palette,
+                                            Helpers().translateText(currentLanguage, "Current",),
+                                            currentLanguage,
+                                            languages,
+                                            currentLanguage,
+                                            settingsState.sizeFactor,
+                                            cardBgColorChangeAnimation,
+                                            cardTextColorChangeAnimation,                                       
+                                          ),
+                                                              
+                                          
+                                          SizedBox(
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 26.0*settingsState.sizeFactor),
+                                                child: ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                          cardBgColorChangeAnimation.value,
+                                                          //palette.optionButtonBgColor,
+                                                      foregroundColor:
+                                                          cardBgColorChangeAnimation.value,
+                                                          // palette.optionButtonTextColor,
+                                                      shape: const RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(10.0)),
+                                                      )),
+                                                  child: Text(
+                                                    Helpers().translateText(currentLanguage, "Add / Remove Language",),
+                                                    style: TextStyle(
+                                                      fontSize: 16 * settingsState.sizeFactor,
+                                                      color: cardTextColorChangeAnimation.value,
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    displayLanguagesDialog(context, palette, languages, currentLanguage);  
+                                                    updateSettingsState(languages, currentLanguage);
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 20*settingsState.sizeFactor,),
+                                                              
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              child: Text(
+                                                // "Privacy Policy",
+                                                Helpers().translateText(currentLanguage, "Link to Privacy Policy",),
+                                                style: TextStyle(
+                                                    fontSize: (24*settingsState.sizeFactor), color: textColorChangeAnimation.value),
+                                                    textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap:() {
+                                                _launchURL("https://nodamngoodstudios.com/games/scribby/privacy-policy");
+                                              },
+                                            child: parameterCard(
+                                              palette,
+                                              Helpers().translateText(currentLanguage, "Privacy Policy",),
+                                              // "Link to privacy policy",
+                                              () {
+                                                _launchURL("https://nodamngoodstudios.com/games/scribby/privacy-policy");
+                                              },
+                                              [
+                                                Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
+                                                Icon(Icons.insert_link_rounded, size: (22*settingsState.sizeFactor) ,),
+                                              ],
+                                              soundOn,
+                                              settingsState.sizeFactor,
+                                              cardBgColorChangeAnimation,
+                                              cardTextColorChangeAnimation,                                      
+                                            ),
+                                          ),                                                                     
                                         ],
-                                        soundOn,
-                                        settingsState.sizeFactor,
-                                        cardBgColorChangeAnimation,
-                                        cardTextColorChangeAnimation,                                      
-                                      ),                                                                     
-                                    ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               )
@@ -483,47 +502,58 @@ Widget usernameCard(
               context: context, 
               builder:(context) {
                 return Dialog(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width*0.6,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                      color:  palette.optionButtonBgColor,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 500,
+
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              "Choose new Username",
-                              style: TextStyle(
-                                color: palette.textColor2,
-                                fontSize: (22 * settingsState.sizeFactor)
+                    // width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.width*0.6,
+                    // decoration: BoxDecoration(
+                    //   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                    //   color:  palette.optionButtonBgColor,
+                    // ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                "Choose new Username",
+                                style: TextStyle(
+                                  color: palette.textColor2,
+                                  fontSize: (22 * settingsState.sizeFactor)
+                                ),
                               ),
                             ),
-                          )
-                        ),
-                        Expanded(
-                          child: Padding(
+                          ),
+                          Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
                               // height: 30,
+                              width: double.infinity,
                               child: TextField(
                                 cursorColor: palette.textColor2,
                                 style: TextStyle(
-                                  
                                   color: palette.textColor2,
                                   decorationColor: Colors.black 
                                 ),
-
+                                                
                                 controller: userNameController,
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
-                                      color: palette.textColor2
-                                    )
+                                      color: palette.textColor2,
+                                    ),                                  
                                   ),
+                                  // border: OutlineInputBorder(
+                                  //   borderRadius: BorderRadius.circular(10.0),
+                                  // ),                                    
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:  palette.textColor2
@@ -538,9 +568,7 @@ Widget usernameCard(
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Row(
+                          Row(
                             children: [
                               const Expanded(child: SizedBox()),
                               Align(
@@ -566,8 +594,8 @@ Widget usernameCard(
                                     late List<String> forbiddenNames = [
                                       "player", "user", "username",
                                     ];
-
-
+                                                
+                                                
                                     if (forbiddenNames.contains(userNameController.text.toLowerCase())) {
                                       Helpers().showBadNameDialog(
                                         context,
@@ -575,7 +603,7 @@ Widget usernameCard(
                                         Helpers().translateText(currentLanguage, "Pick something more original"),
                                         Helpers().translateText(currentLanguage, "Okay"),
                                         palette
-
+                                                
                                       );
                                     } else if (Helpers().checkForBadWords(userNameController.text.toLowerCase())) {
                                       Helpers().showBadNameDialog(
@@ -593,7 +621,7 @@ Widget usernameCard(
                                         Helpers().translateText(currentLanguage, "Okay"),
                                         palette
                                       );                        
-
+                                                
                                     } else if (userNameController.text.toLowerCase().length  < 3) {
                                       Helpers().showBadNameDialog(
                                         context,
@@ -602,11 +630,11 @@ Widget usernameCard(
                                         Helpers().translateText(currentLanguage, "Okay"),
                                         palette
                                       );                        
-
+                                                
                                     } else {
                                     
                                       AuthService().updateUsername(AuthService().currentUser!.uid ,userNameController.text.toString());
-
+                                                
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                           content: Text(
@@ -632,11 +660,11 @@ Widget usernameCard(
                                   ),
                                 ),
                               ),
-
+                                                
                             ],
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -667,33 +695,32 @@ Widget parameterCard(
   ) {
   return Padding(
     padding: EdgeInsets.fromLTRB((16.0*sizeFactor), (4.0*sizeFactor), (16.0*sizeFactor), (4.0*sizeFactor)),
-    child: SizedBox(
-      width: double.infinity,
-      // height: 80,
-      child: Card(
-        color: bgColor.value, //palette.optionButtonBgColor,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB((16.0*sizeFactor), (4.0*sizeFactor), (4.0*sizeFactor), (4.0*sizeFactor)),
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Text(
+    child: Card(
+      color: bgColor.value, //palette.optionButtonBgColor,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB((16.0*sizeFactor), (4.0*sizeFactor), (4.0*sizeFactor), (4.0*sizeFactor)),
+        child: Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
                     cardBody,
                     style: TextStyle(fontSize: (22*sizeFactor), color: textColor.value),
                   ),
-                  const Expanded(flex: 1, child: SizedBox()),
-                  IconButton(
-                      onPressed: onPressed,
-                      icon: value ? iconList[0] : iconList[1],
-                      color: palette.textColor2,
-                  ),
-                      // color: value
-                          // ? const Color.fromARGB(255, 15, 214, 214)
-                          // : Colors.amber[600]),
-                ],
-              )),
-        ),
+                ),
+                const Expanded(flex: 1, child: SizedBox()),
+                IconButton(
+                    onPressed: onPressed,
+                    icon: value ? iconList[0] : iconList[1],
+                    color: palette.textColor2,
+                ),
+                    // color: value
+                        // ? const Color.fromARGB(255, 15, 214, 214)
+                        // : Colors.amber[600]),
+              ],
+            )),
       ),
     ),
   );
@@ -716,52 +743,48 @@ Widget languageCard(
 
   return Padding(
     padding: EdgeInsets.fromLTRB(16.0*sizeFactor, 4.0*sizeFactor, 16.0*sizeFactor, 4.0*sizeFactor),
-    child: SizedBox(
-      width: double.infinity,
-      // height: 80,
-      child: Card(
-        color: bgColor.value,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(26.0*sizeFactor, 8.0*sizeFactor, 26.0*sizeFactor, 8.0*sizeFactor),
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Text(
-                    cardBody,
-                    style: TextStyle(
-                      fontSize: (22 * sizeFactor),
-                      color: textColor.value,
-                      // height: 3,
-                    ),
+    child: Card(
+      color: bgColor.value,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(26.0*sizeFactor, 8.0*sizeFactor, 26.0*sizeFactor, 8.0*sizeFactor),
+        child: Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Text(
+                  cardBody,
+                  style: TextStyle(
+                    fontSize: (22 * sizeFactor),
+                    color: textColor.value,
+                    // height: 3,
                   ),
-                  const Expanded(flex: 1, child: SizedBox()),
-                  DropdownButton(
-                    value: value,
-                    dropdownColor: palette.optionButtonBgColor,
-                    items: languages.map<DropdownMenuItem<dynamic>>(
-                      (dynamic val) {
-                        return DropdownMenuItem<dynamic>(
-                          value: val,
-                          child: Text(
-                            Helpers().translateText(currentLanguage,val),
-                            // Helpers().capitalize(val),
-                            style: TextStyle(
-                              fontSize: 18 * sizeFactor,
-                              color: textColor.value,
-                            ),
+                ),
+                const Expanded(flex: 1, child: SizedBox()),
+                DropdownButton(
+                  value: value,
+                  dropdownColor: palette.optionButtonBgColor,
+                  items: languages.map<DropdownMenuItem<dynamic>>(
+                    (dynamic val) {
+                      return DropdownMenuItem<dynamic>(
+                        value: val,
+                        child: Text(
+                          Helpers().translateText(currentLanguage,val),
+                          // Helpers().capitalize(val),
+                          style: TextStyle(
+                            fontSize: 18 * sizeFactor,
+                            color: textColor.value,
                           ),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (val) {
-                      // print(" change to $val ");
-                      changeCurrentLanguage(val);
+                        ),
+                      );
                     },
-                  )
-                ],
-              )),
-        ),
+                  ).toList(),
+                  onChanged: (val) {
+                    // print(" change to $val ");
+                    changeCurrentLanguage(val);
+                  },
+                )
+              ],
+            )),
       ),
     ),
   );
@@ -852,7 +875,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
   
 
     // get the langs that are not part of the original selected but were marked selected = true
-
     late List<Map<String,dynamic>> newUnSelected = [];
     for (Map<String,dynamic> item in unSelected) {
       if (item['selected'] == true) {
@@ -870,11 +892,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
       newSelected.add(item);
     }    
 
-    // late List<Map<String,dynamic>> impostersInSelected = unSelected.where((element) => element['selected'] == true).toList();
-    
-    // for (Map<String,dynamic> imposter in impostersInSelected) {
-    //   imposter.update('selected', (value) => false);
-    // }
     late List<Map<String, dynamic>> newList = [...newSelected, ...newUnSelected];
 
 
@@ -882,8 +899,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
       currentSelection = newList;
     });
 
-    // newTileState[newTileState.indexWhere((element) => element['index'] == targetIndex)] = targetObject;
-  
   }
 
 
@@ -984,15 +999,19 @@ class _LanguageDialogState extends State<LanguageDialog> {
   Widget build(BuildContext context) {
 
     late SettingsState settingsState = Provider.of<SettingsState>(context,listen: false);
+    final double maxHeight = MediaQuery.of(context).size.height * 0.5;
     
     return Dialog(
       backgroundColor: widget.palette.modalNavigationBarBgColor ,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width*0.9,
-        height: MediaQuery.of(context).size.height*0.8,
+      // backgroundColor: widget.palette.optionButtonBgColor ,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 500
+        ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -1004,71 +1023,75 @@ class _LanguageDialogState extends State<LanguageDialog> {
                   ),
                 ),
               ),
-              Expanded(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        for (Map<String,dynamic> language in  currentSelection)
-
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: getLanguageColor(language["change"],language["originalSelection"], widget.palette),
-                              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 20*settingsState.sizeFactor,
-                                    height: 20*settingsState.sizeFactor,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:const BorderRadius.all(Radius.circular(50.0)),
-                                      image: DecorationImage(
-                                        image: NetworkImage(language['url']),
-                                      ),
-                                    ),
-                                  ),                                
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 16.0),
-                                      child: Text(
-                                        language['body'],
-                                        style:TextStyle(
-                                          color: widget.palette.optionButtonTextColor,
-                                          fontSize: 18 * settingsState.sizeFactor
-                                        ),                                
-                                      ),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: 200,
+                  maxHeight: maxHeight,
+                ),
+                // width: double.infinity,
+                // height: 200,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (Map<String,dynamic> language in  currentSelection)
+                    
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: getLanguageColor(language["change"],language["originalSelection"], widget.palette),
+                            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 20*settingsState.sizeFactor,
+                                  height: 20*settingsState.sizeFactor,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:const BorderRadius.all(Radius.circular(50.0)),
+                                    image: DecorationImage(
+                                      image: NetworkImage(language['url']),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 32*settingsState.sizeFactor,
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0.0),
-                                      onPressed: () {
-                                        updateList(currentSelection, language, widget.currentLanguage);
-                                      },
-                                      icon: Icon( 
-                                        language['selected']
-                                            ? Icons.remove_circle
-                                            : Icons.add_circle,
+                                ),                                
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      language['body'],
+                                      style:TextStyle(
                                         color: widget.palette.optionButtonTextColor,
-                                        size: 22*settingsState.sizeFactor,
-                                      )
+                                        fontSize: 18 * settingsState.sizeFactor
+                                      ),                                
                                     ),
-                                  )                          
-                                ],
-                              ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 32*settingsState.sizeFactor,
+                                  child: IconButton(
+                                    padding: EdgeInsets.all(0.0),
+                                    onPressed: () {
+                                      updateList(currentSelection, language, widget.currentLanguage);
+                                    },
+                                    icon: Icon( 
+                                      language['selected']
+                                          ? Icons.remove_circle
+                                          : Icons.add_circle,
+                                      color: widget.palette.optionButtonTextColor,
+                                      size: 22*settingsState.sizeFactor,
+                                    )
+                                  ),
+                                )                          
+                              ],
                             ),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -1080,7 +1103,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
                 TextButton(
                     onPressed: () {
                       cancelSelections(widget.languages, _settingsState);
-
+        
                       Navigator.of(context).pop();
                     },
                     child: Text(

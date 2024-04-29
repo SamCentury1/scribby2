@@ -384,6 +384,34 @@ final List<Map<String,dynamic>> translations = [
     }    
   },   
 
+  {
+    "key": "Privacy Policy",
+    "data": {
+      "english": "Privacy Policy",
+      "french": "politique de confidentialité",
+      "spanish": "política de privacidad",
+      "german" : "Datenschutzrichtlinie",
+      "italian" : "politica sulla riservatezza",
+      "portuguese" : "política de Privacidade",
+      "greek" : "Πολιτική Απορρήτου",
+      "dutch" : "Privacybeleid",
+    }    
+  },  
+
+  {
+    "key": "Link to Privacy Policy",
+    "data": {
+      "english": "Link to Privacy Policy",
+      "french": "Lien vers la politique de confidentialité",
+      "spanish": "Enlace a la política de privacidad",
+      "german" : "Link zur Datenschutzerklärung",
+      "italian" : "Collegamento all'Informativa sulla privacy",
+      "portuguese" : "Link para a Política de Privacidade",
+      "greek" : "Σύνδεσμος προς την Πολιτική Απορρήτου",
+      "dutch" : "Link naar privacybeleid",
+    }    
+  },     
+
                          
 
 
@@ -965,7 +993,7 @@ final List<Map<String,dynamic>> translations = [
       "spanish": "Rango",
       "german" : "Rang",
       "italian" : "Rango",
-      "portuguese" : "Classificação",
+      "portuguese" : "Fila",
       "greek" : "Τάξη",
       "dutch" : "Rang",
     }    
@@ -976,9 +1004,9 @@ final List<Map<String,dynamic>> translations = [
       "english": "Score",
       "french": "Score",
       "spanish": "Puntaje",
-      "german" : "Punktzahl",
+      "german" : "Punkte",
       "italian" : "Punto",
-      "portuguese" : "Pontuação",
+      "portuguese" : "Pontos",
       "greek" : "Σκορ",
       "dutch" : "Scoren",
     }    

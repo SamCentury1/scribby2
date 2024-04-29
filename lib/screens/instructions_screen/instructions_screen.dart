@@ -91,284 +91,288 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                   ),
                   backgroundColor: palette.screenBackgroundColor,              
               
-                  body: SingleChildScrollView(
-                    child: Consumer<SettingsController>(
-                        builder: (context, settings, child) {
-                      return Container(
-                        width: double.infinity,
-                        color: palette.screenBackgroundColor,
-                        child: Column(
-                          children: [
-              
-                            const SizedBox(
-                              height: 15,
+                  body: Container(
+                    color: palette.screenBackgroundColor,
+                    // width: double.infinity,
+                    child: SingleChildScrollView(
+                      child: Consumer<SettingsController>(
+                          builder: (context, settings, child) {
+                        return Align(
+                          alignment: Alignment.center,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 600
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    textHeading(
-                                      palette.textColor3,
-                                      Helpers().translateText(language, "Objective"),
-                                      settingsState.sizeFactor
-                                    ),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language, 
-                                        "Score as many points as possible by completing as many words as you can.",
-                                      ),
-                                      settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language, 
-                                        "Words must be at least 3 letters in length to count"
-                                      ),
-                                      settingsState.sizeFactor                                  
-                                    ),
-                                    _gap(25*settingsState.sizeFactor),
-                                    TextButton(
-                                      onPressed: () {
-                                        TutorialHelpers().navigateToTutorial(context, language);
-                                      }, 
-                                      child: Padding(
-                                        padding:  EdgeInsets.fromLTRB(16.0*settingsState.sizeFactor, 4.0*settingsState.sizeFactor, 16.0*settingsState.sizeFactor, 4.0*settingsState.sizeFactor),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 50*settingsState.sizeFactor,
-                                          decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                  // stops: [10.0, 1.0, 1.0, 1.0, 3.0],
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                  colors: <Color>[
-                                                    palette.optionButtonBgColor2,
-                                                    palette.optionButtonBgColor2,
-                                                    // palette.optionButtonBgColor2,
-                                                    // palette.optionButtonBgColor2,
-                                                    // palette.optionButtonBgColor,
-                                                    // Colors.black
-
-                                                  ],
-                                                  tileMode: TileMode.mirror),
-                                              border: const Border(),
-                                              borderRadius: BorderRadius.all(Radius.circular(12.0*settingsState.sizeFactor))),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(8.0*settingsState.sizeFactor),
-                                            child: Align(
-                                                alignment: Alignment.center,
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
-                                                  child: Text(
-                                                    Helpers().translateText(
-                                                      language, 
-                                                      "Watch a Demo!"
-                                                    ),
-                                                    style:
-                                                        TextStyle(fontSize: 24*settingsState.sizeFactor, color: palette.optionButtonTextColor),
-                                                  ),
-                                                )),
-                                          ),
-                                        ),
-                                      )
-                                    ),                                  
-                                    textHeading(
-                                      palette.textColor3,
-                                      Helpers().translateText(language,"How It Works",),
-                                      settingsState.sizeFactor
-                                    ),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,
-                                        "Every turn, you have a random letter to place anywhere on the board before the timer runs out."),
-                                        settingsState.sizeFactor
-                                      ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "If the timer runs out, the tile will be disabled for the rest of the game!"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "When words are found, their letters will be destroyed and their values tabulated"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "The game ends when the board is full and no more letters can be placed"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "At every level reached (maximum 10) you have less and less time to place a letter"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(25*settingsState.sizeFactor),
-                                    textHeading(
-                                      palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                    
-                                      "Scoring",
-                                      
-                                      ),
-                                      settingsState.sizeFactor
-                                    ),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "Every letter has a value from 1 to 10"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "Each turn where at least one word is found, letter values are summed for each word."),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "The total value of the turn is calculated based on the following factors:"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBodyBulletHeading(
-                                        palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                      
-                                        "Word Lengths:"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    textBodyBullet(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "For Words that are 5 and 6 letters in length, each of their letters are multiplied by a factor of 2 and 3 respectively"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(10*settingsState.sizeFactor),
-                                    textBodyBulletHeading(
-                                        palette.textColor3, 
-                                      Helpers().translateText(
-                                        language,                                      
-                                        "Active Streak:"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    textBodyBullet(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "The running number of consecutive turns with at least one word found"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(10*settingsState.sizeFactor),
-                                    textBodyBulletHeading(                                    
-                                        palette.textColor3,
-                                        Helpers().translateText(
-                                          language,                                      
-                                        "Cross Words:"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    textBodyBullet(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "Whether or not words were found in the horizontal and vertical axis' doubles the points"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(10*settingsState.sizeFactor),
-                                    textBodyBulletHeading(
-                                        palette.textColor3,
-                                        Helpers().translateText(
-                                          language,                                      
-                                        "Word Count:"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    textBodyBullet(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "The running total is then multiplied by the number of words found in that turn"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(10*settingsState.sizeFactor),
-                                    textHeading(
-                                      palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                    
-                                      "Letter Values",
-                                      ),
-                                      settingsState.sizeFactor
-                                    ),
-                                    Wrap(
-                                      direction: Axis.horizontal,
-                                      alignment: WrapAlignment.start,
+                            
+                            child: Column(
+                              children: [    
+                                const SizedBox(height: 15,),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        for (dynamic item in snapshot.data!['alphabet'])
-                                        
-                                          SizedBox(
-                                              width: 45*settingsState.sizeFactor,
-                                              height: 45*settingsState.sizeFactor,
-                                              // color: Colors.amber,
+                                        textHeading(
+                                          palette.textColor3,
+                                          Helpers().translateText(language, "Objective"),
+                                          settingsState.sizeFactor
+                                        ),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language, 
+                                            "Score as many points as possible by completing as many words as you can.",
+                                          ),
+                                          settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language, 
+                                            "Words must be at least 3 letters in length to count"
+                                          ),
+                                          settingsState.sizeFactor                                  
+                                        ),
+                                        _gap(25*settingsState.sizeFactor),
+                                        TextButton(
+                                          onPressed: () {
+                                            TutorialHelpers().navigateToTutorial(context, language);
+                                          }, 
+                                          child: Padding(
+                                            padding:  EdgeInsets.fromLTRB(16.0*settingsState.sizeFactor, 4.0*settingsState.sizeFactor, 16.0*settingsState.sizeFactor, 4.0*settingsState.sizeFactor),
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: 50*settingsState.sizeFactor,
+                                              decoration: BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                      // stops: [10.0, 1.0, 1.0, 1.0, 3.0],
+                                                      begin: Alignment.topCenter,
+                                                      end: Alignment.bottomCenter,
+                                                      colors: <Color>[
+                                                        palette.optionButtonBgColor2,
+                                                        palette.optionButtonBgColor2,
+                                                        // palette.optionButtonBgColor2,
+                                                        // palette.optionButtonBgColor2,
+                                                        // palette.optionButtonBgColor,
+                                                        // Colors.black
+                                                
+                                                      ],
+                                                      tileMode: TileMode.mirror),
+                                                  border: const Border(),
+                                                  borderRadius: BorderRadius.all(Radius.circular(12.0*settingsState.sizeFactor))),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(3.0),
-                                                child: scrabbleTile(item['letter'],
-                                                    item['points'], 45*settingsState.sizeFactor, 0.65*settingsState.sizeFactor),
-                                              ))
+                                                padding: EdgeInsets.all(8.0*settingsState.sizeFactor),
+                                                child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: FittedBox(
+                                                      fit: BoxFit.scaleDown,
+                                                      child: Text(
+                                                        Helpers().translateText(
+                                                          language, 
+                                                          "Watch a Demo!"
+                                                        ),
+                                                        style:
+                                                            TextStyle(fontSize: 24*settingsState.sizeFactor, color: palette.optionButtonTextColor),
+                                                      ),
+                                                    )),
+                                              ),
+                                            ),
+                                          )
+                                        ),                                  
+                                        textHeading(
+                                          palette.textColor3,
+                                          Helpers().translateText(language,"How It Works",),
+                                          settingsState.sizeFactor
+                                        ),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,
+                                            "Every turn, you have a random letter to place anywhere on the board before the timer runs out."),
+                                            settingsState.sizeFactor
+                                          ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "If the timer runs out, the tile will be disabled for the rest of the game!"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "When words are found, their letters will be destroyed and their values tabulated"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "The game ends when the board is full and no more letters can be placed"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "At every level reached (maximum 10) you have less and less time to place a letter"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(25*settingsState.sizeFactor),
+                                        textHeading(
+                                          palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                    
+                                          "Scoring",
+                                          
+                                          ),
+                                          settingsState.sizeFactor
+                                        ),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "Every letter has a value from 1 to 10"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "Each turn where at least one word is found, letter values are summed for each word."),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "The total value of the turn is calculated based on the following factors:"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBodyBulletHeading(
+                                            palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                      
+                                            "Word Lengths:"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        textBodyBullet(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "For Words that are 5 and 6 letters in length, each of their letters are multiplied by a factor of 2 and 3 respectively"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(10*settingsState.sizeFactor),
+                                        textBodyBulletHeading(
+                                            palette.textColor3, 
+                                          Helpers().translateText(
+                                            language,                                      
+                                            "Active Streak:"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        textBodyBullet(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "The running number of consecutive turns with at least one word found"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(10*settingsState.sizeFactor),
+                                        textBodyBulletHeading(                                    
+                                            palette.textColor3,
+                                            Helpers().translateText(
+                                              language,                                      
+                                            "Cross Words:"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        textBodyBullet(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "Whether or not words were found in the horizontal and vertical axis' doubles the points"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(10*settingsState.sizeFactor),
+                                        textBodyBulletHeading(
+                                            palette.textColor3,
+                                            Helpers().translateText(
+                                              language,                                      
+                                            "Word Count:"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        textBodyBullet(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "The running total is then multiplied by the number of words found in that turn"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(10*settingsState.sizeFactor),
+                                        textHeading(
+                                          palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                    
+                                          "Letter Values",
+                                          ),
+                                          settingsState.sizeFactor
+                                        ),
+                                        Wrap(
+                                          direction: Axis.horizontal,
+                                          alignment: WrapAlignment.start,
+                                          children: [
+                                            for (dynamic item in snapshot.data!['alphabet'])
+                                            
+                                              SizedBox(
+                                                  width: 45*settingsState.sizeFactor,
+                                                  height: 45*settingsState.sizeFactor,
+                                                  // color: Colors.amber,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(3.0),
+                                                    child: scrabbleTile(item['letter'],
+                                                        item['points'], 45*settingsState.sizeFactor, 0.65*settingsState.sizeFactor),
+                                                  ))
+                                          ],
+                                        ),
+                                        _gap(25*settingsState.sizeFactor),
+                                        textHeading(
+                                          palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                    
+                                          "Tips",
+                                          ),
+                                          settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "Place hard letters strategically"),
+                                            settingsState.sizeFactor
+                                        ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "Be careful when trying to create long words, there are ALOT more three letter words than you think..."),
+                                            settingsState.sizeFactor
+                                          ),
+                                        _gap(15*settingsState.sizeFactor),
+                                        textBody(palette.textColor3,
+                                          Helpers().translateText(
+                                            language,                                  
+                                            "Don't be afraid to let the board fill up with letters, it's actually really hard to lose this game that way"),
+                                            settingsState.sizeFactor
+                                        ),
                                       ],
                                     ),
-                                    _gap(25*settingsState.sizeFactor),
-                                    textHeading(
-                                      palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                    
-                                      "Tips",
-                                      ),
-                                      settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "Place hard letters strategically"),
-                                        settingsState.sizeFactor
-                                    ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "Be careful when trying to create long words, there are ALOT more three letter words than you think..."),
-                                        settingsState.sizeFactor
-                                      ),
-                                    _gap(15*settingsState.sizeFactor),
-                                    textBody(palette.textColor3,
-                                      Helpers().translateText(
-                                        language,                                  
-                                        "Don't be afraid to let the board fill up with letters, it's actually really hard to lose this game that way"),
-                                        settingsState.sizeFactor
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                                SizedBox(height: 30*settingsState.sizeFactor,),
+                              ],
                             ),
-                            SizedBox(
-                              height: 30*settingsState.sizeFactor,
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
+                          ),
+                        );
+                      }),
+                    ),
                   )),
             );            
           // }
@@ -390,10 +394,6 @@ Widget textHeading(Color color, String body, double sizeFactor) {
     child: Text(
       body,
       style: Helpers().customTextStyle(color, 32*sizeFactor),
-      // style: GoogleFonts.roboto(
-      //   fontSize: 32*sizeFactor, 
-      //   color: color
-      // ),
     ),
   );
 }

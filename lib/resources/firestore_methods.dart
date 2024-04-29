@@ -53,12 +53,9 @@ class FirestoreMethods {
   }
 
 
-  Future<List<Map<String, dynamic>>?> getDataForLeaderboards(
-      String currentLanguage) async {
+  Future<List<Map<String, dynamic>>?> getDataForLeaderboards(String currentLanguage) async {
     late List<Map<String, dynamic>> res = [];
     try {
-
-
       QuerySnapshot qSnap = await _firestore
           .collection("users")
           .where("highScores.$currentLanguage", isGreaterThan: 0)

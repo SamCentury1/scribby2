@@ -8,7 +8,9 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 // import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class PreGameOverlay extends StatefulWidget {
@@ -23,6 +25,7 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    late SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         final bool hasSeenTutorial = settingsState.userData['parameters']['hasSeenTutorial'];
@@ -42,6 +45,11 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
                         ),
                       ),
                       onTap: () {
+                        FirestoreMethods().updateParameters(
+                          settingsState.userData['uid'],
+                          'hasSeenTutorial',
+                          true
+                        );                            
                         gamePlayState.setIsGameStarted(true);
                       }),
                 ),
@@ -52,6 +60,11 @@ class _PreGameOverlayState extends State<PreGameOverlay> {
 
                     GestureDetector(
                       onTap: () {
+                        FirestoreMethods().updateParameters(
+                          settingsState.userData['uid'],
+                          'hasSeenTutorial',
+                          true
+                        );                        
                         gamePlayState.setIsGameStarted(true);
                       },
                       child: Padding(

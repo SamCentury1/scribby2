@@ -182,7 +182,10 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                                     TextButton(
                                         onPressed: () {
                                           FirestoreMethods().updateParameters(
-                                              (settings.userData.value as Map<String, dynamic>)['uid'],'hasSeenTutorial',true);
+                                            (settings.userData.value as Map<String, dynamic>)['uid'],
+                                            'hasSeenTutorial',
+                                            true
+                                          );
                                           Helpers().getStates(gamePlayState, settings);
 
                                           Navigator.of(context).pushReplacement(
