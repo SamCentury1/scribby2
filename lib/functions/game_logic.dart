@@ -1074,16 +1074,16 @@ class GameLogic {
     final int points = gamePlayState.summaryData['points'];
     final int currentLevel = gamePlayState.currentLevel;
     final List<Map<String, dynamic>> levelMaps = [
-      {"level": 1, "points_low": 0, "points_high": 50},
-      {"level": 2, "points_low": 51, "points_high": 100},
-      {"level": 3, "points_low": 101, "points_high": 150},
-      {"level": 4, "points_low": 151, "points_high": 200},
-      {"level": 5, "points_low": 201, "points_high": 250},
-      {"level": 6, "points_low": 251, "points_high": 300},
-      {"level": 7, "points_low": 301, "points_high": 350},
-      {"level": 8, "points_low": 351, "points_high": 400},
-      {"level": 9, "points_low": 401, "points_high": 450},
-      {"level": 10, "points_low": 451, "points_high": double.infinity},
+      {"level": 1, "points_low": 0, "points_high": 100},
+      {"level": 2, "points_low": 101, "points_high": 200},
+      {"level": 3, "points_low": 201, "points_high": 350},
+      {"level": 4, "points_low": 351, "points_high": 500},
+      {"level": 5, "points_low": 501, "points_high": 1000},
+      {"level": 6, "points_low": 1001, "points_high": 1500},
+      {"level": 7, "points_low": 1501, "points_high": 2000},
+      {"level": 8, "points_low": 2001, "points_high": 3000},
+      {"level": 9, "points_low": 3001, "points_high": 5000},
+      {"level": 10, "points_low": 5001, "points_high": double.infinity},
     ];
 
     Map<String, dynamic> correspondingMapBasedOnPoints = levelMaps.firstWhere(

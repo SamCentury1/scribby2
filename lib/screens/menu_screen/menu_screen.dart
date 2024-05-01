@@ -32,7 +32,7 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
-    loadAsset();
+    // loadAsset();
 
   }
   void navigateToChooseLanguage() {
@@ -51,9 +51,9 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
-  Future<String> loadAsset() async {
-    return await rootBundle.loadString('assets/config.json');
-  }  
+  // Future<String> loadAsset() async {
+  //   return await rootBundle.loadString('assets/config.json');
+  // }  
 
 
 
