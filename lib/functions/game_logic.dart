@@ -1106,7 +1106,7 @@ class GameLogic {
 
   void changeLevels(GamePlayState gamePlayState) {
     if (gamePlayState.currentLevel == 1) {
-      if (gamePlayState.summaryData['points'] >= 51) {
+      if (gamePlayState.summaryData['points'] >= 101) {
         gamePlayState.setPreviousLevel(1);
         gamePlayState.setCurrentLevel(2);
         // runChangeLevelEffect(gamePlayState);
@@ -1116,7 +1116,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 2) {
-      if (gamePlayState.summaryData['points'] >= 101) {
+      if (gamePlayState.summaryData['points'] >= 201) {
         gamePlayState.setPreviousLevel(2);
         gamePlayState.setCurrentLevel(3);
         // runChangeLevelEffect(gamePlayState);
@@ -1126,7 +1126,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 3) {
-      if (gamePlayState.summaryData['points'] >= 151) {
+      if (gamePlayState.summaryData['points'] >= 351) {
         gamePlayState.setPreviousLevel(3);
         gamePlayState.setCurrentLevel(4);
         // runChangeLevelEffect(gamePlayState);
@@ -1134,7 +1134,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 4) {
-      if (gamePlayState.summaryData['points'] >= 201) {
+      if (gamePlayState.summaryData['points'] >= 501) {
         gamePlayState.setPreviousLevel(4);
         gamePlayState.setCurrentLevel(5);
         // runChangeLevelEffect(gamePlayState);
@@ -1142,7 +1142,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 5) {
-      if (gamePlayState.summaryData['points'] >= 251) {
+      if (gamePlayState.summaryData['points'] >= 1001) {
         gamePlayState.setPreviousLevel(5);
         gamePlayState.setCurrentLevel(6);
         // runChangeLevelEffect(gamePlayState);
@@ -1150,7 +1150,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 6) {
-      if (gamePlayState.summaryData['points'] >= 301) {
+      if (gamePlayState.summaryData['points'] >= 1501) {
         gamePlayState.setPreviousLevel(6);
         gamePlayState.setCurrentLevel(7);
         // runChangeLevelEffect(gamePlayState);
@@ -1158,7 +1158,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 7) {
-      if (gamePlayState.summaryData['points'] >= 351) {
+      if (gamePlayState.summaryData['points'] >= 2001) {
         gamePlayState.setPreviousLevel(7);
         gamePlayState.setCurrentLevel(8);
         // runChangeLevelEffect(gamePlayState);
@@ -1166,7 +1166,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 8) {
-      if (gamePlayState.summaryData['points'] >= 401) {
+      if (gamePlayState.summaryData['points'] >= 3001) {
         gamePlayState.setPreviousLevel(8);
         gamePlayState.setCurrentLevel(9);
         // runChangeLevelEffect(gamePlayState);
@@ -1174,7 +1174,7 @@ class GameLogic {
     }
 
     if (gamePlayState.currentLevel == 9) {
-      if (gamePlayState.summaryData['points'] >= 451) {
+      if (gamePlayState.summaryData['points'] >= 5001) {
         gamePlayState.setPreviousLevel(9);
         gamePlayState.setCurrentLevel(10);
         // runChangeLevelEffect(gamePlayState);

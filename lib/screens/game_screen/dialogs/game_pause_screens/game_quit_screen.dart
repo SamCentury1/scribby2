@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
@@ -52,7 +54,9 @@ class _GameQuitScreenState extends State<GameQuitScreen>
 
     late SettingsController settings = Provider.of<SettingsController>(context, listen: false);
 
-    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);        
+    late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+
+
 
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
@@ -180,6 +184,7 @@ class ControlDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AudioController audioController =Provider.of<AudioController>(context, listen: false);        
     return AlertDialog(
       backgroundColor: palette.optionButtonBgColor,
       title: Column(
@@ -234,6 +239,7 @@ class ControlDialogWidget extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
+            audioController.playSfx(SfxType.optionSelected);
             action();
           },
           child: Text(

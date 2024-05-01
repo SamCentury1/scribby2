@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -58,6 +60,7 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
     final GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+    final AudioController audioController =Provider.of<AudioController>(context, listen: false);
 
     // return isLoading
         // ? const Center(child: CircularProgressIndicator(),): 
@@ -81,6 +84,7 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
                       ),                      
                       leading: IconButton(
                         onPressed: () {
+                          audioController.playSfx(SfxType.optionSelected);
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const WelcomeUser(),

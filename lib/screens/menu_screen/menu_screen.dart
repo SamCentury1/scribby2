@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/components/scribby_logo_animation.dart';
+import 'package:scribby_flutter_v2/components/scribby_logo_animation_2.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -98,7 +99,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                         Expanded(flex: 1, child: SizedBox(),),
                                         Expanded(
                                           flex: 4,
-                                          child: Image(image: AssetImage('assets/images/scribby_label_1.png')),
+                                          child: ScribbyLogoAnimation2()
+                                          // child: Image(image: AssetImage('assets/images/scribby_label_1.png')),
                                           // child: ScribbyLogoAnimation()
                                         ),
                                       ],

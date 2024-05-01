@@ -179,7 +179,21 @@ final List<Map<String,dynamic>> translations = [
       "greek" : "Ήχος ενεργός",
       "dutch" : "Geluid aan",
     }
-  },   
+  },
+
+  {
+    "key": "Sound Off",
+    "data": {
+      "english": "Sound Off",
+      "french": "Son désactivé",
+      "spanish": "Sonido apagado",
+      "german" : "Ton aus",
+      "italian" : "Audio Disattivato",
+      "portuguese" : "Som desligado",
+      "greek" : "Χωρίς ήχο",
+      "dutch" : "Geluid uit",
+    }
+  },     
 
   {
     "key": "Language",

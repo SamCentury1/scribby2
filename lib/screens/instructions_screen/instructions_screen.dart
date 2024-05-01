@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
@@ -62,6 +64,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
           return const Center(child: Text("Error"),);
         } else {
             late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+            final AudioController audioController =Provider.of<AudioController>(context, listen: false);
             String language = snapshot.data!['userData']['parameters']['currentLanguage'];
           // if (snapshot.hasData) {
             return SafeArea(
@@ -78,6 +81,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                         color: palette.textColor1,
                       ),
                       onPressed: () {
+                        audioController.playSfx(SfxType.optionSelected);
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const WelcomeUser()));
                       },

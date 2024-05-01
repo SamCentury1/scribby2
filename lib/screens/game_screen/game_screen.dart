@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 // import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 // import 'package:scribby_flutter_v2/ads/banner_ad_widget.dart';
 import 'package:scribby_flutter_v2/components/board.dart';
@@ -85,6 +87,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     final SettingsState settingsState =Provider.of<SettingsState>(context, listen: false);        
     // final Palette palette = Provider.of<Palette>(context, listen: false);
     final ColorPalette palette =Provider.of<ColorPalette>(context, listen: false);
+
+    final AudioController audioController =Provider.of<AudioController>(context, listen: false);
 
     final double tileSide = getBoardWidth(MediaQuery.of(context).size.width)/4;
     // final AnimationState animationState =
@@ -195,6 +199,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                               ),
                               child: IconButton(
                                 onPressed: () {
+                                  audioController.playSfx(SfxType.optionSelected);
                                   gamePlayState.setIsGamePaused(true, 0);
                                 },
                                 icon: const Icon(Icons.pause_circle_outline),

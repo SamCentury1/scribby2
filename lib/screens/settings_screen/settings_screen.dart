@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 // import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
 // import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -149,6 +152,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   Widget build(BuildContext context) {
 
     late SettingsState settingsState = Provider.of<SettingsState>(context,listen: false);
+    late SettingsController settings = Provider.of<SettingsController>(context,listen: false);
+    final AudioController audioController = Provider.of<AudioController>(context, listen: false);
 
     // return isLoading? const Center(child: CircularProgressIndicator(),): 
     return PopScope(
@@ -171,7 +176,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                 String username = document?['username'];
                 var darkMode = document?['parameters']['darkMode'];
                 var soundOn = document?['parameters']['soundOn'];
-                var muted = document?['parameters']['muted'];
+                // var muted = document?['parameters']['muted'];
                 var currentLanguage = document?['parameters']['currentLanguage'];
                 List<dynamic> languages = document?['parameters']['languages'];
       
@@ -194,6 +199,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                   iconSize: 24*settingsState.sizeFactor,
                                   color: textColorChangeAnimation.value, // palette.textColor2,
                                   onPressed: () {
+                                    audioController.playSfx(SfxType.optionSelected);
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                         builder: (context) => const WelcomeUser(),
@@ -320,16 +326,17 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                           ),
                                           parameterCard(
                                             palette,
-                                            Helpers().translateText(currentLanguage, "Muted",),
+                                            soundOn ? Helpers().translateText(currentLanguage, "Sound On",) : Helpers().translateText(currentLanguage, "Sound Off",),
                                             
                                             () {
-                                              updateParameter("muted", !muted, _palette);
+                                              settings.toggleSoundsOn();
+                                              updateParameter("soundOn", !soundOn, _palette);
                                             },
                                             [
-                                              Icon(Icons.volume_mute, size: (22*settingsState.sizeFactor)),
                                               Icon(Icons.volume_up, size: (22*settingsState.sizeFactor)),
+                                              Icon(Icons.volume_off, size: (22*settingsState.sizeFactor)),
                                             ],
-                                            muted,
+                                            soundOn,
                                             settingsState.sizeFactor,
                                             cardBgColorChangeAnimation,
                                             cardTextColorChangeAnimation,                                      
