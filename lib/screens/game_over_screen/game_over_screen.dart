@@ -35,10 +35,10 @@ class _GameOverScreenState extends State<GameOverScreen> {
   /// TODO: CHANGE THIS TO YOUR OWN AD ID!!!
   final adUnitId = Platform.isAndroid
       // ca-app-pub-2459167095237263/4958251976
-      ? 'ca-app-pub-3940256099942544/1033173712'
+      ? 'ca-app-pub-3940256099942544/1033173712' // test
 
       // ca-app-pub-2459167095237263/7967558693
-      : 'ca-app-pub-3940256099942544/4411468910';
+      : 'ca-app-pub-3940256099942544/4411468910'; // test
 
   /// Loads an interstitial ad.
 
