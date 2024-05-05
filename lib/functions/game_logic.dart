@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'dart:developer' as developer;
+// import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -98,19 +98,18 @@ class GameLogic {
 
 
   /// ****************** FOR DEBUGGING ONLY ************************
-  void getLastTimeLetterWasPicked(List<String> letters,) {
-    List<String> alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-    // List<Map<String,dynamic>> letterData = [];
-    for (String letter in alphabet) {
-      late int indexOfLetter = letters.reversed.toList().indexOf(letter);
-      if (indexOfLetter == -1) {
-        indexOfLetter = letters.length;
-      } 
-      final count = letter.allMatches(letters.join()).length;
-      Map<String,dynamic> letterObject = {"letter": letter, "turnsSince": indexOfLetter, "count" :count};
-      developer.log(letterObject.toString());
-    }
-  }
+  // void getLastTimeLetterWasPicked(List<String> letters,) {
+  //   List<String> alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+  //   // List<Map<String,dynamic>> letterData = [];
+  //   for (String letter in alphabet) {
+  //     late int indexOfLetter = letters.reversed.toList().indexOf(letter);
+  //     if (indexOfLetter == -1) {
+  //       indexOfLetter = letters.length;
+  //     } 
+  //     final count = letter.allMatches(letters.join()).length;
+  //     Map<String,dynamic> letterObject = {"letter": letter, "turnsSince": indexOfLetter, "count" :count};
+  //   }
+  // }
 
   /// ****************************************************************
 
@@ -155,7 +154,7 @@ class GameLogic {
 
     final List<String> newRandomLettersList = [...randomLettersList,randomLetter];
 
-    getLastTimeLetterWasPicked(newRandomLettersList);
+    // getLastTimeLetterWasPicked(newRandomLettersList);
 
     final Map<String, dynamic> randomLetterData = {
       "randomList": newRandomLettersList,
@@ -203,11 +202,6 @@ class GameLogic {
       }
     }
 
-    debugPrint("====================================");
-    debugPrint("consonants:   ${cons} | (${(cons/(cons+vows))}%)");
-    debugPrint("vowels:       ${vows} | (${(vows/(cons+vows))}%)");
-    debugPrint("result:       ${res}");
-    debugPrint("====================================");
     return res;
   }
 
@@ -553,10 +547,6 @@ class GameLogic {
 
         Map<String, dynamic> correspondingLetterCount = aggregateLetters.firstWhere((element) => element["letter"] == letter);
 
-        // print("========= correspondingLetterCount ==================");
-        // print(correspondingLetterCount);
-        // print("======================================================");
-      
         late Map<String, dynamic> newAlphabetObject = {
           "letter": randomLetterObject["letter"],
           "type": randomLetterObject["type"],
