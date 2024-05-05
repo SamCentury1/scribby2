@@ -42,15 +42,9 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
       final List<Map<String, dynamic>> leaderboard = await FirestoreMethods()
         .getDataForLeaderboards(userData['parameters']['currentLanguage']) as List<Map<String, dynamic>>;
 
-      // setState(() {
-        // _pointsList = leaderboard;
-        // _userData = userData;
-        // isLoading = false;
-      // });
-
       res = {"leaderboard" : leaderboard, 'userData': userData};
     } catch (e) {
-      debugPrint(e.toString());
+      // debugPrint(e.toString());
     }
     return res;
   }

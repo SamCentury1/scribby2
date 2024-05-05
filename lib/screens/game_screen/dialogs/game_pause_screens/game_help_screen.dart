@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
@@ -21,7 +20,6 @@ class _GameHelpScreenState extends State<GameHelpScreen> {
 
   late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
   late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-  // late SettingsController settings = Provider.of<SettingsController>(context, listen: false);
 
 
 
@@ -150,7 +148,6 @@ class _DemoBoardStateState extends State<DemoBoardState> {
     late String randomLetter1 = GameLogic().displayDemoTileLetter(widget.demoBoardState, "0_0", widget.language);
     late String randomLetter2 = GameLogic().displayDemoTileLetter(widget.demoBoardState, "0_1", widget.language);
 
-    print(tileSize);
 
     return Padding(
       padding: const EdgeInsets.all(12.0),

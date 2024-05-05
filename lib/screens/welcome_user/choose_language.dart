@@ -25,31 +25,9 @@ class ChooseLanguage extends StatefulWidget {
 
 class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStateMixin{
 
-  late bool isLoading = false;
-  // late Map<String,dynamic> _userData = {};
-
-  // late AnimationController _languageSelectedBorderController;
-  // late Animation<double> _languageSelectedBorderAnimation;     
-
-
-  // Future<void> getUserFromFirebase() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   final Map<String,dynamic>? userData = await FirestoreMethods().getUserData(AuthService().currentUser!.uid);
-  //   if (userData!.isNotEmpty) {
-  //     setState(() {
-  //       // _userData = userData;
-  //       isLoading = false;
-  //     });
-  //   }
-
-  // }  
-
   @override
   void initState() {
     super.initState();
-    // getUserFromFirebase();
   }
 
 
@@ -59,7 +37,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
       res = dataList.firstWhere((element) => element['primary'] == true)['body'];
     } 
 
-    print("getPrimaryLanguage = $res");
+    // print("getPrimaryLanguage = $res");
     return res;
   }
 
@@ -135,25 +113,14 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
     );
   }
 
-  // void _runAnimations() {
-  //   _languageSelectedBorderController.reset();
-  //   _languageSelectedBorderController.forward();
-  // }
 
-  double getScreenWidth(double currentScreenWidth) {
-    double res = currentScreenWidth;
-    if (currentScreenWidth > 500) {
-      res = 500;
-    }
-    return res;
-  }
 
 
   @override
   Widget build(BuildContext context) {
 
     final palette = context.watch<ColorPalette>();
-    final double screenWidth = getScreenWidth(MediaQuery.of(context).size.width); 
+    final double screenWidth = Helpers().getScreenWidth(MediaQuery.of(context).size.width,1); 
 
     return Consumer<SettingsState>(
       builder: (context, settingsState, child) {
@@ -164,7 +131,6 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
           child: Scaffold(
             body: Container(
               width: double.infinity,
-              // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "screen_background"),
               color : palette.screenBackgroundColor,
               child: Align(
                 alignment: Alignment.center,
@@ -175,8 +141,6 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                   child: Column(
                     children: [
                       const Expanded(flex: 3, child: SizedBox()),
-                            
-                      // getAllSelectedLanguages(settingsState.languageDataList).isEmpty ? SizedBox() :
                       AnimatedOpacity(
                         duration: const Duration(milliseconds: 500),
                         opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
@@ -185,12 +149,10 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                           label: Text(
                             Helpers().translateWelcomeText(getPrimaryLanguage(settingsState.languageDataList), "Primary Language"),
                             style: TextStyle(
-                              // color: Colors.white
                               color: palette.textColor2,
                             ),
                           ),
                           textStyle: TextStyle(
-                            // color: Colors.white
                             color: palette.textColor2
                           ),
                           initialSelection: getPrimaryLanguage(settingsState.languageDataList),
@@ -205,10 +167,9 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                          ),                                    
+                          ),
                           dropdownMenuEntries: allLanguagesList.map<DropdownMenuEntry<String>>((String value) {
                             return DropdownMenuEntry<String>(
-                                  
                               value: value, 
                               label: value,                                       
                             );
@@ -217,16 +178,12 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                       ),
                             
                       const Expanded(flex: 1, child: SizedBox()),
-                            
-                      // allLanguagesList.isEmpty ? SizedBox() :
-                      
                       AnimatedOpacity(
                         duration: const Duration(milliseconds: 500),
                         opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0 ,
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
-                            
                             padding: const EdgeInsets.fromLTRB(12.0,2.0,12.0,2.0),
                             child: Text(
                               Helpers().translateWelcomeText(
@@ -235,7 +192,6 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                               ),
                               style: TextStyle(
                                 fontSize: 18,
-                                // color: Colors.white
                                 color: palette.textColor2
                               ),
                               textAlign: TextAlign.center,
@@ -244,7 +200,6 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                         ),
                       ),                
                       const Expanded(flex: 1, child: SizedBox()),
-                            
                       SizedBox(
                         width: double.infinity,
                         height: screenWidth,
@@ -252,15 +207,12 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                           alignment: Alignment.center,
                           children: <Widget>[
                             for (int i=0; i<settingsState.languageDataList .length; i++)
-                              
                               LanguageButton(
                                 angle:((360/settingsState.languageDataList.length)*i) ,
                                 size: screenWidth,
                                 langData: settingsState.languageDataList[i],
                                 settingsState: settingsState,
-                              ),
-                            
-                                      
+                              ),    
                           ],
                         ),
                       ),
@@ -279,15 +231,12 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                                 processLanguageSelection(settingsState);
                               },
                               style: ElevatedButton.styleFrom(
-                                // backgroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"), //olor.fromARGB(255, 248, 175, 175) ,
-                                // foregroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_text"),
                                 backgroundColor: palette.optionButtonBgColor2 , 
                                 foregroundColor: palette.optionButtonTextColor,
                                 shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
                                 shape:  RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                                   side: BorderSide(
-                                    // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
                                     color: palette.optionButtonBgColor,
                                     width: 1,
                                     style: BorderStyle.solid
@@ -304,7 +253,6 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                                 ),                         
                               ),
                             ),
-                          
                           ),
                         ),
                       ),
@@ -365,29 +313,18 @@ void selectLanguage(SettingsState settingsState, Map<String,dynamic> selectedIte
   for (Map<String,dynamic> item in settingsState.languageDataList) {
     if (item['body'] == selectedItem['body']) {
       if (selectedItem['selected'] == true) {
-        // if (currentList.length > 1) {
-          // if the item you're iterating through is already selected, then unselect it
           newList.add({'primary': false, 'selected': false, 'body': selectedItem['body'], 'flag':selectedItem['flag'] , 'url': selectedItem['url']},);
           currentList.removeWhere((element) => element == selectedItem['body']);
-        // } else {
-        //   newList.add({'primary': selectedItem['primary'], 'selected': selectedItem['selected'], 'body': selectedItem['body'], 'flag':selectedItem['flag'] , 'url': selectedItem['url']},);
-        //   // currentList.removeWhere((element) => element == selectedItem['body']);          
-        // }
       } else if (selectedItem['selected'] == false) {
-        // if the item  you're iterating through has not been selected but is also not the first to be selected, then select it but not as a primary
         if (isSelection(settingsState.languageDataList)) {
           newList.add({'primary': false, 'selected': true, 'body': selectedItem['body'], 'flag':selectedItem['flag'] , 'url': selectedItem['url']},);
           currentList.add(selectedItem['body']);
           currentSelection = selectedItem['body'];
-          
-          
-        // if the item  you're iterating through has not been selected AND there are no selected items yet, make this a primary as well
         } else {
           newList.add({'primary': true, 'selected': true, 'body': selectedItem['body'], 'flag':selectedItem['flag'] , 'url': selectedItem['url']},);
           currentList.add(selectedItem['body']);
           currentSelection = selectedItem['body'];
         }
-        
       }
     } else {
       newList.add(item);
@@ -422,13 +359,9 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
   late AnimationState _animationState; 
   late AnimationController _languageSelectedController;
   late Animation<double> _languageSelectedAnimation;
-
-
   late double spreadFactor;
   late double rad;
-
   late bool pressed = false;
-
 
   @override
   void initState() {
@@ -438,7 +371,6 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
     _languageSelectedController.addListener(_animationListener);
     spreadFactor = widget.size*0.33;
     rad = radians(widget.angle);    
-
   }
 
   void initializeAnimations() {
@@ -448,7 +380,6 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
     );
 
     final List<TweenSequenceItem<double>> selectLanguageSequence = [
-
       TweenSequenceItem<double>(tween: Tween(begin: 0.0, end: 1.0), weight: 1.0),
     ];
 
@@ -480,8 +411,6 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
     super.dispose();
   }
 
-
-  
   @override
   Widget build(BuildContext context) {
 
@@ -493,7 +422,6 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
             (spreadFactor) * cos(rad), 
             (spreadFactor) * sin(rad)        
           ),
-        
         
           child: GestureDetector(
             onTap: (){ 
@@ -514,21 +442,14 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
               builder: (context, child) {
                 return Stack(
                   children: [
-        
-        
                     Container(
-                      // width:  90 ,
-                      // height: 90 ,
                       width: widget.size*0.25,
                       height: widget.size*0.25,
                       decoration: BoxDecoration(
-                        // color: Colors.green,
                         borderRadius: const BorderRadius.all(Radius.circular(100.0)),
                         border: Border.all(
                           width: 3 ,
                           color: getSelectedLanguageBorderColor(palette.optionButtonTextColor, _languageSelectedAnimation.value)
-                          // color: Color.fromRGBO(255, 255, 255, _languageSelectedAnimation.value),
-                          // color: widget.langData['selected'] ? Color.fromRGBO(255, 255, 255, _languageSelectedAnimation.value) :  Color.fromRGBO(255, 255, 255, _languageSelectedAnimation.value) 
                         ),
                       ),
                     ),
@@ -537,9 +458,6 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
                       left: (((widget.size*0.30)-(widget.size*0.25))/2),
                       top: (((widget.size*0.30)-(widget.size*0.25))/2),
                       child: Container(
-                        // child: Text(body),
-                        // width: 70,
-                        // height: 70,
                         width: widget.size*0.2,
                         height: widget.size*0.2,                        
                         decoration: BoxDecoration(
@@ -557,7 +475,6 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
               },
             )
           ),
-        
         );
       },
     );

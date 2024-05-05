@@ -43,7 +43,7 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
     _animationState.addListener(_handleAnimationStateChange);
 
     initializeAnimations(widget.width,);
-    print(widget.width);
+    // print(widget.width);
   }
 
 
@@ -121,7 +121,6 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationState.removeListener(_handleAnimationStateChange);
     super.dispose();
   }
@@ -150,17 +149,7 @@ class _TutorialFloatingStepState extends State<TutorialFloatingStep> with Ticker
                 top: MediaQuery.of(context).size.height*(currentStep['height'] as double),
                 left: getLeftOrRightEnter(currentStep, _slideEnterAnimation2)['left'],
                 right: getLeftOrRightEnter(currentStep, _slideEnterAnimation2)['right'],
-                child: cardContainer(tutorialState,_animationState,currentStep,palette,MediaQuery.of(context).size.width*0.8, settingsState.sizeFactor),
-                // child: cardContainer(
-                //   next, 
-                //   tutorialState,
-                //   _animationState,
-                //   previousStep, 
-                //   currentStep, 
-                //   nextStep,
-                //   palette,
-                //   MediaQuery.of(context).size.width*0.8
-                // ),                
+                child: cardContainer(tutorialState,_animationState,currentStep,palette,MediaQuery.of(context).size.width*0.8, settingsState.sizeFactor),             
               );
             },
           ),

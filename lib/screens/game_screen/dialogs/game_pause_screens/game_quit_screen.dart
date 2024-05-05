@@ -41,8 +41,6 @@ class _GameQuitScreenState extends State<GameQuitScreen>
       Helpers().getStates(gamePlayState, settings);
       GameLogic().clearTilesFromBoard(gamePlayState);
       Navigator.of(context).pop();
-
-      debugPrint(gamePlayState.visualTileState.toString());
     };
     
   }

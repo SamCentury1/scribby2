@@ -1,20 +1,14 @@
-// import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/functions/helpers.dart';
-// import 'package:scribby_flutter_v2/functions/game_logic.dart';
-// import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
-// import 'package:scribby_flutter_v2/providers/game_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_help_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_quit_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_settings_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_summary_screen.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-// import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class GamePauseDialog extends StatefulWidget {
   const GamePauseDialog({

@@ -1,7 +1,4 @@
 import 'dart:convert';
-// import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -33,7 +30,7 @@ class StorageMethods {
       // Store words to local storage (e.g., shared_preferences or hive)
       // ...
     } catch (e) {
-      debugPrint("there was an error running downloadWordList() : ${e.toString()} ");
+      // debugPrint("there was an error running downloadWordList() : ${e.toString()} ");
       // Handle errors
     }
     return res;

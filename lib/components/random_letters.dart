@@ -2,6 +2,7 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -165,22 +166,13 @@ class _RandomLettersState extends State<RandomLetters>
     super.dispose();
   }
 
-  double getBoardWidth(double currentScreenWidth) {
-    double res = currentScreenWidth;
-    if (currentScreenWidth > 500) {
-      res = 500;
-    }
-    return res;
-  }
-
-
   @override
   Widget build(BuildContext context) {
     // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     // final Palette palette = Provider.of<Palette>(context, listen: false);
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-    final double width = getBoardWidth(MediaQuery.of(context).size.width);
+    final double width = Helpers().getScreenWidth(MediaQuery.of(context).size.width,1);
     final double side = width/3;
 
     return Stack(
@@ -191,7 +183,6 @@ class _RandomLettersState extends State<RandomLetters>
             Consumer<GamePlayState>(
               builder: (context, gamePlayState, child) {
                 return SizedBox(
-                  // width: getBoardWidth(MediaQuery.of(context).size.width) * settingsState.sizeFactor,
                   width: width * settingsState.sizeFactor,
                   height: widget.tileSize * settingsState.sizeFactor,                  
                   child: Row(

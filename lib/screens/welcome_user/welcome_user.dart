@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
@@ -56,13 +55,6 @@ void initState() {
       )
     );
   }  
-
-  // void getSizeFactor(double screenHeight, SettingsState settingsState) {
-  //       // get the size factor
-  //       Helpers().getSizeFactor();
-  // }
-
-
   Future<Map<String,dynamic>?> getUserFromDatabase(
     GamePlayState gamePlayState,
     ColorPalette palette,
@@ -74,10 +66,6 @@ void initState() {
     Map<String,dynamic> res = {};
 
     try {
-
-      // User? user = await AuthService().getOrCreateUser();
-
-      // log(user.toString());
 
       final String uid = AuthService().currentUser!.uid;
 
@@ -92,8 +80,6 @@ void initState() {
         settings.setUserData(userData); 
 
         // update size factor of the screen size
-
-
         palette.getThemeColors(userData['parameters']['darkMode']);                
 
         // check if either the language or the username is missing.
@@ -127,12 +113,10 @@ void initState() {
         // in the main file. so this should never occur. It occurs only when I delete a doc in the
         // db which only happens in dev.
         log("there is a problem, user was never created ");
-
-
       }
     
     } catch (error) {
-      debugPrint(error.toString());
+      // debugPrint(error.toString());
     }
 
     return res;
@@ -163,7 +147,7 @@ void initState() {
 
         } else {
 
-          final Map<String, dynamic>? userData = snapshot.data;
+          // final Map<String, dynamic>? userData = snapshot.data;
 
           return SafeArea(
             child: Scaffold(
@@ -171,17 +155,6 @@ void initState() {
                 color: palette.screenBackgroundColor,
                 width: double.infinity,
                 height: double.infinity,
-
-                // child: Column(
-                //   children: [
-                //     Text(
-                //       userData?['uid'],
-                //       style: TextStyle(
-                //         color: Colors.black
-                //       ),
-                //     )
-                //   ],
-                // ),
               ),
             ),
           );

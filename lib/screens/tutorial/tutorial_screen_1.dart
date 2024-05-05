@@ -1,7 +1,6 @@
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -14,15 +13,12 @@ import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_ended_overlay.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_floating_step.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_overlay.dart';
-import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_pause_overlay.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_random_letters.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_scoreboard.dart';
-// import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_step.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_components/tutorial_time_widget.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TutorialScreen1 extends StatefulWidget {
   const TutorialScreen1({super.key});
@@ -33,7 +29,6 @@ class TutorialScreen1 extends StatefulWidget {
 
 class _TutorialScreen1State extends State<TutorialScreen1>
     with TickerProviderStateMixin {
-  late AnimationState _animationState;
   late AnimationController _textGlowController;
   late Animation<double> _textGlowAnimation;
   late SettingsController settings;
@@ -46,7 +41,6 @@ class _TutorialScreen1State extends State<TutorialScreen1>
   @override
   void initState() {
     super.initState();
-    _animationState = Provider.of<AnimationState>(context, listen: false);
     tutorialState = Provider.of<TutorialState>(context, listen: false);
     settings = Provider.of<SettingsController>(context, listen: false);
     palette = Provider.of<ColorPalette>(context, listen: false);
@@ -105,13 +99,6 @@ class _TutorialScreen1State extends State<TutorialScreen1>
     return res;
   }
 
-  double getBoardWidth(double currentScreenWidth, double sizeFactor) {
-    late double res = currentScreenWidth;
-    if (currentScreenWidth > 500) {
-      res = 500;
-    }
-    return res * sizeFactor;
-  }   
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +106,7 @@ class _TutorialScreen1State extends State<TutorialScreen1>
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-    final double boardWidth = getBoardWidth(MediaQuery.of(context).size.width, settingsState.sizeFactor*0.8);
+    final double boardWidth = Helpers().getScreenWidth(MediaQuery.of(context).size.width, settingsState.sizeFactor*0.8);
     final double tileWidth = boardWidth/3;
 
     return Consumer<TutorialState>(
@@ -247,7 +234,7 @@ class _TutorialScreen1State extends State<TutorialScreen1>
                               tutorialState.tutorialCountDownController.pause();                       
                               // tutorialState.tutorialCountDownController.restart();
                             }
-                            debugPrint(tutorialState.sequenceStep.toString());
+                            // debugPrint(tutorialState.sequenceStep.toString());
                           },
                           icon: Icon(
                             Icons.replay_circle_filled_sharp,

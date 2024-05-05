@@ -66,4 +66,5 @@ flutter {
 
 dependencies {
     implementation 'com.google.android.gms:play-services-ads:22.4.0' // Google Ads
+    implementation 'com.google.android.material:material:1.12.0'
 }

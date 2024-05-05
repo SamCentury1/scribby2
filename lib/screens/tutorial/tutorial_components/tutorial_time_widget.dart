@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
-import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
@@ -22,73 +21,13 @@ class TutorialTimerWidget extends StatefulWidget {
 
 class _TutorialTimerWidgetState extends State<TutorialTimerWidget>
     with TickerProviderStateMixin {
-  // late AnimationState animationState;
-  // late AnimationController _timerController;
-  // late Animation<double> _timerAnimation;
+
 
   @override
   void initState() {
     super.initState();
-    // animationState = Provider.of<AnimationState>(context, listen: false);
-    // initializeAnimations();
-    // _timerController.addListener(_animationListener);
-    // animationState.addListener(_handleAnimationStateChange);
   }
 
-  // void _animationListener() {
-  //   if (_timerController.status == AnimationStatus.completed) {
-  //     // _timerController.reset();
-  //   }
-  // }
-
-  // void _handleAnimationStateChange() {
-  //   if (animationState.shouldRunTutorialTimerdAnimation) {
-  //     _runTimerAnimation();
-  //   }
-  // }
-
-  // void _runTimerAnimation() {
-  //   _timerController.reset();
-
-  //   _timerController.forward();
-  // }
-
-  // void initializeAnimations() {
-  //   /// ============== vvvvvvvvvvvvvvvv ======================
-  //   /// ============== TIMER ANIMATION =======================
-  //   _timerController = AnimationController(
-  //     vsync: this,
-  //     duration: const Duration(seconds: 5),
-  //   );
-
-  //   final List<TweenSequenceItem<double>> timerTweenSequence = [
-  //     TweenSequenceItem<double>(
-  //         tween: Tween(begin: 0.2, end: 1.0), weight: 0.1),
-  //     TweenSequenceItem<double>(
-  //         tween: Tween(begin: 1.0, end: 1.0), weight: 0.8),
-  //     TweenSequenceItem<double>(
-  //         tween: Tween(begin: 1.0, end: 0.2), weight: 0.1),
-  //   ];
-
-  //   _timerAnimation =
-  //       TweenSequence<double>(timerTweenSequence).animate(_timerController);
-
-  //   /// ============== TIMER ANIMATION =======================
-  //   /// ============== ^^^^^^^^^^^^^^^^ ======================
-  // }
-
-  // @override
-  // void dispose() {
-  //   // _timerAnimation.removeListener(_handleAnimationStateChange);
-  //   // _timerController.dispose();
-  //   // animationState.dispose();
-  //   super.dispose();
-  // }
-
-  // String displayFormattedTime(int seconds) {
-  //   // String formattedTime = GameLogic().formatTime(seconds);
-  //   // return formattedTime;
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -9,6 +9,7 @@ import 'package:scribby_flutter_v2/utils/states.dart';
 import 'package:scribby_flutter_v2/utils/translations.dart';
 
 class Helpers {
+  
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
   String formatWord(String s) {
     String lower = s.toLowerCase();
@@ -47,21 +48,19 @@ class Helpers {
     final List<dynamic> alphabet = alphabetDocumnet['alphabet'];
 
     if (alphabet.isNotEmpty) {
-      late List<Map<String, dynamic>> startingAlphabetState = GameLogic()
-          .generateStartingStates(
-              alphabet, initialBoardState, [])['startingAlphabet'];
-      late List<String> randomLetterListState = GameLogic()
-          .generateStartingStates(
-              alphabet, initialBoardState, [])['startingRandomLetterList'];
-      late List<Map<String, dynamic>> startingTileState = GameLogic()
-          .generateStartingStates(
-              alphabet, initialBoardState, [])['startingTileState'];
+      Map<String, dynamic> startingStates = GameLogic().generateStartingStates(alphabet, initialBoardState, []);
+
+      late List<Map<String, dynamic>> startingAlphabetState = startingStates['startingAlphabet'];
+      // GameLogic().generateStartingStates(alphabet, initialBoardState, [])['startingAlphabet'];
+      late List<String> randomLetterListState = startingStates['startingRandomLetterList'];
+      // GameLogic().generateStartingStates(alphabet, initialBoardState, [])['startingRandomLetterList'];
+      late List<Map<String, dynamic>> startingTileState = startingStates['startingTileState'];
+      // GameLogic().generateStartingStates(alphabet, initialBoardState, [])['startingTileState'];
 
       gamePlayState.setAlphabetState(startingAlphabetState);
       gamePlayState.setRandomLetterList(randomLetterListState);
       gamePlayState.setVisualTileState(startingTileState);
     } else {
-      debugPrint("something went wrong retrieving the alphabet from storage");
     }
   }
 
@@ -321,6 +320,15 @@ class Helpers {
     }
     return res;
   }
+
+  double getScreenWidth(double currentScreenWidth, double sizeFactor) {
+    double res = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      res = 500;
+    }
+    return res*sizeFactor;
+  }
+
 
   Future<void> showBadNameDialog(
     BuildContext context, 

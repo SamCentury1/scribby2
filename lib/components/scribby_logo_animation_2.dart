@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ScribbyLogoAnimation2 extends StatefulWidget {
@@ -22,14 +21,6 @@ class _ScribbyLogoAnimation2State extends State<ScribbyLogoAnimation2>  with Sin
   void initState() {
 
     super.initState();
-
-    /// POSITION
-    // _positionAnimation = TweenSequence<double>([
-    //   TweenSequenceItem(
-    //     tween: Tween<double>(begin: 200.0, end: 10.0), 
-    //     weight: 1.0
-    //   ),     
-    // ]).animate(_slideController);
     _positionAnimation = Tween<Offset>(
       begin: const Offset(0.0, 1.0),
       end: Offset.zero,

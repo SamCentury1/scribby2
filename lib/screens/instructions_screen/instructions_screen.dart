@@ -45,7 +45,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
       res = {"userData": userData, "alphabet": alphabetObject['alphabet']};
 
     } catch (error) {
-      debugPrint(error.toString());
+      // debugPrint(error.toString());
     }
     return res;
   }

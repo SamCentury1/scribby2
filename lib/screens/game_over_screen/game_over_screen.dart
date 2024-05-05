@@ -1,7 +1,7 @@
 // import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
@@ -34,7 +34,10 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
   /// TODO: CHANGE THIS TO YOUR OWN AD ID!!!
   final adUnitId = Platform.isAndroid
+      // ca-app-pub-2459167095237263/4958251976
       ? 'ca-app-pub-3940256099942544/1033173712'
+
+      // ca-app-pub-2459167095237263/7967558693
       : 'ca-app-pub-3940256099942544/4411468910';
 
   /// Loads an interstitial ad.
@@ -59,22 +62,22 @@ class _GameOverScreenState extends State<GameOverScreen> {
           adLoadCallback: InterstitialAdLoadCallback(
             // Called when an ad is successfully received.
             onAdLoaded: (InterstitialAd ad) {
-              debugPrint("ad loaded");
+              // debugPrint("ad loaded");
               setFullScreenContentCallback(ad, animationState);
               ad.show();
 
-              debugPrint('$ad loaded.');
+              // debugPrint('$ad loaded.');
             },
             // Called when an ad request failed.
             onAdFailedToLoad: (LoadAdError error) {
               setState(() {
                 isLoading = false;
               });
-              debugPrint('InterstitialAd failed to load: $error');
+              // debugPrint('InterstitialAd failed to load: $error');
             },
           ));
     } catch (e) {
-      debugPrint(e.toString());
+      // debugPrint(e.toString());
       setState(() {
         isLoading = false;
       });
@@ -125,24 +128,15 @@ class _GameOverScreenState extends State<GameOverScreen> {
     return  currentScore > highScore ;
   } 
 
-  double getScreenWidth(double currentScreenWidth) {
-    double res = currentScreenWidth;
-    if (currentScreenWidth > 500) {
-      res = 500;
-    }
-    return res;
-  }
 
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-    // late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-    // late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
 
     final AudioController audioController =Provider.of<AudioController>(context, listen: false);
     
-    double maxScreenWidth = getScreenWidth(MediaQuery.of(context).size.width);
+    double maxScreenWidth = Helpers().getScreenWidth(MediaQuery.of(context).size.width,1);
 
     return isLoading
         ? const Center(
@@ -516,8 +510,6 @@ class _GameOverScreenState extends State<GameOverScreen> {
 }
 
 TableRow rowStatItem(String text, String data, Icon icon, ColorPalette palette, double sizeFactor) {
-  // final ColorPalette palette = context.read<ColorPalette?>();
-
   return TableRow(children: <Widget>[
     Center(child: icon),
     FittedBox(

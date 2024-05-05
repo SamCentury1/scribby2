@@ -1,20 +1,15 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-// import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
-// import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
-// import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,7 +45,6 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   @override
   void initState() {
     super.initState();
-    // getUserFromFirebase();
     _userNameController = TextEditingController();
     _palette = Provider.of<ColorPalette>(context, listen: false);
     initializeAnimations(_palette, widget.darkMode);
@@ -62,31 +56,26 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
     vsync: this, duration: const Duration(milliseconds: 300));
 
     screenBgColorChangeAnimation = ColorTween(
-      // streakSlideEnterTweenSequence
       begin: darkMode ? palette.dark_screenBackgroundColor : palette.light_screenBackgroundColor ,
       end: darkMode ? palette.light_screenBackgroundColor : palette.dark_screenBackgroundColor,
     ).animate(colorChangeController);  
 
     cardBgColorChangeAnimation = ColorTween(
-      // streakSlideEnterTweenSequence
       begin: darkMode ? palette.dark_optionButtonBgColor2 : palette.light_optionButtonBgColor2,
       end: darkMode ? palette.light_optionButtonBgColor2 : palette.dark_optionButtonBgColor2,
     ).animate(colorChangeController);  
 
     cardTextColorChangeAnimation = ColorTween(
-      // streakSlideEnterTweenSequence
       begin: darkMode ? palette.dark_textColor2 : palette.light_textColor2,
       end: darkMode ? palette.light_textColor2 : palette.dark_textColor2,
     ).animate(colorChangeController);  
 
     appBarColorChangeAnimation = ColorTween(
-      // streakSlideEnterTweenSequence
       begin: darkMode ? palette.dark_appBarColor : palette.light_appBarColor,
       end: darkMode ? palette.light_appBarColor : palette.dark_appBarColor,
     ).animate(colorChangeController);  
 
     textColorChangeAnimation = ColorTween(
-      // streakSlideEnterTweenSequence
       begin: darkMode ? palette.dark_textColor1 : palette.light_textColor1,
       end: darkMode ? palette.light_textColor1 : palette.dark_textColor1,
     ).animate(colorChangeController);                  
@@ -1144,7 +1133,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
 
 Future<void> _launchURL(url_string) async {
    final Uri url = Uri.parse(url_string);
-   print("okay go to $url");
+  //  print("okay go to $url");
    if (!await launchUrl(url)) {
         throw Exception('Could not launch privacy policy');
     }

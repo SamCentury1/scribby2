@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/draggable_tile.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
+import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 
@@ -22,20 +23,11 @@ class _ReserveTilesState extends State<ReserveTiles> {
     return (boardWidth/8)*sizeFactor;
   }
 
-  double getBoardWidth(double currentScreenWidth,double sizeFactor) {
-    late double boardWidth = currentScreenWidth;
-    if (currentScreenWidth > 500) {
-      boardWidth = 500;
-    }
-    return boardWidth*sizeFactor;
-  }
   
   @override
   Widget build(BuildContext context) {
 
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-    // late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
-    // late AudioController audioController = Provider.of<AudioController>(context, listen: false);
         
     double tileSize = getTileSize(MediaQuery.of(context).size.width, settingsState.sizeFactor);
 
@@ -44,8 +36,7 @@ class _ReserveTilesState extends State<ReserveTiles> {
         return FittedBox(
           fit: BoxFit.scaleDown,
           child: SizedBox(
-            // width: MediaQuery.of(context).size.width * settingsState.sizeFactor,
-            width: getBoardWidth(MediaQuery.of(context).size.width,settingsState.sizeFactor),
+            width: Helpers().getScreenWidth(MediaQuery.of(context).size.width,settingsState.sizeFactor),
             child: Padding(
               padding: const EdgeInsets.all(0.0),
               child: Row(
@@ -55,13 +46,13 @@ class _ReserveTilesState extends State<ReserveTiles> {
                     Stack(
                       children: [
                         Draggable(
-                          data: reserveLetter["body"] == "" ? const SizedBox() : draggedTile(reserveLetter["body"],Colors.red, 0), // draggedTile(reserveLetter["body"], Colors.red),
-                          feedback: reserveLetter["body"] =="" ? const SizedBox() : DraggableTile(tileState:reserveLetter), // draggedTile(reserveLetter["body"], const Color.fromARGB(255, 73, 54, 244)),
+                          data: reserveLetter["body"] == "" ? const SizedBox() : draggedTile(reserveLetter["body"],Colors.red, 0),
+                          feedback: reserveLetter["body"] =="" ? const SizedBox() : DraggableTile(tileState:reserveLetter),
                           childWhenDragging:
                               reserveLetter["body"] == ""
                                   ? DraggableTile(tileState:reserveLetter)
                                   : DraggableTile(tileState: {"id":reserveLetter["id"],"body": ""}),
-                          child: DraggableTile(tileState:reserveLetter), //draggedTile(reserveLetter["body"], Colors.black),
+                          child: DraggableTile(tileState:reserveLetter), 
           
                           onDragStarted: () {
                               gamePlayState.setDraggedReserveTile(reserveLetter);

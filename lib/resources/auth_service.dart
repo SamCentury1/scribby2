@@ -23,7 +23,7 @@ class AuthService {
           "soundOn": true,
           "hasSeenTutorial": false,
         },
-        "createdAt": DateTime.now(),
+        "createdAt": DateTime.now().toIso8601String(),
         "highScores": {}
       });
     }

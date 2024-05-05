@@ -27,10 +27,6 @@ class _TutorialBoardState extends State<TutorialBoard> {
   Widget build(BuildContext context) {
 
     late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-
-    // late double boardWidth = (MediaQuery.of(context).size.width )*settingsState.sizeFactor*0.8;
-    // late double tileSide = boardWidth / 6;
-
     // if is FALSE - display overlay to tap into
     bool ignoreReserveOverlay(Map<String, dynamic> reserveState, Map<String,dynamic> currentStep) {
       late bool res = true;
@@ -40,19 +36,10 @@ class _TutorialBoardState extends State<TutorialBoard> {
       return res;
     }
 
-    // double getBoardWidth(double currentScreenWidth, double sizeFactor) {
-    //   late double res = currentScreenWidth;
-    //   if (currentScreenWidth > 500) {
-    //     res = 500;
-    //   }
-    //   return res * sizeFactor;
-    // } 
-
     return Consumer<TutorialState>(builder: (context, tutorialState, child) {
       final Map<String,dynamic> currentStep = tutorialState.tutorialStateHistory2.firstWhere((element) => element['step'] == tutorialState.sequenceStep);
       late AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
       late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-      // late double boardWidth = getBoardWidth(MediaQuery.of(context).size.width,settingsState.sizeFactor*0.8 );
       late double tileSide = widget.boardWidth / 6;
       
       return Column(
@@ -86,7 +73,6 @@ class _TutorialBoardState extends State<TutorialBoard> {
               return SizedBox(
                 width: MediaQuery.of(context).size.width *settingsState.sizeFactor*0.8,
                 height: (MediaQuery.of(context).size.width *settingsState.sizeFactor*0.8)/6,
-                // color: Colors.purple,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -96,42 +82,28 @@ class _TutorialBoardState extends State<TutorialBoard> {
                         children: [
 
                           Draggable(
-                            // data: reserve["body"] == "" ? const SizedBox() : draggedTile(reserve["body"],Colors.red, tileSide), // draggedTile(reserve["body"], Colors.red),
-                            data: "reserve_${reserve['id']}" != currentStep['dragSource'] 
+                           data: "reserve_${reserve['id']}" != currentStep['dragSource'] 
                               ? const SizedBox() 
-                              : TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation,), // d          
-                  
-                            
-                            // The widget being dragged (moves with mouse/finger)
-                            // feedback: reserve["body"] =="" ? const SizedBox() : TutorialDraggableTile(tileState:reserve,tileSide:tileSide, animation: widget.animation,), // draggedTile(reserve["body"], const Color.fromARGB(255, 73, 54, 244)),
+                              : TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation,),
                             feedback: "reserve_${reserve['id']}" != currentStep['dragSource'] 
                               ? SizedBox()
-                              : TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation,), // draggedTile(reserve["body"], const Color.fromARGB(255, 73, 54, 244)),
+                              : TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation,),
                             
                             // The static reserve tile spot
                             childWhenDragging: 
-
-                                // reserve["body"] != ""
-
                                 "reserve_${reserve['id']}" != currentStep['dragSource'] 
                                     ? TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation)
-                                    : emptyTile(tileSide, palette),//TutorialDraggableTile(tileState: {"id":reserve["id"],"body": ""},tileSide:tileSide, animation: widget.animation),
-                            child: TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation), //draggedTile(reserve["body"], Colors.black),
-                
+                                    : emptyTile(tileSide, palette),
+                            child: TutorialDraggableTile(tileState:reserve,tileSide:tileSide*0.8, animation: widget.animation), 
                             onDragStarted: () {
-                              
-
                               if ("reserve_${reserve['id']}" == currentStep['dragSource']) {
                                 tutorialState.setTutorialDraggedReserveTile(reserve);
                               }
                             },
                             onDragEnd: (details) {
-
-
                               if (currentStep['callbackTarget'] == "reserve_${reserve['id']}") {
                                 TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
                               }
-                            
                               tutorialState.setTutorialDraggedReserveTile({});
                             },
                           ),
@@ -142,7 +114,6 @@ class _TutorialBoardState extends State<TutorialBoard> {
                               height: tileSide*0.85,
                               child: GestureDetector(
                                 onTap: () {
-
                                   if ("reserve_${reserve['id']}" == currentStep['callbackTarget']) {
                                     TutorialHelpers().reactToTileTap(tutorialState, animationState, currentStep);
                                   }
@@ -192,9 +163,8 @@ Widget emptyTile(double tileSide, ColorPalette palette) {
               palette.textColor3.blue,
               0.5 
             ),
-            // color: colorTileBorder(tileObject,currentStep,palette, animation ),
             width: 3,
-        ), // colorTileBorder(tileObject, palette), width: 3),
+        ), 
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: const SizedBox()

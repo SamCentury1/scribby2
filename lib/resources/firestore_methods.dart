@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
-// import 'package:scribby_flutter_v2/providers/game_play_state.dart';
-// import 'package:scribby_flutter_v2/providers/settings_state.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -18,7 +15,7 @@ class FirestoreMethods {
       final Map<String, dynamic>? docData = docSnap.data();
       res = docData;
     } catch (e) {
-      debugPrint("caught an error running 'getUserData()' ${e.toString()}");
+      // debugPrint("caught an error running 'getUserData()' ${e.toString()}");
     }
     return res;
   }
@@ -48,7 +45,7 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
-      debugPrint("caught an error running 'saveHighScore()' ${e.toString()}");
+      // debugPrint("caught an error running 'saveHighScore()' ${e.toString()}");
     }
   }
 
@@ -75,7 +72,7 @@ class FirestoreMethods {
       }
       res = userList;
     } catch (e) {
-      debugPrint("caught an error running 'getDataForLeaderboards()' ${e.toString()}");
+      // debugPrint("caught an error running 'getDataForLeaderboards()' ${e.toString()}");
     }
     return res;
   }
@@ -109,7 +106,7 @@ class FirestoreMethods {
 
       res = alphabetDoc['alphabet'];
     } catch (e) {
-      debugPrint("caught an error running 'getAlphabet()' ${e.toString()}");
+      // debugPrint("caught an error running 'getAlphabet()' ${e.toString()}");
     }
 
     return res;
@@ -145,7 +142,7 @@ class FirestoreMethods {
 
       settings.setAlphabet(alphabetDoc);
     } catch (e) {
-      debugPrint("caught an error running 'saveAlphabetToLocalStorage()' ${e.toString()}");
+      // debugPrint("caught an error running 'saveAlphabetToLocalStorage()' ${e.toString()}");
     }
   }
 
@@ -157,7 +154,7 @@ class FirestoreMethods {
       await docRef.update({"parameters.currentLanguage": currentLanguage});
       await docRef.update({"parameters.languages": languages});
     } catch (e) {
-      debugPrint("caught an error running 'selectLanguage()' ${e.toString()}");
+      // debugPrint("caught an error running 'selectLanguage()' ${e.toString()}");
     }
   }
 
@@ -177,7 +174,7 @@ class FirestoreMethods {
 
       await docRef.update({"parameters": parameters});
     } catch (e) {
-      debugPrint("caught an error running 'updateParameters()' ${e.toString()}");
+      // debugPrint("caught an error running 'updateParameters()' ${e.toString()}");
     }
   }
 
@@ -186,13 +183,9 @@ class FirestoreMethods {
       Map<String, dynamic> userData = await getUserData(uid) as Map<String, dynamic>;
       settings.updateUserData(userData);
     } catch (e) {
-      debugPrint("caught an error running 'updateSettingsState()' ${e.toString()}");
+      // debugPrint("caught an error running 'updateSettingsState()' ${e.toString()}");
     }
   }
 
-  // Future<void> executeEndTutorial(String uid) async {
-  //   final docRef = _firestore.collection('users').doc(uid);
-  //   await docRef.update({"hasSeenTutorial": true});
-  //   debugPrint("successfully updated skip tutorial");
-  // }
+
 }

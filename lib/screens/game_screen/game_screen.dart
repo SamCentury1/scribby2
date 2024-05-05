@@ -38,66 +38,35 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
-  // late AnimationState _animationState;
-  // late GameState _gameState;
-  // late AudioController _audioController;
-  // late GamePlayState gamePlayState;
-  // late SettingsController _settings;
-  // late AnimationState _animationState;
   late bool isAnimating = false;
   late bool isDragging = false;
   late Map<String, dynamic> draggedSpot = {};
   late List<Map<String, dynamic>> reserveLetters = [];
-
-  // late List<dynamic> _alphabetData = [];
   late bool isLoading = false;
   late bool pressingOnTile = false;
-
-  // late List<Map<String,dynamic>> _startingAlphabetState = [];
-  // late List<String> _randomLetterListState = [];
-  // late List<Map<String,dynamic>> _startingTileState = [];
 
   @override
   void initState() {
     super.initState();
-
-    // _audioController = Provider.of<AudioController>(context, listen: false);
-    // gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-
   }
 
 
-  double getBoardWidth(double currentScreenWidth) {
-    double res = currentScreenWidth;
-    if (currentScreenWidth > 500) {
-      res = 500;
-    }
-    return res;
-  }
+
 
 
   @override
   Widget build(BuildContext context) {
-    // final adsController = context.watch<AdsController?>();
-    // adsController?.preloadAd();
 
-    // final GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     final SettingsController settings =Provider.of<SettingsController>(context, listen: false);
 
     final SettingsState settingsState =Provider.of<SettingsState>(context, listen: false);        
-    // final Palette palette = Provider.of<Palette>(context, listen: false);
+
     final ColorPalette palette =Provider.of<ColorPalette>(context, listen: false);
 
     final AudioController audioController =Provider.of<AudioController>(context, listen: false);
 
-    final double tileSide = getBoardWidth(MediaQuery.of(context).size.width)/4;
-    // final AnimationState animationState =
-    //     Provider.of<AnimationState>(context, listen: false);     
+    final double tileSide = Helpers().getScreenWidth(MediaQuery.of(context).size.width,1)/4;
 
-    // final GamePlayState gamePlayState =
-    //     Provider.of<GamePlayState>(context, listen: false);                
-
-    // return isLoading ? const Center(child: CircularProgressIndicator(),): 
           return Consumer<GamePlayState>(
             builder: (context, gamePlayState, child) {
               
@@ -166,7 +135,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                   // RANDOM LETTERS LAYER
                                   const Expanded(flex: 1, child: SizedBox()),
                                   RandomLetters(
-                                    // tileSize: MediaQuery.of(context).size.width *0.2, 
                                     tileSize: tileSide,
                                     settingsState: settingsState,
                                   ),
@@ -209,16 +177,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        // bottomNavigationBar: const BannerAdWidget(),
                       ),
                     ),
-                    // gamePlayState.isGameStarted && gamePlayState.isGamePaused ? const PauseOverlay() : const SizedBox(),
                     const PauseOverlay(),
-              
                     const GameOverOverlay(),
-                    // const GameOverOverlay(),
-                    // const LevelChangeOverlay(),
-              
                     const PreGameOverlay(),
                     // const PreGameOverlay(),
                   ],

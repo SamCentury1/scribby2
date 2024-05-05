@@ -1,20 +1,11 @@
-// import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-// import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
-// import 'package:scribby_flutter_v2/functions/game_logic.dart';
-// import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
-// import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
-import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-// import 'package:vector_math/vector_math.dart' show radians, Vector3;
-// import 'dart:math';
 
 class ChooseUsername extends StatefulWidget {
   const ChooseUsername({super.key});
@@ -28,7 +19,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
   late bool isLoading = false;
   late bool languageSelected = false;
   late TextEditingController _userNameController;
-  // late Map<String,dynamic> _userData = {};
 
   late List<String> forbiddenNames = [
     "player", "user", "username",
@@ -40,25 +30,11 @@ class _ChooseUsernameState extends State<ChooseUsername> {
 
 
 
-  // Future<void> getUserFromFirebase() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   final Map<String,dynamic>? userData = await FirestoreMethods().getUserData(AuthService().currentUser!.uid);
-  //   if (userData!.isNotEmpty) {
-  //     setState(() {
-  //       _userData = userData;
-  //       isLoading = false;
-  //     });
-  //   }
-
-  // }
 
 
   @override
   void initState() {
     super.initState();
-    // getUserFromFirebase();
     _userNameController = TextEditingController();
   }
 
@@ -126,32 +102,15 @@ class _ChooseUsernameState extends State<ChooseUsername> {
 
   @override
   Widget build(BuildContext context) {
-
-    // final settings = context.watch<SettingsController>();
-    // final palette = context.watch<Palette>();
-    // final double screenWidth = MediaQuery.of(context).size.width;
-    // final lightPalette = context.watch<LightPalette>();
-    // final darkPalette = context.watch<DarkPalette>();
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
 
     return isLoading ? const Center(child: CircularProgressIndicator(),) :    
     Consumer<SettingsState>(
       builder: (context, settingsState, child) {
-        // List<String> allLanguagesList = allLanguagesStringList(settingsState.languageDataList);
 
         return Scaffold(
-          // appBar: AppBar(
-          //   title: Text('Settings'),
-          //   backgroundColor: _userData['parameters']['darkMode'] ? Colors.black : Colors.grey,
-          // ),
-          
           body: Container(
-            // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "screen_background"),
             color: palette.screenBackgroundColor,
-            // child: !languageSelected ?  
-            
-
-            
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -167,7 +126,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                     ),                  
                     style: TextStyle(
                       fontSize: 32,
-                      // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
                       color: palette.textColor2,
                     ),
                   ),
@@ -182,7 +140,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                           
                       style: TextStyle(
                         fontSize: 22,
-                        // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
                         color: palette.textColor2
                       ),
                     ),
@@ -222,7 +179,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                                       ),
                                       style: TextStyle(
                                         fontSize: 18* settingsState.sizeFactor,
-                                        // color: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "tile_bg"),
                                         color: palette.textColor2
                                       ),
                                     ),
@@ -276,7 +232,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                         );                        
 
                       } else {
-                        // settings.setUser(_userNameController.text.toLowerCase());
                         AuthService().updateUsername(AuthService().currentUser!.uid, _userNameController.text.toLowerCase());
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -288,8 +243,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                       
                     },
                     style: ElevatedButton.styleFrom(
-                      // backgroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_bg"),
-                      // foregroundColor: GameLogic().getColor(_userData['parameters']['darkMode'], palette, "option_button_text"),
                       backgroundColor: palette.optionButtonBgColor,
                       foregroundColor: palette.optionButtonTextColor,
                       shape: const RoundedRectangleBorder(
@@ -318,52 +271,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
 }
 
 
-
-// Future<void> _showBadNameDialog(BuildContext context, String textBody,) async {
-  
-//   return showDialog<void>(
-//     context: context,
-//     barrierDismissible: false, // user must tap button!
-//     builder: (BuildContext context) {
-
-//       return Theme(
-//         data: ThemeData.dark().copyWith(
-//           // Set the background color of the AlertDialog
-//           dialogBackgroundColor: Colors.grey[800],
-//           // Set the text color of the AlertDialog
-//           textTheme: const TextTheme().copyWith(
-//             bodyMedium: const TextStyle(color: Colors.white),
-//           ),
-//         ),      
-//         child: AlertDialog(
-//           title: const Text('Aye hold up'),
-//           content: SingleChildScrollView(
-//             child: ListBody(
-//               children: <Widget>[
-//                 Text(
-//                   textBody,
-//                   style: const TextStyle(
-//                     fontSize: 18,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           actions: <Widget>[
-//             TextButton(
-//               child: Text('Okay'),
-//               onPressed: () {
-//                 Navigator.of(context).pop();
-//               },
-//             ),
-//           ],
-//         )
-//       );
-//     },
-//   );
-// }
-
-
 Widget languageButton(String body) {
   return Row(
     children: [
@@ -373,7 +280,6 @@ Widget languageButton(String body) {
           child: Container(
             width: double.infinity,
             height: 60,
-            color: Colors.amber,
             child: Center(
               child: Text(
                 body,

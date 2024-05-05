@@ -1,13 +1,11 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/screens/tutorial/tutorial_helpers.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
 
 class TutorialRandomLetters extends StatefulWidget {
   final Animation animation;
@@ -53,7 +51,6 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
 
   // HANDLES THE FONT GETTING BIGGER
   late int secondsLeft;
-  late TutorialState _tutorialState;
 
   // HERE WE GET THE PROVIDER
   @override
@@ -61,23 +58,11 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
     super.initState();
     initializeAnimations(widget.tileWidth, widget.sizeFactor);
     _animationState = Provider.of<AnimationState>(context, listen: false);
-    _tutorialState = Provider.of<TutorialState>(context, listen: false);
     _animationState.addListener(_handleAnimationStateChange);
-    // _tutorialState.addListener(_handleGamePlayStateChange);
-    // _tutorialState.tutorialCountDownController.pause();
 
 
   }
 
-  // void _handleGamePlayStateChange() {
-  //   // Check if the level has changed
-  //   if (_gamePlayState.currentLevel != _gamePlayState.previousLevel) {
-  //     setState(() {
-  //       secondsLeft =
-  //           GameLogic().getCountdownDuration(_gamePlayState.currentLevel);
-  //     });
-  //   }
-  // }
 
   void _handleAnimationStateChange() {
     if (_animationState.shouldRunAnimation) {
@@ -87,9 +72,6 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
 
   // THIS FUNCTION TELLS THE CODE WHAT TO DO
   void initializeAnimations(double tileWidth, double sizeFactor) {
-
-    // final double width = MediaQuery.of(context).size.width *0.6;
-    // final double side = width/3;
 
     _shrinkAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
@@ -153,14 +135,12 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
     _sizeAnimationController.reset();
     _fontAnimationController.reset();
     _letter2SlideController.reset();
-    // _countDownTextSizeController.reset();
 
     _slideController.forward();
     _shrinkAnimationController.forward();
     _sizeAnimationController.forward();
     _fontAnimationController.forward();
     _letter2SlideController.forward();
-    // _countDownTextSizeController.forward();
   }
 
   @override
@@ -171,9 +151,6 @@ class _TutorialRandomLettersState extends State<TutorialRandomLetters>
     _sizeAnimationController.dispose();
     _fontAnimationController.dispose();
     _letter2SlideController.dispose();
-    // _countDownTextSizeController.dispose();
-
-    // _gamePlayState.removeListener(_handleGamePlayStateChange);
     super.dispose();
   }
 
@@ -192,26 +169,11 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
   return res;
 }
 
-  // double getBoardWidth(double currentScreenWidth) {
-  //   double res = currentScreenWidth;
-  //   if (currentScreenWidth > 500) {
-  //     res = 500;
-  //   }
-  //   return res;
-  // }
-
-
 
   @override
   Widget build(BuildContext context) {
-    // final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
-    // final Palette palette = Provider.of<Palette>(context, listen: false);
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-
-    // final double width = getBoardWidth(MediaQuery.of(context).size.width) * 0.6* settingsState.sizeFactor;
-    // final double side = width/3;
-    // final double side = widget.boardWidth/3;
 
     return Stack(
       children: [
@@ -220,8 +182,6 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
           children: [
             Consumer<TutorialState>(
               builder: (context, tutorialState, child) {
-
-                // final Map<String,dynamic> currentStep = tutorialDetails.firstWhere((element) => element['step'] == tutorialState.sequenceStep,);
                 final Map<String,dynamic> currentStep = TutorialHelpers().getCurrentStep2(tutorialState);
 
                 if (currentStep['targets'].contains('countdown')) {
@@ -235,10 +195,6 @@ Color getColor(ColorPalette palette, Animation animation, Map<String,dynamic> cu
                 }             
 
                 return SizedBox(
-                  // color: Color.fromARGB(255, 220, 171, 230),
-                  // width: double.infinity,
-                  // height: 100,
-                  // width: getBoardWidth(MediaQuery.of(context).size.width)*0.8*settingsState.sizeFactor,
                   width: widget.boardWidth,
                   height: widget.tileWidth*1.2,
                   child: Row(
