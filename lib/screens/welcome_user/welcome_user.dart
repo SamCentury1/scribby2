@@ -25,18 +25,18 @@ class _WelcomeUserState extends State<WelcomeUser> {
 
 
 
-@override
-void initState() {
-  super.initState();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final sizeFactor = Helpers().getSizeFactor(screenHeight);
-    final settingsState = Provider.of<SettingsState>(context, listen: false);
-    settingsState.setSizeFactor(sizeFactor);
-    settingsState.setScreensizedata({"width" : screenWidth, "height": screenHeight});
-  });
-}
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final screenWidth = MediaQuery.of(context).size.width;
+      final screenHeight = MediaQuery.of(context).size.height;
+      final sizeFactor = Helpers().getSizeFactor(screenHeight);
+      final settingsState = Provider.of<SettingsState>(context, listen: false);
+      settingsState.setSizeFactor(sizeFactor);
+      settingsState.setScreensizedata({"width" : screenWidth, "height": screenHeight});
+    });
+  }
 
 
 
@@ -136,7 +136,8 @@ void initState() {
     
 
     return FutureBuilder(
-      future: getUserFromDatabase(gamePlayState,palette,settingsState,settings,audioController,) ,
+      future: getUserFromDatabase(gamePlayState,palette,settingsState,settings,audioController,),
+
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator(),);

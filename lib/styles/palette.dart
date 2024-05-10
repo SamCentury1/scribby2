@@ -210,7 +210,8 @@ class ColorPalette with ChangeNotifier {
 // light color theme
   Color get light_screenBackgroundColor => const Color.fromRGBO(236, 242, 255,1);
   Color get light_optionButtonBgColor => const Color.fromRGBO(255, 255, 255, 1);
-  Color get light_optionButtonBgColor2 => Color.fromARGB(255, 212, 222, 252);
+  // Color get light_optionButtonBgColor2 => Color.fromARGB(255, 212, 222, 252);
+  Color get light_optionButtonBgColor2 => Color.fromARGB(255, 228, 233, 243);
   Color get light_textColor1 => const Color.fromARGB(255, 32, 32, 32);
   Color get light_textColor2 => const Color.fromARGB(255, 71, 71, 71);
   Color get light_appBarColor => const Color.fromRGBO(181, 199, 255, 1);

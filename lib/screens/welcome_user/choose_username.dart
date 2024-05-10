@@ -24,14 +24,6 @@ class _ChooseUsernameState extends State<ChooseUsername> {
     "player", "user", "username",
   ];
 
-
-
-
-
-
-
-
-
   @override
   void initState() {
     super.initState();

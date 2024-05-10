@@ -998,8 +998,8 @@ class _LanguageDialogState extends State<LanguageDialog> {
     final double maxHeight = MediaQuery.of(context).size.height * 0.5;
     
     return Dialog(
-      backgroundColor: widget.palette.modalNavigationBarBgColor ,
-      // backgroundColor: widget.palette.optionButtonBgColor ,
+      // backgroundColor: widget.palette.modalNavigationBarBgColor ,
+      backgroundColor: widget.palette.optionButtonBgColor ,
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           maxWidth: 500

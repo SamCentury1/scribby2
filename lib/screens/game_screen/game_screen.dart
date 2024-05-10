@@ -37,7 +37,7 @@ class GameScreen extends StatefulWidget {
   State<GameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
+class _GameScreenState extends State<GameScreen>   {
   late bool isAnimating = false;
   late bool isDragging = false;
   late Map<String, dynamic> draggedSpot = {};
@@ -48,9 +48,27 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // WidgetsBinding.instance.addObserver(this);
   }
 
+  @override
+  void dispose() {
+    // WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused) {
+  //     // The app is now in the background
+  //     onAppPaused();
+  //   }
+  // }
+
+  // void onAppPaused() {
+  //   print('User has locked their phone or switched to another app');
+  //   // Here, you can execute any function you want
+  // }  
 
 
 

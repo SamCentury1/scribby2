@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppLifecycleObserver(
-        child: MultiProvider(
+      child: MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) {
           var progress = PlayerProgress(playerProgressPersistence);

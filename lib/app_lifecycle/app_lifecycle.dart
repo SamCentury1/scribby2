@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+// import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 
 class AppLifecycleObserver extends StatefulWidget {
   final Widget child;
@@ -17,6 +18,7 @@ class AppLifecycleObserver extends StatefulWidget {
 class _AppLifecycleObserverState extends State<AppLifecycleObserver> with WidgetsBindingObserver {
   
   final ValueNotifier<AppLifecycleState> lifecycleListenable = ValueNotifier(AppLifecycleState.inactive);
+  
 
 
   @override
@@ -41,9 +43,15 @@ class _AppLifecycleObserverState extends State<AppLifecycleObserver> with Widget
     );
   }
 
+
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     lifecycleListenable.value = state;
+    // if (state == AppLifecycleState.paused) {
+    //   gamePlayState.setIsGamePaused(true);
+
+    // }    
   }
 
   @override
