@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-// import 'dart:developer' as developer;
+import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -153,6 +153,10 @@ class GameLogic {
     }
 
     final List<String> newRandomLettersList = [...randomLettersList,randomLetter];
+
+    for (Map<String,dynamic> letterObject in newRandomLetterState) {
+      developer.log(letterObject.toString());
+    }
 
     // getLastTimeLetterWasPicked(newRandomLettersList);
 
