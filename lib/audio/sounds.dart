@@ -1,16 +1,39 @@
 
 List<String> soundTypeToFileName(SfxType type) {
   switch (type) {
+    case SfxType.startGame:
+      return const [
+        'start_game.mp3'
+      ];
+    case SfxType.finishGame:
+      return const [
+        'game_over.mp3'
+      ];          
     case SfxType.tilePress:
       return const [
-        'place-tile.mp3'
+        // 'place-tile.mp3',
+        'click_1.mp3',
+        'click_2.mp3',
+        'click_3.mp3',
+        'click_4.mp3',
+        'click_5.mp3',
+        'click_6.mp3',
         
       ];
     case SfxType.wordFound:
       return const [
-        'word-found.mp3'
+        // 'word-found.mp3'
+        // 'ding.mp3'
+        'word_found_3.mp3'
       ];
-
+    case SfxType.streak:
+      return const [
+        'streak.mp3'
+      ];
+    case SfxType.crossWord:
+      return const [
+        'ding_2.mp3'
+      ];      
     case SfxType.levelUp:
       return const [
         'level-up.mp3'
@@ -57,8 +80,12 @@ List<String> soundTypeToFileName(SfxType type) {
 
 
 enum SfxType {
+  startGame,
+  finishGame,
   tilePress,
   wordFound,
+  streak,
+  crossWord,
   levelUp,
   bad,
   highScore,

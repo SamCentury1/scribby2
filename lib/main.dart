@@ -14,7 +14,6 @@ import 'package:scribby_flutter_v2/player_progress/persistence/player_progress_p
 import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
-import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/settings/persistence/local_storage_settings_persistence.dart';
@@ -77,7 +76,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AnimationState(),),
         ChangeNotifierProvider(create: (context) => SettingsState(),),
         ChangeNotifierProvider(create: (context) => GamePlayState(),),
-        ChangeNotifierProvider(create: (context) => TutorialState(),),
+        // ChangeNotifierProvider(create: (context) => TutorialState(),),
         ChangeNotifierProvider(create: (context) => ColorPalette(),),
 
         Provider<AdsController?>.value(value: adsController),

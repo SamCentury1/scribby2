@@ -21,6 +21,8 @@ class SettingsController {
 
   ValueNotifier<Object> alphabet = ValueNotifier({});
 
+  ValueNotifier<Object> initialTileState = ValueNotifier({});
+
   /// Creates a new instance of [SettingsController] backed by [persistence].
   SettingsController({required SettingsPersistence persistence})
       : _persistence = persistence;
@@ -36,7 +38,8 @@ class SettingsController {
       _persistence.getUser().then((value) => user.value = value),
       _persistence.getDarkTheme().then((value) => darkTheme.value = value),
       _persistence.getUserData().then((value) => userData.value = value),
-      _persistence.getAlphabet().then((value) => alphabet.value = value)
+      _persistence.getAlphabet().then((value) => alphabet.value = value),
+      _persistence.getInitialTileState().then((value) => initialTileState.value = value)
     ]);
   }
 
@@ -69,4 +72,9 @@ class SettingsController {
     alphabet.value = alphabetObject;
     _persistence.saveUserData(alphabet.value);
   }
+
+  void setInitialTileState(Object initialTileStateObject) {
+    initialTileState.value = initialTileStateObject;
+    _persistence.saveInitialTileState(initialTileState.value);
+  }  
 }

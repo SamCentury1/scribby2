@@ -31,7 +31,7 @@ Widget scrabbleTile(String letter, int value, double side, double sizeFactor) {
           child: Text(
             letter,
             style: GoogleFonts.inter(
-              fontSize: 36 * sizeFactor,
+              fontSize: side*0.6,
               fontWeight: FontWeight.w400,
               textStyle: const TextStyle(
                 shadows: <Shadow>[
@@ -48,11 +48,11 @@ Widget scrabbleTile(String letter, int value, double side, double sizeFactor) {
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
-            padding: EdgeInsets.all(1.0 * sizeFactor),
+            padding: EdgeInsets.all(side*0.02),
             child: Text(
               value.toString(),
               style: TextStyle(
-                fontSize: 14 * sizeFactor
+                fontSize: side*0.35
               ),
             ),
           ),

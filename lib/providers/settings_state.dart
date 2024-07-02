@@ -38,13 +38,34 @@ class SettingsState with ChangeNotifier {
   } 
 
   Map<String, dynamic> _userData = {};
-
   Map<String, dynamic> get userData => _userData;
-
   void updateUserData(Map<String, dynamic> newData) {
     _userData = newData;
     notifyListeners();
   }
+
+
+  Map<dynamic, dynamic> _demoStates = {};
+  Map<dynamic, dynamic> get demoStates => _demoStates;
+  void setDemoStates(Map<dynamic, dynamic> value) {
+    _demoStates = value;
+    notifyListeners();
+  }
+
+  Map<dynamic, dynamic> _demoLetters = {};
+  Map<dynamic, dynamic> get demoLetters => _demoLetters;
+  void setDemoLetters(Map<dynamic, dynamic> value) {
+    _demoLetters = value;
+    notifyListeners();
+  }  
+
+  List<Map<dynamic, dynamic>> _translations = [];
+  List<Map<dynamic, dynamic>> get translations => _translations;
+  void setTranslations(List<Map<dynamic, dynamic>> value) {
+    _translations = value;
+    notifyListeners();
+  }  
+
 
   double _sizeFactor = 1.0; 
   double get sizeFactor => _sizeFactor;
@@ -56,7 +77,7 @@ class SettingsState with ChangeNotifier {
 
   late Map<String,dynamic> _screenSizeData = {"width" : 0.0, "height" : 0.0};
   Map<String,dynamic> get screenSizeData => _screenSizeData;
-  void setScreensizedata(Map<String,dynamic> value) {
+  void setScreenSizeData(Map<String,dynamic> value) {
     _screenSizeData = value;
     notifyListeners();
   }  

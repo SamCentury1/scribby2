@@ -35,7 +35,7 @@ class AudioController {
   ///
   /// Background music does not count into the [polyphony] limit. Music will
   /// never be overridden by sound effects because that would be silly.
-  AudioController({int polyphony = 2}) : assert(polyphony >= 1),
+  AudioController({int polyphony = 8}) : assert(polyphony >= 1),
 
   _sfxPlayers = Iterable.generate(polyphony, (i) => AudioPlayer(playerId: 'sfxPlayer#$i')).toList(growable: false);
        
@@ -107,6 +107,8 @@ class AudioController {
         // ignoring the playing sound
         return;
       }
+
+      
 
       final options = soundTypeToFileName(type);
       final fileName = options[_random.nextInt(options.length)];

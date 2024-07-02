@@ -10,6 +10,7 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   bool darkTheme = true;
   Object userData = {};
   Object alphabet = {};
+  Object initialTileState = {};
 
   /// ============= GET ===================
   @override
@@ -30,6 +31,9 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   @override
   Future<Object> getAlphabet() async => alphabet;
 
+  @override
+  Future<Object> getInitialTileState() async => alphabet;  
+
   /// =========== SAVE ========================
   @override
   Future<void> saveSoundsOn(bool value) async => soundsOn = value;
@@ -48,4 +52,7 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
 
   @override
   Future<void> saveAlphabet(Object value) async => alphabet = value;
+
+  @override
+  Future<void> saveInitialTileState(Object value) async => alphabet = value;  
 }

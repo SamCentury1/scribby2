@@ -8,6 +8,7 @@ import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
@@ -264,8 +265,8 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
     }
   }
 
-  double containerWidth(AnimationState animationState, Animation sizeAnimation, Animation endSizeAnimation) {
-    double res = 5.0;
+  double containerWidth(AnimationState animationState, Animation sizeAnimation, Animation endSizeAnimation, double tileSize) {
+    double res = tileSize*0.07;
     if (animationState.shouldRunGameOverPointsCounting) {
       res = res * sizeAnimation.value;
     } else {
@@ -316,6 +317,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
 
       res = Color.fromRGBO(r,g,b,animation.value);
     }
+
     return res;
   }
 
@@ -326,22 +328,23 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
         res = colorAnimation.value;
       }
     } 
+
     return res;
   } 
 
 
-  String getLabelText(bool newHs, String language) {
+  String getLabelText(bool newHs, String language, SettingsState settingsState) {
     String text = "";
     if (newHs) {
       text = "New High Score";
     } else {
       text = "Score";
     }
-    String translated = Helpers().translateText(language, text);
+    String translated = Helpers().translateText(language, text, settingsState);
     return translated;
   }
 
-  String getLabelText2(bool newHs, int highScore, language) {
+  String getLabelText2(bool newHs, int highScore, String language, SettingsState settingsState) {
     String res = "";
     String text = ""; 
     if (newHs) {
@@ -349,7 +352,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
     } else {
       text = "High Score:";
     }
-    String translated = Helpers().translateText(language, text);
+    String translated = Helpers().translateText(language, text, settingsState);
     res = "$translated $highScore";
 
     return res;
@@ -359,6 +362,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
   Widget build(BuildContext context) {
 
     late SettingsState settingsState = Provider.of<SettingsState>(context,listen: false);
+    late GamePlayState gamePlayState = Provider.of<GamePlayState>(context,listen: false);
     late ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
     final String language = settingsState.userData['parameters']['currentLanguage'];
 
@@ -369,10 +373,10 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
           children: [
             // isCounting ? Expanded(child: Container(width: 100, height: 20, color: Colors.red,)) : Expanded(child: SizedBox()),
             Text(
-              getLabelText(widget.newHs, language),
+              getLabelText(widget.newHs, language,settingsState),
               style: TextStyle(
                 color: getLabelColor(animationState, labelOpacityAnimation, palette),
-                fontSize: 22*settingsState.sizeFactor
+                fontSize: gamePlayState.tileSize*0.4
               ),
             ),
             Center(
@@ -384,7 +388,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                         child: SizedBox(
                           child: Icon(
                             Icons.emoji_events,
-                            size: 32*settingsState.sizeFactor,
+                            size: gamePlayState.tileSize*0.45,
                             color: getDecorationColor(animationState, decorationColorAnimation, widget.newHs),
                           ),
                         )
@@ -400,9 +404,10 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color:   Colors.transparent,
-                                width:  containerWidth(animationState, sizeAnimation, endSizeAnimation) //5 * sizeAnimation.value
+                                // color:Colors.black,
+                                width:  containerWidth(animationState, sizeAnimation, endSizeAnimation, gamePlayState.tileSize) //5 * sizeAnimation.value
                               ),
-                              borderRadius: const BorderRadius.all(Radius.circular(14.0))
+                              borderRadius: BorderRadius.all(Radius.circular(gamePlayState.tileSize*0.3))
                             ),
                                   
                             child: Padding(
@@ -412,7 +417,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                                 displayScoreValue(animationState, count, widget.score),
                           
                                 style: GoogleFonts.zenDots(
-                                  fontSize: 56*settingsState.sizeFactor,
+                                  fontSize: gamePlayState.tileSize*0.8,
                                   color: getTextColor(animationState,colorAnimation,endColorAnimation, palette), // colorAnimation.value ?? Colors.orange,
                                   letterSpacing: 0.0
                                     
@@ -428,7 +433,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                         child: SizedBox(
                           child: Icon(
                             Icons.emoji_events,
-                            size: 32*settingsState.sizeFactor,
+                            size: gamePlayState.tileSize*0.45,
                             color: getDecorationColor(animationState,  decorationColorAnimation,widget.newHs),
                           ),
                         )
@@ -443,7 +448,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                         child: SizedBox(
                           child: Icon(
                             Icons.star,
-                            size: 32*settingsState.sizeFactor,
+                            size: gamePlayState.tileSize*0.6,
                             color: Colors.transparent// getLabelColor(animationState, labelOpacityAnimation),
                           ),
                         )
@@ -459,18 +464,19 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: getContainerColor(animationState,colorAnimation,endColorAnimation), // colorAnimation.value ?? Colors.transparent,
-                                width:  containerWidth(animationState, sizeAnimation, endSizeAnimation) //5 * sizeAnimation.value
+                                // color: Colors.black,  
+                                width:  containerWidth(animationState, sizeAnimation, endSizeAnimation,gamePlayState.tileSize) //5 * sizeAnimation.value
                               ),
-                              borderRadius: const BorderRadius.all(Radius.circular(14.0))
+                              borderRadius: BorderRadius.all(Radius.circular(gamePlayState.tileSize*0.2,))
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                              padding: EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.25,),
                               child: Text(
                                 // score.toString(),
                                 sizeOfContainer(widget.score),
                                                   
                                 style: GoogleFonts.zenDots(
-                                  fontSize: 56*settingsState.sizeFactor,
+                                  fontSize: gamePlayState.tileSize*0.8,
                                   color: Colors.transparent, //getTextColor(isCounting,isFinalAnimationPlaying,colorAnimation,endColorAnimation), // colorAnimation.value ?? Colors.orange,
                                   letterSpacing: 0.0
                                     
@@ -486,7 +492,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
                         child: SizedBox(
                           child: Icon(
                             Icons.star,
-                            size: 32*settingsState.sizeFactor,
+                            size: gamePlayState.tileSize*1,
                             color: Colors.transparent// getLabelColor(isCounting, labelOpacityAnimation),
                           ),
                         )
@@ -497,10 +503,10 @@ class _ScoreWidgetState extends State<ScoreWidget> with TickerProviderStateMixin
               ),
             ),
             Text(
-              getLabelText2(widget.newHs, widget.highScore, language),
+              getLabelText2(widget.newHs, widget.highScore, language,settingsState),
               style: TextStyle(
                 color: getLabelColor(animationState, labelOpacityAnimation, palette),
-                fontSize: 18*settingsState.sizeFactor
+                fontSize: gamePlayState.tileSize*0.35,
               ),
             ),
             const Expanded(child: SizedBox()),

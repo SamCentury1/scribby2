@@ -1,9 +1,11 @@
+// import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
+// import 'package:scribby_flutter_v2/models/tile_model.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
@@ -29,12 +31,32 @@ class _WelcomeUserState extends State<WelcomeUser> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final screenWidth = MediaQuery.of(context).size.width;
-      final screenHeight = MediaQuery.of(context).size.height;
-      final sizeFactor = Helpers().getSizeFactor(screenHeight);
+      // final screenWidth = MediaQuery.of(context).size.width;
+      // final screenHeight = MediaQuery.of(context).size.height;
+      // final sizeFactor = Helpers().getSizeFactor(screenHeight);
       final settingsState = Provider.of<SettingsState>(context, listen: false);
-      settingsState.setSizeFactor(sizeFactor);
-      settingsState.setScreensizedata({"width" : screenWidth, "height": screenHeight});
+      // settingsState.setSizeFactor(sizeFactor);
+      // settingsState.setScreensizedata({"width" : screenWidth, "height": screenHeight});
+
+      final screenwidth = MediaQuery.of(context).size.width;
+      final screenHeight = MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top;
+      final gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+
+      final double playAreaHeight = screenHeight - 170;
+      final double playAreaWidth = screenwidth > 600.0 ? 600.0 : screenwidth;
+      final double minTileSize = playAreaHeight/9;
+      final double maxTileSize = (playAreaWidth*0.95)/6;
+      late double tileSize = 0.0;
+      if (minTileSize > maxTileSize) {
+        tileSize = maxTileSize;
+      } else {
+        tileSize = minTileSize;
+      }
+
+      final List<Map<String,dynamic>> decorationDetails = Helpers().getRandomDecorativeSquareDetails(playAreaWidth,playAreaHeight);
+      gamePlayState.setDecorationData(decorationDetails);
+      gamePlayState.setTileSize(tileSize);
+      settingsState.setScreenSizeData({"width" : screenwidth, "height": screenHeight});      
     });
   }
 
@@ -97,11 +119,24 @@ class _WelcomeUserState extends State<WelcomeUser> {
 
           List<String> listOfWords = await StorageMethods().downloadWordList(currentLanguage);
           gamePlayState.setDictionary(listOfWords);  
-
           await FirestoreMethods().saveAlphabetToLocalStorage(uid, settings);
 
-          navigateToMainMenu();
+          List<Map<String,dynamic>> initialBoardState = await StorageMethods().downloadInitialBoardState();
+          settings.setInitialTileState(initialBoardState);
 
+          List<List<dynamic>> combinations = await StorageMethods().downloadCombinations();
+          gamePlayState.setCombinations(combinations);
+
+          Map<dynamic,dynamic> demoStates = await StorageMethods().downloadDemoBoardStates();
+          settingsState.setDemoStates(demoStates);
+
+          Map<dynamic,dynamic> demoDynamicLetters = await StorageMethods().downloadDemoStateDynamicLetters();
+          settingsState.setDemoLetters(demoDynamicLetters);
+
+          List<Map<String,dynamic>> translations = await StorageMethods().downloadTranslations();
+          settingsState.setTranslations(translations);
+
+          navigateToMainMenu();
 
         }
 

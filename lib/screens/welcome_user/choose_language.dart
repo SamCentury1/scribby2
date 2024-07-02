@@ -4,11 +4,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
-// import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/play_area/decorations/decorations.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/choose_username.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:vector_math/vector_math.dart' show radians;
@@ -25,9 +26,19 @@ class ChooseLanguage extends StatefulWidget {
 
 class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStateMixin{
 
+  late SettingsState settingsState;
+  late AnimationState animationState;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      settingsState = Provider.of<SettingsState>(context, listen: false);
+      animationState = Provider.of<AnimationState>(context, listen: false);
+      final Map<String,dynamic> englishData = {'primary': false, 'selected': false, 'body': "English" , 'flag':'english' , 'url': 'https://cdn-icons-png.flaticon.com/512/197/197374.png'};
+      selectLanguage(settingsState, englishData, animationState);
+    });
+
   }
 
 
@@ -50,7 +61,9 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
   }  
 
   List<Map<String,dynamic>> getAllSelectedLanguages(List<Map<String,dynamic>> dataList) {
-    List<Map<String,dynamic>>  res = [];
+    List<Map<String,dynamic>>  res = [
+       {'primary': true, 'selected': false, 'body': "English" , 'flag':'english' , 'url': 'https://cdn-icons-png.flaticon.com/512/197/197374.png'},
+    ];
     List<Map<String,dynamic>> selected = dataList.where((element) => element['selected']==true).toList();
     if (selected.isNotEmpty) {
       res = selected;
@@ -66,7 +79,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
         res.add(item['body']);
       }
     } else {
-      res = [];
+      res = ["english"];
     }
     return res;    
   }
@@ -120,147 +133,169 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
   Widget build(BuildContext context) {
 
     final palette = context.watch<ColorPalette>();
-    final double screenWidth = Helpers().getScreenWidth(MediaQuery.of(context).size.width,1); 
+    final GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
 
     return Consumer<SettingsState>(
       builder: (context, settingsState, child) {
 
         List<String> allLanguagesList = allLanguagesStringList(settingsState.languageDataList);
-
+        final double screenWidth = settingsState.screenSizeData['width'];
+        final double screenHeight = settingsState.screenSizeData['height'];
+        final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;
+            
         return SafeArea(
           child: Scaffold(
-            body: Container(
-              width: double.infinity,
-              color : palette.screenBackgroundColor,
-              child: Align(
-                alignment: Alignment.center,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 600
-                  ),
-                  child: Column(
-                    children: [
-                      const Expanded(flex: 3, child: SizedBox()),
-                      AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
-                        child: DropdownMenu<String>(
-                          width: screenWidth*0.5,
-                          label: Text(
-                            Helpers().translateWelcomeText(getPrimaryLanguage(settingsState.languageDataList), "Primary Language"),
-                            style: TextStyle(
-                              color: palette.textColor2,
-                            ),
-                          ),
-                          textStyle: TextStyle(
-                            color: palette.textColor2
-                          ),
-                          initialSelection: getPrimaryLanguage(settingsState.languageDataList),
-                          onSelected: (value) {
-                            changePrimaryLanguage(settingsState, value!);
-                          },
-                          inputDecorationTheme: InputDecorationTheme(
-                            isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                            constraints: BoxConstraints.tight(const 
-                            Size.fromHeight(60)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          dropdownMenuEntries: allLanguagesList.map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                              value: value, 
-                              label: value,                                       
-                            );
-                          }).toList(),
+            body: Stack(
+              children: [
+
+                CustomPaint(size: Size(screenWidth, screenHeight), painter: CustomBackground(palette: palette)),
+              
+                Decorations().decorativeSquare(decorationDetails[0]),
+                Decorations().decorativeSquare(decorationDetails[1]),
+                Decorations().decorativeSquare(decorationDetails[2]),
+                Decorations().decorativeSquare(decorationDetails[3]),
+                Decorations().decorativeSquare(decorationDetails[4]),
+                Decorations().decorativeSquare(decorationDetails[5]),
+                Decorations().decorativeSquare(decorationDetails[6]),
+                Decorations().decorativeSquare(decorationDetails[7]),
+                Decorations().decorativeSquare(decorationDetails[8]),
+                Decorations().decorativeSquare(decorationDetails[9]),
+                Decorations().decorativeSquare(decorationDetails[10]),    
+
+                Positioned.fill(
+                  child: Container(
+                    width: double.infinity,
+                    // color : palette.screenBackgroundColor,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: 600
                         ),
-                      ),
-                            
-                      const Expanded(flex: 1, child: SizedBox()),
-                      AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0 ,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(12.0,2.0,12.0,2.0),
-                            child: Text(
-                              Helpers().translateWelcomeText(
-                                getPrimaryLanguage(settingsState.languageDataList), 
-                                "Select all languages you would play with"
+                        child: Column(
+                          children: [
+                            const Expanded(flex: 3, child: SizedBox()),
+                            DropdownMenu<String>(
+                              width: screenWidth*0.5,
+                              label: Text(
+                                Helpers().translateWelcomeText(getPrimaryLanguage(settingsState.languageDataList), "Primary Language",settingsState),
+                                style: TextStyle(
+                                  color: palette.textColor2,
+                                ),
                               ),
-                              style: TextStyle(
-                                fontSize: 18,
+                              textStyle: TextStyle(
                                 color: palette.textColor2
                               ),
-                              textAlign: TextAlign.center,
+                              initialSelection: getPrimaryLanguage(settingsState.languageDataList),
+                              onSelected: (value) {
+                                changePrimaryLanguage(settingsState, value!);
+                              },
+                              inputDecorationTheme: InputDecorationTheme(
+                                isDense: true,
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                                constraints: BoxConstraints.tight(const 
+                                Size.fromHeight(60)),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              dropdownMenuEntries: allLanguagesList.map<DropdownMenuEntry<String>>((String value) {
+                                return DropdownMenuEntry<String>(
+                                  value: value, 
+                                  label: value,                                       
+                                );
+                              }).toList(),
                             ),
-                          ),
-                        ),
-                      ),                
-                      const Expanded(flex: 1, child: SizedBox()),
-                      SizedBox(
-                        width: double.infinity,
-                        height: screenWidth,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            for (int i=0; i<settingsState.languageDataList .length; i++)
-                              LanguageButton(
-                                angle:((360/settingsState.languageDataList.length)*i) ,
-                                size: screenWidth,
-                                langData: settingsState.languageDataList[i],
-                                settingsState: settingsState,
-                              ),    
+                                  
+                            const Expanded(flex: 1, child: SizedBox()),
+                            AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0 ,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(12.0,2.0,12.0,2.0),
+                                  child: Text(
+                                    Helpers().translateWelcomeText(
+                                      getPrimaryLanguage(settingsState.languageDataList), 
+                                      "Select all languages you would play with",
+                                      settingsState
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: palette.textColor2
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),                
+                            const Expanded(flex: 1, child: SizedBox()),
+                            SizedBox(
+                              width: double.infinity,
+                              height: screenWidth,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  for (int i=0; i<settingsState.languageDataList .length; i++)
+                                    LanguageButton(
+                                      angle:((360/settingsState.languageDataList.length)*i) ,
+                                      size: screenWidth,
+                                      langData: settingsState.languageDataList[i],
+                                      settingsState: settingsState,
+                                    ),    
+                                ],
+                              ),
+                            ),
+                                  
+                                  
+                            AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 60,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      processLanguageSelection(settingsState);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: palette.optionButtonBgColor2 , 
+                                      foregroundColor: palette.optionButtonTextColor,
+                                      shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
+                                      shape:  RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                        side: BorderSide(
+                                          color: palette.optionButtonBgColor,
+                                          width: 1,
+                                          style: BorderStyle.solid
+                                        ), 
+                                      ),                            
+                                    ),
+                                    child: Text(
+                                      Helpers().translateWelcomeText(
+                                        getPrimaryLanguage(settingsState.languageDataList), 
+                                        "Proceed",
+                                        settingsState
+                                      ),
+                                      style: TextStyle(
+                                        color: palette.textColor2,
+                                      ),                         
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Expanded(flex: 1, child: SizedBox()),                                                                             
                           ],
                         ),
                       ),
-                            
-                            
-                      AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        opacity: allLanguagesList.isNotEmpty ? 1.0 : 0.0,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 60,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                processLanguageSelection(settingsState);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: palette.optionButtonBgColor2 , 
-                                foregroundColor: palette.optionButtonTextColor,
-                                shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
-                                shape:  RoundedRectangleBorder(
-                                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                  side: BorderSide(
-                                    color: palette.optionButtonBgColor,
-                                    width: 1,
-                                    style: BorderStyle.solid
-                                  ), 
-                                ),                            
-                              ),
-                              child: Text(
-                                Helpers().translateWelcomeText(
-                                  getPrimaryLanguage(settingsState.languageDataList), 
-                                  "Proceed"
-                                ),
-                                style: TextStyle(
-                                  color: palette.textColor2,
-                                ),                         
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Expanded(flex: 1, child: SizedBox()),                                                                             
-                    ],
+                    )
                   ),
                 ),
-              )
+              ],
             )
           ),
         );
@@ -387,6 +422,11 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
       selectLanguageSequence
     ).animate(_languageSelectedController);
     widget.langData['selected'] ? _languageSelectedController.forward() : _languageSelectedController.reset(); 
+
+    if (widget.langData['flag'] == 'english') {
+      _languageSelectedController.forward();
+    }
+    // _languageSelectedController.forward();
   }
 
 

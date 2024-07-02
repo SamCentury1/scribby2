@@ -7,6 +7,7 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/play_area/decorations/decorations.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
@@ -42,6 +43,9 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
     final GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     final AudioController audioController =Provider.of<AudioController>(context, listen: false);
 
+    final double screenWidth = settingsState.screenSizeData['width'];
+    final double screenHeight = settingsState.screenSizeData['height'];
+    final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;   
     // return isLoading
         // ? const Center(child: CircularProgressIndicator(),): 
         return FutureBuilder(
@@ -55,49 +59,74 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
               return const Center(child: Text("Error"),);
             } else {
               return SafeArea(
-                child: Scaffold(
-                    appBar: AppBar(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          bottom: Radius.circular(30.0)
-                        )
-                      ),                      
-                      leading: IconButton(
-                        onPressed: () {
-                          audioController.playSfx(SfxType.optionSelected);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const WelcomeUser(),
+                child: Stack(                   
+                  children: [
+                    CustomPaint(size: Size(screenWidth, screenHeight), painter: CustomBackground(palette: palette)),  
+                    Decorations().decorativeSquare(decorationDetails[0]),
+                    Decorations().decorativeSquare(decorationDetails[1]),
+                    Decorations().decorativeSquare(decorationDetails[2]),
+                    Decorations().decorativeSquare(decorationDetails[3]),
+                    Decorations().decorativeSquare(decorationDetails[4]),
+                    Decorations().decorativeSquare(decorationDetails[5]),
+                    Decorations().decorativeSquare(decorationDetails[6]),
+                    Decorations().decorativeSquare(decorationDetails[7]),
+                    Decorations().decorativeSquare(decorationDetails[8]),
+                    Decorations().decorativeSquare(decorationDetails[9]),
+                    Decorations().decorativeSquare(decorationDetails[10]),                       
+                    Positioned.fill(
+                      child: Scaffold(
+                          appBar: PreferredSize(
+                            preferredSize: Size(double.infinity,gamePlayState.tileSize),
+                            
+                            child: AppBar(     
+                              backgroundColor: Colors.transparent,
+                              leading: SizedBox(),
+                                flexibleSpace: Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.arrow_back),
+                                        iconSize: gamePlayState.tileSize*0.44,
+                                        color: palette.textColor1,
+                                        onPressed: () {
+                                          audioController.playSfx(SfxType.optionSelected);
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) => const WelcomeUser(),
+                                            ),
+                                          );
+                                        },
+                                      ),                                         
+                                      Text(Helpers().translateText(gamePlayState.currentLanguage, 'Leaderboard',settingsState),
+                                        style: TextStyle(
+                                          color: palette.textColor1,
+                                          fontSize: gamePlayState.tileSize*0.4
+                                        ),
+                                                                        
+                                      ),
+                                    ],
+                                  ),
+                                ), 
                             ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: palette.textColor1,
-                          size: 24*settingsState.sizeFactor,
-                        )
-                      ),
-                      title: Text(
-                        Helpers().translateText(gamePlayState.currentLanguage, "Leaderboard"),
-                        // "Leaderboard",
-                        style: TextStyle(
-                          color: palette.textColor2,
-                          fontSize: 26*settingsState.sizeFactor
-                        ),
-                      ),
-                      backgroundColor: palette.appBarColor,
+                          ),              
+                          // backgroundColor: palette.screenBackgroundColor,
+                          backgroundColor: Colors.transparent,
+                          body: Container(
+                            // color: palette.screenBackgroundColor,
+                            child: getLeaderboard(
+                              snapshot.data!['leaderboard'], 
+                              palette, 
+                              snapshot.data!['userData'], 
+                              gamePlayState.currentLanguage, 
+                              // settingsState.sizeFactor
+                              gamePlayState.tileSize,
+                              settingsState
+                            ),
+                          )),
                     ),
-                    backgroundColor: palette.screenBackgroundColor,
-                    body: Container(
-                      color: palette.screenBackgroundColor,
-                      child: getLeaderboard(
-                        snapshot.data!['leaderboard'], 
-                        palette, 
-                        snapshot.data!['userData'], 
-                        gamePlayState.currentLanguage, 
-                        settingsState.sizeFactor
-                      ),
-                    )),
+                  ],
+                ),
               );
             }         
           },
@@ -105,7 +134,7 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
   }
 }
 
-Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map<String, dynamic> user, String language, double sizeFactor) {
+Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map<String, dynamic> user, String language, double tileSize, SettingsState settingsState) {
   bool checkIfUser(Map<String, dynamic> user, Map<String, dynamic> item) {
     late bool res = false;
     if (user['uid'] == item['user']) res = true;
@@ -123,43 +152,45 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
         child: Column(
           children: [
             Container(
-              height: 80*sizeFactor,
+              // height: tileSize*2,
               width: double.infinity,
               color: Colors.transparent,
-              child: Row(
-                children: [
-                  const Expanded(flex: 3, child: SizedBox(),),
-                  Icon(
-                    Icons.emoji_events,
-                    size: 36*sizeFactor,
-                    color: palette.textColor2,
-                  ),
-                  // const SizedBox(
-                  //   width: 10,
-                  // ),
-                  const Expanded(flex: 1, child: SizedBox(),),
-                  Column(
-                    children: [
-                      Text(
-                        Helpers().translateText(language, "High Score:"),
-                        // "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
-                        style: TextStyle(fontSize: 22*sizeFactor, color: palette.textColor2),
-                      ),
-                      Text(
-                        "${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
-                        // "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
-                        style: TextStyle(fontSize: 22*sizeFactor, color: palette.textColor2),
-                      ),                  
-                    ],
-                  ),
-                  const Expanded(flex: 1, child: SizedBox(),),
-                  Icon(
-                    Icons.emoji_events,
-                    size: 36*sizeFactor,
-                    color: palette.textColor2,
-                  ),
-                  const Expanded(flex: 3, child: SizedBox(),),             
-                ],
+              child: Center(
+                child: Row(
+                  children: [
+                    const Expanded(flex: 3, child: SizedBox(),),
+                    Icon(
+                      Icons.emoji_events,
+                      size: tileSize*0.5,
+                      color: palette.textColor2,
+                    ),
+                    // const SizedBox(
+                    //   width: 10,
+                    // ),
+                    const Expanded(flex: 1, child: SizedBox(),),
+                    Column(
+                      children: [
+                        Text(
+                          Helpers().translateText(language, "High Score:",settingsState),
+                          // "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
+                          style: TextStyle(fontSize: tileSize*0.35, color: palette.textColor2),
+                        ),
+                        Text(
+                          "${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
+                          // "High Score: ${user['highScores'][user['parameters']['currentLanguage']] ?? 0}",
+                          style: TextStyle(fontSize: tileSize*0.35, color: palette.textColor2),
+                        ),                  
+                      ],
+                    ),
+                    const Expanded(flex: 1, child: SizedBox(),),
+                    Icon(
+                      Icons.emoji_events,
+                      size: tileSize*0.5,
+                      color: palette.textColor2,
+                    ),
+                    const Expanded(flex: 3, child: SizedBox(),),             
+                  ],
+                ),
               ),
             ),
             Table(
@@ -175,7 +206,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
               children: [
                 TableRow(
                     decoration: BoxDecoration(
-                        color: palette.optionButtonBgColor3,
+                        // color: palette.optionButtonBgColor3,
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(5.0),
                             topRight: Radius.circular(5.0))),
@@ -186,9 +217,9 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                         child: Center(
                             child: Text(
                           // "Rank",
-                          Helpers().translateText(language, "Rank"),
+                          Helpers().translateText(language, "Rank",settingsState),
                           style: TextStyle(
-                              fontSize: 18*sizeFactor,
+                              fontSize: tileSize*0.3,
                               color: palette.textColor2,
                               fontWeight: FontWeight.bold),
                         )),
@@ -199,10 +230,10 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                             child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  Helpers().translateText(language, "Username"),
+                                  Helpers().translateText(language, "Username",settingsState),
                                   // "Username",
                                   style: TextStyle(
-                                      fontSize: 18*sizeFactor,
+                                      fontSize: tileSize*0.3,
                                       color: palette.textColor2,
                                       fontWeight: FontWeight.bold),
                                 ))),
@@ -214,9 +245,9 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   // "Score",
-                                  Helpers().translateText(language, "Score"),
+                                  Helpers().translateText(language, "Score",settingsState),
                                   style: TextStyle(
-                                      fontSize: 18*sizeFactor,
+                                      fontSize: tileSize*0.3,
                                       color: palette.textColor2,
                                       fontWeight: FontWeight.bold),
                                 ))),
@@ -227,9 +258,9 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
             Expanded(
               child: SingleChildScrollView(
                 child: Table(
-                  border: const TableBorder(
+                  border: TableBorder(
                     horizontalInside: BorderSide(
-                        width: 1, color: Colors.grey, style: BorderStyle.solid),
+                        width: 1, color: Colors.grey.withOpacity(0.3), style: BorderStyle.solid),
                   ),
                   columnWidths: const {
                     0: FlexColumnWidth(1),
@@ -240,9 +271,10 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                     for (int i = 0; i < list.length; i++)
                       TableRow(
                           decoration: BoxDecoration(
-                              color: (i + 1).isEven
-                                  ? palette.optionButtonBgColor2
-                                  : palette.optionButtonBgColor),
+                              // color: (i + 1).isEven
+                              //     ? palette.optionButtonBgColor2
+                              //     : palette.optionButtonBgColor
+                              ),
                           children: [
                             TableCell(
                               child: Padding(
@@ -251,7 +283,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                                       child: Text(
                                         (i + 1).toString(),
                                     style: TextStyle(
-                                        fontSize: 18*sizeFactor,
+                                        fontSize: tileSize*0.3,
                                         color: palette.textColor2,
                                         fontWeight: checkIfUser(user, list[i])
                                             ? FontWeight.w800
@@ -267,7 +299,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                                         Helpers()
                                             .capitalizeName(list[i]['username']),
                                         style: TextStyle(
-                                            fontSize: 18*sizeFactor,
+                                            fontSize: tileSize*0.3,
                                             color: palette.textColor2,
                                             fontWeight: checkIfUser(user, list[i])
                                                 ? FontWeight.w800
@@ -283,7 +315,7 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                                       child: Text(
                                         list[i]["points"].toString(),
                                         style: TextStyle(
-                                            fontSize: 18*sizeFactor,
+                                            fontSize: tileSize*0.3,
                                             color: palette.textColor2,
                                             fontWeight: checkIfUser(user, list[i])
                                                 ? FontWeight.w800

@@ -1,5 +1,5 @@
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
-import 'package:scribby_flutter_v2/utils/states.dart';
+// import 'package:scribby_flutter_v2/utils/states.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -44,8 +44,16 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   @override
   Future<Object> getAlphabet() async {
     final prefs = await instanceFuture;
-    return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
+    // return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
+    return json.decode(prefs.getString('alphabet') ?? json.encode([]));
   }
+
+  @override
+  Future<Object> getInitialTileState() async {
+    final prefs = await instanceFuture;
+    // return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
+    return json.decode(prefs.getString('initialTileState') ?? json.encode([]));
+  }  
 
   /// ========= SAVE THE DATA =================
   @override
@@ -83,4 +91,10 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
     final prefs = await instanceFuture;
     await prefs.setString('alphabet', json.encode(value));
   }
+
+  @override
+  Future<void> saveInitialTileState(Object value) async {
+    final prefs = await instanceFuture;
+    await prefs.setString('initialTileState', json.encode(value));
+  }  
 }
