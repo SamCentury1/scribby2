@@ -43,7 +43,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
     late Map<String, dynamic> res = {};
     try {
       final Map<String,dynamic> userData = (settings.userData.value as Map<String, dynamic>);
-      final List<dynamic> alphabetObject = (settings.alphabet.value as List<dynamic>);
+      final List<dynamic> alphabetObject = settings.alphabet.value;
       res = {"userData": userData, "alphabet": alphabetObject};
     } catch (error) {
     }
@@ -121,7 +121,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                           child: SingleChildScrollView(
                             child: Consumer<SettingsController>(
                                 builder: (context, settings, child) {
-                                  List<dynamic> alphabetList = settings.alphabet.value as List<dynamic>;
+                                  List<dynamic> alphabetList = settings.alphabet.value;
 
                               return Align(
                                 alignment: Alignment.center,
