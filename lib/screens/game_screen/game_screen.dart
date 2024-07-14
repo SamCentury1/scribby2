@@ -246,25 +246,187 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
     super.dispose();
   }  
   
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Consumer<GamePlayState>(
+  //     builder: (BuildContext context, GamePlayState gamePlayState, Widget? child) {
+  //       final SettingsState settingsState =Provider.of<SettingsState>(context, listen: false);        
+  //       final ColorPalette palette =Provider.of<ColorPalette>(context, listen: false);
+  //       final double screenWidth = settingsState.screenSizeData['width'];
+  //       final double screenHeight = settingsState.screenSizeData['height'];
+  //       final double tileSize = gamePlayState.tileSize;
+  //       final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;
+
+  //       return PopScope(
+  //         canPop: false,
+  //         child: SafeArea(
+  //             child: Stack(
+  //               children: [
+
+  //                 CustomPaint(size: Size(screenWidth, screenHeight), painter: CustomBackground(palette: palette)),
+                
+  //                 Decorations().decorativeSquare(decorationDetails[0]),
+  //                 Decorations().decorativeSquare(decorationDetails[1]),
+  //                 Decorations().decorativeSquare(decorationDetails[2]),
+  //                 Decorations().decorativeSquare(decorationDetails[3]),
+  //                 Decorations().decorativeSquare(decorationDetails[4]),
+  //                 Decorations().decorativeSquare(decorationDetails[5]),
+  //                 Decorations().decorativeSquare(decorationDetails[6]),
+  //                 Decorations().decorativeSquare(decorationDetails[7]),
+  //                 Decorations().decorativeSquare(decorationDetails[8]),
+  //                 Decorations().decorativeSquare(decorationDetails[9]),
+  //                 Decorations().decorativeSquare(decorationDetails[10]),
+
+
+  //                 Positioned(
+  //                   top: 0,
+  //                   left: 0,
+  //                   child: Container(
+  //                     width: screenWidth,
+  //                     height: screenHeight,
+  //                     child: Scaffold(
+  //                       backgroundColor: Colors.transparent,
+  //                       body: AnimatedBuilder(
+  //                         animation: gameStartedController,
+  //                         builder: (context,child) {
+  //                           return Center(
+  //                             child: Column(
+  //                               children: [
+  //                                 TopLayer(
+  //                                   gameStartedAnimation: gameStartedOpacityAnimation,
+  //                                   clockController: clockController,
+  //                                 ),
+  //                                 Scoreboard(
+  //                                   wordFoundController: wordFoundController, 
+  //                                   gameStartedController: gameStartedController, 
+  //                                   gameStartedOpacityAnimation: gameStartedOpacityAnimation
+  //                                 ),
+                        
+  //                                 /// BONUS ITEMS + LEVEL UP
+  //                                 BonusItems(
+  //                                   wordFoundController: wordFoundController,
+  //                                   streakController: streakController,
+  //                                   streakOutController: streakOutController,
+  //                                   levelUpController: levelUpController,
+  //                                 ),
+                        
+  //                                 Spacer(flex: 1,),
+                        
+  //                                 /// GAME PLAY AREA                       
+  //                                 Consumer<AnimationState>(
+  //                                   builder: (context, animationState, child) {
+  //                                     if (!gamePlayState.isGameStarted || gameStartedController.isAnimating) {
+  //                                       return Container(
+  //                                         height: (tileSize*9).roundToDouble(),
+  //                                         width: (tileSize*6).roundToDouble(),
+  //                                         child: BoardAnimation(gameStartedController: gameStartedController),
+  //                                       );                                    
+  //                                     } else if (gameEndedController.isAnimating || gamePlayState.isGameOver) {
+  //                                       return Container(
+  //                                         height: (tileSize*9).roundToDouble(),
+  //                                         width: (tileSize*6).roundToDouble(),
+  //                                         child: BoardAnimation(gameStartedController: gameEndedController),
+  //                                       );
+  //                                     } else {
+  //                                       return Container(
+  //                                         height: (tileSize*9).roundToDouble(),
+  //                                         width: (tileSize*6).roundToDouble(),
+  //                                         child: GameBoard(wordFoundController: wordFoundController,),
+  //                                       );
+  //                                     }  
+  //                                   }
+  //                                 ),
+  //                                 Spacer(flex: 1,),
+                        
+  //                               ],
+  //                             ),
+  //                           );
+  //                         },
+  //                       ),
+  //                       bottomNavigationBar: Container(
+
+  //                         width: double.infinity,
+  //                         color: Colors.transparent,
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                           children: [
+  //                             IconButton(
+  //                               onPressed: () {
+  //                                 if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+  //                                   gamePlayState.setIsGamePaused(true);
+  //                                   gamePlayState.setPauseScreen('summary');
+  //                                 }                                  
+  //                               }, 
+  //                               icon: Icon(Icons.emoji_events,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
+  //                             ),
+  //                             IconButton(
+  //                               onPressed: () {
+  //                                 if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+  //                                   gamePlayState.setIsGamePaused(true);
+  //                                   gamePlayState.setPauseScreen('help');
+  //                                 }                                  
+  //                               }, 
+  //                               icon: Icon(Icons.help,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
+  //                             ),
+  //                             IconButton(
+  //                               onPressed: () {
+  //                                 if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+  //                                   gamePlayState.setIsGamePaused(true);
+  //                                   gamePlayState.setPauseScreen('settings');
+  //                                 }                                  
+  //                               }, 
+  //                               icon: Icon(Icons.settings,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
+  //                             ),
+  //                             IconButton(
+  //                               onPressed: () {
+  //                                 if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+  //                                   gamePlayState.setIsGamePaused(true);
+  //                                   gamePlayState.setPauseScreen('quit');
+  //                                 }                                  
+  //                               }, 
+  //                               icon: Icon(Icons.exit_to_app,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
+  //                             ),                                                                                          
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     )
+  //                   )
+  //                 ),
+
+  //                 GameStartOverlay(
+  //                   gameStartedController: gameStartedController, 
+  //                   gameStartedAnimation: gameStartedOverlayAnimation,
+  //                 ),
+  //                 GamePauseOverlay(),
+  //                 GameOverOverlay(),
+  //               ],
+  //             ),
+  //           // ),
+  //         )
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GamePlayState>(
       builder: (BuildContext context, GamePlayState gamePlayState, Widget? child) {
-        final SettingsState settingsState =Provider.of<SettingsState>(context, listen: false);        
-        final ColorPalette palette =Provider.of<ColorPalette>(context, listen: false);
+        final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);        
+        final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
         final double screenWidth = settingsState.screenSizeData['width'];
         final double screenHeight = settingsState.screenSizeData['height'];
         final double tileSize = gamePlayState.tileSize;
-        final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;
+        final List<Map<String, dynamic>> decorationDetails = gamePlayState.decorationData;
 
         return PopScope(
           canPop: false,
           child: SafeArea(
-              child: Stack(
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Stack(
                 children: [
-
                   CustomPaint(size: Size(screenWidth, screenHeight), painter: CustomBackground(palette: palette)),
-                
                   Decorations().decorativeSquare(decorationDetails[0]),
                   Decorations().decorativeSquare(decorationDetails[1]),
                   Decorations().decorativeSquare(decorationDetails[2]),
@@ -277,7 +439,6 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                   Decorations().decorativeSquare(decorationDetails[9]),
                   Decorations().decorativeSquare(decorationDetails[10]),
 
-
                   Positioned(
                     top: 0,
                     left: 0,
@@ -288,7 +449,7 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                         backgroundColor: Colors.transparent,
                         body: AnimatedBuilder(
                           animation: gameStartedController,
-                          builder: (context,child) {
+                          builder: (context, child) {
                             return Center(
                               child: Column(
                                 children: [
@@ -301,96 +462,92 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                                     gameStartedController: gameStartedController, 
                                     gameStartedOpacityAnimation: gameStartedOpacityAnimation
                                   ),
-                        
-                                  /// BONUS ITEMS + LEVEL UP
                                   BonusItems(
                                     wordFoundController: wordFoundController,
                                     streakController: streakController,
                                     streakOutController: streakOutController,
                                     levelUpController: levelUpController,
                                   ),
-                        
                                   Spacer(flex: 1,),
-                        
-                                  /// GAME PLAY AREA                       
                                   Consumer<AnimationState>(
                                     builder: (context, animationState, child) {
                                       if (!gamePlayState.isGameStarted || gameStartedController.isAnimating) {
                                         return Container(
-                                          height: (tileSize*9).roundToDouble(),
-                                          width: (tileSize*6).roundToDouble(),
+                                          height: (tileSize * 9).roundToDouble(),
+                                          width: (tileSize * 6).roundToDouble(),
                                           child: BoardAnimation(gameStartedController: gameStartedController),
                                         );                                    
                                       } else if (gameEndedController.isAnimating || gamePlayState.isGameOver) {
                                         return Container(
-                                          height: (tileSize*9).roundToDouble(),
-                                          width: (tileSize*6).roundToDouble(),
+                                          height: (tileSize * 9).roundToDouble(),
+                                          width: (tileSize * 6).roundToDouble(),
                                           child: BoardAnimation(gameStartedController: gameEndedController),
                                         );
                                       } else {
                                         return Container(
-                                          height: (tileSize*9).roundToDouble(),
-                                          width: (tileSize*6).roundToDouble(),
-                                          child: GameBoard(wordFoundController: wordFoundController,),
+                                          height: (tileSize * 9).roundToDouble(),
+                                          width: (tileSize * 6).roundToDouble(),
+                                          child: GameBoard(wordFoundController: wordFoundController),
                                         );
                                       }  
                                     }
                                   ),
                                   Spacer(flex: 1,),
-                        
                                 ],
                               ),
                             );
                           },
                         ),
-                        bottomNavigationBar: Container(
-
-                          width: double.infinity,
-                          color: Colors.transparent,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
-                                    gamePlayState.setIsGamePaused(true);
-                                    gamePlayState.setPauseScreen('summary');
-                                  }                                  
-                                }, 
-                                icon: Icon(Icons.emoji_events,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
-                                    gamePlayState.setIsGamePaused(true);
-                                    gamePlayState.setPauseScreen('help');
-                                  }                                  
-                                }, 
-                                icon: Icon(Icons.help,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
-                                    gamePlayState.setIsGamePaused(true);
-                                    gamePlayState.setPauseScreen('settings');
-                                  }                                  
-                                }, 
-                                icon: Icon(Icons.settings,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
-                                    gamePlayState.setIsGamePaused(true);
-                                    gamePlayState.setPauseScreen('quit');
-                                  }                                  
-                                }, 
-                                icon: Icon(Icons.exit_to_app,size: tileSize*0.4, color: palette.textColor3.withOpacity(0.5),),
-                              ),                                                                                          
-                            ],
+                        bottomNavigationBar: Padding(
+                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+                          child: Container(
+                            width: double.infinity,
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+                                      gamePlayState.setIsGamePaused(true);
+                                      gamePlayState.setPauseScreen('summary');
+                                    }                                  
+                                  }, 
+                                  icon: Icon(Icons.emoji_events, size: tileSize * 0.4, color: palette.textColor3.withOpacity(0.5)),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+                                      gamePlayState.setIsGamePaused(true);
+                                      gamePlayState.setPauseScreen('help');
+                                    }                                  
+                                  }, 
+                                  icon: Icon(Icons.help, size: tileSize * 0.4, color: palette.textColor3.withOpacity(0.5)),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+                                      gamePlayState.setIsGamePaused(true);
+                                      gamePlayState.setPauseScreen('settings');
+                                    }                                  
+                                  }, 
+                                  icon: Icon(Icons.settings, size: tileSize * 0.4, color: palette.textColor3.withOpacity(0.5)),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
+                                      gamePlayState.setIsGamePaused(true);
+                                      gamePlayState.setPauseScreen('quit');
+                                    }                                  
+                                  }, 
+                                  icon: Icon(Icons.exit_to_app, size: tileSize * 0.4, color: palette.textColor3.withOpacity(0.5)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      )
-                    )
+                      ),
+                    ),
                   ),
 
                   GameStartOverlay(
@@ -401,11 +558,11 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                   GameOverOverlay(),
                 ],
               ),
-            // ),
-          )
+            ),
+          ),
         );
       },
     );
-  }
+  }  
 }
 
