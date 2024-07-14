@@ -55,6 +55,7 @@ dependencies:
   firebase_core: ^2.27.1
   path_provider: ^2.1.2
   url_launcher: ^6.2.6
+  connectivity_plus: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -94,7 +95,8 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/audio/sfx/  
+    - assets/audio/sfx/
+    - assets/json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

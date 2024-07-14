@@ -8,7 +8,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/play_area/decorations/decorations.dart';
-import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
+import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 
 class LeaderboardsScreen extends StatefulWidget {
@@ -72,7 +72,7 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
                     Decorations().decorativeSquare(decorationDetails[7]),
                     Decorations().decorativeSquare(decorationDetails[8]),
                     Decorations().decorativeSquare(decorationDetails[9]),
-                    Decorations().decorativeSquare(decorationDetails[10]),                       
+                    Decorations().decorativeSquare(decorationDetails[10]),
                     Positioned.fill(
                       child: Scaffold(
                           appBar: PreferredSize(
@@ -91,11 +91,16 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
                                         color: palette.textColor1,
                                         onPressed: () {
                                           audioController.playSfx(SfxType.optionSelected);
-                                          Navigator.of(context).pushReplacement(
+                                          // Navigator.of(context).pushReplacement(
+                                          //   MaterialPageRoute(
+                                          //     builder: (context) => const MenuScreen(),
+                                          //   ),
+                                          // );
+                                          Navigator.of(context).pushAndRemoveUntil(
                                             MaterialPageRoute(
-                                              builder: (context) => const WelcomeUser(),
-                                            ),
-                                          );
+                                              builder: (context) => const MenuScreen(),
+                                            ), (Route<dynamic> route) => false
+                                          );                                          
                                         },
                                       ),                                         
                                       Text(Helpers().translateText(gamePlayState.currentLanguage, 'Leaderboard',settingsState),
@@ -215,27 +220,31 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                           child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Center(
-                            child: Text(
-                          // "Rank",
-                          Helpers().translateText(language, "Rank",settingsState),
-                          style: TextStyle(
-                              fontSize: tileSize*0.3,
-                              color: palette.textColor2,
-                              fontWeight: FontWeight.bold),
-                        )),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                Helpers().translateText(language, "Rank",settingsState),
+                                style: TextStyle(
+                                fontSize: tileSize*0.3,
+                                color: palette.textColor2,
+                                fontWeight: FontWeight.bold),
+                                                      ),
+                            )),
                       )),
                       TableCell(
                         child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text(
-                                  Helpers().translateText(language, "Username",settingsState),
-                                  // "Username",
-                                  style: TextStyle(
-                                      fontSize: tileSize*0.3,
-                                      color: palette.textColor2,
-                                      fontWeight: FontWeight.bold),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    Helpers().translateText(language, "Username",settingsState),
+                                    style: TextStyle(
+                                        fontSize: tileSize*0.3,
+                                        color: palette.textColor2,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ))),
                       ),
                       TableCell(
@@ -243,13 +252,15 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                             padding: const EdgeInsets.fromLTRB(4.0, 4.0, 8.0, 4.0),
                             child: Align(
                                 alignment: Alignment.centerRight,
-                                child: Text(
-                                  // "Score",
-                                  Helpers().translateText(language, "Score",settingsState),
-                                  style: TextStyle(
-                                      fontSize: tileSize*0.3,
-                                      color: palette.textColor2,
-                                      fontWeight: FontWeight.bold),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    Helpers().translateText(language, "Score",settingsState),
+                                    style: TextStyle(
+                                        fontSize: tileSize*0.3,
+                                        color: palette.textColor2,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ))),
                       ),
                     ]),

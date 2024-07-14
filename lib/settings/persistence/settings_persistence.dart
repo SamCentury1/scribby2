@@ -14,9 +14,11 @@ abstract class SettingsPersistence {
 
   Future<Object> getUserData();
 
-  Future<Object> getAlphabet();
+  Future<List<dynamic>> getAlphabet();
   
   Future<Object> getInitialTileState();
+
+  Future<String> getDictionary();
 
   /// ========== SAVE THE DATA ===================
   Future<void> saveSoundsOn(bool value);
@@ -29,7 +31,9 @@ abstract class SettingsPersistence {
 
   Future<void> saveUserData(Object value);
 
-  Future<void> saveAlphabet(Object value);
+  Future<void> saveAlphabet(List<dynamic> value);
 
   Future<void> saveInitialTileState(Object value);
+
+  Future<void> saveDictionary(String value);
 }

@@ -31,9 +31,6 @@ void main() async {
 
   AdsController? adsController;
   if (kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
-    /// Prepare the google_mobile_ads plugin so that the first ad loads
-    /// faster. This can be done later or with a delay if startup
-    /// experience suffers.
     adsController = AdsController(MobileAds.instance);
     adsController.initialize();
   }
@@ -49,18 +46,18 @@ class MyApp extends StatelessWidget {
   final PlayerProgressPersistence playerProgressPersistence;
   final SettingsPersistence settingsPersistence;
   final AdsController? adsController;
-  // final SettingsController settingsController;
 
   const MyApp(
       {required this.playerProgressPersistence,
       required this.settingsPersistence,
       required this.adsController,
-      // required this.settingsController,
       super.key});
 
   static final defaultDarkColorScheme = ColorScheme.fromSwatch(
       brightness: Brightness.dark,
       primarySwatch: const MaterialColor(20, {12: Colors.black}));
+
+      
 
   // This widget is the root sof your application.  
   @override
@@ -76,7 +73,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AnimationState(),),
         ChangeNotifierProvider(create: (context) => SettingsState(),),
         ChangeNotifierProvider(create: (context) => GamePlayState(),),
-        // ChangeNotifierProvider(create: (context) => TutorialState(),),
         ChangeNotifierProvider(create: (context) => ColorPalette(),),
 
         Provider<AdsController?>.value(value: adsController),

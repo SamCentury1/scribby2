@@ -38,11 +38,11 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   @override
   Future<Object> getUserData() async {
     final prefs = await instanceFuture;
-    return json.decode(prefs.getString('userData') ?? "");
+    return json.decode(prefs.getString('userData') ?? json.encode([]));
   }
 
   @override
-  Future<Object> getAlphabet() async {
+  Future<List<dynamic>> getAlphabet() async {
     final prefs = await instanceFuture;
     // return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
     return json.decode(prefs.getString('alphabet') ?? json.encode([]));
@@ -54,6 +54,12 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
     // return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
     return json.decode(prefs.getString('initialTileState') ?? json.encode([]));
   }  
+
+  @override
+  Future<String> getDictionary() async {
+    final prefs = await instanceFuture;
+    return prefs.getString('dictionary') ?? "";
+  }    
 
   /// ========= SAVE THE DATA =================
   @override
@@ -87,7 +93,7 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   }
 
   @override
-  Future<void> saveAlphabet(Object value) async {
+  Future<void> saveAlphabet(List<dynamic> value) async {
     final prefs = await instanceFuture;
     await prefs.setString('alphabet', json.encode(value));
   }
@@ -97,4 +103,10 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
     final prefs = await instanceFuture;
     await prefs.setString('initialTileState', json.encode(value));
   }  
+
+  @override
+  Future<void> saveDictionary(String value) async {
+    final prefs = await instanceFuture;
+    await prefs.setString('dictionary', value);
+  }    
 }

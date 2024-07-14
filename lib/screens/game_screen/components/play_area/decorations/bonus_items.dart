@@ -55,7 +55,7 @@ class _BonusItemsState extends State<BonusItems> with TickerProviderStateMixin{
     late ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
     Color color_1 = Colors.red;
     Color color_2 = Colors.yellow;
-    Color color_3 = palette.timerTextColor;
+    Color color_3 = palette.textColor2;
 
     List<TweenSequenceItem<Color?>> streakAnimationColorSequence = [
       TweenSequenceItem(tween: ColorTween(begin: color_3, end: color_1), weight: 20),
@@ -268,7 +268,7 @@ class _BonusItemsState extends State<BonusItems> with TickerProviderStateMixin{
                           // "Level ${gamePlayState.currentLevel}",
                           style: TextStyle(
                             fontSize: tileSize*0.6,
-                            color: palette.timerTextColor.withOpacity(levelUpOpacityAnimation.value)
+                            color: palette.textColor2.withOpacity(levelUpOpacityAnimation.value)
                           ),
                         ),
                       ),

@@ -56,7 +56,7 @@ class _DraggableTileState extends State<DraggableTile> {
           child: Center(
             child: DefaultTextStyle(
               style: TextStyle(
-                color: palette.fullTileTextColor,
+                color: palette.fullReserveTextColor,
                 fontSize: (gamePlayState.tileSize*0.75)*0.5
               ),
               child: Text(body),

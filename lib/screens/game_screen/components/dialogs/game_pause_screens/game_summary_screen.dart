@@ -1,42 +1,14 @@
-// import 'package:expansion_tile_card/expansion_tile_card.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
-// import 'package:scribby_flutter_v2/providers/animation_state.dart';
+import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
-// import 'package:scribby_flutter_v2/screens/game_screen/dialogs/game_pause_screens/game_settings_screen.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-// import 'package:scribby_flutter_v2/providers/game_state.dart';
-// import 'package:scribby_flutter_v2/styles/buttons.dart';
-
-class GameSummaryScreen extends StatelessWidget {
-  const GameSummaryScreen({super.key});
-
-  @override
-  Key? get key => null;
-
-  @override
-  Widget build(BuildContext context) {
-    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-    return Consumer<GamePlayState>(builder: (context, gamePlayState, child) {
-      return DialogWidget(
-          key, 
-          Helpers().translateText(gamePlayState.currentLanguage, "Game Summary",settingsState), 
-          GameSummaryContent(gamePlayState), 
-          null
-        );
-    });
-  }
-}
 
 class GameSummaryContent extends StatefulWidget {
   final GamePlayState gamePlayState;
-  // final GameState gameState;
   const GameSummaryContent(this.gamePlayState,
-      // this.gameState,
       {super.key});
 
   @override
@@ -98,32 +70,6 @@ class ShowWordsView extends StatefulWidget {
 
 class _ShowWordsViewState extends State<ShowWordsView> {
 
-
-  // List<Map<String,dynamic>> summaryDataRefined(GamePlayState gamePlayState) {
-
-  //   int count = 1;
-
-  //   late List<Map<String,dynamic>> res  = [];
-  //   for (int i=0; i<gamePlayState.gameSummaryLog.length; i++) {
-  //     Map<String,dynamic> item = gamePlayState.gameSummaryLog[i];
-  //     if (item['points'] > 0) {
-
-  //       for (Map<String,dynamic> word in item['words']) {
-  //         int totalScore = word['points'] * item['crossword'] * item['streak'] * item['count'];
-  //         word['totalScore'] = totalScore;
-  //         word['index'] = count;
-  //         count++;
-  //       }
-
-  //       item['index'] = i;
-  //       res.add(item);
-  //     }
-  //   }
-
-  //   return res;
-  // }
-
-
   @override
   Widget build(BuildContext context) {
     return Consumer<GamePlayState>(
@@ -136,140 +82,129 @@ class _ShowWordsViewState extends State<ShowWordsView> {
 
         // late List<Map<String,dynamic>> summary = GameLogic().getPointsSummary(gamePlayState);
 
-        return SingleChildScrollView(
-          child: Column(
+        return Container(
+          child: Stack(
             children: [
-
-              data.isEmpty
-                  ? Text(
-                    Helpers().translateText(gamePlayState.currentLanguage,"No words found yet...",settingsState),
-                      style: TextStyle(color: palette.textColor1, fontSize: gamePlayState.tileSize*0.3),
+              Positioned.fill(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    gamePlayState.tileSize*0.1,
+                    gamePlayState.tileSize*0.1,
+                    gamePlayState.tileSize*0.1,
+                    gamePlayState.tileSize*1.0
+                  ),
+                
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                       
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: SizedBox(
-                        width: double.infinity,
-
-                        child: Table(
-                          columnWidths: const <int, TableColumnWidth>{
-                            0: FlexColumnWidth(2),
-                            1: FlexColumnWidth(6),
-                            2: FlexColumnWidth(6),
-                            // 2: FlexColumnWidth(1),
-                            // 3: FlexColumnWidth(1),
-                            // 4: FlexColumnWidth(1),
-                            3: FlexColumnWidth(4),
-                          },
-                          border: TableBorder(horizontalInside: BorderSide(width: 0.5, color: widget.palette.textColor2, style: BorderStyle.solid)),                          
-                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                          children: <TableRow>[
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left:gamePlayState.tileSize*0.1),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "#",
-                                      style: Helpers().customTextStyle(widget.palette.textColor2, (gamePlayState.tileSize*0.3))
-                                      // style: TextStyle(
-                                      //   color: widget.palette.textColor2, 
-                                      //   fontSize: (20 * widget.settingsState.sizeFactor),
-                                      // )
+                            data.isEmpty
+                                ? DefaultTextStyle(
+                                  child: Text(
+                                    Helpers().translateText(gamePlayState.currentLanguage,"No words found yet...",settingsState),
+                                    ),
+                                    style: TextStyle(color: palette.overlayText, fontSize: gamePlayState.tileSize*0.3),
+                                    textAlign: TextAlign.center,
+                                )
+                                : Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                      
+                                      child: Table(
+                                        columnWidths: const <int, TableColumnWidth>{
+                                          0: FlexColumnWidth(4),
+                                          1: FlexColumnWidth(6),
+                                          2: FlexColumnWidth(5),
+                                          3: FlexColumnWidth(4),
+                                        },
+                                        border: TableBorder(horizontalInside: BorderSide(
+                                          width: gamePlayState.tileSize*0.005, 
+                                          color: widget.palette.overlayText, 
+                                          style: BorderStyle.solid
+                                          )
+                                        ),                          
+                                        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                        children: <TableRow>[
+                                          TableRow(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: DefaultTextStyle(
+                                                  child: Text( Helpers().translateText(gamePlayState.currentLanguage,"Turn",settingsState),),
+                                                  style: Helpers().customTextStyle(widget.palette.overlayText, (gamePlayState.tileSize*0.3))
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: DefaultTextStyle(
+                                                  child: Text(
+                                                    Helpers().translateText(gamePlayState.currentLanguage,"Word",settingsState),
+                                                  ),
+                                                  style: Helpers().customTextStyle(widget.palette.overlayText, (gamePlayState.tileSize*0.3))
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: DefaultTextStyle(
+                                                  child: Text(Helpers().translateText(gamePlayState.currentLanguage,"Bonus",settingsState),),
+                                                  style: Helpers().customTextStyle(widget.palette.overlayText, (gamePlayState.tileSize*0.3))
+                                                ),
+                                              ),                                                                                                                              
+                                              Padding(
+                                                padding: EdgeInsets.only(right: gamePlayState.tileSize*0.15),
+                                                child: Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: DefaultTextStyle(
+                                                    child: Text(
+                                                      Helpers().translateText(gamePlayState.currentLanguage,"Points",settingsState),
+                                                      textAlign: TextAlign.right,
+                                                    ),
+                                                    style: Helpers().customTextStyle(widget.palette.overlayText, (gamePlayState.tileSize*0.3)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]
+                                          ),
+                                          for (int i=0; i<data.length; i++)
+                                          Helpers().scoreSummaryTableRow2(i, widget.palette, data[i], context, gamePlayState.currentLanguage, gamePlayState.tileSize),
+                                          // Helpers().scoreSummaryTableRow(i, widget.palette,summary[i], context, gamePlayState.currentLanguage, widget.settingsState.sizeFactor),
+                                        ]
+                                      ),                    
                                     ),
                                   ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    Helpers().translateText(gamePlayState.currentLanguage,"Word",settingsState),
-                                    style: Helpers().customTextStyle(widget.palette.textColor2, (gamePlayState.tileSize*0.3))
-                                    // style: TextStyle(
-                                    //   color: widget.palette.textColor2, 
-                                    //   fontSize: (18 * widget.settingsState.sizeFactor)
-                                    // ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    // Helpers().translateText(gamePlayState.currentLanguage,"Bonus"),
-                                    "Bonus",
-                                    style: Helpers().customTextStyle(widget.palette.textColor2, (gamePlayState.tileSize*0.3))
-                                  ),
-                                ),                                
-                                // Align(
-                                //   alignment: Alignment.center,
-                                //   child: Icon(
-                                //     Icons.bolt,
-                                //     size: gamePlayState.tileSize*0.3,
-                                //     color: widget.palette.textColor2,
-                                //   )
-                                // ),
-                                // Align(
-                                //   alignment: Alignment.center,
-                                //   child: Icon(
-                                //     Icons.library_books_outlined,
-                                //     size: gamePlayState.tileSize*0.3,
-                                //     color: widget.palette.textColor2,
-                                //   )
-                                // ),
-                                // Align(
-                                //   alignment: Alignment.center,
-                                //   child: Icon(
-                                //     Icons.close,
-                                //     size: gamePlayState.tileSize*0.3,
-                                //     color: widget.palette.textColor2,
-                                //   )
-                                // ),                                                                                                
-                                Padding(
-                                  padding: EdgeInsets.only(right: gamePlayState.tileSize*0.15),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      Helpers().translateText(gamePlayState.currentLanguage,"Points",settingsState),
-                                      style: Helpers().customTextStyle(widget.palette.textColor2, (gamePlayState.tileSize*0.3)),
-                                      // style: TextStyle(
-                                      //   color: widget.palette.textColor2, 
-                                      //   fontSize: (18 * widget.settingsState.sizeFactor)
-                                      // ),
-                                      textAlign: TextAlign.right,
-                                    ),
-                                  ),
-                                ),
-                              ]
-                            ),
-                            for (int i=0; i<data.length; i++)
-                            Helpers().scoreSummaryTableRow2(i, widget.palette, data[i], context, gamePlayState.currentLanguage, gamePlayState.tileSize),
-                            // Helpers().scoreSummaryTableRow(i, widget.palette,summary[i], context, gamePlayState.currentLanguage, widget.settingsState.sizeFactor),
-                          ]
-                        ),                    
+                          ],
+                        ),
+                      ),
+                
+                ),
+              ),
+              Positioned(
+                // right: (settingsState.screenSizeData['width']-(gamePlayState.tileSize*6))/2,
+                right: 0,
+                left: 0,
+                bottom: 0,
+                child: Container(
+                  width: gamePlayState.tileSize*6,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: widget.toggleDisplay,
+                      child: Container(
+                        width: gamePlayState.tileSize*0.7,
+                        height: gamePlayState.tileSize*0.7,  
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.all(Radius.circular(100.0))
+                        ),
+                        child: Icon(
+                          Icons.arrow_upward, 
+                          size: gamePlayState.tileSize*0.4,
+                          color: palette.overlayText.withOpacity(0.5),
+                        )  
                       ),
                     ),
-              InkWell(
-                onTap: widget.toggleDisplay,
-                child: Row(
-                  children: [
-                    const Expanded(flex: 1, child: SizedBox()),
-                    Icon(Icons.arrow_upward,
-                        size: 20 * widget.settingsState.sizeFactor, 
-                        color: widget.palette.textColor2),
-                    SizedBox(
-                      width: 10 * widget.settingsState.sizeFactor,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.2),
-                      child: Text(
-                        Helpers().translateText(gamePlayState.currentLanguage, "Hide",settingsState),
-                        style: Helpers().customTextStyle(widget.palette.textColor2, (gamePlayState.tileSize*0.3)),
-                        // style: TextStyle(
-                        //   fontSize: (24 * widget.settingsState.sizeFactor),
-                        //   color: widget.palette.textColor2,
-                        // ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               )
             ],
@@ -306,178 +241,307 @@ class _GameSummaryViewState extends State<GameSummaryView> {
   @override
   Widget build(BuildContext context) {
 
+    late AnimationState animationState = Provider.of<AnimationState>(context,listen: false);
+
     final Map<String,dynamic> gameData = Helpers().getGameSummaryData(widget.gamePlayState.scoringLog);
-    return Padding(
-      // padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      padding: EdgeInsets.symmetric(horizontal: widget.gamePlayState.tileSize*0.4),
-      child: Column(children: [
-        const Expanded(child: SizedBox()),
-        Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(5),
-            2: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            tableRowItem(
-              Helpers().translateText(widget.gamePlayState.currentLanguage, "Score",widget.settingsState),
-                // widget.gamePlayState.currentLevel.toString(),
-                // (widget.gamePlayState.summaryData['points'] ?? 0).toString(),
-                gameData['points'].toString(),
-                Icon(Icons.emoji_events,
-                    // size: (22 * widget.settingsState.sizeFactor), color: widget.palette.textColor2),
-                    size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.textColor2),
-                widget.palette,
-                widget.settingsState.sizeFactor,
-                widget.gamePlayState.tileSize*0.3,
-                ),
-            tableRowItem(
-              Helpers().translateText(widget.gamePlayState.currentLanguage, "Duration",widget.settingsState),
-                Helpers().formatTime(widget.gamePlayState.duration.inSeconds),
-                Icon(Icons.timer, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.textColor2),
-                
-                widget.palette,
-                widget.settingsState.sizeFactor,
-                widget.gamePlayState.tileSize*0.3,
-                ),
-            tableRowItem(
-              Helpers().translateText(widget.gamePlayState.currentLanguage, "Level",widget.settingsState),
-                widget.gamePlayState.currentLevel.toString(),
-                Icon(Icons.bar_chart,
-                    size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.textColor2),
-                widget.palette,
-                widget.settingsState.sizeFactor,
-                widget.gamePlayState.tileSize*0.3,
-                ),
-          ],
-        ),
-        const Expanded(child: SizedBox()),
-        Text(
-          Helpers().translateText(widget.gamePlayState.currentLanguage, "Summary",widget.settingsState),
-          style: Helpers().customTextStyle(widget.palette.textColor2, widget.gamePlayState.tileSize*0.4),
-          // style: TextStyle(
-          //   color: widget.palette.textColor2, 
-          //   fontSize: (24 * widget.settingsState.sizeFactor)
-          // ),
-        ),
-        Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(5),
-            2: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            tableRowItem(
-                Helpers().translateText(widget.gamePlayState.currentLanguage, "Longest Streak",widget.settingsState),
-                // (widget.gamePlayState.summaryData['longestStreak'] ?? 0)
-                gameData['longestStreak']
-                    .toString(),
-                Icon(Icons.bolt, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.textColor2),
-                widget.palette,
-                widget.settingsState.sizeFactor,
-                widget.gamePlayState.tileSize*0.3,
-                ),
-            tableRowItem(
-                Helpers().translateText(widget.gamePlayState.currentLanguage, "Cross Words",widget.settingsState),
-                // (widget.gamePlayState.summaryData['crosswords'] ?? 0)
-                gameData['crosswords']
-                    .toString(),
-                Icon(Icons.close, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.textColor2),
-                widget.palette,
-                widget.settingsState.sizeFactor,
-                widget.gamePlayState.tileSize*0.3,
-                ),
-            tableRowItem(
-                Helpers().translateText(widget.gamePlayState.currentLanguage, "Most Points",widget.settingsState),
-                // (widget.gamePlayState.summaryData['mostPoints'] ?? 0)
-                gameData['mostPoints']
-                    .toString(),
-                Icon(Icons.star, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.textColor2),
-                widget.palette,
-                widget.settingsState.sizeFactor,
-                widget.gamePlayState.tileSize*0.3,
-                ),
-            tableRowItem(
-                Helpers().translateText(widget.gamePlayState.currentLanguage, "Most Words",widget.settingsState),
-                // (widget.gamePlayState.summaryData['mostWords'] ?? 0).toString(),
-                gameData['mostWords'].toString(),
-                Icon(Icons.my_library_books,
-                    size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.textColor2),
-                widget.palette,
-                widget.settingsState.sizeFactor,
-                widget.gamePlayState.tileSize*0.3,
-                ),
-          ],
-        ),
-        const Expanded(child: SizedBox()),
-        widget.gamePlayState.scoringLog.isEmpty
-            ? const SizedBox()
-            : InkWell(
-                onTap: widget.toggleDisplay,
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              widget.gamePlayState.tileSize*0.4, 
+              widget.gamePlayState.tileSize*0.4,
+              widget.gamePlayState.tileSize*0.4,
+              widget.gamePlayState.tileSize*1.0,
+            ),
+            
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              DefaultTextStyle(
                 child: Text(
-                  Helpers().translateText(widget.gamePlayState.currentLanguage, "View points summary",widget.settingsState),
-                  textAlign: TextAlign.center,
-                  style: Helpers().customTextStyle(widget.palette.textColor2, (widget.gamePlayState.tileSize*0.3)),
-                  // style: TextStyle(
-                  //     fontSize: (20 * widget.settingsState.sizeFactor),
-                  //     color: widget.palette.textColor3,
-                  //     fontStyle: FontStyle.italic
-                  // ),
+                  Helpers().translateText(widget.gamePlayState.currentLanguage, "Summary",widget.settingsState),
                 ),
-                // child: Text.rich(
-                //   TextSpan(
-                //     text: 'View all ',
-                //     style: TextStyle(
-                //         fontSize: 20,
-                //         color: widget.palette.textColor3,
-                //         fontStyle: FontStyle.italic),
-                //     children: <TextSpan>[
-                //       TextSpan(
-                //           text: widget
-                //               .gamePlayState.summaryData['uniqueWords'].length
-                //               .toString(),
-                //           style: TextStyle(
-                //               decoration: TextDecoration.underline,
-                //               decorationColor: widget.palette.textColor3,
-                //               decorationThickness: 1.0)),
-                //       const TextSpan(text: ' words'),
-                //     ],
-                //   ),
-                // ),
+                style: Helpers().customTextStyle(widget.palette.overlayText, widget.gamePlayState.tileSize*0.4),
               ),
-        const Expanded(child: SizedBox()),
-      ]),
+              SizedBox(height: widget.gamePlayState.tileSize*0.5,),     
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(5),
+                  2: FlexColumnWidth(2),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: <TableRow>[
+                  tableRowItem(
+                    Helpers().translateText(widget.gamePlayState.currentLanguage, "Level",widget.settingsState),
+                      widget.gamePlayState.currentLevel.toString(),
+                      Icon(Icons.bar_chart,
+                          size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ), 
+          
+                  tableRowItem(
+                    Helpers().translateText(widget.gamePlayState.currentLanguage, "Score",widget.settingsState),
+                      gameData['points'].toString(),
+                      Icon(Icons.emoji_events,
+                          size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),
+          
+                  tableRowItem(
+                    Helpers().translateText(widget.gamePlayState.currentLanguage, "Words",widget.settingsState),
+                      gameData['uniqueWords'].length.toString(),
+                      Icon(Icons.library_books,
+                          size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),
+          
+                             
+                ],
+              ),
+              Divider(thickness: widget.gamePlayState.tileSize*0.01,color: widget.palette.overlayText),
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(5),
+                  2: FlexColumnWidth(2),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: <TableRow>[
+                  tableRowItem(
+                    Helpers().translateText(widget.gamePlayState.currentLanguage, "Duration",widget.settingsState),
+                      Helpers().formatTime(widget.gamePlayState.duration.inSeconds),
+                      Icon(Icons.timer, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),
+                  tableRowItem(
+                    Helpers().translateText(widget.gamePlayState.currentLanguage, "Turns",widget.settingsState),
+                      gameData['turns'].toString(),
+                      Icon(Icons.touch_app,
+                          size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),                    
+                   
+                ],
+              ),
+          
+              Divider(thickness: widget.gamePlayState.tileSize*0.01,color: widget.palette.overlayText),
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(5),
+                  2: FlexColumnWidth(2),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: <TableRow>[
+          
+                  tableRowItem(
+                      Helpers().translateText(widget.gamePlayState.currentLanguage, "Longest Streak",widget.settingsState),
+                      gameData['longestStreak']
+                          .toString(),
+                      Icon(Icons.bolt, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),
+                  tableRowItem(
+                      Helpers().translateText(widget.gamePlayState.currentLanguage, "Cross Words",widget.settingsState),
+                      gameData['crosswords']
+                          .toString(),
+                      Icon(Icons.close, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),
+                  tableRowItem(
+                      Helpers().translateText(widget.gamePlayState.currentLanguage, "Most Points",widget.settingsState),
+                      gameData['mostPoints']
+                          .toString(),
+                      Icon(Icons.star, size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),
+                  tableRowItem(
+                      Helpers().translateText(widget.gamePlayState.currentLanguage, "Most Words",widget.settingsState),
+                      gameData['mostWords'].toString(),
+                      Icon(Icons.my_library_books,
+                          size: (widget.gamePlayState.tileSize*0.3), color: widget.palette.overlayText),
+                      widget.palette,
+                      widget.settingsState.sizeFactor,
+                      widget.gamePlayState.tileSize*0.3,
+                      ),                
+                ],
+              ),                
+              SizedBox(height: widget.gamePlayState.tileSize*0.2,),
+              widget.gamePlayState.scoringLog.isEmpty
+                  ? const SizedBox()
+                  : GestureDetector(
+                      onTap: widget.toggleDisplay,
+                      child: DefaultTextStyle(
+                        child: Text(
+                          Helpers().translateText(widget.gamePlayState.currentLanguage, "View points summary",widget.settingsState),
+                          textAlign: TextAlign.center,
+                        ),
+                        style: Helpers().customTextStyle(widget.palette.overlayText, (widget.gamePlayState.tileSize*0.3)),
+                      ),
+                    ),
+              // const Expanded(child: SizedBox()),
+            ]),
+          ),
+        ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: Container(
+                width: widget.gamePlayState.tileSize*6,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (widget.gamePlayState.isGamePaused) {
+                        if (widget.gamePlayState.isGameStarted) {
+                          widget.gamePlayState.setIsGamePaused(false);
+                          widget.gamePlayState.countDownController.resume();
+                          animationState.setShouldRunClockAnimation(true);
+                          Future.microtask(() {
+                            animationState.setShouldRunClockAnimation(false);
+                          });                        
+                        }
+                      }                      
+                    },
+                    child: Container(
+                      width: widget.gamePlayState.tileSize*0.7,
+                      height: widget.gamePlayState.tileSize*0.7,  
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.all(Radius.circular(100.0))
+                      ),
+                      child: Icon(
+                        Icons.close, 
+                        size: widget.gamePlayState.tileSize*0.4,
+                        color: widget.palette.overlayText.withOpacity(0.5),
+                      )  
+                    ),
+                  ),
+                ),
+              ),
+            )        
+      ],
     );
   }
 }
 
-TableRow tableRowItem( String textBody, String data, Icon icon, ColorPalette palette, double sizeFactor, double fontSize) {
-  return TableRow(children: [
-    Center(
-      child: icon,
+ tableRowItem( String textBody, String data, Icon icon, ColorPalette palette, double sizeFactor, double fontSize) {
+  return TableRow(
+    children: [
+    Padding(
+      padding: EdgeInsets.all(fontSize*0.5),
+      child: Center(
+        child: icon,
+      ),
     ),
-    Text(
-      textBody,
-      // style: Helpers().customTextStyle(palette.textColor2, (20 *sizeFactor)),
-      style: Helpers().customTextStyle(palette.textColor2, fontSize),
-      // style: TextStyle(
-      //   color: palette.textColor2, 
-      //   fontSize: ( 20 * sizeFactor)
-      // ),
+    Padding(
+      padding: EdgeInsets.all(fontSize*0.5),
+      child: DefaultTextStyle(
+        child: Text(
+          textBody,
+        ),
+        style: Helpers().customTextStyle(palette.overlayText, fontSize),
+      ),
     ),
-    Align(
-      alignment: Alignment.centerRight,
-      child: Text(
-        data,
-        style: Helpers().customTextStyle(palette.textColor2, fontSize),
-        // style: TextStyle(
-        //   color: palette.textColor2, 
-        //   fontSize: (20 * sizeFactor)
-        // ),
-        textAlign: TextAlign.right,
+    Padding(
+      padding: EdgeInsets.all(fontSize*0.5),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: DefaultTextStyle(
+          child: Text(
+            data,
+            textAlign: TextAlign.right,
+          ),
+          style: Helpers().customTextStyle(palette.overlayText, fontSize),
+        ),
       ),
     ),
   ]);
 }
+
+
+class GameSummaryScreen extends StatefulWidget {
+  const GameSummaryScreen({
+    super.key,
+  });
+
+  @override
+  State<GameSummaryScreen> createState() => _GameSummaryScreenState();
+}
+
+class _GameSummaryScreenState extends State<GameSummaryScreen> {
+
+  double getDialogWidth(double currentScreenWidth) {
+    late double res = currentScreenWidth;
+    if (currentScreenWidth > 500) {
+      res = 500;
+    }
+    return res * 0.85;
+  } 
+
+  @override
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+    final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    return Consumer<GamePlayState>(
+      builder: (context, gamePlayState, child) {
+
+        return Padding(
+          padding: EdgeInsets.all(gamePlayState.tileSize*0.2),
+          child: Column(
+            // mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Container(
+                  height: gamePlayState.tileSize*1,
+                  child:FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: DefaultTextStyle(
+                        child: Text(
+                          Helpers().translateText(gamePlayState.currentLanguage, "Game Summary",settingsState), 
+                        ),
+                        style: Helpers().customTextStyle(palette.overlayText,gamePlayState.tileSize*0.5),
+                      ),
+                    ),                        
+                  ),
+              ),
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.2),
+                  child: Divider(
+                    color: palette.overlayText,
+                    height: 2,
+                  ),
+                ),
+                Expanded(child: GameSummaryContent(gamePlayState)), 
+          
+              ],
+            ),
+        );        
+      },
+    );
+  }
+}
+

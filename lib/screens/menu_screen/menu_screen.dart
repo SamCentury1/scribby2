@@ -25,78 +25,11 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin{
 
   late bool isLoading = false;
-  late AnimationController _introAnimationController1;
-  late AnimationController _introAnimationController2;
-  late AnimationController _introAnimationController3;
-  late AnimationController _introAnimationController4;
-
-  late Animation<double> _introAnimation1;
-  late Animation<double> _introAnimation2;
-  late Animation<double> _introAnimation3;
-  late Animation<double> _introAnimation4;
-
-
-
 
   @override
   void initState() {
     super.initState();
-    // loadAsset();
 
-
-    // List<TweenSequenceItem<double>> _introAnimationSequence1 = getAnimationSequence(1, 2000, 99);
-    // _introAnimation1 = TweenSequence<double>(_introAnimationSequence1).animate(_introAnimationController);
-
-    // List<TweenSequenceItem<double>> _introAnimationSequence2 = getAnimationSequence(2, 2000, 99);
-    // _introAnimation2 = TweenSequence<double>(_introAnimationSequence2).animate(_introAnimationController);
-
-    // List<TweenSequenceItem<double>> _introAnimationSequence3 = getAnimationSequence(3, 2000, 99);
-    // _introAnimation3 = TweenSequence<double>(_introAnimationSequence3).animate(_introAnimationController);
-
-    // List<TweenSequenceItem<double>> _introAnimationSequence4 = getAnimationSequence(4, 2000, 99);
-    // _introAnimation4 = TweenSequence<double>(_introAnimationSequence4).animate(_introAnimationController);
-
-    _introAnimationController1 = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );       
-    _introAnimation1 = Tween<double>(begin: 0.0,end: 1.0,).animate(_introAnimationController1);
-    Future.delayed(const Duration(milliseconds: 0), () {
-      _introAnimationController1.forward();
-    });
-
-    _introAnimationController2 = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );       
-    _introAnimation2 = Tween<double>(begin: 0.0,end: 1.0,).animate(_introAnimationController1);
-    Future.delayed(const Duration(milliseconds: 200), () {
-      _introAnimationController2.forward();
-    });
-    _introAnimationController3 = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );       
-    _introAnimation3 = Tween<double>(begin: 0.0,end: 1.0,).animate(_introAnimationController1);
-    Future.delayed(const Duration(milliseconds: 400), () {
-      _introAnimationController3.forward();
-    });
-    _introAnimationController4 = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );       
-    _introAnimation4 = Tween<double>(begin: 0.0,end: 1.0,).animate(_introAnimationController1);            
-    Future.delayed(const Duration(milliseconds: 600), () {
-      _introAnimationController4.forward();
-    });    
-    // _introAnimation1 = Tween<double>(
-    //   begin: 0.0,
-    //   end: 1.0,
-    // ).animate(CurvedAnimation(
-    //   parent: _introAnimationController, 
-    //   curve: Curves.easeInOutQuint
-    //   )
-    // );
   }
   void navigateToChooseLanguage() {
     Navigator.of(context).pushReplacement(
@@ -113,45 +46,34 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin{
     super.dispose();
   }
 
-  // Future<String> loadAsset() async {
-  //   return await rootBundle.loadString('assets/config.json');
-  // }  
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
-
         late GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-        late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
         late SettingsController settings = Provider.of<SettingsController>(context, listen: false);
         late AudioController audioController = Provider.of<AudioController>(context, listen: false);
+        late ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
 
         return FutureBuilder(
           future: getDataFromStorage(),
           builder:(BuildContext context, AsyncSnapshot<Map<String,dynamic>> snapshot) {
-            // print(snapshot.data);
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator(),);
             } else if (snapshot.hasError ) {
               return const Center(child: Text("Error"),);
             } else {
+      
 
-              String language = settingsState.userData['parameters']['currentLanguage'];
+              return  Consumer<SettingsState>(
+                  builder: (context, settingsState, child) {
 
-              final double screenWidth = settingsState.screenSizeData['width'];
-              final double screenHeight = settingsState.screenSizeData['height'];
-              final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;              
-
-              return  Consumer<ColorPalette>(
-                  builder: (context, palette, child) {
+                    String language = settingsState.userData['parameters']['currentLanguage'];
+                    final double screenWidth = settingsState.screenSizeData['width'];
+                    final double screenHeight = settingsState.screenSizeData['height'];
+                    final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;                         
                     return PopScope(
                       canPop: false,
                       child: SafeArea(
                         child: Scaffold(
-                            backgroundColor: palette.screenBackgroundColor,
                             body: Stack(
                               children: [
                                 CustomPaint(size: Size(screenWidth, screenHeight), painter: CustomBackground(palette: palette)),
@@ -169,7 +91,6 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin{
                                 Decorations().decorativeSquare(decorationDetails[10]),                                
                                 Positioned.fill(
                                   child: Container(
-                                    // color: palette.screenBackgroundColor,
                                     child: Column(
                                       children: [
                                                         
@@ -182,8 +103,6 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin{
                                               Expanded(
                                                 flex: 4,
                                                 child: ScribbyLogoAnimation2()
-                                                // child: Image(image: AssetImage('assets/images/scribby_label_1.png')),
-                                                // child: ScribbyLogoAnimation()
                                               ),
                                             ],
                                           ),
@@ -199,129 +118,98 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin{
                                                 alignment: WrapAlignment.spaceEvenly,
                                                 runSpacing: gamePlayState.tileSize*0.5,
                                                 children: [
-                                                  AnimatedBuilder(
-                                                    animation: _introAnimationController1,
-                                                    builder: (context,child) {
-                                                      return AnimatedOpacity(
-                                                        duration: const Duration(milliseconds: 1000),
-                                                        opacity: _introAnimation1.value,
-                                                        child: MenuTileWidget(
-                                                          index:0,
-                                                          gamePlayState: gamePlayState, 
-                                                          palette: palette, 
-                                                          language: language,
-                                                          body: Helpers().translateText(language, "New Game",settingsState),
-                                                          
-                                                          iconData: Icon(
-                                                            Icons.emoji_events,
-                                                            size: gamePlayState.tileSize,
-                                                            color: palette.fullTileTextColor
-                                                          ),
-                                                          onPressed: () {  
-                                                            audioController.playSfx(SfxType.optionSelected);
-                                                            Navigator.of(context).pushReplacement(
-                                                              MaterialPageRoute(
-                                                                builder: (context) => const GameScreen()
-                                                              ),
-                                                            );
-                                                            Helpers().getStates(gamePlayState, settings);         
-                                                          },
+
+                                                  MenuTileWidget(
+                                                    index:0,
+                                                    gamePlayState: gamePlayState, 
+                                                    palette: palette, 
+                                                    language: language,
+                                                    body: Helpers().translateText(language, "New Game",settingsState),
+                                                    
+                                                    iconData: Icon(
+                                                      Icons.emoji_events,
+                                                      size: gamePlayState.tileSize*0.7,
+                                                      color: palette.fullTileTextColor
+                                                    ),
+                                                    onPressed: () {  
+                                                      audioController.playSfx(SfxType.optionSelected);
+                                                      Navigator.of(context).pushReplacement(
+                                                        MaterialPageRoute(
+                                                          builder: (context) => const GameScreen()
                                                         ),
+                                                      );
+                                                      Helpers().getStates(gamePlayState, settings,settingsState);         
+                                                    },
+                                                  ),
+
+                                                  MenuTileWidget(
+                                                    index:1,
+                                                    gamePlayState: gamePlayState, 
+                                                    palette: palette, 
+                                                    language: language,
+                                                    body: Helpers().translateText(language, "Leaderboards",settingsState),
+                                                    iconData: Icon(
+                                                      Icons.leaderboard,
+                                                      size: gamePlayState.tileSize*0.7,
+                                                      color: palette.fullTileTextColor
+                                                    ),                                                    
+                                                    onPressed: () {
+                                                      audioController.playSfx(SfxType.optionSelected);
+                                                      Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const LeaderboardsScreen()),
                                                       );
                                                     },
                                                   ),
-                                                  AnimatedBuilder(
-                                                    animation: _introAnimationController2,
-                                                    builder: (context,child) {
-                                                      return AnimatedOpacity(
-                                                        duration: const Duration(milliseconds: 1000),
-                                                        opacity: _introAnimation2.value,
-                                                        child: MenuTileWidget(
-                                                          index:1,
-                                                          gamePlayState: gamePlayState, 
-                                                          palette: palette, 
-                                                          language: language,
-                                                          body: Helpers().translateText(language, "Leaderboards",settingsState),
-                                                          iconData: Icon(
-                                                            Icons.leaderboard,
-                                                            size: gamePlayState.tileSize,
-                                                            color: palette.fullTileTextColor
-                                                          ),                                                    
-                                                          onPressed: () {
-                                                            audioController.playSfx(SfxType.optionSelected);
-                                                            Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      const LeaderboardsScreen()),
-                                                            );
-                                                          },
-                                                        ),
+
+
+                                                  MenuTileWidget(
+                                                    index:2,
+                                                    gamePlayState: gamePlayState, 
+                                                    palette: palette, 
+                                                    language: language,
+                                                    body: Helpers().translateText(language, "Instructions",settingsState),
+                                                    iconData: Icon(
+                                                      Icons.notes,
+                                                      size: gamePlayState.tileSize*0.7,
+                                                      color: palette.fullTileTextColor
+                                                    ),                                                    
+                                                    onPressed: () {
+                                                      audioController.playSfx(SfxType.optionSelected);
+                                                      Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const InstructionsScreen()),
                                                       );
-                                                    }
+                                                    },
                                                   ),
-                                                  AnimatedBuilder(
-                                                    animation: _introAnimationController4,
-                                                    builder: (context,child) {
-                                                      return AnimatedOpacity(
-                                                        duration: const Duration(milliseconds: 1000),
-                                                        opacity: _introAnimation4.value,
-                                                        child: MenuTileWidget(
-                                                          index:2,
-                                                          gamePlayState: gamePlayState, 
-                                                          palette: palette, 
-                                                          language: language,
-                                                          body: Helpers().translateText(language, "Instructions",settingsState),
-                                                          iconData: Icon(
-                                                            Icons.notes,
-                                                            size: gamePlayState.tileSize,
-                                                            color: palette.fullTileTextColor
-                                                          ),                                                    
-                                                          onPressed: () {
-                                                            audioController.playSfx(SfxType.optionSelected);
-                                                            Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      const InstructionsScreen()),
-                                                            );
-                                                          },
+
+
+                                                  MenuTileWidget(
+                                                    index:3,
+                                                    gamePlayState: gamePlayState, 
+                                                    palette: palette, 
+                                                    language: language,
+                                                    body: Helpers().translateText(language, "Settings",settingsState),
+                                                    iconData: Icon(
+                                                      Icons.settings,
+                                                      size: gamePlayState.tileSize*0.7,
+                                                      color: palette.fullTileTextColor
+                                                    ),                                                    
+                                                    onPressed: () {
+                                                      audioController.playSfx(SfxType.optionSelected);
+                                                                                        
+                                                      Helpers().getStates(gamePlayState, settings,settingsState);
+                                                                                        
+                                                      bool darkMode = (settings.userData.value as Map<String, dynamic>)['parameters']['darkMode'];
+                                                      Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) => SettingsScreen(darkMode: darkMode),
                                                         ),
                                                       );
-                                                    }
-                                                  ),
-                                                  AnimatedBuilder(
-                                                    animation: _introAnimationController3,
-                                                    builder: (context,child) {
-                                                      return AnimatedOpacity(
-                                                        duration: const Duration(milliseconds: 1000),
-                                                        opacity: _introAnimation3.value,
-                                                        child: MenuTileWidget(
-                                                          index:3,
-                                                          gamePlayState: gamePlayState, 
-                                                          palette: palette, 
-                                                          language: language,
-                                                          body: Helpers().translateText(language, "Settings",settingsState),
-                                                          iconData: Icon(
-                                                            Icons.settings,
-                                                            size: gamePlayState.tileSize,
-                                                            color: palette.fullTileTextColor
-                                                          ),                                                    
-                                                          onPressed: () {
-                                                            audioController.playSfx(SfxType.optionSelected);
-                                                                                              
-                                                            Helpers().getStates(gamePlayState, settings);
-                                                                                              
-                                                            bool darkMode = (settings.userData.value as Map<String, dynamic>)['parameters']['darkMode'];
-                                                            Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) => SettingsScreen(darkMode: darkMode),
-                                                              ),
-                                                                  
-                                                            );
-                                                          },
-                                                        ),
-                                                      );
-                                                    }
-                                                  ),                                                                                                                                                                               
+                                                    },
+                                                  ),                                                                                                                                                                            
                                                 ],
                                               ),
                                             ),
@@ -406,20 +294,3 @@ class MenuTileWidget extends StatelessWidget {
     );
   }
 }
-
-
-
-// List<TweenSequenceItem<double>> getAnimationSequence(int index, int duration, int delay) {
-
-//   double delay2 = 20;
-//   double delayWeight = 0.01 +  (delay2 * index);
-//   double middleWeight = 80.0;
-//   double endWeight = 100.0 - (delayWeight + middleWeight);
-//   print("delay : ${delayWeight} | middle: ${middleWeight} | end: ${endWeight}"); 
-//   List<TweenSequenceItem<double>> res =  [
-//     TweenSequenceItem(tween: Tween(begin:0.0, end: 0.0,), weight: delayWeight),
-//     TweenSequenceItem(tween: Tween(begin:0.0, end: 1.0,), weight: middleWeight),    
-//     TweenSequenceItem(tween: Tween(begin:1.0, end: 1.0,), weight: endWeight),           
-//   ];
-//   return res; 
-// }    

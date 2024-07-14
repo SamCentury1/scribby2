@@ -164,7 +164,7 @@ class _StartAnimationTileState extends State<StartAnimationTile> with SingleTick
                               child: Text(
                                 body,
                                 style: TextStyle(
-                                  fontSize: tileSizeAnim*0.9*0.4,
+                                  fontSize: tileSizeAnim*0.9*0.5,
                                   color: palette.fullTileTextColor
                                 ),
                               ),
@@ -244,15 +244,20 @@ class _StartAnimationTimerState extends State<StartAnimationTimer> with SingleTi
                         // fillColor: Colors.transparent,
                         backgroundColor:Colors.transparent,
 
-                        ringColor: Colors.white.withOpacity(startAnimation.value),
-                        ringGradient: LinearGradient(colors: [
-                          palette.fullTileBorderColor.withOpacity(startAnimation.value), 
-                          palette.fullTileBorderColor.withOpacity(startAnimation.value*0.3)]),
-                        fillColor: Colors.black.withOpacity(startAnimation.value),
-                        fillGradient: LinearGradient(colors: [
-                          palette.fullTileGradientBackGroundColor1.withOpacity(startAnimation.value),
-                          palette.fullTileGradientBackGroundColor2.withOpacity(startAnimation.value),
-                        ]),                        
+                        ringColor: palette.timerRingColor.withOpacity(startAnimation.value),
+                        ringGradient: LinearGradient(
+                          colors: [
+                            palette.timerRingGradient1.withOpacity(startAnimation.value),
+                            palette.timerRingGradient2.withOpacity(startAnimation.value),
+                          ]
+                        ),
+                        fillColor: palette.timerFillColor.withOpacity(startAnimation.value),
+                        fillGradient: LinearGradient(
+                          colors: [
+                            palette.timerFillGradient1.withOpacity(startAnimation.value),
+                            palette.timerFillGradient1.withOpacity(startAnimation.value),
+                          ]
+                        ),                        
                         backgroundGradient: null,
                         strokeWidth: gamePlayState.tileSize*0.10,
                         strokeCap: StrokeCap.round,

@@ -1,19 +1,33 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
-import 'package:scribby_flutter_v2/screens/game_screen/components/dialogs/game_pause_dialog.dart';
-// import 'package:scribby_flutter_v2/providers/animation_state.dart';
-// import 'package:scribby_flutter_v2/providers/game_state.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/dialogs/game_pause_screens/game_help_screen.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/dialogs/game_pause_screens/game_quit_screen.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/dialogs/game_pause_screens/game_settings_screen.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/dialogs/game_pause_screens/game_summary_screen.dart';
 
 class GamePauseOverlay extends StatelessWidget {
   const GamePauseOverlay({super.key});
 
+
+  Widget displayPage(String pageName) {                    
+    if (pageName == 'summary') {
+      return GameSummaryScreen();
+    } else if (pageName == 'help') {
+      return GameHelpScreen();
+    } else if (pageName == 'settings') {
+      return GameSettings();
+    } else if (pageName == 'quit') {
+      return GameQuitScreen();
+    } else {
+      // print("a problem occured");
+      return GameSummaryScreen();
+    }
+  }  
+
   @override
   Widget build(BuildContext context) {
-    late AnimationState animationState =Provider.of<AnimationState>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
         return AnimatedOpacity(
@@ -26,31 +40,15 @@ class GamePauseOverlay extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (gamePlayState.isGamePaused) {
-                        if (gamePlayState.isGameStarted) {
-                          gamePlayState.setIsGamePaused(false);
-                          gamePlayState.countDownController.resume();
-                          animationState.setShouldRunClockAnimation(true);
-                          Future.microtask(() {
-                            animationState.setShouldRunClockAnimation(false);
-                          });                        
-                          // gamePlayState.setIsGamePaused(false, 0);
-                          // GameLogic().executeTimerAnimation(animationState);
-                        }
-                      }
-                    },
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                      child: Container(
-                        color: Colors.black.withOpacity(0.5),
-                      ),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      color: Colors.black.withOpacity(0.7),
                     ),
                   ),
                 ),
-                const Center(
-                  child: GamePauseDialog(),
+                Center(
+                  child: displayPage(gamePlayState.pauseScreen)
                 ),
               ],
             ),

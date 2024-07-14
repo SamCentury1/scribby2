@@ -192,7 +192,7 @@ class _GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
           killTileController.forward(from: 1.0);
         }
         if (gamePlayState.isGamePaused) {
-          print("you tried pausing while the tile was in the process of getting killed");
+          // print("you tried pausing while the tile was in the process of getting killed");
           gamePlayState.countDownController.pause();
           killTileController.forward(from: 1.0);
           animationState.setShouldRunTimerAnimation(false);

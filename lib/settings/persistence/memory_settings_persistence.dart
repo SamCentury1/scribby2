@@ -9,8 +9,9 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   String user = "User";
   bool darkTheme = true;
   Object userData = {};
-  Object alphabet = {};
+  List<dynamic> alphabet = [];
   Object initialTileState = {};
+  String dictionary = "";
 
   /// ============= GET ===================
   @override
@@ -29,10 +30,13 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   Future<Object> getUserData() async => userData;
 
   @override
-  Future<Object> getAlphabet() async => alphabet;
+  Future<List<dynamic>> getAlphabet() async => alphabet;
 
   @override
-  Future<Object> getInitialTileState() async => alphabet;  
+  Future<Object> getInitialTileState() async => initialTileState;  
+
+  @override
+  Future<String> getDictionary() async => dictionary;    
 
   /// =========== SAVE ========================
   @override
@@ -51,8 +55,11 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   Future<void> saveUserData(Object value) async => userData = value;
 
   @override
-  Future<void> saveAlphabet(Object value) async => alphabet = value;
+  Future<void> saveAlphabet(List<dynamic> value) async => alphabet = value;
 
   @override
-  Future<void> saveInitialTileState(Object value) async => alphabet = value;  
+  Future<void> saveInitialTileState(Object value) async => initialTileState = value; 
+  
+  @override
+  Future<void> saveDictionary(String value) async => initialTileState = value;    
 }

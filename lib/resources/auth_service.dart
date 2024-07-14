@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -9,6 +10,7 @@ class AuthService {
 
   /// needs to be called as soon as the app loads
   Future<User?> getOrCreateUser() async {
+
     if (currentUser == null) {
       // try {
       UserCredential cred = await _firebaseAuth.signInAnonymously();
@@ -21,7 +23,7 @@ class AuthService {
           "languages": [],
           "muted": false,
           "soundOn": true,
-          "hasSeenTutorial": false,
+          // "hasSeenTutorial": false,
         },
         "createdAt": DateTime.now().toIso8601String(),
         "highScores": {}

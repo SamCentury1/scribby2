@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/models/tile_model.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/play_area/decorations/decorations.dart';
 // import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -52,36 +53,44 @@ class Helpers {
     return currentHighScore;
   }
 
-  void getStates(GamePlayState gamePlayState, SettingsController settings){
-    final Map<String, dynamic> alphabetDocumnet = (settings.alphabet.value as Map<String, dynamic>);
-    final List<dynamic> alphabet = alphabetDocumnet['alphabet'];
+
+List<dynamic> createCopyOfAlphabet(SettingsState settingsState) {
+  final List<dynamic> originalAlphabet = settingsState.alphabetCopy;
+
+  List<dynamic> alphabetCopy = [];
+  for (Map<String, dynamic> alphabetObject in originalAlphabet) {
+    // Create a deep copy of each map in the list
+    Map<String, dynamic> newObject = Map<String, dynamic>.from(alphabetObject);
+    alphabetCopy.add(newObject);
+  }
+  return alphabetCopy;
+}
+
+  void getStates(GamePlayState gamePlayState, SettingsController settings, SettingsState settingsState){
+
+    List<dynamic> alphabet = createCopyOfAlphabet(settingsState);
 
     
-
     if (alphabet.isNotEmpty) {
 
-      print(settings.initialTileState.value);
       final List<dynamic> _initialBoardState = settings.initialTileState.value as List<dynamic>;
       Map<String, dynamic> startingStates = generateStartingStates(alphabet, _initialBoardState, []);
 
       late List<Map<String, dynamic>> startingAlphabetState = startingStates['startingAlphabet'];
-      // GameLogic().generateStartingStates(alphabet, initialBoardState, [])['startingAlphabet'];
       late List<String> randomLetterListState = startingStates['startingRandomLetterList'];
 
       late List<int> randomShadeListState = startingStates['startingRandomShadeList'];
 
       late List<int> randomAngleListState = startingStates['startingRandomAngleList'];
-      // GameLogic().generateStartingStates(alphabet, initialBoardState, [])['startingRandomLetterList'];
       late List<dynamic> startingTileState = startingStates['startingTileState'];
-      // GameLogic().generateStartingStates(alphabet, initialBoardState, [])['startingTileState'];
 
       gamePlayState.setAlphabetState(startingAlphabetState);
       gamePlayState.setRandomLetterList(randomLetterListState);
       gamePlayState.setRandomShadeList(randomShadeListState);
       gamePlayState.setRandomAngleList(randomAngleListState);
-      // gamePlayState.setVisualTileState(startingTileState);
       gamePlayState.setTileState(startingTileState);
     } else {
+
     }
   }
 
@@ -161,7 +170,7 @@ class Helpers {
       child: Container(
         // color: Colors.orange,
         width: tileSize*0.4,
-        height: tileSize*0.5,
+        height: tileSize*0.6,
         child: Stack(
           children: [
             Positioned(
@@ -171,11 +180,13 @@ class Helpers {
               child: icon
             ),
             Positioned(
-              bottom: -5,
+              bottom: 0,
               // right: element == 'streak' ? 10 : 5,
               right: 0,
-              child: Text(
-                value.toString(),
+              child: DefaultTextStyle(
+                child: Text(
+                  value.toString(),
+                ),
                 style: TextStyle(
                   fontSize: tileSize*0.25,
                   color: color
@@ -204,90 +215,102 @@ class Helpers {
     String language, 
     double tileSize, 
     ) {
-    Color textColor = index.isEven ? palette.textColor1 : palette.fullTileTextColor ;
-    Color rowColor1 = index.isEven ? Colors.transparent : palette.tileGradientShade2Color1;
-    Color rowColor2 = index.isEven ? Colors.transparent : palette.tileGradientShade2Color2;
+    Color textColor = palette.overlayText;  //index.isEven ? palette.textColor2 : palette.fullTileTextColor ;
+    // Color rowColor1 = index.isEven ? Colors.transparent : palette.tileGradientShade2Color1;
+    // Color rowColor2 = index.isEven ? Colors.transparent : palette.tileGradientShade2Color2;
     List<Map<String,dynamic>> words = data["wordValues"];
 
     SettingsState settingsState = context.read<SettingsState>();
-
 
     // return TableRow();
 
     return TableRow(
       decoration: BoxDecoration(
         // color: rowColor,
-        gradient: LinearGradient(
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          colors: [
-            rowColor1,
-            rowColor2,
-          ]
-        )
+        // gradient: LinearGradient(
+        //   begin: Alignment.bottomLeft,
+        //   end: Alignment.topRight,
+        //   colors: [
+        //     rowColor1,
+        //     rowColor2,
+        //   ]
+        // )
+        color: Colors.transparent
       ),
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: EdgeInsets.symmetric(vertical: tileSize*0.05),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Column(
-              children: [
-                for (Map<String,dynamic> word in words)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    word['index'].toString(),
-                    style: customTextStyle(textColor, tileSize*0.3),
-                    // style: TextStyle(
-                    //   color: textColor,
-                    //   fontSize: 18*sizeFactor
-                    // ),
-                  )
-                )
-              ],
+            child: DefaultTextStyle(
+              child: Text(
+                data['turn'].toString()
+              ),
+              style: TextStyle(
+                fontSize: tileSize*0.3,
+                color: textColor
+              ),
             ),
+            // child: Column(
+            //   children: [
+            //     for (Map<String,dynamic> word in words)
+            //     Align(
+            //       alignment: Alignment.centerLeft,
+            //       child: DefaultTextStyle(
+            //         child: Text(
+            //           word['index'].toString(),
+            //         ),
+            //         style: customTextStyle(textColor, tileSize*0.3),
+            //       )
+            //     )
+            //   ],
+            // ),
           ),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             for (Map<String,dynamic> word in words)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                child: Text(
-                  word['word'],
-                  style: customTextStyle(textColor, tileSize*0.3),
-                ),
-                onTap: () {
-                  showDialog(
-                    context: context, 
-                    builder:(context) {
-                      return FutureBuilder<Map<String,dynamic>>(
-                        future: fetchDefinition(word["word"], language, settingsState),
-                        builder: (context, snapshot) {
-                          late Map<String,dynamic> res = {};
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            res = {"result" : "loading", "data": translateText(language, "loading...",settingsState)};
-                            return wordDefinitionDialog(palette, tileSize,word['word'],res,language);
-                          } else if (snapshot.hasError) {
-                            res = {"result" : "fail", "data": translateText(language,"Error fetching definition",settingsState)};
-                            return wordDefinitionDialog(palette, tileSize,word['word'],res,language);
-                          } else {
-                            if (snapshot.data != null) {
-                              return wordDefinitionDialog(palette, tileSize,word['word'], snapshot.data!,language);
-                            } else {
-                              res = {"result" : "fail", "data": translateText(language, "No definition available at this time",settingsState)};
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: tileSize*0.05),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  child: DefaultTextStyle(
+                    child: Text(
+                      word['word'],
+                    ),
+                    style: customTextStyle(textColor, tileSize*0.3),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context, 
+                      builder:(context) {
+                        return FutureBuilder<Map<String,dynamic>>(
+                          future: fetchDefinition(word["word"], language, settingsState),
+                          builder: (context, snapshot) {
+                            late Map<String,dynamic> res = {};
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              res = {"result" : "loading", "data": translateText(language, "loading...",settingsState)};
                               return wordDefinitionDialog(palette, tileSize,word['word'],res,language);
-                            }
-                          }                    
-                        },
-          
-                      );
-                    },
-                  );
-                },
+                            } else if (snapshot.hasError) {
+                              res = {"result" : "fail", "data": translateText(language,"Error fetching definition",settingsState)};
+                              return wordDefinitionDialog(palette, tileSize,word['word'],res,language);
+                            } else {
+                              if (snapshot.data != null) {
+                                return wordDefinitionDialog(palette, tileSize,word['word'], snapshot.data!,language);
+                              } else {
+                                res = {"result" : "fail", "data": translateText(language, "No definition available at this time",settingsState)};
+                                return wordDefinitionDialog(palette, tileSize,word['word'],res,language);
+                              }
+                            }                    
+                          },
+                        
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),       
           ],
@@ -304,63 +327,7 @@ class Helpers {
               ],
             ),
           ),
-          // child: Column(
-          //   children: [
-          //     for (int i=0; i<words.length; i++)
-          //     Row(
-          //       children: [
-          //         Text(
-          //           data['streak'].toString(),
-          //           style: customTextStyle(textColor, tileSize*0.3),
-          //         ),
-          //       ],
-          //     )
-          //   ],
-          // ),
-        ),        
-
-        // Align(
-        //   alignment: Alignment.center,
-        //   child: Column(
-        //     children: [
-        //       for (int i=0; i<words.length; i++)
-        //       Row(
-        //         children: [
-        //           Text(
-        //             data['streak'].toString(),
-        //             style: customTextStyle(textColor, tileSize*0.3),
-        //           ),
-        //         ],
-        //       )
-        //     ],
-        //   ),
-        // ),
-
-        // Align(
-        //   alignment: Alignment.center,
-        //   child: Column(
-        //     children: [
-        //       for (int i=0; i<words.length; i++)
-        //       Text(
-        //         data['words'].toString(),
-        //         style: customTextStyle(textColor, tileSize*0.3),
-        //       )
-        //     ],
-        //   ),
-        // ),
-
-        // Align(
-        //   alignment: Alignment.center,
-        //   child: Column(
-        //     children: [
-        //       for (int i=0; i<words.length; i++)
-        //       Text(
-        //         data['crossWord'].toString(),
-        //         style: customTextStyle(textColor, tileSize*0.3),
-        //       )
-        //     ],
-        //   ),
-        // ),                
+        ),                     
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Align(
@@ -370,8 +337,10 @@ class Helpers {
                 for (Map<String,dynamic> word in words)
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    word['totalScore'].toString(),
+                  child: DefaultTextStyle(
+                    child: Text(
+                      word['totalScore'].toString(),
+                    ),
                     style: customTextStyle(textColor, tileSize*0.3),
                   )
                 )
@@ -411,8 +380,12 @@ class Helpers {
 
   String translateText(String languageRaw, String originalString,SettingsState settingsState) {
 
-    late Map<dynamic,dynamic> languageMap = settingsState.translations.firstWhere((element) => element['key'] == originalString);
-    return languageMap['data'][languageRaw.toLowerCase()];
+    try {
+      late Map<dynamic,dynamic> languageMap = settingsState.translations.firstWhere((element) => element['key'] == originalString);
+      return languageMap['data'][languageRaw.toLowerCase()];
+    } catch (e) {
+      return originalString;
+    }
   }
 
   String translateDemoSequence(String language, String originalString, Map<dynamic,dynamic> demoStateDynamicLetters, SettingsState settingsState) {
@@ -457,70 +430,8 @@ class Helpers {
   }
 
 
-  Future<void> showBadNameDialog(
-    BuildContext context, 
-    String titleText, 
-    String textBody,
-    String buttonText,   
-    ColorPalette palette
-    ) async {
-    
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-
-     
-
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            // Set the background color of the AlertDialog
-            dialogBackgroundColor: palette.optionButtonBgColor,
-            // Set the text color of the AlertDialog
-            textTheme: const TextTheme().copyWith(
-              bodyMedium: TextStyle(color: palette.textColor1),
-            ),
-          ),      
-          child: AlertDialog(
-            title: Text(
-              titleText,
-              style: TextStyle(
-                color: palette.textColor2
-              ),
-            ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    textBody,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text(
-                  buttonText,
-                  style: TextStyle(
-                    color: palette.textColor2
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          )
-        );
-      },
-    );
-  }
-
   bool checkForBadWords(String name) {
-    List<String> badWords = ["faggot", "faggit", "fagot","nigger","retard","nigga","bitch","cunt"];
+    List<String> badWords = ["faggot", "faggit", "fagot","nigger","retard","nigga","bitch","cunt",];
     bool badWordFound = false;
     for (String word in badWords) {
       if (name.contains(word)) {
@@ -528,11 +439,23 @@ class Helpers {
         
       } 
     }
-
-    
     return badWordFound;
   }
 
+  void showUserNameSnackBar(BuildContext context,ColorPalette palette, double tileSize,String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(
+            color: palette.fullTileTextColor,
+            fontSize: tileSize*0.3
+          ),
+        ),
+        duration: const Duration(milliseconds: 3000),
+      )
+    );    
+  }
 
   List<Widget> getDefinitions(List<dynamic> definitions, double tileSize, ColorPalette palette, String language) {
 
@@ -540,58 +463,73 @@ class Helpers {
 
     if (language =='english') {
       for (int i=0; i<definitions.length; i++) {
-        late Map<String,dynamic> definition = definitions[i];
-        late List<TableRow> rows = [];
-        late TableRow partOfSpeechRow = TableRow(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                "${(i+1).toString()}. ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: tileSize*0.20 
-                ),
-              ),            
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "${definition['partOfSpeech']}",
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: tileSize*0.20, 
-                ),
-              ),            
-            ),
-          ]
-        );
-        rows.add(partOfSpeechRow);
-        late TableRow definitionRow = TableRow(
-          children: [
-            SizedBox(),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                definition['string'],
-                style: TextStyle(
-                  fontSize: tileSize*0.20           
-                ),
-              ),            
-            ),          
-          ]
-        );
-        rows.add(definitionRow);
-        late Table tableRes = Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(9),
-          },
-          defaultVerticalAlignment:TableCellVerticalAlignment.middle,
-          children: rows,
-        );  
-        cols.add(tableRes);
 
+
+        if (definitions[i] is Map<String, dynamic>) {
+
+          String partOfSpeech = "";
+          String string = "";
+          final Map<String, dynamic> something = definitions[i] as Map<String, dynamic>;
+          partOfSpeech = something["partOfSpeech"];
+          string = something["string"];
+          late List<TableRow> rows = [];
+          late TableRow partOfSpeechRow = TableRow(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "${(i+1).toString()}. ",
+                  style: TextStyle(
+                    color: palette.textColor2,
+                    fontWeight: FontWeight.w800,
+                    fontSize: tileSize*0.20 
+                  ),
+                ),            
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  // partOfSpeech,
+                  partOfSpeech,
+                  style: TextStyle(
+                    color: palette.textColor2,
+                    fontWeight: FontWeight.w800,
+                    fontSize: tileSize*0.20, 
+                  ),
+                ),            
+              ),
+            ]
+          );
+          rows.add(partOfSpeechRow);
+          late TableRow definitionRow = TableRow(
+            children: [
+              SizedBox(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  // string,
+                  string,
+                  style: TextStyle(
+                    color: palette.textColor2,
+                    fontSize: tileSize*0.20           
+                  ),
+                ),            
+              ),          
+            ]
+          );
+          rows.add(definitionRow);
+          late Table tableRes = Table(
+            columnWidths: const <int, TableColumnWidth>{
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(9),
+            },
+            defaultVerticalAlignment:TableCellVerticalAlignment.middle,
+            children: rows,
+          );  
+          cols.add(tableRes);
+          cols.add(Divider(color: palette.textColor2,thickness: tileSize*0.01,));
+
+        }
 
       }
     } else {
@@ -610,6 +548,7 @@ class Helpers {
                     child: Text(
                       "${(i+1).toString()}. ",
                       style: TextStyle(
+                        color: palette.textColor2,
                         fontWeight: FontWeight.w800,
                         fontSize: tileSize*0.20 
                       ),
@@ -624,6 +563,7 @@ class Helpers {
               child: Text(
                 definition,
                 style: TextStyle(
+                  color: palette.textColor2,
                   fontSize: tileSize*0.20, 
                 ),
               ),            
@@ -646,19 +586,42 @@ class Helpers {
       }
     }
 
-
     return cols;
   }
 
   Widget wordDefinitionDialog(ColorPalette palette, double tileSize, String wordText, Map<String,dynamic> definition, String language) {
 
-    print(definition['data']);
+    List<Widget> definitions = [];
+    if (definition['result'] != 'success') {
+
+      Text(definition['data']);
+    } else {
+
+      if (language == 'english') {
+        definitions = getDefinitions(definition['data']['data'], tileSize, palette, language);
+      } else {
+        definitions = getDefinitions(definition['data'], tileSize, palette, language);
+      }      
+    }
+
 
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(tileSize*0.2))
       ),
       child: Container(
+        decoration: BoxDecoration(
+          color: palette.modalBgColor,
+          // gradient: LinearGradient(
+          //   begin: Alignment.bottomCenter,
+          //   end: Alignment.topCenter,
+          //   colors: [
+          //     palette.screenGradientBackgroundColor1,
+          //     palette.screenGradientBackgroundColor2
+          //   ]
+          // ),
+          borderRadius: BorderRadius.all(Radius.circular(tileSize*0.2))
+        ),
 
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -677,13 +640,13 @@ class Helpers {
                   ),
                 ),
             
-                Divider(),
-                definition['result'] != 'success' ? Text(definition['data']) : 
+                Divider(color: palette.textColor2,thickness:tileSize*0.01),
+                definition['result'] != 'success' ? Text(definition['data'],style: TextStyle(color: palette.modalTextColor),) : 
                 Flexible(
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children:getDefinitions(definition['data']['data'], tileSize, palette, language),
+                      children: definitions
                     ),
                   ),
                 )
@@ -843,6 +806,9 @@ class Helpers {
     List<String> initialRandomLetterList,
     // GamePlayState gamePlayState,
   ) {
+
+
+
     // late List<Map<String, dynamic>> startingAlphabet = [];
     late List<dynamic> startingTileState = [];
     late List<String> startingRandomLetterList = [];
@@ -1359,6 +1325,211 @@ class Helpers {
     final parsed = jsonDecode(jsonString).cast<Map<String, dynamic>>();
     return parsed.map<Tile>((json) => Tile.fromJson(json)).toList();
   }          
+
+  Widget wordValuesTable(List<dynamic> alphabet, String language, SettingsState settings, ColorPalette palette, double tileSize) {
+    List<TableRow> rows = [
+      TableRow(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: DefaultTextStyle(
+              child: Text(
+                Helpers().translateText(language, "Alphabet", settings),
+              ),
+              style: GoogleFonts.roboto(
+                color: palette.textColor2,
+                fontSize: tileSize*0.32,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: DefaultTextStyle(
+              child: Text(
+                Helpers().translateText(language, "Values", settings),
+              ),
+              style: GoogleFonts.roboto(
+                color: palette.textColor2,
+                fontSize: tileSize*0.32,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: DefaultTextStyle(
+              child: Text(
+                Helpers().translateText(language, "Count", settings),
+              ),
+              style: GoogleFonts.roboto(
+                color: palette.textColor2,
+                fontSize: tileSize*0.32,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),        
+        ]
+      ),
+    ];
+    for (dynamic item in alphabet) {
+      final TableRow rowWidget = TableRow(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: DefaultTextStyle(
+              child: Text(
+                item['letter'],
+              ),
+              style: Helpers().customTextStyle(palette.textColor2, tileSize*0.3),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: DefaultTextStyle(
+              child: Text(
+                item['points'].toString(),
+              ),
+              style: Helpers().customTextStyle(palette.textColor2, tileSize*0.3),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: DefaultTextStyle(
+              child: Text(
+                item['count'].toString(),
+              ),
+              style: Helpers().customTextStyle(palette.textColor2, tileSize*0.3),
+            ),
+          ),        
+        ]
+      );
+      rows.add(rowWidget);
+    }
+    return Table(
+      border: TableBorder.all(
+        color: palette.textColor2,
+        width: tileSize*0.01,
+        borderRadius: BorderRadius.all(Radius.circular(tileSize*0.2))
+      ),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: rows,
+    );
+
+
+
+  }
+  List<Map<String,dynamic>> getInitialBoardState() {
+    List<Map<String,dynamic>> boardState = [];
+    Random _rand = Random();  
+    int count = 0;
+    for (int j=1;j<7;j++) {
+      for (int k=1;k<7;k++) {
+        int shade = _rand.nextInt(4);
+        int angle = _rand.nextInt(4);
+        Map<String,dynamic> data ={
+          "index": count, 
+          "tileId": "${j}_${k}",
+          "row": j,
+          "column": k,
+          "letter": "",
+          "active": false,
+          "alive": true, 
+          "shade": shade, 
+          "angle": angle
+        };
+        boardState.add(data);
+        count = count+1;
+      }    
+    }
+    return boardState;
+  }
+
+
+
+  Widget instructionsHeading(Color color, String body, String language, double fontSize,SettingsState settingsState) {
+    String res = "";
+    res = Helpers().translateText(language, body,settingsState);
+    return Container(
+      margin: const EdgeInsets.all(4.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: DefaultTextStyle(
+          child: Text(
+            res,
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fontSize,
+            color: color
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget instructionsText(
+    Color color, 
+    String body, 
+    String language, 
+    bool dynamicValue, 
+    double fontSize, 
+    Map<dynamic,dynamic> translateDemoSequence,
+    SettingsState settingsState
+    ) {
+    String res = "";
+    if (dynamicValue) {
+      res = Helpers().translateDemoSequence(language, body, translateDemoSequence,settingsState);
+    } else {
+      res = Helpers().translateText(language, body,settingsState);
+    }
+    return Container(
+      margin: const EdgeInsets.all(4.0),
+      child: DefaultTextStyle(
+        child: Text(
+          res,
+        ),
+        style: TextStyle(fontSize: fontSize, color: color),
+      ),
+    );
+  }
+
+
+  Color getDemoTileBorderColor(String tileLetter, Color color) {
+    late Color res = Colors.transparent;
+    if (tileLetter == "") {
+      res = color;
+    }
+    return res;
+  }
+
+  Color getDemoTileTextColor(String tileLetter, ColorPalette palette, bool isActive) {
+    late Color res = palette.fullTileTextColor;
+    if (isActive) {
+      res = palette.emptyTileBorderColor;
+    }
+    return res;
+  }
+
+  BoxDecoration getBoxDecoration(double tileSize, ColorPalette palette, String tileLetter, bool active) {
+    BoxDecoration res = Decorations().getTileDecoration(tileSize, palette, 1, 1);
+    if (tileLetter == "" ) {
+      res = Decorations().getEmptyTileDecoration(tileSize, palette,0,1);
+    } else {
+      if (active) {
+        res = BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.all(Radius.circular(tileSize*0.2)),
+          border: Border.all(
+            color: palette.emptyTileBorderColor,
+            width: tileSize*0.04
+          )
+        );
+      }
+    }
+    return res;
+  }
+
 
 
 

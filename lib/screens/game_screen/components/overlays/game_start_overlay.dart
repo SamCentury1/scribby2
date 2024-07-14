@@ -60,7 +60,7 @@ class _GameStartOverlayState extends State<GameStartOverlay> {
                                 ),
                                 textAlign: TextAlign.center,
                                 child: Text(
-                                  Helpers().translateText(gamePlayState.currentLanguage, "Start Game!",settingsState),
+                                  Helpers().translateText(gamePlayState.currentLanguage, "Tap to Start", settingsState),
                                 ),
                               ),
                             ),

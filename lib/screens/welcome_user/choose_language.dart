@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/play_area/decorations/decorations.dart';
+import 'package:scribby_flutter_v2/screens/menu_screen/test.dart';
 import 'package:scribby_flutter_v2/screens/welcome_user/choose_username.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
 import 'package:vector_math/vector_math.dart' show radians;
@@ -181,10 +182,13 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                                 Helpers().translateWelcomeText(getPrimaryLanguage(settingsState.languageDataList), "Primary Language",settingsState),
                                 style: TextStyle(
                                   color: palette.textColor2,
+                                  fontSize: gamePlayState.tileSize*0.3
+                                  
                                 ),
                               ),
                               textStyle: TextStyle(
-                                color: palette.textColor2
+                                color: palette.textColor2,
+                                fontSize: gamePlayState.tileSize*0.3
                               ),
                               initialSelection: getPrimaryLanguage(settingsState.languageDataList),
                               onSelected: (value) {
@@ -196,13 +200,13 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                                 constraints: BoxConstraints.tight(const 
                                 Size.fromHeight(60)),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(gamePlayState.tileSize*0.1),
                                 ),
                               ),
                               dropdownMenuEntries: allLanguagesList.map<DropdownMenuEntry<String>>((String value) {
                                 return DropdownMenuEntry<String>(
                                   value: value, 
-                                  label: value,                                       
+                                  label: value,                                 
                                 );
                               }).toList(),
                             ),
@@ -222,7 +226,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                                       settingsState
                                     ),
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: gamePlayState.tileSize*0.3,
                                       color: palette.textColor2
                                     ),
                                     textAlign: TextAlign.center,
@@ -232,15 +236,16 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                             ),                
                             const Expanded(flex: 1, child: SizedBox()),
                             SizedBox(
-                              width: double.infinity,
-                              height: screenWidth,
+                              // width: double.infinity,
+                              width: gamePlayState.tileSize*6,
+                              height: gamePlayState.tileSize*6,
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: <Widget>[
                                   for (int i=0; i<settingsState.languageDataList .length; i++)
                                     LanguageButton(
                                       angle:((360/settingsState.languageDataList.length)*i) ,
-                                      size: screenWidth,
+                                      size: gamePlayState.tileSize*6,
                                       langData: settingsState.languageDataList[i],
                                       settingsState: settingsState,
                                     ),    
@@ -257,33 +262,28 @@ class _ChooseLanguageState extends State<ChooseLanguage> with TickerProviderStat
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: 60,
-                                  child: ElevatedButton(
-                                    onPressed: () {
+                                  child: GestureDetector(
+                                    onTap: () {
                                       processLanguageSelection(settingsState);
                                     },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: palette.optionButtonBgColor2 , 
-                                      foregroundColor: palette.optionButtonTextColor,
-                                      shadowColor: const Color.fromRGBO(123, 123, 123, 0.7),
-                                      shape:  RoundedRectangleBorder(
-                                        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                        side: BorderSide(
-                                          color: palette.optionButtonBgColor,
-                                          width: 1,
-                                          style: BorderStyle.solid
-                                        ), 
-                                      ),                            
-                                    ),
-                                    child: Text(
-                                      Helpers().translateWelcomeText(
-                                        getPrimaryLanguage(settingsState.languageDataList), 
-                                        "Proceed",
-                                        settingsState
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: gamePlayState.tileSize*0.8,
+                                      decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, 3, 2),
+                                      child: Center(
+                                        child: Text(
+                                          Helpers().translateWelcomeText(
+                                            getPrimaryLanguage(settingsState.languageDataList), 
+                                            "Proceed",
+                                            settingsState
+                                          ), 
+                                          style: TextStyle(
+                                            fontSize: gamePlayState.tileSize*0.3,
+                                            color: palette.fullTileTextColor
+                                          ),                   
+                                        ),
                                       ),
-                                      style: TextStyle(
-                                        color: palette.textColor2,
-                                      ),                         
-                                    ),
+                                    ),                                    
                                   ),
                                 ),
                               ),
@@ -489,7 +489,7 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
                         borderRadius: const BorderRadius.all(Radius.circular(100.0)),
                         border: Border.all(
                           width: 3 ,
-                          color: getSelectedLanguageBorderColor(palette.optionButtonTextColor, _languageSelectedAnimation.value)
+                          color: getSelectedLanguageBorderColor(palette.textColor2, _languageSelectedAnimation.value)
                         ),
                       ),
                     ),
@@ -499,15 +499,16 @@ class _LanguageButtonState extends State<LanguageButton> with SingleTickerProvid
                       top: (((widget.size*0.30)-(widget.size*0.25))/2),
                       child: Container(
                         width: widget.size*0.2,
-                        height: widget.size*0.2,                        
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(100.0)),
-                          image: DecorationImage(
-                            opacity: widget.langData['selected'] ? 1.0 : 0.8,
-                            image: NetworkImage(widget.langData['url']), 
-                          ),
-                        ),
+                        height: widget.size*0.2,
+                        child: FlagWidget(radius: widget.size, flag: widget.langData['flag'],),                      
+                        // decoration: BoxDecoration(
+                        //   color: Colors.white,
+                        //   borderRadius: const BorderRadius.all(Radius.circular(100.0)),
+                        //   image: DecorationImage(
+                        //     opacity: widget.langData['selected'] ? 1.0 : 0.8,
+                        //     image: NetworkImage(widget.langData['url']), 
+                        //   ),
+                        // ),
                       ),
                     ),                   
                   ]

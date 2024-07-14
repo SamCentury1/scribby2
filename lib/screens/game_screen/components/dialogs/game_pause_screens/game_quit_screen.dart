@@ -1,10 +1,8 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
-import 'package:scribby_flutter_v2/components/dialog_widget.dart';
 import 'package:scribby_flutter_v2/functions/game_logic_2.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
@@ -46,7 +44,6 @@ class _GameQuitScreenState extends State<GameQuitScreen>
 
       
       Future.delayed(const Duration(milliseconds: 1500), () {
-        // animationState.setShouldRunGameEndedAnimation(true);
        gamePlayState.endGame();
        gamePlayState.setTileState(settings.initialTileState.value as List<Map<String,dynamic>>);
        if (mounted) {
@@ -58,11 +55,10 @@ class _GameQuitScreenState extends State<GameQuitScreen>
     };
   }
 
-  VoidCallback restartGameAction(GamePlayState gamePlayState, BuildContext context, SettingsController settings) {
+  VoidCallback restartGameAction(GamePlayState gamePlayState, BuildContext context, SettingsController settings, SettingsState settingsState) {
     return () {
       gamePlayState.restartGame();
-      Helpers().getStates(gamePlayState, settings);
-      // GameLogic().clearTilesFromBoard(gamePlayState);
+      Helpers().getStates(gamePlayState, settings, settingsState);
       Navigator.of(context).pop();
     };
     
@@ -87,119 +83,188 @@ class _GameQuitScreenState extends State<GameQuitScreen>
 
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
-        return DialogWidget(
-          key,
-          Helpers().translateText(gamePlayState.currentLanguage,"Quit Game",settingsState),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Column(
-              children: [
-                const Expanded(flex: 2, child: SizedBox(),),
-                labelItem(gamePlayState, palette, gamePlayState.tileSize*0.35, "Would you like to leave?",settingsState),
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ControlDialogWidget(
-                          gamePlayState: gamePlayState,
-                          palette: palette,
-                          settingsState: settingsState,
-                          titleText:  "Quit Game",
-                          promptText: "Are you sure you want to quit the game?",
-                          promptConfirmText: "Yes",
-                          action: quitGameAction(gamePlayState, animationState, context, settings),
-                        );
-                      }
-                    );
-                  },  
-                  child: Container(
-                    width: double.infinity,
-                    height: gamePlayState.tileSize*0.8,
-                    decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, randomShade1, randomAngle1),
-                    child: Center(
-                      child: Text(
-                        Helpers().translateText(gamePlayState.currentLanguage,"Exit",settingsState),
-                        style: TextStyle(
-                          fontSize:gamePlayState.tileSize*0.35,
-                          color: palette.fullTileTextColor
-                        ),
-                      ),
-                    ),
-                  ),
-                ),     
-                const Expanded(flex: 1, child: SizedBox(),),
 
-                labelItem(gamePlayState, palette, gamePlayState.tileSize*0.35, "Or simply restart?",settingsState),
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ControlDialogWidget(
-                          gamePlayState: gamePlayState,
-                          palette: palette,
-                          settingsState: settingsState,
-                          titleText:  "Restart Game",
-                          promptText: "Are you sure you want to restart the game?",
-                          promptConfirmText: "Yes",
-                          action: restartGameAction(gamePlayState, context, settings),
-                        );                        
-                      }
-                    );
-                  },  
-                  child: Container(
-                    width: double.infinity,
-                    height: gamePlayState.tileSize*0.8,
-                    decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, randomShade2, randomAngle2),
-                    child: Center(
-                      child: Text(
-                        Helpers().translateText(gamePlayState.currentLanguage,"Restart",settingsState),
-                        style: TextStyle(
-                          fontSize:gamePlayState.tileSize*0.35,
-                          color: palette.fullTileTextColor
-                        ),
+                return Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Padding(
+                        padding: EdgeInsets.all(gamePlayState.tileSize*0.2),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: Container(
+                                height: gamePlayState.tileSize*1,
+                                child:FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: DefaultTextStyle(
+                                      child: Text(
+                                        Helpers().translateText(gamePlayState.currentLanguage,"Quit Game",settingsState),
+                                      ),
+                                      style: Helpers().customTextStyle(palette.overlayText,gamePlayState.tileSize*0.5),
+                                    ),
+                                  ),                        
+                                ),
+                            ),
+                            Padding(
+                              padding:  EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.2),
+                              child: Divider(
+                                color: palette.textColor2,
+                                height: 2,
+                              ),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // const Expanded(flex: 2, child: SizedBox(),),
+                                      labelItem(gamePlayState, palette, gamePlayState.tileSize*0.35, "Would you like to leave?",settingsState),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ControlDialogWidget(
+                                                gamePlayState: gamePlayState,
+                                                palette: palette,
+                                                settingsState: settingsState,
+                                                titleText:  "Quit Game",
+                                                promptText: "Are you sure you want to quit the game?",
+                                                promptConfirmText: "Yes",
+                                                action: quitGameAction(gamePlayState, animationState, context, settings),
+                                              );
+                                            }
+                                          );
+                                        },  
+                                        child: Padding(
+                                          padding: EdgeInsets.all(gamePlayState.tileSize*0.2),
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: gamePlayState.tileSize*0.8,
+                                            decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, randomShade1, randomAngle1),
+                                            child: Center(
+                                              child: DefaultTextStyle(
+                                                child: Text(
+                                                  Helpers().translateText(gamePlayState.currentLanguage,"Exit",settingsState),
+                                                ),
+                                                style: TextStyle(
+                                                  fontSize:gamePlayState.tileSize*0.35,
+                                                  color: palette.fullTileTextColor
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),     
+                                      // const Expanded(flex: 1, child: SizedBox(),),
+                                                    
+                                      labelItem(gamePlayState, palette, gamePlayState.tileSize*0.35, "Or simply restart?",settingsState),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ControlDialogWidget(
+                                                gamePlayState: gamePlayState,
+                                                palette: palette,
+                                                settingsState: settingsState,
+                                                titleText:  "Restart Game",
+                                                promptText: "Are you sure you want to restart the game?",
+                                                promptConfirmText: "Yes",
+                                                action: restartGameAction(gamePlayState, context, settings,settingsState),
+                                              );                        
+                                            }
+                                          );
+                                        },  
+                                        child: Padding(
+                                          padding: EdgeInsets.all(gamePlayState.tileSize*0.2),
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: gamePlayState.tileSize*0.8,
+                                            decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, randomShade2, randomAngle2),
+                                            child: Center(
+                                              child: DefaultTextStyle(
+                                                child: Text(
+                                                  Helpers().translateText(gamePlayState.currentLanguage,"Restart",settingsState),
+                                                ),
+                                                style: TextStyle(
+                                                  fontSize:gamePlayState.tileSize*0.35,
+                                                  color: palette.fullTileTextColor
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),                
+                                          
+                                      // const Expanded(flex: 3, child: SizedBox(),),                   
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                        
+                            ],
+                          ),
                       ),
                     ),
-                  ),
-                ),                
-                    
-                const Expanded(flex: 3, child: SizedBox(),),                   
-              ],
-            ),
-          ),
-          null
-        );
+                    Positioned(
+                      bottom: gamePlayState.tileSize*0.2,
+                      right: (settingsState.screenSizeData['width']-(gamePlayState.tileSize*6))/2,
+                      child: Container(
+                        width: gamePlayState.tileSize*6,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              if (gamePlayState.isGamePaused) {
+                                if (gamePlayState.isGameStarted) {
+                                  gamePlayState.setIsGamePaused(false);
+                                  gamePlayState.countDownController.resume();
+                                  animationState.setShouldRunClockAnimation(true);
+                                  Future.microtask(() {
+                                    animationState.setShouldRunClockAnimation(false);
+                                  });                        
+                                }
+                              }                      
+                            },
+                            child: Container(
+                              width: gamePlayState.tileSize*0.7,
+                              height: gamePlayState.tileSize*0.7,  
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.all(Radius.circular(100.0))
+                              ),
+                              child: Icon(
+                                Icons.close, 
+                                size: gamePlayState.tileSize*0.4,
+                                color: Colors.white.withOpacity(0.5),
+                              )  
+                            ),
+                          ),
+                        ),
+                      ),
+                    )                        
+                  ],
+                );
       },
     );
   }
 }
 
-ButtonStyle buttonStyle(ColorPalette palette, double tileSize,) {
-  return ElevatedButton.styleFrom(
-    backgroundColor: palette.optionButtonBgColor2,
-    foregroundColor: palette.textColor2,
-    shadowColor:const Color.fromRGBO(123, 123, 123, 0.7),
-    elevation: 3.0,
-    minimumSize: Size(double.infinity, (tileSize*0.8)),
-    padding: const EdgeInsets.all(4.0),
-    textStyle: TextStyle(
-      fontSize: tileSize*0.35,
-      color: palette.textColor2
-    ),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(tileSize*0.2)),
-    ),
-  ); 
-}
 
 
 
 Widget labelItem(GamePlayState gamePlayState, ColorPalette palette, double fontSize, String textBody, SettingsState settingsState) {
-  return Text(
-    Helpers().translateText(gamePlayState.currentLanguage,textBody,settingsState),
+  return DefaultTextStyle(
+    child: Text(
+      Helpers().translateText(gamePlayState.currentLanguage,textBody,settingsState),
+    ),
     style: TextStyle(
-      color: palette.textColor2,
+      color: palette.overlayText,
       fontSize: fontSize
     ),
   ); 
@@ -237,14 +302,15 @@ class ControlDialogWidget extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(gamePlayState.tileSize*0.20)),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomRight,
-            colors: [
-              palette.screenGradientBackgroundColor1,
-              palette.screenGradientBackgroundColor2,
-            ]
-          )
+          color: palette.modalBgColor
+          // gradient: LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomRight,
+          //   colors: [
+          //     palette.screenGradientBackgroundColor1,
+          //     palette.screenGradientBackgroundColor2,
+          //   ]
+          // )
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -267,7 +333,7 @@ class ControlDialogWidget extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal:gamePlayState.tileSize*0.1),
                 child: Divider(
-                  color: palette.textColor3,
+                  color: palette.modalTextColor,
                   height: gamePlayState.tileSize*0.02,
                 ),
               ),
@@ -280,7 +346,7 @@ class ControlDialogWidget extends StatelessWidget {
                   Helpers().translateText(gamePlayState.currentLanguage,promptText,settingsState),
                   style: TextStyle(
                     fontSize: (gamePlayState.tileSize*0.30), 
-                    color: palette.textColor2
+                    color: palette.modalTextColor
                   ),
                 ),
               ),
@@ -293,10 +359,12 @@ class ControlDialogWidget extends StatelessWidget {
                     audioController.playSfx(SfxType.optionSelected);
                     action();
                   },
-                  child: Text(
-                    Helpers().translateText(gamePlayState.currentLanguage,promptConfirmText,settingsState),
+                  child: DefaultTextStyle(
+                    child: Text(
+                      Helpers().translateText(gamePlayState.currentLanguage,promptConfirmText,settingsState),
+                    ),
                     style:TextStyle(
-                      color: palette.textColor2,
+                      color: palette.modalTextColor,
                       fontSize: gamePlayState.tileSize*0.3
                     ),
                   )
@@ -305,10 +373,12 @@ class ControlDialogWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text(
-                    Helpers().translateText(gamePlayState.currentLanguage,"Cancel",settingsState),
+                  child: DefaultTextStyle(
+                    child: Text(
+                      Helpers().translateText(gamePlayState.currentLanguage,"Cancel",settingsState),
+                    ),
                     style: TextStyle(
-                      color: palette.textColor2,
+                      color: palette.modalTextColor,
                       fontSize: gamePlayState.tileSize*0.3
                     ),
                   )

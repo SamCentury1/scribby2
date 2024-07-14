@@ -125,4 +125,18 @@ class AnimationState extends ChangeNotifier {
     notifyListeners();
   }  
 
+  late bool _shouldShowGameOverScreenOverlay = false;
+  bool get shouldShowGameOverScreenOverlay => _shouldShowGameOverScreenOverlay;
+  void setShouldShowGameOverScreenOverlay(bool value) {
+    _shouldShowGameOverScreenOverlay = value;
+    notifyListeners();
+  }    
+
+  late bool _shouldRunScoreBoardPointsCount = false;
+  bool get shouldRunScoreBoardPointsCount => _shouldRunScoreBoardPointsCount;
+  void setShouldRunScoreBoardPointsCount(bool value) {
+    _shouldRunScoreBoardPointsCount = value;
+    notifyListeners();
+  }    
+
 }

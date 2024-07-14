@@ -45,7 +45,7 @@ class _ScoreboardState extends State<Scoreboard> with SingleTickerProviderStateM
     Color color_0 = Colors.transparent;
     Color color_1 = Colors.red;
     Color color_2 = Colors.yellow;
-    Color color_4 = palette.timerTextColor;
+    Color color_4 = palette.textColor2;
 
 
     List<TweenSequenceItem<Color?>> wordFoundColorSequence1 = [
@@ -155,6 +155,9 @@ class _ScoreboardState extends State<Scoreboard> with SingleTickerProviderStateM
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // Counter(),
+                        // NewNPoints(),
+                        // Text("caca"),
                         SizedBox(width: 10,),
                         Container(
                           decoration: BoxDecoration(
@@ -187,6 +190,8 @@ class _ScoreboardState extends State<Scoreboard> with SingleTickerProviderStateM
                             ],
                           ),
                         ),
+
+                        
                         Expanded(child: SizedBox(),),
                         Container(
                           decoration: BoxDecoration(
@@ -220,6 +225,8 @@ class _ScoreboardState extends State<Scoreboard> with SingleTickerProviderStateM
                       ]
                     ),
                   ),
+
+                  
 
                   /// FIRST
                   Container(
@@ -301,7 +308,7 @@ class _ScoreboardState extends State<Scoreboard> with SingleTickerProviderStateM
                         SizedBox(width: 10,),
                       ]
                     ),
-                  ),                 
+                  ),
                 ],
               ),
             );

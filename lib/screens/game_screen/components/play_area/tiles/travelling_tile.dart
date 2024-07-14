@@ -74,9 +74,6 @@ class _TravellingTileState extends State<TravellingTile> with SingleTickerProvid
       palette.fullReserveGradientBackGroundColor5,      
     ];
 
-
-    // late Color gradientColor1 = Colors.transparent;
-    // late Color gradientColor2 = Colors.transparent;
     late Color borderColor;
 
 
@@ -139,22 +136,6 @@ class _TravellingTileState extends State<TravellingTile> with SingleTickerProvid
     tileTappedProgressAnimation = TweenSequence<double>(tileTappedProgressSizeSequence)
     .animate(widget.tileTappedController);
 
-
-
-
-
-    // late Color gradientColor1 = gradientColor1List[shade]; // palette.fullTileGradientBackGroundColor1;
-    // late Color gradientColor2 = gradientColor2List[shade]; //palette.fullTileGradientBackGroundColor2;
-    // late Color borderColor = palette.fullTileBorderColor;
-
-    // if (widget.element == "reserve") {
-    //   gradientColor1 = palette.fullReserveGradientBackGroundColor1;
-    //   gradientColor2 = palette.fullReserveGradientBackGroundColor2;
-    //   borderColor = palette.fullReserveBorderColor;
-    // }
-
-
-  
     final List<TweenSequenceItem<double>> tileTappedBoxDecorationSequence = [
     
       TweenSequenceItem<double>(
@@ -246,20 +227,6 @@ class _TravellingTileState extends State<TravellingTile> with SingleTickerProvid
     ];
     tileTappedBorderColorAnimation = TweenSequence<Color?>(tileTappedBorderColorAnimationSequence)
     .animate(widget.tileTappedController);        
-
-    // widget.tileTappedController.addListener(() {
-    //   if (widget.tileTappedController.isAnimating) {
-    //     if (gamePlayState.selectedTileIndex > -1) {
-    //       animationState.setShouldRunTileTappedAnimation(false);
-    //       print("you tried to tap ${gamePlayState.selectedTileIndex} before the animation completed ");
-    //       widget.tileTappedController.forward(from: 1.0);
-    //     }
-    //   }
-      
-    //   if (widget.tileTappedController.isCompleted) {
-    //     animationState.setShouldRunTileTappedAnimation(false);
-    //   }
-    // });    
 
   }
   double showTempTileAnimation(AnimationState animationState, Animation animation) {

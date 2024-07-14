@@ -91,22 +91,25 @@ class _NewPointsState extends State<NewPoints> with SingleTickerProviderStateMix
             return Positioned(
               top: widget.coords.dy-wordFoundPoints.value,
               left: widget.coords.dx,
-              child: Container(
-                child: Center(
-                  child: DefaultTextStyle(
-                    style: TextStyle(
-                      color: colorAnimation.value!.withOpacity(newPointsOpacity.value),
-                      fontSize: (gamePlayState.tileSize*0.6)* showNewPointsAnimation(widget.wordFoundController),
-                      shadows: [
-                        Shadow(
-                          offset: Offset.zero,
-                          blurRadius: 5,
-                          color: Colors.black.withOpacity(newPointsOpacity.value),
-                        )
-                      ],
-                      fontWeight: FontWeight.w600
+              child: IgnorePointer(
+                ignoring: true,
+                child: Container(
+                  child: Center(
+                    child: DefaultTextStyle(
+                      style: TextStyle(
+                        color: colorAnimation.value!.withOpacity(newPointsOpacity.value),
+                        fontSize: (gamePlayState.tileSize*0.6)* showNewPointsAnimation(widget.wordFoundController),
+                        shadows: [
+                          Shadow(
+                            offset: Offset.zero,
+                            blurRadius: 5,
+                            color: Colors.black.withOpacity(newPointsOpacity.value),
+                          )
+                        ],
+                        fontWeight: FontWeight.w600
+                      ),
+                      child: Text("+${newPoints}",),
                     ),
-                    child: Text("+${newPoints}",),
                   ),
                 ),
               ),

@@ -22,7 +22,6 @@ class Tile {
   });
 
   factory Tile.fromJson(Map<String, dynamic> json) {
-    print('Parsing Tile: $json');
     return Tile(
       index: json['index'] is int ? json['index'] : int.parse(json['index']),
       tileId: json['tileId'],

@@ -12,12 +12,12 @@ List<String> soundTypeToFileName(SfxType type) {
     case SfxType.tilePress:
       return const [
         // 'place-tile.mp3',
-        'click_1.mp3',
-        'click_2.mp3',
-        'click_3.mp3',
+        'click_1.wav',
+        'click_2.wav',
+        'click_3.wav',
         'click_4.mp3',
-        'click_5.mp3',
-        'click_6.mp3',
+        'click_5.wav',
+        'click_6.wav',
         
       ];
     case SfxType.wordFound:

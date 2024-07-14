@@ -104,6 +104,7 @@ class _ChooseUsernameState extends State<ChooseUsername> {
         final double screenWidth = settingsState.screenSizeData['width'];
         final double screenHeight = settingsState.screenSizeData['height'];
         final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;
+        final String currentLanguage = getPrimaryLanguage(settingsState.languageDataList);
         return SafeArea(
           child: Scaffold(
             body: Stack(
@@ -133,12 +134,12 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                           Text(
                             // "Welcome!",
                             Helpers().translateWelcomeText(
-                              getPrimaryLanguage(settingsState.languageDataList), 
+                              currentLanguage,
                               "Welcome!",
                               settingsState
                             ),                  
                             style: TextStyle(
-                              fontSize: 32,
+                              fontSize: gamePlayState.tileSize*0.45,
                               color: palette.textColor2,
                             ),
                           ),
@@ -147,24 +148,64 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               Helpers().translateWelcomeText(
-                                getPrimaryLanguage(settingsState.languageDataList), 
+                                currentLanguage,
                                 "Pick an original username",
                                 settingsState
                               ),                  
                                   
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: gamePlayState.tileSize*0.3,
                                 color: palette.textColor2
                               ),
                             ),
-                          ),            
+                          ),
+
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  Helpers().translateWelcomeText(currentLanguage, "No bad words",settingsState),
+                                  style: TextStyle(
+                                    color: palette.textColor2,
+                                    fontSize: gamePlayState.tileSize*0.27
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                                Text(
+                                  Helpers().translateWelcomeText(currentLanguage, "No unoriginal names ('user', 'player', etc.)",settingsState),
+                                  style: TextStyle(
+                                    color: palette.textColor2,
+                                    fontSize: gamePlayState.tileSize*0.27
+                                  ),
+                                  textAlign: TextAlign.start,                                    
+                                ),
+                                Text(
+                                  Helpers().translateWelcomeText(currentLanguage, "Minimum 3 characters",settingsState),
+                                  style: TextStyle(
+                                    color: palette.textColor2,
+                                    fontSize: gamePlayState.tileSize*0.27
+                                  ),
+                                  textAlign: TextAlign.start,                                    
+                                ),
+                                Text(
+                                  Helpers().translateWelcomeText(currentLanguage, "Maximum 40 characters",settingsState),
+                                  style: TextStyle(
+                                    color: palette.textColor2,
+                                    fontSize: gamePlayState.tileSize*0.27
+                                  ),
+                                  textAlign: TextAlign.start,                                    
+                                ),
+                              ],
+                            ),
+                          ),                          
                           Consumer<GamePlayState>(
                             builder: (context, gamePlayState, child) {
                               return Padding(
                                 padding: const EdgeInsets.fromLTRB(16.0,8.0,16.0,8.0),
                                 child: SizedBox(
                                   width: double.infinity,
-                                  height: 80,
+                                  height: gamePlayState.tileSize,
                                   child: Align(
                                     alignment: Alignment.center,
                                                                 
@@ -185,9 +226,9 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
                                                   borderSide: BorderSide(color: palette.textColor2, width: 2.0),
-                                                  borderRadius: BorderRadius.circular(25.0),
+                                                  borderRadius: BorderRadius.circular(gamePlayState.tileSize*0.2),
                                                 ),
-                                                labelStyle: TextStyle(color: palette.textColor2, fontSize: 12),
+                                                labelStyle: TextStyle(color: palette.textColor2, fontSize: gamePlayState.tileSize*0.28),
                                                 labelText: Helpers().translateWelcomeText(
                                                   getPrimaryLanguage(settingsState.languageDataList), "Username",settingsState),
                                               ),
@@ -206,46 +247,42 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                                 ),
                               );
                             }
-                          ),              
-                          ElevatedButton(
-                            onPressed: () {
-                              String language = getPrimaryLanguage(settingsState.languageDataList);
-                              if (forbiddenNames.contains(_userNameController.text.toLowerCase())) {
-                                Helpers().showBadNameDialog(
-                                  context,
-                                  Helpers().translateWelcomeText(language, "Hold On",settingsState),
-                                  Helpers().translateWelcomeText(language, "Pick something more original",settingsState),
-                                  Helpers().translateWelcomeText(language, "Okay",settingsState),
-                                  palette,                   
-                                  
-                                );
-                              } else if (Helpers().checkForBadWords(_userNameController.text.toLowerCase())) {
-                                Helpers().showBadNameDialog(
-                                  context,
-                                  Helpers().translateWelcomeText(language, "Excuse me!",settingsState),
-                                  Helpers().translateWelcomeText(language, "Hey! No bad words!",settingsState),
-                                  Helpers().translateWelcomeText(language, "Okay",settingsState),
-                                  palette,       
-                                );
-                              } else if (_userNameController.text.toLowerCase() == "") {
-                                Helpers().showBadNameDialog(
-                                  context,
-                                  Helpers().translateWelcomeText(language, "Hold On",settingsState),
-                                  Helpers().translateWelcomeText(language, "Pick something more original",settingsState),
-                                  Helpers().translateWelcomeText(language, "Okay",settingsState),
-                                  palette,      
-                                );                        
-                  
-                              } else if (_userNameController.text.toLowerCase().length  < 3) {
-                                Helpers().showBadNameDialog(
-                                  context,
-                                  Helpers().translateWelcomeText(language, "Hold On",settingsState),
-                                  Helpers().translateWelcomeText(language, "Pick something more original",settingsState),
-                                  Helpers().translateWelcomeText(language, "Okay",settingsState),
-                                  palette,        
-                                );                        
-                  
-                              } else {
+                          ),
+                          SizedBox(height: gamePlayState.tileSize*0.5,),
+                          GestureDetector(
+                            onTap: () {
+                                      late List<String> forbiddenNames = [
+                                        "player", "user", "username",
+                                      ];
+                                      if (forbiddenNames.contains(_userNameController.text.toLowerCase())) {
+                                        Helpers().showUserNameSnackBar(
+                                          context,
+                                          palette,
+                                          gamePlayState.tileSize,
+                                          Helpers().translateText(currentLanguage, "Pick something more original",settingsState)
+                                        );
+                                      } else if (Helpers().checkForBadWords(_userNameController.text.toLowerCase())) {
+                                        Helpers().showUserNameSnackBar(
+                                          context,
+                                          palette,
+                                          gamePlayState.tileSize,
+                                          Helpers().translateText(currentLanguage, "Hey! No bad words!",settingsState)
+                                        );                                        
+                                      } else if (_userNameController.text.toLowerCase().length  < 3) {
+                                        Helpers().showUserNameSnackBar(
+                                          context,
+                                          palette,
+                                          gamePlayState.tileSize,
+                                          Helpers().translateText(currentLanguage, "Username must be at least 3 characters",settingsState)
+                                        );                                                         
+                                      } else if (_userNameController.text.toLowerCase().length  > 40) {
+                                        Helpers().showUserNameSnackBar(
+                                          context,
+                                          palette,
+                                          gamePlayState.tileSize,
+                                          Helpers().translateText(currentLanguage, "Username must be at most 40 characters",settingsState)
+                                        );
+                                      } else {
                                 AuthService().updateUsername(AuthService().currentUser!.uid, _userNameController.text.toLowerCase());
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -253,23 +290,24 @@ class _ChooseUsernameState extends State<ChooseUsername> {
                                   )
                                 );                    
                               }
-                              
-                              
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: palette.optionButtonBgColor,
-                              foregroundColor: palette.optionButtonTextColor,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              )
-                            ),
-                            child: Text(
-                              Helpers().translateWelcomeText(
-                                getPrimaryLanguage(settingsState.languageDataList), 
-                                "Save",
-                                settingsState
-                              ),                     
-                              
+                            child: Container(
+                              width: gamePlayState.tileSize*4,
+                              height: gamePlayState.tileSize*0.8,
+                              decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, 3, 2),
+                              child: Center(
+                                child: Text(
+                                  Helpers().translateWelcomeText(
+                                    getPrimaryLanguage(settingsState.languageDataList), 
+                                    "Save",
+                                    settingsState
+                                  ),                     
+                                  style: TextStyle(
+                                    fontSize: gamePlayState.tileSize*0.3,
+                                    color: palette.fullTileTextColor
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           const Expanded(flex: 3, child: SizedBox()),             

@@ -9,13 +9,15 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/animation_state.dart';
 
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 // import 'package:scribby_flutter_v2/utils/states.dart';
 
 class GameLogic {
   Map<String, dynamic> generateRandomLetterData(GamePlayState gamePlayState) {
-    List<Map<String, dynamic>> alphabet = gamePlayState.alphabetState; 
+    List<Map<String, dynamic>> alphabet = gamePlayState.alphabetState;
+
     List<String> randomLettersList = gamePlayState.randomLetterList;
     List<int> randomShadeList = gamePlayState.randomShadeList;
     List<int> randomAngleList = gamePlayState.randomAngleList;
@@ -34,6 +36,7 @@ class GameLogic {
     }
 
     int availableLettersCount = availableLetters.length;
+
 
     int randomIndex = random.nextInt(availableLettersCount);
     String randomLetter = availableLetters[randomIndex];
@@ -70,9 +73,9 @@ class GameLogic {
     String res = "";
     int cons = 0;
     int vows = 0;
-
     for (Map<String, dynamic> letterObject in alphabet) {
       for (var i = 0; i < letterObject["inPlay"]; i++) {
+
         if (letterObject["type"] == "consonant") {
           cons = cons + 1;
         } else if (letterObject["type"] == "vowel") {
@@ -84,9 +87,9 @@ class GameLogic {
     if (vows <= 0) {
       res = "vowel";
     } else {
-      if (shareOfVowels <= 0.45) {
+      if (shareOfVowels <= 0.49) {
         res = "vowel";
-      } else if (shareOfVowels > 0.55) {
+      } else if (shareOfVowels > 0.50) {
         res = "consonant";
       } else {
         Random random = Random();
@@ -98,7 +101,6 @@ class GameLogic {
         }
       }
     }
-
     return res;
   }
 
@@ -165,23 +167,6 @@ class GameLogic {
     
   }    
 
-  // void replaceWordsWithCleanTiles(GamePlayState gamePlayState) {
-  //   List<int> idsToRemove = [];
-  //   for (Map<String,dynamic> wordItem in gamePlayState.validStrings) {
-  //     for (int letterId in wordItem['ids']) {
-  //       if (!idsToRemove.contains(letterId)) {
-  //         idsToRemove.add(letterId);
-  //       }
-  //     }
-  //   }
-
-  //   for (int id in idsToRemove) {
-  //     Map<String,dynamic> tileObject = Helpers().getTileObject(gamePlayState, id);
-  //     tileObject.update("body", (value) => "");
-  //   }
-  // }
-
-
 
   void checkGameOver(GamePlayState gamePlayState, AnimationState animationState,BuildContext context) {
 
@@ -197,18 +182,7 @@ class GameLogic {
       gamePlayState.countDownController.pause();
       executeGameOver(gamePlayState,context);
       animationState.setShouldRunTimerAnimation(false);
-      animationState.setShouldRunGameEndedAnimation(true);
-      // gamePlayState.setIsGameOver(true); 
-
-      // animationState.setShouldRunGameOverAnimation(true);
-      // Future.delayed(const Duration(milliseconds: 01), () {
-      //   // animationState.setShouldRunGameOverAnimation(false);
-      //   animationState.setShouldRunGameEndedAnimation(true);
-      //   gamePlayState.setIsGameOver(true);
-
-      //   executeGameOver(gamePlayState,context);        
-
-      // });      
+      animationState.setShouldRunGameEndedAnimation(true);  
     }
   }
 
@@ -265,10 +239,6 @@ class GameLogic {
 
 
       // CALCULATE THE DURATION OF THE ANIM FOR THE TILE MOVING IINTO PLACE BASED ON WHERE IT IS
-
-
-      // final int duration = 300 + (row-1)*30;
-      // final int duration = 280;
       final int duration = 280;
 
       
@@ -289,14 +259,9 @@ class GameLogic {
         /// IF SCORE
         if (gamePlayState.validStrings.isNotEmpty) {
 
-          // audioController.playSfx(SfxType.wordFound);
-          // Future.delayed(const Duration(milliseconds: 200), () {
-          //   audioController.playSfx(SfxType.wordFound);
-          // });
-          // Future.delayed(const Duration(milliseconds: 400), () {
-          //   audioController.playSfx(SfxType.wordFound);
-          // });   
-          Helpers().executeWordFoundSounds(audioController,gamePlayState.validStrings.length);     
+
+          Helpers().executeWordFoundSounds(audioController,gamePlayState.validStrings.length);
+          animationState.setShouldRunScoreBoardPointsCount(true);  
 
           processScore(gamePlayState);
 
@@ -310,11 +275,8 @@ class GameLogic {
           runStreakAnimation(gamePlayState,animationState);
 
           gamePlayState.countDownController.pause();
-          // animationState.setShouldRunTimerAnimation(false);
 
           List<dynamic> validIdIndexes = gamePlayState.validIds.map((e) => e['id']).toList();
-
-          // Random _rand = Random();
 
           List<dynamic> tileStatePostFoundWord = List.from(gamePlayState.tileState.map((tile) {
 
@@ -327,6 +289,7 @@ class GameLogic {
           }));
           gamePlayState.setTileState(tileStatePostFoundWord);
           animationState.setShouldRunWordFoundAnimation(true);
+          
 
           Helpers().updateRandomLetterDataAfterWordFound(gamePlayState);
   
@@ -354,11 +317,6 @@ class GameLogic {
 
 
   void reserveTapDownBehavior(GamePlayState gamePlayState, AnimationState animationState, int index) {
-    // animationState.setShouldRunTileTappedAnimation(false);
-    // animationState.setShouldRunWordFoundAnimation(false);
-    // print("tapped down into Reserve!");
-   
-
     gamePlayState.setSelectedReserveIndex(index);
   }
 
@@ -629,7 +587,6 @@ class GameLogic {
     }
     int streak = lastTurnData['streak'];
     if (streak ==2) {
-      print('launch streak in animation');
       animationState.setShouldRunStreakInAnimation(true);
       Future.microtask(() {
         animationState.setShouldRunStreakInAnimation(false);
@@ -803,19 +760,12 @@ class GameLogic {
  
     Map<String,dynamic> data = Helpers().getGameSummaryData(gamePlayState.scoringLog);
     List<Map<String,dynamic>> wordSummary = Helpers().getPointsSummary(gamePlayState.scoringLog);
+    SettingsState settingsState = context.read<SettingsState>();
 
-
-    // if (data['points']==0 ) {
-    //   // gamePlayState.setIsGameEnded(true);
-    //   gamePlayState.endGame();
-    //   Future.delayed(const Duration(seconds: 1), () {
-    //     Navigator.of(context).pushReplacement(
-    //         MaterialPageRoute(builder: (context) => const WelcomeUser()));
-    //   });
-    // } else {
       late Map<String, dynamic> newGameData = {
         "timeStamp": DateTime.now().toIso8601String(),
         "duration": gamePlayState.duration.inSeconds,
+        "turns" : gamePlayState.scoringLog.length,
         "points": data['points'],
         "uniqueWords": data['uniqueWords'].length,
         "uniqueWordsList": data['uniqueWords'],
@@ -827,16 +777,12 @@ class GameLogic {
         "language": gamePlayState.currentLanguage,
         "wordSummary": wordSummary,
       };
-      FirestoreMethods().saveHighScore(AuthService().currentUser!.uid, newGameData);
+      
+      if (!settingsState.isPlayingOffline) {
+        FirestoreMethods().saveHighScore(AuthService().currentUser!.uid, newGameData);
+      }
       gamePlayState.setEndOfGameData(newGameData);
-      // gamePlayState.setIsGameEnded(true);
 
-      // final int delay = gamePlayState.didUserQuitGame ? 0 : 2400; 
-      // Future.delayed(Duration(milliseconds: delay), () {
-      //   Helpers().clearTilesFromBoard(gamePlayState);
-      // });
-      // Helpers().clearTilesFromBoard(gamePlayState);
-    // }
   }
 
 

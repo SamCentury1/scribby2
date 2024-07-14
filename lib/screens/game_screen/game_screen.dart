@@ -30,7 +30,6 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
 
   late AnimationState animationState;
   late GamePlayState gamePlayState;
-  // late double buttonOpacity;
   late double tileSize = 0.0;
 
   late AnimationController gameStartedController;
@@ -83,13 +82,6 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
         animationState.setShouldRunGameStartedAnimation(false);
         gamePlayState.startTimer();
         gamePlayState.setDidShowStartAnimation(true);
-
-        // if (gamePlayState.isGameOver) {
-        //   GameLogic().executeGameOver(gamePlayState, context);
-        //   // Navigator.of(context).pushReplacement(
-        //   //   MaterialPageRoute(builder: (context) => GameOverScreen() )
-        //   // );
-        // }
       }
     });
     List<TweenSequenceItem<double>> gameStartedOverlaySequence = [
@@ -115,30 +107,24 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
     );
 
     wordFoundController.addListener(() {
-      // bool wasStopped = false;
       if (wordFoundController.isAnimating) {
-        // print(gamePlayState.selectedTileIndex);
         if (gamePlayState.selectedTileIndex > -1 || gamePlayState.selectedReserveIndex > -1) {
           if (animationState.shouldRunTileTappedAnimation) {
-            // wordFoundController.stop();
             wordFoundController.forward(from: 1.0);
           }
         }
 
         if (gamePlayState.isGamePaused) {       
           wordFoundController.forward(from: 1.0);
-          // wordFoundController.value;
-          // gamePlayState.countDownController.pause();
-
         }
       }
       if (wordFoundController.isCompleted) {
-        // print("okay it's complete");
-        // wordFoundController.forward(from: 1.0);
         GameLogic().wordFoundAnimationCompletedBehavior(gamePlayState, animationState);
         animationState.setShouldRunTimerAnimation(true);
       }
     });
+
+
 
               
 
@@ -200,14 +186,16 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
     }
     if (animationState.shouldRunGameEndedAnimation) {
       executeGameEndedAnimation();
-    }    
+    }
+
   }
 
 
   void runClockAnimation() {
     clockController.reset();
     clockController.forward();
-  }  
+  }
+
 
   void executeGameStartedAnimation() {
     gameStartedController.reset();
@@ -364,7 +352,7 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation) {
+                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
                                     gamePlayState.setIsGamePaused(true);
                                     gamePlayState.setPauseScreen('summary');
                                   }                                  
@@ -373,7 +361,7 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation) {
+                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
                                     gamePlayState.setIsGamePaused(true);
                                     gamePlayState.setPauseScreen('help');
                                   }                                  
@@ -382,7 +370,7 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation) {
+                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
                                     gamePlayState.setIsGamePaused(true);
                                     gamePlayState.setPauseScreen('settings');
                                   }                                  
@@ -391,7 +379,7 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if (!animationState.shouldRunTileTappedAnimation) {
+                                  if (!animationState.shouldRunTileTappedAnimation && !animationState.shouldRunGameStartedAnimation) {
                                     gamePlayState.setIsGamePaused(true);
                                     gamePlayState.setPauseScreen('quit');
                                   }                                  
@@ -409,8 +397,6 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                     gameStartedController: gameStartedController, 
                     gameStartedAnimation: gameStartedOverlayAnimation,
                   ),
-
-
                   GamePauseOverlay(),
                   GameOverOverlay(),
                 ],

@@ -19,9 +19,11 @@ class SettingsController {
 
   ValueNotifier<Object> userData = ValueNotifier({});
 
-  ValueNotifier<Object> alphabet = ValueNotifier({});
+  ValueNotifier<List<dynamic>> alphabet = ValueNotifier([]);
 
   ValueNotifier<Object> initialTileState = ValueNotifier({});
+
+  ValueNotifier<String> dictionary = ValueNotifier("");
 
   /// Creates a new instance of [SettingsController] backed by [persistence].
   SettingsController({required SettingsPersistence persistence})
@@ -39,7 +41,8 @@ class SettingsController {
       _persistence.getDarkTheme().then((value) => darkTheme.value = value),
       _persistence.getUserData().then((value) => userData.value = value),
       _persistence.getAlphabet().then((value) => alphabet.value = value),
-      _persistence.getInitialTileState().then((value) => initialTileState.value = value)
+      _persistence.getInitialTileState().then((value) => initialTileState.value = value),
+      _persistence.getDictionary().then((value) => dictionary.value = value)
     ]);
   }
 
@@ -68,7 +71,7 @@ class SettingsController {
     _persistence.saveUserData(userData.value);
   }
 
-  void setAlphabet(Object alphabetObject) {
+  void setAlphabet(List<dynamic> alphabetObject) {
     alphabet.value = alphabetObject;
     _persistence.saveUserData(alphabet.value);
   }
@@ -77,4 +80,9 @@ class SettingsController {
     initialTileState.value = initialTileStateObject;
     _persistence.saveInitialTileState(initialTileState.value);
   }  
+
+  void setDictionary(String dictionaryRaw) {
+    dictionary.value = dictionaryRaw;
+    _persistence.saveDictionary(dictionary.value);
+  }    
 }

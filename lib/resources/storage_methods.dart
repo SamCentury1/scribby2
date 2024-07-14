@@ -51,19 +51,15 @@ Future<List<Map<String,dynamic>>> downloadInitialBoardState() async {
     // Ensure the directory exists
     await downloadToFile.parent.create(recursive: true);
 
-    print('Downloading file to: $filePath');
-
     // Download the file
     await storage.ref(fileName).writeToFile(downloadToFile);
-
-    print('File downloaded successfully');
 
     // Read the file and convert it to a list
     final String jsonString = await downloadToFile.readAsString();
     final parsed = jsonDecode(jsonString).cast<Map<String, dynamic>>();
     res = parsed;
   } catch (e) {
-    print('Error: $e');
+
   }
 
   return res;
@@ -92,7 +88,6 @@ Future<List<Tile>> downloadInitialBoardState2() async {
     // final List<dynamic> jsonMap = jsonDecode(jsonString);
     // res = jsonMap;
   } catch (e) {
-    print('Error: $e');
   }
 
   return res;
@@ -120,71 +115,10 @@ Future<Map<String,dynamic>> downloadStates2() async {
     final parsed = jsonDecode(jsonString);
     res = parsed;
   } catch (e) {
-    print('Error: $e');
   }
 
   return res;
 }
-
-
-// Future<dynamic> downloadStates() async {
-//   final FirebaseStorage storage = FirebaseStorage.instance;
-//   final String fileName = 'utilities/states.json';
-//   final Directory appDocDir = await getApplicationDocumentsDirectory();
-//   final String filePath = '${appDocDir.path}/$fileName';
-//   final File downloadToFile = File(filePath);
-//   late dynamic res = [];
-
-//   try {
-//     // Ensure the directory exists
-//     await downloadToFile.parent.create(recursive: true);
-
-//     print('Downloading file to: $filePath');
-
-//     // Download the file
-//     await storage.ref(fileName).writeToFile(downloadToFile);
-
-//     print('File downloaded successfully');
-
-//     // Read the file and convert it to a list
-//     final String jsonString = await downloadToFile.readAsString();
-//     final dynamic jsonMap = jsonDecode(jsonString);
-//     res = jsonMap;
-//   } catch (e) {
-//     print('Error: $e');
-//   }
-
-//   return res;
-// }
-
-
-// Future<Map<String,dynamic>> getWordDefinition(String language, String word) async {
-//   final FirebaseStorage storage = FirebaseStorage.instance;
-//   final String fileName = '$word.json';
-//   final Directory appDocDir = await getApplicationDocumentsDirectory();
-//   final String filePath = '${appDocDir.path}/definitions/$language/$fileName';
-//   final File downloadToFile = File(filePath);
-//   late Map<String, dynamic> res = {};
-
-//   try {
-//     // Ensure the directory exists before attempting to download the file
-//     // final directory = await Directory('${appDocDir.path}/definitions/$language').create(recursive: true);
-
-//     // Correct the reference to match the file's location in Firebase Storage
-//     final String storagePath = 'definitions/$language/$fileName';
-//     await storage.ref(storagePath).writeToFile(downloadToFile);
-
-//     final String jsonString = await downloadToFile.readAsString();
-//     final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-//     res = jsonMap;
-//   } catch (e) {
-//     // If an error occurs, print it to the console and return an empty map
-//     return {};
-//   }
-//   return res;
-// }
-
-
 
 
 
@@ -203,7 +137,7 @@ Future<Map<String,dynamic>> downloadStates2() async {
       final parsed = jsonDecode(jsonString).cast<List<dynamic>>();
       res = parsed;
     } catch (e) {
-      print('Error: $e');
+      // print('Error: $e');
     }
     return res;
   }
@@ -233,7 +167,7 @@ Future<Map<String,dynamic>> downloadStates2() async {
         res[name] = parsed;
       }
     } catch (e) {
-      print('Error: $e');
+      // print('Error: $e');
     }
     return res;
   }
@@ -254,28 +188,10 @@ Future<Map<String,dynamic>> downloadStates2() async {
       final parsed = jsonDecode(jsonString);
       res = parsed;
     } catch (e) {
-      print('Error: $e');
+      // print('Error: $e');
     }
     return res;
   }  
 
 
-  Future<List<Map<String,dynamic>>> downloadTranslations() async {
-    final FirebaseStorage storage = FirebaseStorage.instance;
-    final String fileName = 'utilities/translations.json';
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final String filePath = '${appDocDir.path}/$fileName';
-    final File downloadToFile = File(filePath);
-    late List<Map<String,dynamic>> res = [];
-    try {
-      await downloadToFile.parent.create(recursive: true);
-      await storage.ref(fileName).writeToFile(downloadToFile);
-      final String jsonString = await downloadToFile.readAsString();
-      final parsed = jsonDecode(jsonString).cast<Map<String,dynamic>>();
-      res = parsed;
-    } catch (e) {
-      print('Error: $e');
-    }
-    return res;
-  }    
 }

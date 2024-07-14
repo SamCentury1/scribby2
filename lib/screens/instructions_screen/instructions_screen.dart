@@ -3,14 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/audio/sounds.dart';
+import 'package:scribby_flutter_v2/components/scrabble_tile.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/play_area/decorations/decorations.dart';
-import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/play_area/decorations/demo_board_state.dart';
+import 'package:scribby_flutter_v2/screens/menu_screen/menu_screen.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
-import 'package:scribby_flutter_v2/styles/styles.dart';
+
+
 
 class InstructionsScreen extends StatefulWidget {
   const InstructionsScreen({super.key});
@@ -22,7 +25,6 @@ class InstructionsScreen extends StatefulWidget {
 class _InstructionsScreenState extends State<InstructionsScreen> {
   late bool isLoading = false;
   late bool isLoading2 = false;
-  // late Map<String, dynamic> _userData = {};
   late ColorPalette palette;
 
   late SettingsController settings;
@@ -41,11 +43,9 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
     late Map<String, dynamic> res = {};
     try {
       final Map<String,dynamic> userData = (settings.userData.value as Map<String, dynamic>);
-      final Map<String, dynamic> alphabetObject = (settings.alphabet.value as Map<String, dynamic>);
-      res = {"userData": userData, "alphabet": alphabetObject['alphabet']};
-
+      final List<dynamic> alphabetObject = (settings.alphabet.value as List<dynamic>);
+      res = {"userData": userData, "alphabet": alphabetObject};
     } catch (error) {
-      // debugPrint(error.toString());
     }
     return res;
   }
@@ -55,23 +55,14 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getDataFromStorage(), 
-      builder:(context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(),);
-        } else if (snapshot.hasError ) {
-          return const Center(child: Text("Error"),);
-        } else {
             late SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
             final AudioController audioController =Provider.of<AudioController>(context, listen: false);
             final GamePlayState gamePlayState =Provider.of<GamePlayState>(context, listen: false);
-            String language = snapshot.data!['userData']['parameters']['currentLanguage'];
+            String language = gamePlayState.currentLanguage;
 
             final double screenWidth = settingsState.screenSizeData['width'];
             final double screenHeight = settingsState.screenSizeData['height'];
             final List<Map<String,dynamic>> decorationDetails = gamePlayState.decorationData;             
-          // if (snapshot.hasData) {
             return SafeArea(
               child: Stack(
                 children: [
@@ -107,7 +98,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                           audioController.playSfx(SfxType.optionSelected);
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(
-                                              builder: (context) => const WelcomeUser(),
+                                              builder: (context) => const MenuScreen(),
                                             ),
                                           );
                                         },
@@ -130,6 +121,8 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                           child: SingleChildScrollView(
                             child: Consumer<SettingsController>(
                                 builder: (context, settings, child) {
+                                  List<dynamic> alphabetList = settings.alphabet.value as List<dynamic>;
+
                               return Align(
                                 alignment: Alignment.center,
                                 child: ConstrainedBox(
@@ -171,63 +164,78 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                 gamePlayState.tileSize                                  
                                               ),
                                               _gap(0.25*gamePlayState.tileSize),
-                                              TextButton(
-                                                onPressed: () {
-                                                  // TutorialHelpers().navigateToTutorial(context, language);
-                                                }, 
-                                                child: Padding(
-                                                  padding:  EdgeInsets.fromLTRB(
-                                                    gamePlayState.tileSize*0.05, 
-                                                    gamePlayState.tileSize*0.15, 
-                                                    gamePlayState.tileSize*0.05, 
-                                                    gamePlayState.tileSize*0.15
-                                                  ),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    height: gamePlayState.tileSize,
-                                                    decoration: Decorations().getTileDecoration(
-                                                      gamePlayState.tileSize, 
-                                                      palette, 
-                                                      3, 
-                                                      2
-                                                    ),
-                                                    // decoration: BoxDecoration(
-                                                    //     gradient: LinearGradient(
-                                                    //         // stops: [10.0, 1.0, 1.0, 1.0, 3.0],
-                                                    //         begin: Alignment.topCenter,
-                                                    //         end: Alignment.bottomCenter,
-                                                    //         colors: <Color>[
-                                                    //           palette.optionButtonBgColor2,
-                                                    //           palette.optionButtonBgColor2,
-                                                    //           // palette.optionButtonBgColor2,
-                                                    //           // palette.optionButtonBgColor2,
-                                                    //           // palette.optionButtonBgColor,
-                                                    //           // Colors.black
-                                                      
-                                                    //         ],
-                                                    //         tileMode: TileMode.mirror),
-                                                    //     border: const Border(),
-                                                    //     borderRadius: BorderRadius.all(Radius.circular(gamePlayState.tileSize*0.2))),
-                                                    child: Padding(
-                                                      padding: EdgeInsets.all(gamePlayState.tileSize*0.07),
-                                                      child: Align(
-                                                          alignment: Alignment.center,
-                                                          child: FittedBox(
-                                                            fit: BoxFit.scaleDown,
-                                                            child: Text(
-                                                              Helpers().translateText(
-                                                                language, 
-                                                                "Watch a Demo!",
-                                                                settingsState
-                                                              ),
-                                                              style:
-                                                                  TextStyle(fontSize: gamePlayState.tileSize*0.4, color: palette.fullTileTextColor),
-                                                            ),
-                                                          )),
-                                                    ),
-                                                  ),
-                                                )
-                                              ),                                  
+
+
+                                              Helpers().instructionsHeading(palette.textColor3, "Demo",gamePlayState.currentLanguage, gamePlayState.tileSize*0.35,settingsState),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "The two letters at the top are randomly generated. The center letter letter_01 gets placed next",
+                                                  gamePlayState.currentLanguage,
+                                                  true,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+                                              DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState1'], language: gamePlayState.currentLanguage),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "When the letter letter_01 is placed inside the board, the letter to the right letter_02 will become the center letter and a new random letter will be generated and take its spot",
+                                                  gamePlayState.currentLanguage,
+                                                  true,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+                                              SizedBox(height: gamePlayState.tileSize*0.2,),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "A new letter letter_03 is randomly generated to be place after the next letter letter_02 is placed.",
+                                                  gamePlayState.currentLanguage,
+                                                  true,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+                                              DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState2'], language: gamePlayState.currentLanguage),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "Place your letters strategically to create words. In this case, we see the letter_04 coming after the letter_03",
+                                                  gamePlayState.currentLanguage,
+                                                  true,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+                                              DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState3'], language: gamePlayState.currentLanguage),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "The letter_03 is placed below the letter_02 so the letter_04 can be placed between the letter_01 and the letter_02 and create the word WORD",
+                                                  gamePlayState.currentLanguage,
+                                                  true,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+                                              DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState4'], language: gamePlayState.currentLanguage),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "The letter_04 is placed in between the letter_01 and letter_02. The letters animate and you are granted points for the letters.",
+                                                  gamePlayState.currentLanguage,
+                                                  true,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+                                              // Helpers().instructionsHeading(palette.textColor3,
+                                              //     "Swipe to 'Settings' to understand how points are allocated",gamePlayState.currentLanguage, gamePlayState.tileSize*0.35),
+                                              DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState5'], language: gamePlayState.currentLanguage),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "After an animation plays, the letters from the word WORD will disappear from the board and the spaces will become available for new letters",
+                                                  gamePlayState.currentLanguage,
+                                                  true,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+                                              DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState6'], language: gamePlayState.currentLanguage),
+                                              Helpers().instructionsText(palette.textColor3,
+                                                  "The spaces become available for the new letters to be placed",
+                                                  gamePlayState.currentLanguage,
+                                                  false,
+                                                  gamePlayState.tileSize*0.30,
+                                                  settingsState.demoLetters,
+                                                  settingsState),
+
+                                              SizedBox(height: gamePlayState.tileSize*0.3,),
+
+
                                               textHeading(
                                                 palette.textColor3,
                                                 Helpers().translateText(language,"How It Works",settingsState),
@@ -381,40 +389,27 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                 ),
                                                 gamePlayState.tileSize
                                               ),
+
+                                              // Helpers().wordValuesTable(snapshot.data!['alphabet'],gamePlayState.currentLanguage,settingsState,palette,gamePlayState.tileSize),
                                               Wrap(
                                                 direction: Axis.horizontal,
                                                 alignment: WrapAlignment.start,
                                                 children: [
-                                                  for (dynamic item in snapshot.data!['alphabet'])
                                                   
-                                                    SizedBox(
-                                                        width: gamePlayState.tileSize*0.8,
-                                                        height: gamePlayState.tileSize*0.8,
-                                                        // color: Colors.amber,
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(3.0),
-                                                          child: scrabbleTile(item['letter'],
-                                                              item['points'], gamePlayState.tileSize*0.8,1.0 ),
-                                                        ))
+                                                  for (int i=0; i<alphabetList.length; i++)
+                                                  ScrabbleTile(letterData: alphabetList[i])
                                                 ],
                                               ),
                                               _gap(0.25*gamePlayState.tileSize),
                                               textHeading(
                                                 palette.textColor3,
-                                                Helpers().translateText(
-                                                  language,                                    
-                                                "Tips",
-                                                settingsState
-                                                ),
+                                                Helpers().translateText(language,"Tips",settingsState),
                                                 gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
                                               textBody(palette.textColor3,
-                                                Helpers().translateText(
-                                                  language,                                  
-                                                  "Place hard letters strategically",
-                                                  settingsState),
-                                                  gamePlayState.tileSize
+                                                Helpers().translateText(language,"Place hard letters strategically",settingsState),
+                                                gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
                                               textBody(palette.textColor3,
@@ -448,10 +443,6 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                 ],
               ),
             );            
-          // }
-        }
-      },
-    );
   }
 }
 
@@ -479,9 +470,6 @@ Widget textBody(Color color, String body, double tileSize) {
   return Text(
     body,
     style: Helpers().customTextStyle(color, tileSize*0.3),
-    // style: GoogleFonts.roboto(
-    //   fontSize: 18*sizeFactor, color: color
-    // ),
   );
 }
 
@@ -490,7 +478,6 @@ Widget textBodyBulletHeading(Color color, String body, double tileSize) {
     padding: EdgeInsets.only(left: tileSize*0.35),
     child: Text(
       body,
-      // style: Helpers().customTextStyle(color, tileSize*0.3),
       style: GoogleFonts.roboto(
           fontSize: tileSize*0.35, 
           color: color, 
@@ -506,10 +493,7 @@ Widget textBodyBullet(Color color, String body, double tileSize) {
     child: Text(
       body,
       style: Helpers().customTextStyle(color, tileSize*0.28),
-      // style: GoogleFonts.roboto(
-      //   fontSize: 14*sizeFactor, 
-      //   color: color
-      // ),
     ),
   );
 }
+

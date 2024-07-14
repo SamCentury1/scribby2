@@ -30,8 +30,8 @@ class DialogWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                  // width: double.infinity,
+                  // height: double.infinity,
                   // color: palette.optionButtonBgColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
