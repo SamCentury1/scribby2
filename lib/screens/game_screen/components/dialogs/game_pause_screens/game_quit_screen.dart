@@ -86,16 +86,18 @@ class _GameQuitScreenState extends State<GameQuitScreen>
 
                 return Stack(
                   children: [
+
                     Positioned.fill(
                       child: Padding(
-                        padding: EdgeInsets.all(gamePlayState.tileSize*0.2),
+                        padding: EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.2),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              padding:  EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.2),
                               child: Container(
                                 height: gamePlayState.tileSize*1,
+                                width: gamePlayState.tileSize*6,
                                 child:FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: DefaultTextStyle(
@@ -110,7 +112,7 @@ class _GameQuitScreenState extends State<GameQuitScreen>
                             Padding(
                               padding:  EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.2),
                               child: Divider(
-                                color: palette.textColor2,
+                                color: palette.overlayText,
                                 height: 2,
                               ),
                             ),
@@ -211,43 +213,7 @@ class _GameQuitScreenState extends State<GameQuitScreen>
                             ],
                           ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: gamePlayState.tileSize*0.2,
-                      right: (settingsState.screenSizeData['width']-(gamePlayState.tileSize*6))/2,
-                      child: Container(
-                        width: gamePlayState.tileSize*6,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (gamePlayState.isGamePaused) {
-                                if (gamePlayState.isGameStarted) {
-                                  gamePlayState.setIsGamePaused(false);
-                                  gamePlayState.countDownController.resume();
-                                  animationState.setShouldRunClockAnimation(true);
-                                  Future.microtask(() {
-                                    animationState.setShouldRunClockAnimation(false);
-                                  });                        
-                                }
-                              }                      
-                            },
-                            child: Container(
-                              width: gamePlayState.tileSize*0.7,
-                              height: gamePlayState.tileSize*0.7,  
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.all(Radius.circular(100.0))
-                              ),
-                              child: Icon(
-                                Icons.close, 
-                                size: gamePlayState.tileSize*0.4,
-                                color: Colors.white.withOpacity(0.5),
-                              )  
-                            ),
-                          ),
-                        ),
-                      ),
-                    )                        
+                    ),                      
                   ],
                 );
       },

@@ -402,44 +402,7 @@ class _GameSummaryViewState extends State<GameSummaryView> {
               // const Expanded(child: SizedBox()),
             ]),
           ),
-        ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: Container(
-                width: widget.gamePlayState.tileSize*6,
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (widget.gamePlayState.isGamePaused) {
-                        if (widget.gamePlayState.isGameStarted) {
-                          widget.gamePlayState.setIsGamePaused(false);
-                          widget.gamePlayState.countDownController.resume();
-                          animationState.setShouldRunClockAnimation(true);
-                          Future.microtask(() {
-                            animationState.setShouldRunClockAnimation(false);
-                          });                        
-                        }
-                      }                      
-                    },
-                    child: Container(
-                      width: widget.gamePlayState.tileSize*0.7,
-                      height: widget.gamePlayState.tileSize*0.7,  
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.all(Radius.circular(100.0))
-                      ),
-                      child: Icon(
-                        Icons.close, 
-                        size: widget.gamePlayState.tileSize*0.4,
-                        color: widget.palette.overlayText.withOpacity(0.5),
-                      )  
-                    ),
-                  ),
-                ),
-              ),
-            )        
+        ),     
       ],
     );
   }
@@ -505,6 +468,7 @@ class _GameSummaryScreenState extends State<GameSummaryScreen> {
   Widget build(BuildContext context) {
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
+    final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
 
@@ -514,9 +478,10 @@ class _GameSummaryScreenState extends State<GameSummaryScreen> {
             // mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: EdgeInsets.symmetric(horizontal: gamePlayState.tileSize*0.2),
                 child: Container(
                   height: gamePlayState.tileSize*1,
+                  width: gamePlayState.tileSize*6,
                   child:FittedBox(
                       fit: BoxFit.scaleDown,
                       child: DefaultTextStyle(

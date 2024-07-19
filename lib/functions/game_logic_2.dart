@@ -87,9 +87,9 @@ class GameLogic {
     if (vows <= 0) {
       res = "vowel";
     } else {
-      if (shareOfVowels <= 0.49) {
+      if (shareOfVowels <= 0.40) {
         res = "vowel";
-      } else if (shareOfVowels > 0.50) {
+      } else if (shareOfVowels > 0.60) {
         res = "consonant";
       } else {
         Random random = Random();

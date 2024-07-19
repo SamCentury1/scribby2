@@ -58,7 +58,6 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
             } else if (snapshot.data!.isEmpty) {
               return const Center(child: Text("Error"),);
             } else {
-              print(snapshot.data!);
               return SafeArea(
                 child: Stack(                   
                   children: [
