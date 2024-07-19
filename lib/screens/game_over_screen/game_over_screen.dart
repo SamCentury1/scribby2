@@ -39,11 +39,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
   late bool isConnected = true;
 
   final adUnitId = Platform.isAndroid
-      // ? 'ca-app-pub-2459167095237263/4958251976' // prod
-      ? 'ca-app-pub-3940256099942544/1033173712' // test
+      ? 'ca-app-pub-2459167095237263/4958251976' // prod
+      // ? 'ca-app-pub-3940256099942544/1033173712' // test
 
-      // : 'ca-app-pub-2459167095237263/7967558693'; // prod
-      : 'ca-app-pub-3940256099942544/4411468910'; // test
+      : 'ca-app-pub-2459167095237263/7967558693'; // prod
+      // : 'ca-app-pub-3940256099942544/4411468910'; // test
 
   /// Loads an interstitial ad.
 
