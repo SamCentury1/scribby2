@@ -58,6 +58,7 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> with TickerProv
             } else if (snapshot.data!.isEmpty) {
               return const Center(child: Text("Error"),);
             } else {
+              print(snapshot.data!);
               return SafeArea(
                 child: Stack(                   
                   children: [
@@ -307,8 +308,9 @@ Widget getLeaderboard(List<Map<String, dynamic>> list, ColorPalette palette, Map
                                   child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        Helpers()
-                                            .capitalizeName(list[i]['username']),
+                                        // Helpers()
+                                        //     .capitalizeName(list[i]['username']),
+                                        list[i]['username'],
                                         style: TextStyle(
                                             fontSize: tileSize*0.3,
                                             color: palette.textColor2,

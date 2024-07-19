@@ -142,11 +142,11 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               textHeading(
-                                                palette.textColor3,
+                                                palette.textColor2,
                                                 Helpers().translateText(language, "Objective",settingsState),
                                                 gamePlayState.tileSize
                                               ),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language, 
                                                   "Score as many points as possible by completing as many words as you can.",
@@ -155,7 +155,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                 gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language, 
                                                   "Words must be at least 3 letters in length to count",
@@ -166,8 +166,8 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               _gap(0.25*gamePlayState.tileSize),
 
 
-                                              Helpers().instructionsHeading(palette.textColor3, "Demo",gamePlayState.currentLanguage, gamePlayState.tileSize*0.35,settingsState),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsHeading(palette.textColor2, "Demo",gamePlayState.currentLanguage, gamePlayState.tileSize*0.35,settingsState),
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "The two letters at the top are randomly generated. The center letter letter_01 gets placed next",
                                                   gamePlayState.currentLanguage,
                                                   true,
@@ -175,7 +175,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   settingsState.demoLetters,
                                                   settingsState),
                                               DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState1'], language: gamePlayState.currentLanguage),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "When the letter letter_01 is placed inside the board, the letter to the right letter_02 will become the center letter and a new random letter will be generated and take its spot",
                                                   gamePlayState.currentLanguage,
                                                   true,
@@ -183,7 +183,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   settingsState.demoLetters,
                                                   settingsState),
                                               SizedBox(height: gamePlayState.tileSize*0.2,),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "A new letter letter_03 is randomly generated to be place after the next letter letter_02 is placed.",
                                                   gamePlayState.currentLanguage,
                                                   true,
@@ -191,7 +191,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   settingsState.demoLetters,
                                                   settingsState),
                                               DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState2'], language: gamePlayState.currentLanguage),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "Place your letters strategically to create words. In this case, we see the letter_04 coming after the letter_03",
                                                   gamePlayState.currentLanguage,
                                                   true,
@@ -199,7 +199,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   settingsState.demoLetters,
                                                   settingsState),
                                               DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState3'], language: gamePlayState.currentLanguage),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "The letter_03 is placed below the letter_02 so the letter_04 can be placed between the letter_01 and the letter_02 and create the word WORD",
                                                   gamePlayState.currentLanguage,
                                                   true,
@@ -207,17 +207,17 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   settingsState.demoLetters,
                                                   settingsState),
                                               DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState4'], language: gamePlayState.currentLanguage),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "The letter_04 is placed in between the letter_01 and letter_02. The letters animate and you are granted points for the letters.",
                                                   gamePlayState.currentLanguage,
                                                   true,
                                                   gamePlayState.tileSize*0.30,
                                                   settingsState.demoLetters,
                                                   settingsState),
-                                              // Helpers().instructionsHeading(palette.textColor3,
+                                              // Helpers().instructionsHeading(palette.textColor2,
                                               //     "Swipe to 'Settings' to understand how points are allocated",gamePlayState.currentLanguage, gamePlayState.tileSize*0.35),
                                               DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState5'], language: gamePlayState.currentLanguage),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "After an animation plays, the letters from the word WORD will disappear from the board and the spaces will become available for new letters",
                                                   gamePlayState.currentLanguage,
                                                   true,
@@ -225,7 +225,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   settingsState.demoLetters,
                                                   settingsState),
                                               DemoBoardState(demoBoardState: settingsState.demoStates['demoBoardState6'], language: gamePlayState.currentLanguage),
-                                              Helpers().instructionsText(palette.textColor3,
+                                              Helpers().instructionsText(palette.textColor2,
                                                   "The spaces become available for the new letters to be placed",
                                                   gamePlayState.currentLanguage,
                                                   false,
@@ -237,11 +237,11 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
 
 
                                               textHeading(
-                                                palette.textColor3,
+                                                palette.textColor2,
                                                 Helpers().translateText(language,"How It Works",settingsState),
                                                 gamePlayState.tileSize
                                               ),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,
                                                   "Every turn, you have a random letter to place anywhere on the board before the timer runs out.",
@@ -250,7 +250,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   gamePlayState.tileSize
                                                 ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "If the timer runs out, the tile will be disabled for the rest of the game!",
@@ -258,7 +258,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "When words are found, their letters will be destroyed and their values tabulated",
@@ -266,7 +266,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "The game ends when the board is full and no more letters can be placed",
@@ -274,7 +274,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "At every level reached (maximum 10) you have less and less time to place a letter",
@@ -283,7 +283,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               ),
                                               _gap(0.25*gamePlayState.tileSize),
                                               textHeading(
-                                                palette.textColor3,
+                                                palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                    
                                                 "Scoring",
@@ -292,7 +292,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                 ),
                                                 gamePlayState.tileSize
                                               ),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "Every letter has a value from 1 to 10",
@@ -300,7 +300,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "Each turn where at least one word is found, letter values are summed for each word.",
@@ -308,7 +308,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "The total value of the turn is calculated based on the following factors:",
@@ -317,14 +317,14 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
                                               textBodyBulletHeading(
-                                                  palette.textColor3,
+                                                  palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                      
                                                   "Word Lengths:",
                                                   settingsState),
                                                   gamePlayState.tileSize
                                               ),
-                                              textBodyBullet(palette.textColor3,
+                                              textBodyBullet(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "For Words that are 5 and 6 letters in length, each of their letters are multiplied by a factor of 2 and 3 respectively",
@@ -333,14 +333,14 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               ),
                                               _gap(0.10*gamePlayState.tileSize),
                                               textBodyBulletHeading(
-                                                  palette.textColor3, 
+                                                  palette.textColor2, 
                                                 Helpers().translateText(
                                                   language,                                      
                                                   "Active Streak:",
                                                   settingsState),
                                                   gamePlayState.tileSize
                                               ),
-                                              textBodyBullet(palette.textColor3,
+                                              textBodyBullet(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "The running number of consecutive turns with at least one word found",
@@ -349,14 +349,14 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               ),
                                               _gap(0.10*gamePlayState.tileSize),
                                               textBodyBulletHeading(                                    
-                                                  palette.textColor3,
+                                                  palette.textColor2,
                                                   Helpers().translateText(
                                                     language,                                      
                                                   "Cross Words:",
                                                   settingsState),
                                                   gamePlayState.tileSize
                                               ),
-                                              textBodyBullet(palette.textColor3,
+                                              textBodyBullet(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "Whether or not words were found in the horizontal and vertical axis' doubles the points",
@@ -365,14 +365,14 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               ),
                                               _gap(0.10*gamePlayState.tileSize),
                                               textBodyBulletHeading(
-                                                  palette.textColor3,
+                                                  palette.textColor2,
                                                   Helpers().translateText(
                                                     language,                                      
                                                   "Word Count:",
                                                   settingsState),
                                                   gamePlayState.tileSize
                                               ),
-                                              textBodyBullet(palette.textColor3,
+                                              textBodyBullet(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "The running total is then multiplied by the number of words found in that turn",
@@ -381,7 +381,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               ),
                                               _gap(0.10*gamePlayState.tileSize),
                                               textHeading(
-                                                palette.textColor3,
+                                                palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                    
                                                 "Letter Values",
@@ -402,17 +402,17 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                               ),
                                               _gap(0.25*gamePlayState.tileSize),
                                               textHeading(
-                                                palette.textColor3,
+                                                palette.textColor2,
                                                 Helpers().translateText(language,"Tips",settingsState),
                                                 gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(language,"Place hard letters strategically",settingsState),
                                                 gamePlayState.tileSize
                                               ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "Be careful when trying to create long words, there are ALOT more three letter words than you think...",
@@ -420,7 +420,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                                                   gamePlayState.tileSize
                                                 ),
                                               _gap(0.15*gamePlayState.tileSize),
-                                              textBody(palette.textColor3,
+                                              textBody(palette.textColor2,
                                                 Helpers().translateText(
                                                   language,                                  
                                                   "Don't be afraid to let the board fill up with letters, it's actually really hard to lose this game that way",

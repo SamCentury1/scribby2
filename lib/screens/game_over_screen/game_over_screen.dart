@@ -39,11 +39,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
   late bool isConnected = true;
 
   final adUnitId = Platform.isAndroid
-      ? 'ca-app-pub-2459167095237263/4958251976' // prod
-      // ? 'ca-app-pub-3940256099942544/1033173712' // test
+      // ? 'ca-app-pub-2459167095237263/4958251976' // prod
+      ? 'ca-app-pub-3940256099942544/1033173712' // test
 
-      : 'ca-app-pub-2459167095237263/7967558693'; // prod
-      // : 'ca-app-pub-3940256099942544/4411468910'; // test
+      // : 'ca-app-pub-2459167095237263/7967558693'; // prod
+      : 'ca-app-pub-3940256099942544/4411468910'; // test
 
   /// Loads an interstitial ad.
 
@@ -201,23 +201,34 @@ class _GameOverScreenState extends State<GameOverScreen> {
                             builder: (context, gamePlayState, child) {
                               return Column(
                                children: [
-                              const Expanded(
-                                flex: 2,
-                                child: SizedBox(),
-                              ),
-                              Expanded(
-                                flex: 5,
+                              // Expanded(
+                              //   flex: 2,
+                              //   child: Container(
+                              //     width: double.infinity,
+                              //     height: double.infinity,
+                              //     color: Colors.orange,
+                              //     child: SizedBox()
+                              //   ),
+                              // ),
+                              Expanded(child: SizedBox(),),
+                              Flexible(
+                                flex: 3,
                                 child: ScoreWidget(
                                   score: gamePlayState.endOfGameData['points'], 
                                   newHs: newHighScore(settingsState, palette, gamePlayState.endOfGameData['points']),
                                   highScore: currentHighScore(settingsState, palette, gamePlayState.endOfGameData['points']),
                                 )
                               ),
-                              const Expanded(
-                                flex: 1,
-                                child: SizedBox(),
-                              ),
-                              Expanded(
+                              // Expanded(
+                              //   flex: 1,
+                              //   child: Container(
+                              //     width: double.infinity,
+                              //     height: double.infinity,
+                              //     color: Colors.orange,
+                              //     child: SizedBox()
+                              //   ),
+                              // ),
+                              Flexible(
                                 flex: 6,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(
@@ -290,64 +301,74 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                   ),
                                 ),
                               ),
-                              const Expanded(child: SizedBox()),
-                              const Expanded(
-                                flex: 2,
-                                child: SizedBox(),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  animationState.setShouldShowGameOverScreenOverlay(true);
-                                },
-                                child: Text(
-                                  Helpers().translateText(gamePlayState.currentLanguage, "View points summary",settingsState),
-                                  style: TextStyle(
-                                    color: palette.textColor2,
-                                    fontSize: gamePlayState.tileSize*0.3,
-                                    fontStyle: FontStyle.italic
+                              // const Expanded(child: SizedBox()),
+                              // const Expanded(
+                              //   flex: 2,
+                              //   child: SizedBox(),
+                              // ),
+                              Expanded(child: SizedBox()),
+                              Flexible(
+                                flex: 1,
+                                child: InkWell(
+                                  onTap: () {
+                                    animationState.setShouldShowGameOverScreenOverlay(true);
+                                  },
+                                  child: Text(
+                                    Helpers().translateText(gamePlayState.currentLanguage, "View points summary",settingsState),
+                                    style: TextStyle(
+                                      color: palette.textColor2,
+                                      fontSize: gamePlayState.tileSize*0.3,
+                                      decoration: TextDecoration.underline
+                                    ),
                                   ),
                                 ),
                               ),
-                              const Expanded(
+                              // const Expanded(
+                              //   flex: 2,
+                              //   child: SizedBox(),
+                              // ),
+                              Expanded(child: SizedBox()),
+                              if (!isConnected) Flexible(
                                 flex: 2,
-                                child: SizedBox(),
-                              ),
-
-                              if (!isConnected) GestureDetector(
-                                onTap: () {
-                                  audioController.playSfx(SfxType.optionSelected);
-                                  gamePlayState.endGame();
-                                  gamePlayState.setTileState(settings.initialTileState.value as List<Map<String,dynamic>>);
-                                  FirestoreMethods().updateSettingsState( settingsState, AuthService().currentUser!.uid);
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) => const MenuScreen()
-                                    )
-                                  );
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  height: gamePlayState.tileSize*0.8,
-                                  decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, 2, 2),
-                                    child: Center(
-                                      child: Text(
-                                        Helpers().translateText(gamePlayState.currentLanguage, "Main Menu",settingsState),
-                                        style: TextStyle(
-                                          color: palette.fullTileTextColor,
-                                          fontSize: gamePlayState.tileSize*0.4,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    audioController.playSfx(SfxType.optionSelected);
+                                    gamePlayState.endGame();
+                                    gamePlayState.setTileState(settings.initialTileState.value as List<Map<String,dynamic>>);
+                                    FirestoreMethods().updateSettingsState( settingsState, AuthService().currentUser!.uid);
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) => const MenuScreen()
+                                      )
+                                    );
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: gamePlayState.tileSize*0.8,
+                                    decoration: Decorations().getTileDecoration(gamePlayState.tileSize, palette, 2, 2),
+                                      child: Center(
+                                        child: Text(
+                                          Helpers().translateText(gamePlayState.currentLanguage, "Main Menu",settingsState),
+                                          style: TextStyle(
+                                            color: palette.fullTileTextColor,
+                                            fontSize: gamePlayState.tileSize*0.4,
+                                          ),
                                         ),
-                                      ),
-                                    ),                                        
+                                      ),                                        
+                                  ),
                                 ),
-                              ) else Consumer<AnimationState>(
-                                builder: (context, animationState, child) {
-                                  return IgnorePointer(
-                                    ignoring: animationState.shouldRunGameOverPointsCounting,
-                                    child: AnimatedOpacity(
+                              ) else Flexible(
+                                flex: 1,
+                                child: Consumer<AnimationState>(
+                                  builder: (context, animationState, child) {
+                                    return AnimatedOpacity(
                                       duration: const Duration(milliseconds: 500),
-                                      opacity: animationState.shouldRunGameOverPointsFinishedCounting ? 1.0 : 0.0,
+                                      opacity: animationState.shouldRunGameOverPointsFinishedCounting ? 1.0 : 1.0,
                                       child: GestureDetector(
                                         onTap: () {
+                                          animationState.setShouldRunGameOverPointsCounting(false);
+                                          animationState.setShouldRunGameOverPointsFinishedCounting(false);
+                                          audioController.stopLoopSfx();
                                           audioController.playSfx(SfxType.optionSelected);
                                           gamePlayState.endGame();
                                           gamePlayState.setTileState(settings.initialTileState.value as List<Map<String,dynamic>>);
@@ -375,14 +396,14 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                             ),                                        
                                         ),
                                       ),
-                                    ),
-                                  );
-                                }
+                                    );
+                                  }
+                                ),
                               ),
-                              const Expanded(
-                                flex: 1,
-                                child: SizedBox(),
-                              ),                        
+                              // const Expanded(
+                              //   flex: 1,
+                              //   child: SizedBox(),
+                              // ),                        
                                 ],
                               );
                             },

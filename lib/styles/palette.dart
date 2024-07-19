@@ -233,7 +233,7 @@ class ColorPalette with ChangeNotifier {
         _fullReserveGradientBackGroundColor4 = Color.fromARGB(223, 18, 26, 63); 
         _fullReserveGradientBackGroundColor5 = Color.fromARGB(223, 3, 9, 32); 
         
-        _fullReserveTextColor = Color.fromARGB(255, 175, 229, 254); 
+        _fullReserveTextColor = Color.fromARGB(255, 211, 234, 245); 
         _fullReserveBorderColor = Color.fromARGB(255,172,205,254); 
         _emptyReserveGradientBackGroundColor1 = Color.fromARGB(255, 112, 113, 114);
         _emptyReserveGradientBackGroundColor2 = Color.fromARGB(232, 91, 92, 92);

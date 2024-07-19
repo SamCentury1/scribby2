@@ -20,7 +20,7 @@ import 'package:http/http.dart' as http;
 
 class Helpers {
   
-  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+  // String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
   String formatWord(String s) {
     String lower = s.toLowerCase();
     String newString = lower[0].toUpperCase() + lower.substring(1);
@@ -31,7 +31,8 @@ class Helpers {
     List<String> strings = s.split(character);
     List<String> newList = [];
     for (String item in strings) {
-      newList.add(capitalize(item));
+      // newList.add(capitalize(item));
+      newList.add(item);
     }
     String stringsCleaned = newList.join(character);
     return stringsCleaned;
