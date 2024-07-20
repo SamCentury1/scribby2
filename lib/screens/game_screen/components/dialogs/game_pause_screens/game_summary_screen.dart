@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
-import 'package:scribby_flutter_v2/providers/animation_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/styles/palette.dart';
@@ -241,7 +240,6 @@ class _GameSummaryViewState extends State<GameSummaryView> {
   @override
   Widget build(BuildContext context) {
 
-    late AnimationState animationState = Provider.of<AnimationState>(context,listen: false);
 
     final Map<String,dynamic> gameData = Helpers().getGameSummaryData(widget.gamePlayState.scoringLog);
     return Stack(
@@ -468,7 +466,6 @@ class _GameSummaryScreenState extends State<GameSummaryScreen> {
   Widget build(BuildContext context) {
     final ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
     final SettingsState settingsState = Provider.of<SettingsState>(context, listen: false);
-    final AnimationState animationState = Provider.of<AnimationState>(context, listen: false);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
 
