@@ -352,7 +352,7 @@ class GameScreenState extends State<GameScreen> with TickerProviderStateMixin{
                                       gamePlayState.setPauseScreen('summary');
                                     }                                  
                                   }, 
-                                  icon: Icon(Icons.emoji_events, size: tileSize * 0.4, color: palette.textColor3.withOpacity(0.5)),
+                                  icon: Icon(Icons.pause, size: tileSize * 0.4, color: palette.textColor3.withOpacity(0.5)),
                                 ),
                                 IconButton(
                                   onPressed: () {
