@@ -37,8 +37,8 @@ class _WelcomeUserState extends State<WelcomeUser> {
       final screenHeight = MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top;
       final gamePlayState = Provider.of<GamePlayState>(context, listen: false);
 
-      // final double playAreaHeight = screenHeight - 170;
-      final double playAreaHeight = screenHeight;
+      final double playAreaHeight = screenHeight - 170;
+      // final double playAreaHeight = screenHeight;
       final double playAreaWidth = screenwidth > 600.0 ? 600.0 : screenwidth;
       final double minTileSize = playAreaHeight/9;
       final double maxTileSize = (playAreaWidth*0.95)/6;
