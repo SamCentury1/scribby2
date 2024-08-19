@@ -40,7 +40,7 @@ class _WelcomeUserState extends State<WelcomeUser> {
       final double playAreaHeight = screenHeight - 170;
       // final double playAreaHeight = screenHeight;
       final double playAreaWidth = screenwidth > 600.0 ? 600.0 : screenwidth;
-      final double minTileSize = playAreaHeight/9;
+      final double minTileSize = playAreaHeight/8;
       final double maxTileSize = (playAreaWidth*0.95)/6;
       late double tileSize = 0.0;
       if (minTileSize > maxTileSize) {
