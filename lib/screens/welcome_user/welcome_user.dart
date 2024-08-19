@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,11 +38,15 @@ class _WelcomeUserState extends State<WelcomeUser> {
       // final screenHeight = MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top;
       final screenHeight = MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top;
       final gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-
-      final double playAreaHeight = screenHeight - 170;
+      late double playAreaHeight = screenHeight - 170;
+      if (Platform.isIOS) {
+        playAreaHeight = screenHeight - 270;
+      }
+      // final double playAreaHeight = screenHeight - 170;
+      
       // final double playAreaHeight = screenHeight;
       final double playAreaWidth = screenwidth > 600.0 ? 600.0 : screenwidth;
-      final double minTileSize = playAreaHeight/8;
+      final double minTileSize = playAreaHeight/8.5;
       final double maxTileSize = (playAreaWidth*0.95)/6;
       late double tileSize = 0.0;
       if (minTileSize > maxTileSize) {
