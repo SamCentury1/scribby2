@@ -1,5 +1,4 @@
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
-// import 'package:scribby_flutter_v2/utils/states.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -7,20 +6,14 @@ import 'dart:convert';
 /// `package:shared_preferences`.
 
 class LocalStorageSettingsPersistence extends SettingsPersistence {
-  final Future<SharedPreferences> instanceFuture =
-      SharedPreferences.getInstance();
+  final Future<SharedPreferences> instanceFuture = SharedPreferences.getInstance();
 
   /// ========= GET THE DATA =================
-  @override
-  Future<bool> getMuted({required bool defaultValue}) async {
-    final prefs = await instanceFuture;
-    return prefs.getBool('mute') ?? defaultValue;
-  }
 
   @override
-  Future<bool> getSoundsOn() async {
+  Future<bool> getSoundsOn({required bool defaultValue}) async {
     final prefs = await instanceFuture;
-    return prefs.getBool('soundsOn') ?? true;
+    return prefs.getBool('soundsOn') ?? defaultValue;
   }
 
   @override
@@ -29,50 +22,87 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
     return prefs.getString('user') ?? "";
   }
 
+  // @override
+  // Future<String> getColorTheme() async {
+  //   final prefs = await instanceFuture;
+  //   return prefs.getString('colorTheme') ?? 'dark';
+  // }
+
+  // @override
+  // Future<Object> getUserData() async {
+  //   final prefs = await instanceFuture;
+  //   return json.decode(prefs.getString('userData') ?? json.encode([]));
+  // }
   @override
-  Future<bool> getDarkTheme() async {
+  Future<List<dynamic>> getLevelData() async {
     final prefs = await instanceFuture;
-    return prefs.getBool('darkTheme') ?? true;
+    return json.decode(prefs.getString("levelData")??json.encode([]));
+  }
+
+  @override
+  Future<List<dynamic>> getGameInfoData() async {
+    final prefs = await instanceFuture;
+    return json.decode(prefs.getString("gameInfoData")??json.encode([]));
+  }
+
+  @override
+  Future<int> getCoins() async {
+    final prefs = await instanceFuture;
+    return prefs.getInt('coins')??10;
+  }
+
+  @override
+  Future<Object> getDeviceSizeInfo() async {
+    final prefs = await instanceFuture;
+    return json.decode(prefs.getString("deviceSizeInfo")??json.encode({}));
+  }  
+  @override
+  Future<Object> getAchievements() async {
+    final prefs = await instanceFuture;
+    return json.decode(prefs.getString("achievements")??json.encode({}));
+  }
+
+
+  @override
+  Future<List<dynamic>> getUserGameHistory() async {
+    final prefs = await instanceFuture;
+    return json.decode(prefs.getString("userGameHistory")??json.encode([]));
   }
 
   @override
   Future<Object> getUserData() async {
     final prefs = await instanceFuture;
-    return json.decode(prefs.getString('userData') ?? json.encode([]));
+    return json.decode(prefs.getString("userData")??json.encode({}));
+  }
+
+
+  @override
+  Future<List<dynamic>> getRankData() async {
+    final prefs = await instanceFuture;
+    return json.decode(prefs.getString("rankData")??json.encode([]));
   }
 
   @override
-  Future<List<dynamic>> getAlphabet() async {
+  Future<List<dynamic>> getAchievementData() async {
     final prefs = await instanceFuture;
-    // return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
-    return json.decode(prefs.getString('alphabet') ?? json.encode([]));
+    return json.decode(prefs.getString("achievementData")??json.encode([]));
   }
 
   @override
-  Future<Object> getInitialTileState() async {
+  Future<int> getXP() async {
     final prefs = await instanceFuture;
-    // return json.decode(prefs.getString('alphabet') ?? json.encode(englishAlphabet));
-    return json.decode(prefs.getString('initialTileState') ?? json.encode([]));
+    return prefs.getInt('xp')??0;
   }  
 
-  @override
-  Future<String> getDictionary() async {
-    final prefs = await instanceFuture;
-    return prefs.getString('dictionary') ?? "";
-  }    
+
 
   /// ========= SAVE THE DATA =================
-  @override
-  Future<void> saveMuted(bool value) async {
-    final prefs = await instanceFuture;
-    await prefs.setBool('mute', value);
-  }
 
-  @override
-  Future<void> saveSoundsOn(bool value) async {
-    final prefs = await instanceFuture;
-    await prefs.setBool('soundsOn', value);
-  }
+  // @override
+  // Future<void> saveSoundsOn(bool value) async {
+  //   final prefs = await instanceFuture;
+  //   await prefs.setBool('soundsOn', value);
+  // }
 
   @override
   Future<void> saveUser(String value) async {
@@ -80,33 +110,82 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
     await prefs.setString('user', value);
   }
 
+  // @override
+  // Future<void> saveColorTheme(String value) async {
+  //   final prefs = await instanceFuture;
+  //   await prefs.setString('colorTheme', value);
+  // }
+
+  // @override
+  // Future<void> saveUserData(Object value) async {
+  //   final prefs = await instanceFuture;
+  //   await prefs.setString('userData', json.encode(value));
+  // }
+   
+
   @override
-  Future<void> saveDarkTheme(bool value) async {
+  Future<void> saveLevelData(List<dynamic> value) async {
     final prefs = await instanceFuture;
-    await prefs.setBool('darkTheme', value);
+    prefs.setString("levelData", json.encode(value)); 
   }
+
+  @override
+  Future<void> saveGameInfoData(List<dynamic> value) async {
+    final prefs = await instanceFuture;
+    prefs.setString("gameInfoData", json.encode(value)); 
+  }  
+
+  @override
+  Future<void> saveSoundsOn(bool value) async {
+    final prefs = await instanceFuture;
+    prefs.setBool("soundsOn", value); 
+  }    
+
+
+  @override
+  Future<void> saveCoins(int value) async {
+    final prefs = await instanceFuture;
+    prefs.setInt("coins", value); 
+  }   
+
+  @override
+  Future<void> saveDeviceSizeInfo(Object value) async {
+    final prefs = await instanceFuture;
+    prefs.setString("deviceSizeInfo", json.encode(value)); 
+  }     
+  @override
+  Future<void> saveAchievements(Object value) async {
+    final prefs = await instanceFuture;
+    prefs.setString("achievements", json.encode(value)); 
+  }     
+
+  @override
+  Future<void> saveUserGameHistory(List<dynamic> value) async {
+    final prefs = await instanceFuture;
+    prefs.setString("userGameHistory", json.encode(value)); 
+  }  
 
   @override
   Future<void> saveUserData(Object value) async {
     final prefs = await instanceFuture;
-    await prefs.setString('userData', json.encode(value));
-  }
+    prefs.setString("userData", json.encode(value)); 
+  }     
 
   @override
-  Future<void> saveAlphabet(List<dynamic> value) async {
+  Future<void> saveRankData(List<dynamic> value) async {
     final prefs = await instanceFuture;
-    await prefs.setString('alphabet', json.encode(value));
-  }
-
+    prefs.setString("rankData", json.encode(value)); 
+  }       
   @override
-  Future<void> saveInitialTileState(Object value) async {
+  Future<void> saveAchievementData(List<dynamic> value) async {
     final prefs = await instanceFuture;
-    await prefs.setString('initialTileState', json.encode(value));
+    prefs.setString("achievementData", json.encode(value)); 
   }  
 
   @override
-  Future<void> saveDictionary(String value) async {
+  Future<void> saveXP(int value) async {
     final prefs = await instanceFuture;
-    await prefs.setString('dictionary', value);
-  }    
+    prefs.setInt("xp", value); 
+  }   
+
 }

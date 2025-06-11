@@ -14,7 +14,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 
 import 'package:scribby_flutter_v2/main.dart';
-import 'package:scribby_flutter_v2/player_progress/persistence/local_storage_player_progress_persistence.dart';
 import 'package:scribby_flutter_v2/settings/persistence/local_storage_settings_persistence.dart';
 
 void main() {
@@ -30,7 +29,7 @@ void main() {
     }    
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp(
-      playerProgressPersistence: LocalStoragePlayerProgressPersistence(),
+      // playerProgressPersistence: LocalStoragePlayerProgressPersistence(),
       settingsPersistence: LocalStorageSettingsPersistence(),
       adsController: adsController,      
     ));

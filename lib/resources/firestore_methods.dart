@@ -1,259 +1,128 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:scribby_flutter_v2/providers/settings_state.dart';
-import 'package:scribby_flutter_v2/settings/settings.dart';
-import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreMethods {
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<Map<String, dynamic>?> getUserData(
-    String uid,
-  ) async {
-    late Map<String, dynamic>? res = {};
-    try {
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-      final docSnap = await docRef.get();
-      final Map<String, dynamic>? docData = docSnap.data();
-      res = docData;
-    } catch (e) {
 
-    }
-    return res;
-  }
+  Future<Map<String,dynamic>> getFirestoreDocument(String uid) async {
+    late DocumentSnapshot<Map<String,dynamic>> docStream;
+    docStream = await _firestore.collection("users").doc(uid).get();
+    return docStream.data() as Map<String, dynamic>;
+  }  
 
+  // Future<List<Map<dynamic,dynamic>>> getLevelsFromFirestore() async {
 
-  Future<void> saveHighScore(String uid, Map<String, dynamic> gameData) async {
-    try {
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-      final docSnap = await docRef.get();
-      final Map<String, dynamic> docData =
-          docSnap.data() as Map<String, dynamic>;
-      String language = docData['parameters']['currentLanguage'];
-      late Map<String, dynamic> userHighScores = docData['highScores'];
-      if (userHighScores[language] != null) {
-        int currentHighScore = userHighScores[language];
-        if (gameData['points'] > currentHighScore) {
-          userHighScores.update(language, (value) => gameData['points']);
-          await _firestore.collection("users").doc(uid).update({
-            "highScores": userHighScores,
-          });
-        }
-      } else {
-        // userHighScores.update(language, (value) => gameData['points']);
-        userHighScores[language] = gameData['points'];
-        await _firestore.collection("users").doc(uid).update({
-          "highScores": userHighScores,
-        });
-      }
-    } catch (e) {
-
-    }
-  }
+  //   late QuerySnapshot gamesPlayedQuerySnapshot;
+  //   gamesPlayedQuerySnapshot = await _firestore.collection("games")
+  //   .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+  //   .get();
 
 
-  Future<List<Map<String, dynamic>>?> getDataForLeaderboards(String currentLanguage) async {
-    late List<Map<String, dynamic>> res = [];
-    try {
-      QuerySnapshot qSnap = await _firestore
-          .collection("users")
-          .where("highScores.$currentLanguage", isGreaterThan: 0)
-          .orderBy("highScores.$currentLanguage", descending: true)
-          .limit(50)
-          .get();
+  //   List<Map<dynamic,dynamic>> gamesPlayed = [];
+  //   List<String> completedLevelsIds = [];
+  //   for (DocumentSnapshot gameDocumentSnapshot in gamesPlayedQuerySnapshot.docs) {
+  //     late Map<dynamic,dynamic> gameData = gameDocumentSnapshot.data() as Map;
+  //     gameData["gameId"] = gameDocumentSnapshot.id;
+  //     gamesPlayed.add(gameData);
+  //     completedLevelsIds.add(gameData["levelId"]);
+  //   }
 
-      late List<Map<String, dynamic>> userList = [];
-      for (DocumentSnapshot qDocSnap in qSnap.docs) {
-        late Map<String, dynamic> userData =
-            qDocSnap.data() as Map<String, dynamic>;
-        userList.add({
-          "user": userData['uid'],
-          "username": userData['username'],
-          "points": userData['highScores'][currentLanguage],
-        });
-      }
-      res = userList;
-    } catch (e) {
 
-    }
-    return res;
-  }
+  //   late QuerySnapshot qSnap; 
+  //   qSnap = await _firestore.collection("levels").orderBy("level").get();
+  //   late List<Map<dynamic, dynamic>> levels = [];
 
-  Future<List<dynamic>> getAlphabet(String uid) async {
-    late List<dynamic> res = [];
+  //   print(completedLevelsIds);
 
-    try {
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-      final docSnap = await docRef.get();
-      final Map<String, dynamic> docData =
-          docSnap.data() as Map<String, dynamic>;
+  //   for (DocumentSnapshot qDocSnap in qSnap.docs) {
+  //     late Map<dynamic,dynamic> levelData = qDocSnap.data() as Map; // as Map<dynamic, dynamic>;
+    
+  //       // search if played game
+  //       late Map<dynamic,dynamic> playedGameDocument = {};
+  //       // print(qDocSnap.id);
+  //       if (completedLevelsIds.contains(qDocSnap.id)) {
+  //         playedGameDocument = gamesPlayed.firstWhere((value) => value["levelId"] == qDocSnap.id);
+  //       }
 
-      String language = docData['parameters']['currentLanguage'];
+  //       Map<dynamic,dynamic> wheelData = {};
+  //       levelData["wheelData"].forEach((key,value) {
+  //         int newKey = int.parse(key);
+  //         wheelData[newKey] = value;
+  //       });
 
-      QuerySnapshot qSnap = await _firestore
-          .collection("alphabets")
-          .where("language", isEqualTo: language)
-          .get();
+  //       Map<dynamic,dynamic> clues = {};
+  //       levelData["clues"].forEach((key, value) {
+  //         int newKey = int.parse(key);
+  //         clues[newKey] = value;
+  //       });
+  //       Map<dynamic,dynamic> data = {
+  //         "level": levelData["level"],
+  //         "key": levelData["key"],
+  //         "wheelData": wheelData, 
+  //         "clues":clues,
+  //         "playedData":playedGameDocument,
+  //       };
 
-      List<Map<String, dynamic>> documents = [];
+  //       levels.add(data);
+  //   }
+  //   return levels;
+  // }
 
-      for (DocumentSnapshot qDocSnap in qSnap.docs) {
-        late Map<String, dynamic> alphabetData =
-            qDocSnap.data() as Map<String, dynamic>;
-        documents.add(alphabetData);
-      }
 
-      Map<String, dynamic> alphabetDoc =
-          documents.firstWhere((element) => element['language'] == language);
+  // /// generates a map that can be used in various sign in methods
+  // Map<String,dynamic> generateUserDocument(String uid, String? username, String? email, String? photoUrl, String provider, String os) {
+  //   return {
+  //       "uid": uid,
+  //       "username": username,
+  //       "email": email,
+  //       "photoUrl": null,
+  //       "parameters" : {
+  //         "muted": false,
+  //         "soundOn": true,
+  //         "theme": 'dark',
+  //       },
+  //       "createdAt": DateTime.now().toIso8601String(),
+  //       "providerData": provider,
+  //       "os": os,
+  //       "balance": 200      
+  //   };
+  // }
 
-      res = alphabetDoc['alphabet'];
-    } catch (e) {
-      // debugPrint("caught an error running 'getAlphabet()' ${e.toString()}");
+  Future<void> saveUserToDatabase(Map<String,dynamic> userData) async {
+    late String os = "";
+    if (Platform.isAndroid) {
+      os = 'android';
+    } else {
+      os = 'iOS';
     }
 
-    return res;
+    final String uid = userData["uid"];
+    final String displayName = userData["displayName"];
+    final String email = userData["email"];
+    final String photoURL = userData["photoURL"];
+    final String providerData = userData["providerData"];
+
+    final Map<String,dynamic> userDocument = {
+      "uid": uid,
+      "username": displayName,
+      "email": email,
+      "photoUrl": photoURL,
+      "parameters" : {
+        "soundOn": true,
+        "theme": 'default',
+      },
+      "language": "english",
+      "createdAt": DateTime.now().toIso8601String(),
+      "providerData": providerData,
+      "os": os,
+      "balance": 200,
+      "rank":"1_1",     
+    };
+    await _firestore.collection("users").doc(uid).set(userDocument);
   }
-
-  Future<void> saveAlphabetToLocalStorage(String uid, SettingsController settings, SettingsState settingsState) async {
-  // Future<Map<String,dynamic>> saveAlphabetToLocalStorage(String uid, SettingsController settings, SettingsState settingsState) async {    
-
-    try {
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-      final docSnap = await docRef.get();
-      final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
-
-      
-
-      late String language = 'english';
-      
-      if (docData['parameters']['currentLanguage'] != "") {
-        language = docData['parameters']['currentLanguage'];
-      } 
-
-      QuerySnapshot qSnap = await _firestore
-          .collection("alphabets")
-          .where("language", isEqualTo: language)
-          .get();
-
-      List<Map<String, dynamic>> documents = [];
-
-      for (DocumentSnapshot qDocSnap in qSnap.docs) {
-        late Map<String, dynamic> alphabetData =
-          qDocSnap.data() as Map<String, dynamic>;
-          // log(qDocSnap.data().toString());
-          documents.add(alphabetData);
-      }
-
-
-      Map<String, dynamic> alphabetDoc = documents.firstWhere((element) => element['language'] == language);
-      settingsState.setAlphabetCopy(alphabetDoc['alphabet']);
-      settings.setAlphabet(alphabetDoc['alphabet']);
-
-
-      settings.setUserData(docData);
-
-      // return alphabetDoc;
-    } catch (e) {
-      log("caught an error running 'saveAlphabetToLocalStorage()' ${e.toString()}");
-      // return {};
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getAlphabetFromJSON(String currentLanguage) async {
-    // Load the JSON file as a string
-    final String jsonData = await rootBundle.loadString('assets/json/alphabets.json');
-
-    // Decode the JSON string into a Map
-    final Map<String, dynamic> allAlphabets = jsonDecode(jsonData);
-
-    // Check if the specified language exists in the JSON data
-    if (!allAlphabets.containsKey(currentLanguage)) {
-      throw Exception("Language '$currentLanguage' not found in the JSON data");
-    }
-
-    // Extract the list of letters for the specified language
-    final List<dynamic> targetAlphabet = allAlphabets[currentLanguage];
-
-    // Convert the list of dynamic objects to a list of maps
-    return List<Map<String, dynamic>>.from(targetAlphabet.map((item) => item as Map<String, dynamic>));
-  }
-
-  Future<List<Map<String,dynamic>>> getTranslations() async {
-    final String jsonData = await rootBundle.loadString('assets/json/translations.json');
-    List<dynamic> jsonResponse = json.decode(jsonData);
-    List<Map<String,dynamic>> translations = List<Map<String,dynamic>>.from(jsonResponse.map((item) => item as Map<String,dynamic>));
-    return translations;
-  } 
-
-  Future<void> selectLanguage(String uid, String currentLanguage, List<String> languages) async {
-    try {
-      final docRef = _firestore.collection('users').doc(uid);
-
-
-      await docRef.update({"parameters.currentLanguage": currentLanguage});
-      await docRef.update({"parameters.languages": languages});
-    } catch (e) {
-      // debugPrint("caught an error running 'selectLanguage()' ${e.toString()}");
-    }
-  }
-
-  Future<void> saveWordListToLocalStorage(List<String> wordList, String fileName) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/$fileName';
-    final file = File(filePath);
-
-    // Write the word list to the file
-    await file.writeAsString(wordList.join('\n'));
-  }
-
-  Future<List<String>> readWordListFromLocalStorage(String fileName) async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/$fileName';
-      final file = File(filePath);
-
-      // Read the word list from the file
-      if (await file.exists()) {
-        final fileContent = await file.readAsString();
-        return fileContent.split('\n');
-      } else {
-        return [];
-      }
-    } catch (e) {
-      return [];
-    }
-  }
-
-  // EXECUTES IN THE SETTINGS PAGE - IN THE DROPOWN MENU FOR CHANGING THE CURRENT LANGUAGE
-  Future<void> updateParameters( String uid, String parameter, dynamic updatedValue) async {
-    try {
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-      final docSnap = await docRef.get();
-      final Map<String, dynamic> docData =
-          docSnap.data() as Map<String, dynamic>;
-
-      Map<String, dynamic> parameters = docData['parameters'];
-
-      parameters.update(parameter, (value) => updatedValue);
-
-      await docRef.update({"parameters": parameters});
-    } catch (e) {
-      // debugPrint("caught an error running 'updateParameters()' ${e.toString()}");
-    }
-  }
-
-  Future<void> updateSettingsState(SettingsState settings, String uid) async {
-    try {
-      Map<String, dynamic> userData = await getUserData(uid) as Map<String, dynamic>;
-      settings.updateUserData(userData);
-    } catch (e) {
-      // debugPrint("caught an error running 'updateSettingsState()' ${e.toString()}");
-    }
-  }
-
 
 }

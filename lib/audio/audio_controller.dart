@@ -63,14 +63,14 @@ class AudioController {
     // Remove handlers from the old settings controller if present
     final oldSettings = _settings;
     if (oldSettings != null) {
-      oldSettings.muted.removeListener(_mutedHandler);
+      oldSettings.soundsOn.removeListener(_mutedHandler);
       oldSettings.soundsOn.removeListener(_soundsOnHandler);
     }
 
     _settings = settingsController;
 
     // Add handlers to the new settings controller
-    settingsController.muted.addListener(_mutedHandler);
+    settingsController.soundsOn.addListener(_mutedHandler);
     settingsController.soundsOn.addListener(_soundsOnHandler);
 
   }
@@ -97,12 +97,12 @@ class AudioController {
 
   void playSfx(SfxType type) async {
     await _lock.synchronized(() {
-      final muted = _settings?.muted.value ?? true;
+      final muted = _settings?.soundsOn.value ?? false;
       if (muted) {
         // ignoring the playing sound
         return;
       }
-      final soundsOn = _settings?.soundsOn.value ?? false;
+      final soundsOn = _settings?.soundsOn.value ?? true;
       if (!soundsOn) {
         // ignoring the playing sound
         return;
@@ -122,16 +122,16 @@ class AudioController {
 
   void playLoopSfx() async {
     await _lock.synchronized(()  {
-      final muted = _settings?.muted.value ?? true;
+      final muted = _settings?.soundsOn.value ?? false;
       if (muted) {
         // ignoring the playing sound
         return;
       }
-      final soundsOn = _settings?.soundsOn.value ?? false;
-      if (!soundsOn) {
-        // ignoring the playing sound
-        return;
-      }
+      // final soundsOn = _settings?.soundsOn.value ?? true;
+      // if (!soundsOn) {
+      //   // ignoring the playing sound
+      //   return;
+      // }
       _gameOverAudioPlayer.setReleaseMode(ReleaseMode.loop);
       _gameOverAudioPlayer.play(AssetSource('audio/sfx/points-count-electronic.mp3'));
       
@@ -157,7 +157,7 @@ class AudioController {
   }
 
   void _mutedHandler() {
-    if(_settings!.muted.value) {
+    if(_settings!.soundsOn.value) {
       // All sound just got muted.
       _stopAllSound();
     }

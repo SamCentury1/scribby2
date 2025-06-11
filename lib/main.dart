@@ -9,23 +9,17 @@ import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 import 'package:scribby_flutter_v2/app_lifecycle/app_lifecycle.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/firebase_options.dart';
-import 'package:scribby_flutter_v2/player_progress/persistence/local_storage_player_progress_persistence.dart';
-import 'package:scribby_flutter_v2/player_progress/persistence/player_progress_persistence.dart';
-import 'package:scribby_flutter_v2/player_progress/player_progress.dart';
-import 'package:scribby_flutter_v2/providers/animation_state.dart';
-import 'package:scribby_flutter_v2/providers/settings_state.dart';
-import 'package:scribby_flutter_v2/resources/auth_service.dart';
-import 'package:scribby_flutter_v2/screens/welcome_user/welcome_user.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
+import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
 import 'package:scribby_flutter_v2/settings/persistence/local_storage_settings_persistence.dart';
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
-import 'package:scribby_flutter_v2/styles/palette.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await AuthService().getOrCreateUser(); 
+  // await AuthService().getOrCreateUser(); 
   await MobileAds.instance.initialize();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -36,22 +30,22 @@ void main() async {
   }
 
   runApp(MyApp(
-    playerProgressPersistence: LocalStoragePlayerProgressPersistence(),
     settingsPersistence: LocalStorageSettingsPersistence(),
     adsController: adsController,
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final PlayerProgressPersistence playerProgressPersistence;
+  // final PlayerProgressPersistence playerProgressPersistence;
   final SettingsPersistence settingsPersistence;
   final AdsController? adsController;
 
-  const MyApp(
-      {required this.playerProgressPersistence,
-      required this.settingsPersistence,
-      required this.adsController,
-      super.key});
+  const MyApp({
+      // required this.playerProgressPersistence,
+    required this.settingsPersistence,
+    required this.adsController,
+    super.key
+  });
 
   static final defaultDarkColorScheme = ColorScheme.fromSwatch(
       brightness: Brightness.dark,
@@ -65,13 +59,13 @@ class MyApp extends StatelessWidget {
     return AppLifecycleObserver(
       child: MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) {
-          var progress = PlayerProgress(playerProgressPersistence);
-          progress.getLatestFromStore();
-          return progress;
-        }),
-        ChangeNotifierProvider(create: (context) => AnimationState(),),
-        ChangeNotifierProvider(create: (context) => SettingsState(),),
+        // ChangeNotifierProvider(create: (context) {
+        //   var progress = PlayerProgress(playerProgressPersistence);
+        //   progress.getLatestFromStore();
+        //   return progress;
+        // }),
+        // ChangeNotifierProvider(create: (context) => AnimationState(),),
+        // ChangeNotifierProvider(create: (context) => SettingsState(),),
         ChangeNotifierProvider(create: (context) => GamePlayState(),),
         ChangeNotifierProvider(create: (context) => ColorPalette(),),
 
@@ -80,7 +74,7 @@ class MyApp extends StatelessWidget {
           lazy: false,
           create: (context) => SettingsController(
             persistence: settingsPersistence,
-          )..loadStateFromPerisitence(),
+          )..loadStateFromPersistence(),
         ),
         ProxyProvider2<SettingsController, ValueNotifier<AppLifecycleState>,AudioController>(
           lazy: false,
@@ -103,10 +97,30 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(3, 29, 68, 1)),
               useMaterial3: true,
             ),
-            home: const WelcomeUser(),
+            home: const AuthScreen(),
+            // home: const TestHome(),
           );
         }
       ),
     ));
+  }
+}
+
+
+class TestHome extends StatefulWidget {
+  const TestHome({super.key});
+
+  @override
+  State<TestHome> createState() => _TestHomeState();
+}
+
+class _TestHomeState extends State<TestHome> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text("test"),
+      ),
+    );
   }
 }
