@@ -104,6 +104,23 @@ flutter:
     - assets/images/
     - assets/audio/sfx/
     - assets/json/
+
+    - assets/json/levels.json
+    - assets/json/game_types.json
+    - assets/json/ranks.json
+    - assets/json/achievements.json
+    
+    - assets/images/treasure_scribby.png
+    - assets/images/play-player-button-of-video-svgrepo-com.svg
+    - assets/images/bomb_icon.png
+    - assets/images/snowflake_icon.png
+    - assets/images/swap_image.png
+    - assets/images/coin_image.png
+    - assets/images/xp_image.png    
+    - assets/images/play_ad_image.png
+    - assets/images/no_damn_good_studios_logo.png
+    - assets/images/ndg_logo_official.png
+    - assets/images/scribby_label_1.png    
     # - assets/audio/sfx/start_game.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -132,3 +149,25 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  color: "#42a5f5"
+  image: "assets/images/ndg_logo_official.png"
+  icon_background_color: "#cacaca"
+
+  # branding: "assets/images/ndg_branding-removebg-preview.png"
+
+
+  color_dark: "#FFFFFF"
+
+  android_12:
+    image: "assets/images/ndg_logo_official.png"
+    # branding: "assets/images/ndg_branding-removebg-preview.png"
+    icon_background_color: "#cacaca"
+
+
+    # Splash screen background color.
+    color: "#FFFFFF"
