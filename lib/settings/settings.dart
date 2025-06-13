@@ -8,6 +8,10 @@ class SettingsController {
   /// Whether or not the sound is on at all. This overrides both music and sound.
 
   ValueNotifier<Object> deviceSizeInfo = ValueNotifier({});
+  
+  ValueNotifier<String> language = ValueNotifier("en");
+
+  ValueNotifier<String> theme = ValueNotifier("default");  
 
   ValueNotifier<String> user = ValueNotifier("User");
 
@@ -46,6 +50,8 @@ class SettingsController {
   Future<void> loadStateFromPersistence() async {
     await Future.wait([ // await
       _persistence.getDeviceSizeInfo().then((value)=>deviceSizeInfo.value = value),
+      _persistence.getLanguage().then((value) => language.value = value),
+      _persistence.getTheme().then((value) => theme.value = value),
       _persistence.getUser().then((value) => user.value = value),
       _persistence.getUserData().then((value) => userData.value = value),
       _persistence.getSoundsOn(defaultValue: kIsWeb).then((value) => soundsOn.value = value),
@@ -64,7 +70,18 @@ class SettingsController {
 
   void setDeviceSizeInfo(Object value) {
     deviceSizeInfo.value = value;
-    _persistence.saveDeviceSizeInfo(deviceSizeInfo.value);
+    _persistence.saveDeviceSizeInfo(deviceSizeInfo.value);    
+  }  
+
+  void setLanguage(String value) {
+    language.value = value;
+    _persistence.saveLanguage(language.value);
+  }  
+
+
+  void setTheme(String value) {
+    theme.value = value;
+    _persistence.saveTheme(theme.value);
   }  
 
   void setUser(String value) {

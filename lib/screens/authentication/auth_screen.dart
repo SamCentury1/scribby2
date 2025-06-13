@@ -25,10 +25,17 @@ class _AuthScreenState extends State<AuthScreen> {
     final SettingsController settings = Provider.of<SettingsController>(context,listen:false);
     final ColorPalette palette = Provider.of<ColorPalette>(context,listen:false);
 
+    print("in the initstate func of the auth screen. device size data: ${settings.deviceSizeInfo.value} | language: ${settings.language.value} ");
+    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
+        // StorageMethods().saveDeviceSizeInfoToSettings(settings);
+        final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
         StorageMethods().saveDeviceSizeInfoToSettings(settings);
-        palette.getThemeColors('default');
+        StorageMethods().saveLanguageLocalesToSettings(settings);
+        StorageMethods().initializeThemeColor(settings);        
+        palette.getThemeColors(settings.theme.value);
       });
     });        
   }  
@@ -58,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   if (futureSnapshot.connectionState == ConnectionState.waiting) {
                     return Scaffold(body: Center(child: CircularProgressIndicator()));
                   } else if (futureSnapshot.hasError) {
-                    return Scaffold(body: Center(child: Text('Error: ${futureSnapshot.error}')));
+                    return Scaffold(body: Center(child: Text('Error: ${futureSnapshot.error} | ${futureSnapshot.stackTrace}')));
                   } else {
                     return HomeScreen(); // Only return after getScreenSizeData() completes
                   }

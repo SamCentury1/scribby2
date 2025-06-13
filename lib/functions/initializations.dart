@@ -52,7 +52,9 @@ class Initializations {
     print("userData => $userData");
     
     if (userData.isNotEmpty) {
-      palette.getThemeColors(userData["parameters"]["theme"]);
+      // fix bug of old user doc in firebase which saved the theme as a bool in parameters
+      // palette.getThemeColors(userData["parameters"]["theme"]);
+      palette.getThemeColors(settings.theme.value);
     }
 
     // await StorageMethods().saveDummyUserToSettings(settings,palette);

@@ -4,6 +4,10 @@ abstract class SettingsPersistence {
 
   Future<String> getUser();
 
+  Future<String> getLanguage();
+
+  Future<String> getTheme();
+
   // Future<String> getColorTheme();
 
   // Future<Object> getUserData();
@@ -37,6 +41,10 @@ abstract class SettingsPersistence {
   // Future<void> saveSoundsOn(bool value);
 
   Future<void> saveUser(String value);
+
+  Future<void> saveLanguage(String value);  
+
+  Future<void> saveTheme(String value);  
 
   // Future<void> saveColorTheme(String value);
 

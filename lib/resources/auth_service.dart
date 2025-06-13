@@ -39,7 +39,7 @@ class AuthService {
     }    
   }
 
-  Future<UserCredential?> signInWithGoogle() async {
+  Future<UserCredential?> signInWithGoogle(BuildContext context) async {
     print("sign in with google");
     try {
       final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
@@ -68,18 +68,34 @@ class AuthService {
           "providerData": providerData,
         };
         FirestoreMethods().saveUserToDatabase(userData);
-      }      
+      }    
+      return cred;  
     } catch(e) {
       print("===========================================");
       print("GOOGLE SIGN IN ERROR:");
       print("$e");
       print("===========================================");
+
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Sign In Failed"),
+          content: Text("Google sign-in failed.\n\nDetails: $e"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );        
       return null;
     }
   }
 
-  Future<UserCredential?> signInWithApple() async {
+  Future<UserCredential?> signInWithApple(BuildContext context) async {
     try {
+      
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -113,15 +129,31 @@ class AuthService {
           "providerData": providerData,
         };
         FirestoreMethods().saveUserToDatabase(userData);
+
       }
 
       return cred;
 
     } catch (e) {
+      
       print("===========================================");
       print("APPLE SIGN IN ERROR:");
       print("$e");
       print("===========================================");
+
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Sign In Failed"),
+          content: Text("Apple sign-in failed.\n\nDetails: $e"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );      
       return null;
     }
   }

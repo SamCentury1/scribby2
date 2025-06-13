@@ -7,6 +7,7 @@ class Helpers {
   double getScalor(SettingsController settings) {
     final Map<dynamic,dynamic> deviceSizeData = settings.deviceSizeInfo.value as Map<dynamic,dynamic>;
     final scalor = deviceSizeData["scalor"];
+    print("in the getScalor funciton: $deviceSizeData | $scalor");
     return scalor;  
   }
 

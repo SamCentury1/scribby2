@@ -7,6 +7,8 @@ import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dar
 class MemoryOnlySettingsPersistence implements SettingsPersistence {
   bool soundsOn = true;
   String user = "User";
+  String language = 'en';
+  String theme = 'default';
   List<dynamic> levelData = [];
   List<dynamic> gameInfoData = [];
   int coins = 10;
@@ -25,6 +27,12 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
 
   @override
   Future<String> getUser() async => user;
+
+  @override
+  Future<String> getLanguage() async => language;  
+
+  @override
+  Future<String> getTheme() async => theme;    
 
   // @override
   // Future<String> getColorTheme() async => darkTheme;
@@ -68,6 +76,12 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
 
   @override
   Future<void> saveUser(String value) async => user = value;
+
+  @override
+  Future<void> saveLanguage(String value) async => language = value;  
+
+  @override
+  Future<void> saveTheme(String value) async => theme = value;    
 
   // @override
   // Future<String> saveColorTheme(String value) async => darkTheme = value;

@@ -44,7 +44,7 @@ class LoginTextField extends StatelessWidget {
         filled: true,
         hintText: hintText,
         hintStyle: TextStyle(
-          color: palette.widget1,
+          color: palette.text1,
           fontSize: 18 * scalor,
         )
       ),

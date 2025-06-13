@@ -65,6 +65,19 @@ class StorageMethods {
     };
     settings.setDeviceSizeInfo(deviceSizeInfo);
 
+    print("device size ratio has been initialized in storage methods: ${deviceSizeInfo}");
+
+  }
+
+  Future<void> saveLanguageLocalesToSettings(SettingsController settings) async {
+    print("language has been initialized in storage methods");
+    final String languageCode = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+    settings.setLanguage(languageCode);
+  }
+
+  Future<void> initializeThemeColor(SettingsController settings) async {
+    print("theme has been initialized in storage methods");
+    settings.setTheme("default");
   }
 
   Future<void> saveDummyUserToSettings(SettingsController settings, ColorPalette palette) async {

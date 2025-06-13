@@ -22,6 +22,20 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
     return prefs.getString('user') ?? "";
   }
 
+  @override
+  Future<String> getLanguage() async {
+    final prefs = await instanceFuture;
+    return prefs.getString('language') ?? "en";
+  }
+
+
+  @override
+  Future<String> getTheme() async {
+    final prefs = await instanceFuture;
+    return prefs.getString('theme') ?? "default";
+  }  
+
+
   // @override
   // Future<String> getColorTheme() async {
   //   final prefs = await instanceFuture;
@@ -109,6 +123,19 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
     final prefs = await instanceFuture;
     await prefs.setString('user', value);
   }
+
+  @override
+  Future<void> saveLanguage(String value) async {
+    final prefs = await instanceFuture;
+    await prefs.setString('language', value);
+  }  
+
+  @override
+  Future<void> saveTheme(String value) async {
+    final prefs = await instanceFuture;
+    await prefs.setString('theme', value);
+  }  
+
 
   // @override
   // Future<void> saveColorTheme(String value) async {

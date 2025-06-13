@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/app_lifecycle/app_lifecycle.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
+import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
 import 'package:scribby_flutter_v2/screens/home_screen.dart';
 import 'package:scribby_flutter_v2/settings/persistence/local_storage_settings_persistence.dart';
@@ -30,6 +31,8 @@ void main() async {
   //   adsController = AdsController(MobileAds.instance);
   //   adsController.initialize();
   // }
+
+
     
   runApp(MyApp(
     settingsPersistence: LocalStorageSettingsPersistence(),
@@ -57,6 +60,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     // initializeSplashScreen();
+
   }
 
   @override
@@ -71,6 +75,7 @@ class _MyAppState extends State<MyApp> {
   //   print("unpausing");
   //   FlutterNativeSplash.remove();
   // }
+
 
   // This widget is the root of your application.
   @override
@@ -92,10 +97,20 @@ class _MyAppState extends State<MyApp> {
             )..loadStateFromPersistence(),
           ),
         ],
-        child: MaterialApp(
-          title: "Scribby",
-          debugShowCheckedModeBanner: false,
-          home: const AuthScreen(),
+        child: Builder(
+          builder: (context)  {
+
+
+
+
+            // palette.getThemeColors("default");
+            
+            return MaterialApp(
+              title: "Scribby",
+              debugShowCheckedModeBanner: false,
+              home: const AuthScreen(),
+            );
+          }
         ),
       ),
     );
