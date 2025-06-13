@@ -1,0 +1,66 @@
+[
+    {
+        "name": "classic",
+        "description": "Score as many points as possible within a certain timeframe",
+        "details":[
+            "The objective of the game is to score as many points as possible before the time runs out.",
+            "The duration of the game is outlined at the start of the game.",
+            "There is no time-limit to each move made."
+        ]
+    },
+
+    {
+        "name": "timed-move",
+        "description": "Under time pressure to make a move within a certain timeframe, try to score as much as possible in a given game",
+        "details": [
+            "You need to place the letter on the board before a timer reaches zero.", 
+            "The time to make a move can be as long as 10+ seconds and as short as 1 second!",
+            "If you cannot make a move in the given time, a tile will be removed from the board.",
+            "The objective is to score as many points as possible in a given game time duration."
+        ]
+    },
+    
+    {
+        "name": "scavenger-hunt",
+        "description": "A list of challenges is given and the goal is to complete as many of them as possible within a given timeframe.",
+        "details": [
+            "A set of challenging items is given at the start of the game",
+            "Examples: 'cross two 5 letter words', 'find 3 words in one turn', 'get a 4 turn point streak', 'make an anagram' ...",
+            "Items can be achieved in any order.",
+            "The objective is to complete as many challenges as possible."
+
+        ]
+    },
+
+    {
+        "name": "word-search",
+        "description": "Try to find as many words as possible related to a predetermined theme",
+        "details": [
+            "A list of hidden words related to a given theme is given at the start of the game.",
+            "You can consult the list of hidden words and obtain get clues for help",
+            "The objective is to complete as many of the items as possible in a given timeframe.",
+            "There is no time-limit to place a tile"
+        ]
+    },
+    
+    {
+        "name": "sprint",
+        "description": "A target is given at the start of the game, the objective is to reach it in as little time as possible",
+        "details": [
+            "Play as long as you need, but the quicker you can achieve the target number of points or (words), the better your score will be.",
+            "There is no time-limit to place a tile, but you will want to hurry!"
+        ]
+    },
+    
+    {
+        "name": "arcade",
+        "description": "Unlimited time is given, the objective is to score the highest amount of time and climb as many levels as possible!",
+        "details": [
+            "You can play as long as you want, so long as you can survive!",
+            "There is a time-limit to each move, after which a tile will be removed if you cannot play within the time given",
+            "The game ends when you have no more space to move.",
+            "You will climb levels as you advance in the game, causing the game to get harder and harder...",
+            "The end goal is to score as many points as possible, and reach the highest level possible."
+        ]
+    }    
+]

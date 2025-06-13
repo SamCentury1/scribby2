@@ -1,0 +1,127 @@
+[
+    {"key": "1_1", "rank": 1, "level": 1, "rankName": "Spore", "xpRange": [0,50]},
+    {"key": "1_2", "rank": 1, "level": 2, "rankName": "Spore", "xpRange": [51,100]},
+    {"key": "1_3", "rank": 1, "level": 3, "rankName": "Spore", "xpRange": [101,151]},
+
+    {"key": "2_1", "rank": 2, "level": 1, "rankName": "Novice", "xpRange": [151,200]},
+    {"key": "2_2", "rank": 2, "level": 2, "rankName": "Novice", "xpRange": [201,250]},
+    {"key": "2_3", "rank": 2, "level": 3, "rankName": "Novice", "xpRange": [251,300]},
+    {"key": "2_4", "rank": 2, "level": 4, "rankName": "Novice", "xpRange": [301,350]},
+    {"key": "2_5", "rank": 2, "level": 5, "rankName": "Novice", "xpRange": [351,400]},
+
+    {"key": "3_1", "rank": 3, "level": 1, "rankName": "Beginner", "xpRange": [401,450]},
+    {"key": "3_2", "rank": 3, "level": 2, "rankName": "Beginner", "xpRange": [451,500]},
+    {"key": "3_3", "rank": 3, "level": 3, "rankName": "Beginner", "xpRange": [501,550]},
+    {"key": "3_4", "rank": 3, "level": 4, "rankName": "Beginner", "xpRange": [551,600]},
+    {"key": "3_5", "rank": 3, "level": 5, "rankName": "Beginner", "xpRange": [601,650]},
+
+    {"key": "4_1", "rank": 4, "level": 1, "rankName": "Learner", "xpRange": [651,700]},
+    {"key": "4_2", "rank": 4, "level": 2, "rankName": "Learner", "xpRange": [701,750]},
+    {"key": "4_3", "rank": 4, "level": 3, "rankName": "Learner", "xpRange": [751,800]},
+    {"key": "4_4", "rank": 4, "level": 4, "rankName": "Learner", "xpRange": [801,850]},
+    {"key": "4_5", "rank": 4, "level": 5, "rankName": "Learner", "xpRange": [851,900]},
+
+    {"key": "5_1", "rank": 5, "level": 1, "rankName": "Explorer", "xpRange": [901,950]},
+    {"key": "5_2", "rank": 5, "level": 2, "rankName": "Explorer", "xpRange": [951,1000]},
+    {"key": "5_3", "rank": 5, "level": 3, "rankName": "Explorer", "xpRange": [1001,1050]},
+    {"key": "5_4", "rank": 5, "level": 4, "rankName": "Explorer", "xpRange": [1051,1100]},
+    {"key": "5_5", "rank": 5, "level": 5, "rankName": "Explorer", "xpRange": [1101,1150]},
+
+    {"key": "6_1", "rank": 6, "level": 1, "rankName": "Explorer", "xpRange": [1151,1200]},
+    {"key": "6_2", "rank": 6, "level": 2, "rankName": "Explorer", "xpRange": [1201,1250]},
+    {"key": "6_3", "rank": 6, "level": 3, "rankName": "Explorer", "xpRange": [1251,1300]},
+    {"key": "6_4", "rank": 6, "level": 4, "rankName": "Explorer", "xpRange": [1301,1350]},
+    {"key": "6_5", "rank": 6, "level": 5, "rankName": "Explorer", "xpRange": [1351,1400]},
+
+    {"key": "7_1", "rank": 7, "level": 1, "rankName": "Thinker", "xpRange": [1451,1500]},
+    {"key": "7_2", "rank": 7, "level": 2, "rankName": "Thinker", "xpRange": [1501,1550]},
+    {"key": "7_3", "rank": 7, "level": 3, "rankName": "Thinker", "xpRange": [1551,1600]},
+    {"key": "7_4", "rank": 7, "level": 4, "rankName": "Thinker", "xpRange": [1601,1650]},
+    {"key": "7_5", "rank": 7, "level": 5, "rankName": "Thinker", "xpRange": [1651,1700]},
+
+    {"key": "8_1", "rank": 8, "level": 1, "rankName": "Solver", "xpRange": [1751, 1800]},
+    {"key": "8_2", "rank": 8, "level": 2, "rankName": "Solver", "xpRange": [1801, 1850]},
+    {"key": "8_3", "rank": 8, "level": 3, "rankName": "Solver", "xpRange": [1851, 1900]},
+    {"key": "8_4", "rank": 8, "level": 4, "rankName": "Solver", "xpRange": [1901, 1950]},
+    {"key": "8_5", "rank": 8, "level": 5, "rankName": "Solver", "xpRange": [1951, 2000]},
+
+    {"key": "9_1", "rank": 9, "level": 1, "rankName": "Strategist", "xpRange": [2001, 2050]},
+    {"key": "9_2", "rank": 9, "level": 2, "rankName": "Strategist", "xpRange": [2051, 2100]},
+    {"key": "9_3", "rank": 9, "level": 3, "rankName": "Strategist", "xpRange": [2101, 2150]},
+    {"key": "9_4", "rank": 9, "level": 4, "rankName": "Strategist", "xpRange": [2151, 2200]},
+    {"key": "9_5", "rank": 9, "level": 5, "rankName": "Strategist", "xpRange": [2201, 2250]},
+
+    {"key": "10_1", "rank": 10, "level": 1, "rankName": "Analyst", "xpRange": [2251, 2300]},
+    {"key": "10_2", "rank": 10, "level": 2, "rankName": "Analyst", "xpRange": [2301, 2350]},
+    {"key": "10_3", "rank": 10, "level": 3, "rankName": "Analyst", "xpRange": [2351, 2400]},
+    {"key": "10_4", "rank": 10, "level": 4, "rankName": "Analyst", "xpRange": [2401, 2450]},
+    {"key": "10_5", "rank": 10, "level": 5, "rankName": "Analyst", "xpRange": [2451, 2500]},
+
+    {"key": "11_1", "rank": 11, "level": 1, "rankName": "Scholar", "xpRange": [2501, 2550]},
+    {"key": "11_2", "rank": 11, "level": 2, "rankName": "Scholar", "xpRange": [2551, 2600]},
+    {"key": "11_3", "rank": 11, "level": 3, "rankName": "Scholar", "xpRange": [2601, 2650]},
+    {"key": "11_4", "rank": 11, "level": 4, "rankName": "Scholar", "xpRange": [2651, 2700]},
+    {"key": "11_5", "rank": 11, "level": 5, "rankName": "Scholar", "xpRange": [2701, 2750]},
+
+    {"key": "12_1", "rank": 12, "level": 1, "rankName": "Adept", "xpRange": [2751, 2800]},
+    {"key": "12_2", "rank": 12, "level": 2, "rankName": "Adept", "xpRange": [2801, 2850]},
+    {"key": "12_3", "rank": 12, "level": 3, "rankName": "Adept", "xpRange": [2851, 2900]},
+    {"key": "12_4", "rank": 12, "level": 4, "rankName": "Adept", "xpRange": [2901, 2950]},
+    {"key": "12_5", "rank": 12, "level": 5, "rankName": "Adept", "xpRange": [2951, 3000]},
+
+    {"key": "13_1", "rank": 13, "level": 1, "rankName": "Expert", "xpRange": [3001, 3050]},
+    {"key": "13_2", "rank": 13, "level": 2, "rankName": "Expert", "xpRange": [3051, 3100]},
+    {"key": "13_3", "rank": 13, "level": 3, "rankName": "Expert", "xpRange": [3101, 3150]},
+    {"key": "13_4", "rank": 13, "level": 4, "rankName": "Expert", "xpRange": [3151, 3200]},
+    {"key": "13_5", "rank": 13, "level": 5, "rankName": "Expert", "xpRange": [3201, 3250]},
+    
+    {"key": "14_1", "rank": 14, "level": 1, "rankName": "Tactician", "xpRange": [3251, 3300]},
+    {"key": "14_2", "rank": 14, "level": 2, "rankName": "Tactician", "xpRange": [3301, 3350]},
+    {"key": "14_3", "rank": 14, "level": 3, "rankName": "Tactician", "xpRange": [3351, 3400]},
+    {"key": "14_4", "rank": 14, "level": 4, "rankName": "Tactician", "xpRange": [3401, 3450]},
+    {"key": "14_5", "rank": 14, "level": 5, "rankName": "Tactician", "xpRange": [3451, 3500]},
+    
+    {"key": "15_1", "rank": 15, "level": 1, "rankName": "Mastermind", "xpRange": [3501, 3550]},
+    {"key": "15_2", "rank": 15, "level": 2, "rankName": "Mastermind", "xpRange": [3551, 3600]},
+    {"key": "15_3", "rank": 15, "level": 3, "rankName": "Mastermind", "xpRange": [3601, 3650]},
+    {"key": "15_4", "rank": 15, "level": 4, "rankName": "Mastermind", "xpRange": [3651, 3700]},
+    {"key": "15_5", "rank": 15, "level": 5, "rankName": "Mastermind", "xpRange": [3701, 3750]},
+    
+    {"key": "16_1", "rank": 16, "level": 1, "rankName": "Champion", "xpRange": [3751, 3800]},
+    {"key": "16_2", "rank": 16, "level": 2, "rankName": "Champion", "xpRange": [3801, 3850]},
+    {"key": "16_3", "rank": 16, "level": 3, "rankName": "Champion", "xpRange": [3851, 3900]},
+    {"key": "16_4", "rank": 16, "level": 4, "rankName": "Champion", "xpRange": [3901, 3950]},
+    {"key": "16_5", "rank": 16, "level": 5, "rankName": "Champion", "xpRange": [3951, 4000]},
+
+    {"key": "17_1", "rank": 17, "level": 1, "rankName": "Elite", "xpRange": [4001, 4050]},
+    {"key": "17_2", "rank": 17, "level": 2, "rankName": "Elite", "xpRange": [4051, 4100]},
+    {"key": "17_3", "rank": 17, "level": 3, "rankName": "Elite", "xpRange": [4101, 4150]},
+    {"key": "17_4", "rank": 17, "level": 4, "rankName": "Elite", "xpRange": [4151, 4200]},
+    {"key": "17_5", "rank": 17, "level": 5, "rankName": "Elite", "xpRange": [4201, 4250]},
+    
+    {"key": "18_1", "rank": 18, "level": 1, "rankName": "Grandmaster", "xpRange": [4251, 4300]},
+    {"key": "18_2", "rank": 18, "level": 2, "rankName": "Grandmaster", "xpRange": [4301, 4350]},
+    {"key": "18_3", "rank": 18, "level": 3, "rankName": "Grandmaster", "xpRange": [4351, 4400]},
+    {"key": "18_4", "rank": 18, "level": 4, "rankName": "Grandmaster", "xpRange": [4401, 4450]},
+    {"key": "18_5", "rank": 18, "level": 5, "rankName": "Grandmaster", "xpRange": [4451, 4500]},
+    
+    {"key": "19_1", "rank": 19, "level": 1, "rankName": "Virtuoso", "xpRange": [4501, 4550]},
+    {"key": "19_2", "rank": 19, "level": 2, "rankName": "Virtuoso", "xpRange": [4551, 4600]},
+    {"key": "19_3", "rank": 19, "level": 3, "rankName": "Virtuoso", "xpRange": [4601, 4650]},
+    {"key": "19_4", "rank": 19, "level": 4, "rankName": "Virtuoso", "xpRange": [4651, 4700]},
+    {"key": "19_5", "rank": 19, "level": 5, "rankName": "Virtuoso", "xpRange": [4701, 4750]},
+
+    {"key": "20_1", "rank": 20, "level": 1, "rankName": "Legend", "xpRange": [4751, 4800]},
+    {"key": "20_2", "rank": 20, "level": 2, "rankName": "Legend", "xpRange": [4801, 4850]},
+    {"key": "20_3", "rank": 20, "level": 3, "rankName": "Legend", "xpRange": [4851, 4900]},
+    {"key": "20_4", "rank": 20, "level": 4, "rankName": "Legend", "xpRange": [4901, 4950]},
+    {"key": "20_5", "rank": 20, "level": 5, "rankName": "Legend", "xpRange": [4951, 5000]},
+    
+    {"key": "21_1", "rank": 21, "level": 1, "rankName": "Ascendant", "xpRange": [5001, 5050]},
+    {"key": "21_2", "rank": 21, "level": 2, "rankName": "Ascendant", "xpRange": [5051, 5100]},
+    {"key": "21_3", "rank": 21, "level": 3, "rankName": "Ascendant", "xpRange": [5101, 5150]},
+    {"key": "21_4", "rank": 21, "level": 4, "rankName": "Ascendant", "xpRange": [5151, 5200]},
+    {"key": "21_5", "rank": 21, "level": 5, "rankName": "Ascendant", "xpRange": [5201, 5250]}
+]
+
+

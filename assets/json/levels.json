@@ -1,0 +1,110 @@
+[
+
+
+    {
+        "levelId": 100001,
+        "levelName": "Timed-Move Puzzle #1",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "timed-move",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": 600,
+        "timeToPlaceSeconds": 10,
+        "difficulty": 0
+    },
+
+    {
+        "levelId": 100002,
+        "levelName": "Timed-Move Puzzle #2",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "timed-move",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": 500,
+        "timeToPlaceSeconds": 10,
+        "difficulty": 0
+    },
+    
+    {
+        "levelId": 100003,
+        "levelName": "Timed-Move Puzzle #3",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "timed-move",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": 300,
+        "timeToPlaceSeconds": 10,
+        "difficulty": 0
+    },
+    
+    {
+        "levelId": 100004,
+        "levelName": "Timed-Move Puzzle #4",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "timed-move",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": 600,
+        "timeToPlaceSeconds": 10,
+        "difficulty": 0
+    },    
+
+
+
+    {
+        "levelId": 200001,
+        "levelName": "Sprint Puzzle #1",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "sprint",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": null,
+        "timeToPlaceSeconds": null,
+        "difficulty": 0
+    },
+
+    {
+        "levelId": 200002,
+        "levelName": "Sprint Puzzle #2",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "sprint",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": null,
+        "timeToPlaceSeconds": null,
+        "difficulty": 0
+    },
+    
+    {
+        "levelId": 200003,
+        "levelName": "Sprint Puzzle #3",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "sprint",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": null,
+        "timeToPlaceSeconds": null,
+        "difficulty": 0
+    },
+    
+    {
+        "levelId": 200004,
+        "levelName": "Sprint Puzzle #4",
+        "rows": 6,
+        "columns": 6,
+        "gameType": "sprint",
+        "objectiveText": null,
+        "targets": null,
+        "gameDuration": null,
+        "timeToPlaceSeconds": null,
+        "difficulty": 0
+    }
+
+]

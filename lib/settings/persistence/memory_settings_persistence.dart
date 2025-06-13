@@ -1,3 +1,4 @@
+
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
 
 /// An in-memory implementation of [SettingsPersistence].
@@ -5,61 +6,107 @@ import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dar
 
 class MemoryOnlySettingsPersistence implements SettingsPersistence {
   bool soundsOn = true;
-  bool muted = false;
   String user = "User";
-  bool darkTheme = true;
+  List<dynamic> levelData = [];
+  List<dynamic> gameInfoData = [];
+  int coins = 10;
+  Object deviceSizeInfo = {};
+  Object achievements = {};
+  List<dynamic> userGameHistory = [];
   Object userData = {};
-  List<dynamic> alphabet = [];
-  Object initialTileState = {};
-  String dictionary = "";
+  List<dynamic> rankData = [];
+  List<dynamic> achievementData = [];
+  int xp = 10;  
 
   /// ============= GET ===================
   @override
-  Future<bool> getSoundsOn() async => soundsOn;
+  Future<bool> getSoundsOn({required bool defaultValue}) async => soundsOn;
 
-  @override
-  Future<bool> getMuted({required bool defaultValue}) async => muted;
 
   @override
   Future<String> getUser() async => user;
 
+  // @override
+  // Future<String> getColorTheme() async => darkTheme;
+
+  // @override
+  // Future<Object> getUserData() async => userData;
+
   @override
-  Future<bool> getDarkTheme() async => darkTheme;
+  Future<List<dynamic>> getLevelData() async => levelData;
+
+  @override
+  Future<List<dynamic>> getGameInfoData() async => gameInfoData;  
+
+  @override
+  Future<int> getCoins() async => coins;    
+
+  @override
+  Future<Object> getDeviceSizeInfo() async => deviceSizeInfo;      
+
+  @override
+  Future<Object> getAchievements() async => achievements;              
+
+  @override
+  Future<List<dynamic>> getUserGameHistory() async => userGameHistory;  
 
   @override
   Future<Object> getUserData() async => userData;
 
   @override
-  Future<List<dynamic>> getAlphabet() async => alphabet;
+  Future<List<dynamic>> getRankData() async => rankData;  
 
   @override
-  Future<Object> getInitialTileState() async => initialTileState;  
+  Future<List<dynamic>> getAchievementData() async => achievementData;
 
   @override
-  Future<String> getDictionary() async => dictionary;    
-
+  Future<int> getXP() async => xp;
   /// =========== SAVE ========================
-  @override
-  Future<void> saveSoundsOn(bool value) async => soundsOn = value;
+  // @override
+  // Future<void> saveSoundsOn(bool value) async => soundsOn = value;
 
-  @override
-  Future<void> saveMuted(bool value) async => muted = value;
 
   @override
   Future<void> saveUser(String value) async => user = value;
 
+  // @override
+  // Future<String> saveColorTheme(String value) async => darkTheme = value;
+
+  // @override
+  // Future<void> saveUserData(Object value) async => userData = value;
+
+
   @override
-  Future<void> saveDarkTheme(bool value) async => darkTheme = value;
+  Future<void> saveLevelData(List<dynamic> value) async => levelData = value;
+
+  @override
+  Future<void> saveGameInfoData(List<dynamic> value) async => gameInfoData = value;
+
+  @override
+  Future<void> saveSoundsOn(bool value) async => soundsOn = value;  
+
+  @override
+  Future<void> saveCoins(int value) async => coins = value;    
+
+  @override
+  Future<void> saveDeviceSizeInfo(Object value) async => deviceSizeInfo = value;    
+
+
+  @override
+  Future<void> saveAchievements(Object value) async => achievements = value;   
+
+  @override
+  Future<void> saveUserGameHistory(List<dynamic> value) async => userGameHistory = value;
 
   @override
   Future<void> saveUserData(Object value) async => userData = value;
 
   @override
-  Future<void> saveAlphabet(List<dynamic> value) async => alphabet = value;
+  Future<void> saveRankData(List<dynamic> value) async => rankData = value;
 
   @override
-  Future<void> saveInitialTileState(Object value) async => initialTileState = value; 
-  
+  Future<void> saveAchievementData(List<dynamic> value) async => achievementData = value;
+
   @override
-  Future<void> saveDictionary(String value) async => initialTileState = value;    
+  Future<void> saveXP(int value) async => xp = value;    
 }

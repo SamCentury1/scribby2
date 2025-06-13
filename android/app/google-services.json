@@ -12,7 +12,20 @@
           "package_name": "com.example.scribby_flutter_v2"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "712370123958-r08g6e667hu25k4csv9jg0f43unlphkp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scribby_flutter_v2",
+            "certificate_hash": "d132101b42339b519fe974a0dc0b1fbb47e0b2b4"
+          }
+        },
+        {
+          "client_id": "712370123958-l9ie0ke3dqk09m02sn1jllv38h1824sc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCRs96lfDcjpM_iDtCOSSSYWtRS-X2VVJ8"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712370123958-l9ie0ke3dqk09m02sn1jllv38h1824sc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "712370123958-553ei202o3j6s0pbkci3gto4tkg2kalj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.scribbyFlutterV2.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }
