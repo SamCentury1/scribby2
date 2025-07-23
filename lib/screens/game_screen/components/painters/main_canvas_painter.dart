@@ -21,22 +21,19 @@ class MainCanvasPainter extends CustomPainter {
   @override  
   void paint(Canvas canvas, Size size) {
 
-    Paint backgroundPaint = Paint()
-    ..shader = ui.Gradient.linear(
-      Offset.zero,
-      Offset(size.width,size.height),
-      [
-        palette.bg1,
-        palette.bg2
-        // const ui.Color.fromARGB(255, 55, 116, 173),
-        // const ui.Color.fromARGB(255, 38, 9, 92)
-      ],
-    );
+    final Rect rect = Offset.zero & size;
+    final Paint backgroundPaint = Paint()
+      ..shader = RadialGradient(
+        colors: [palette.bg1, palette.bg2],
+        center: Alignment(0.0,0.24), // You can also use Alignment.topLeft, etc.
+        radius: 0.9,              // Relative to the shorter side of the rect
+      ).createShader(rect);
 
+    canvas.drawRect(rect, backgroundPaint); // Or drawCircle, drawRRect, etc.
 
       // Rect canvasRect = Rect.fromCenter(center: canvasCenter,w,h);
     // canvas.drawRect(canvasRect, backgroundPaint);
-    canvas.drawPaint(backgroundPaint);
+    // canvas.drawPaint(backgroundPaint);
 
 
     // Painters().drawPlayArea(canvas,gamePlayState);

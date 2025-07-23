@@ -109,7 +109,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
-                        child: CustomPaint(painter: GradientBackground(palette: palette, settings: settings, decorationData: []),)
+                        child: CustomPaint(painter: GradientBackground(settings: settings, palette: palette, decorationData: []),)
                       ),
                       Column(
                         children: [

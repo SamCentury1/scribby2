@@ -90,9 +90,10 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                 height: MediaQuery.of(context).size.height,            
                 child: Stack(
                   children: [
-                    CustomPaint(
-                      painter: GradientBackground(settings: settings, palette: palette, decorationData: []),
-                    ),              
+                    // CustomPaint(
+                    //   painter: GradientBackground(settings: settings, palette: palette, decorationData: []),
+                    // ),             
+                    // CustomPaint(painter: GradientBackground(palette: palette, settings: settings, decorationData: []),), 
                     Scaffold(
                       // backgroundColor: Colors.transparent,
                       key: _scaffoldKey,
