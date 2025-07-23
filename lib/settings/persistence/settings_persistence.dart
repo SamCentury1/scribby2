@@ -31,6 +31,10 @@ abstract class SettingsPersistence {
 
   Future<List<dynamic>> getRankData();
 
+  Future<List<dynamic>> getAlphabet();  
+
+  Future<String> getDictionary();
+
   Future<List<dynamic>> getAchievementData();
 
   Future<int> getXP();  
@@ -67,6 +71,10 @@ abstract class SettingsPersistence {
   Future<void> saveUserData(Object value);
 
   Future<void> saveRankData(List<dynamic> value);  
+
+  Future<void> saveAlphabet(List<dynamic> value);
+
+  Future<void> saveDictionary(String value);
 
   Future<void> saveAchievementData(List<dynamic> value); 
 

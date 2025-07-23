@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/components/loading_image.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/initializations.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/authentication/login_or_register_screen.dart';
-import 'package:scribby_flutter_v2/screens/home_screen.dart';
+import 'package:scribby_flutter_v2/screens/home_screen/home_screen.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -34,7 +35,8 @@ class _AuthScreenState extends State<AuthScreen> {
         final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
         StorageMethods().saveDeviceSizeInfoToSettings(settings);
         StorageMethods().saveLanguageLocalesToSettings(settings);
-        StorageMethods().initializeThemeColor(settings);        
+        StorageMethods().initializeThemeColor(settings);
+        print("in auth screen: theme value = ${settings.theme.value}");        
         palette.getThemeColors(settings.theme.value);
       });
     });        
@@ -54,7 +56,15 @@ class _AuthScreenState extends State<AuthScreen> {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             print("waiting");
-            return Scaffold(body: Center(child: CircularProgressIndicator()));
+            // return Scaffold(body: Center(child: CircularProgressIndicator()));
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SizedBox(
+                width:MediaQuery.of(context).size.width, 
+                height:MediaQuery.of(context).size.height,
+                child: LoadingImage()
+              )
+            );            
           } else {
             if (snapshot.hasData) {
               
@@ -63,11 +73,20 @@ class _AuthScreenState extends State<AuthScreen> {
                 future: Initializations().initializeAppData(settings, palette, snapshot.data), 
                 builder: (context, AsyncSnapshot<void> futureSnapshot) {
                   if (futureSnapshot.connectionState == ConnectionState.waiting) {
-                    return Scaffold(body: Center(child: CircularProgressIndicator()));
+                    // return Scaffold(body: Center(child: CircularProgressIndicator()));
+                    return Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: SizedBox(
+                        width:MediaQuery.of(context).size.width, 
+                        height:MediaQuery.of(context).size.height,
+                        child: LoadingImage()
+                      )
+                    );                    
                   } else if (futureSnapshot.hasError) {
                     return Scaffold(body: Center(child: Text('Error: ${futureSnapshot.error} | ${futureSnapshot.stackTrace}')));
                   } else {
                     return HomeScreen(); // Only return after getScreenSizeData() completes
+
                   }
                 }
               );

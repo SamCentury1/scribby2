@@ -61,6 +61,9 @@ dependencies:
   sign_in_with_apple: ^7.0.1  
   image_picker: ^1.1.2
   flutter_native_splash: ^2.4.6
+  flutter_svg: ^2.1.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 
 dev_dependencies:
@@ -91,6 +94,7 @@ flutter:
     - assets/json/game_types.json
     - assets/json/ranks.json
     - assets/json/achievements.json
+    - assets/json/alphabets.json
     
     - assets/images/treasure_scribby.png
     - assets/images/play-player-button-of-video-svgrepo-com.svg
@@ -103,6 +107,16 @@ flutter:
     - assets/images/no_damn_good_studios_logo.png
     - assets/images/ndg_logo_official.png
     - assets/images/scribby_label_1.png
+    - assets/images/home_page_tiles.png
+    - assets/images/how_to_play_icon.png
+    - assets/images/shop_image.png
+    - assets/images/analytics_image.jpeg
+    - assets/images/coins_1.png
+    - assets/images/coins_2.png
+    - assets/images/coins_3.png
+    - assets/images/coins_4.png
+    - assets/images/coins_5.png
+    - assets/images/no_ads.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -139,7 +153,7 @@ flutter_native_splash:
 
   color: "#42a5f5"
   image: "assets/images/ndg_logo_official.png"
-  icon_background_color: "#cacaca"
+  icon_background_color: "#FFFFFF"
 
   # branding: "assets/images/ndg_branding-removebg-preview.png"
 
@@ -149,7 +163,7 @@ flutter_native_splash:
   android_12:
     image: "assets/images/ndg_logo_official.png"
     # branding: "assets/images/ndg_branding-removebg-preview.png"
-    icon_background_color: "#cacaca"
+    icon_background_color: "#FFFFFF"
 
 
     # Splash screen background color.

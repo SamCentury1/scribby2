@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/components/background_painter.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
@@ -53,133 +55,165 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context,settings,child) {
 
         final double scalor = Helpers().getScalor(settings);
+        // final List<Map<String,dynamic>> decorationData = [];
         
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: palette.bg1,
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0 * scalor),
-              child: Column(
-                children: [
-                  // SizedBox(height: 50,),
-                  // Icon(Icons.lock,size: 100,),
-                  Expanded(
-                    flex: 2, 
-                    child: SizedBox(
-                      // child: Center(
-                      //   child: Image.asset('assets/images/temp_logo.png'),
-                      // ),
-                    )
-                  ),
-        
-        
-                  Expanded(
-                    flex: 4,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "Welcome back!",
-                          // style: TextStyle(color: Colors.grey[700],fontSize: 24),
-                          style: TextStyle(color: palette.text1,fontSize: 24*scalor),
-                        ),
-                        // SizedBox(height: 15,),
-                        LoginTextField(controller: emailController, hintText: 'Email', obscureText: false, palette: palette,),
-                        // SizedBox(height: 25,),
-                        LoginTextField(controller: passwordController, hintText: 'Password', obscureText: true, palette: palette,),
-                        // SizedBox(height: 10,),
-                    
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "forgot password?",
-                            style: TextStyle(color: palette.text2,fontSize: 16 * scalor),
-                          ),
-                        ),
-                    
-                        // SizedBox(height: 20),
-                        LoginButton(onTap: signInUser, body: "Sign In", palette: palette,),
-                        // SizedBox(height: 20),
-                    
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.0 * scalor),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Divider(thickness: 0.5 * scalor, color: palette.text1,),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0 * scalor),
-                                child: Text(
-                                  "or continue with",
-                                  style: TextStyle(
-                                    color: palette.text1,
-                                    fontSize: 16 * scalor
-                                  ),
+        return Stack(
+          children: [
+            Positioned(
+              // top: 1,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,//-MediaQuery.of(context).padding.top-MediaQuery.of(context).padding.bottom,
+                child: CustomPaint(
+                  painter: GradientBackground(settings: settings, palette: palette, decorationData:[]),
+                ),
+              ),
+            ),              
+            Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.transparent,
+              body: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0 * scalor),
+                  child: Column(
+                    children: [
+                      // SizedBox(height: 50,),
+                      // Icon(Icons.lock,size: 100,),
+                      Expanded(
+                        flex: 2, 
+                        child: SizedBox(
+                          // child: Center(
+                          //   child: Image.asset('assets/images/temp_logo.png'),
+                          // ),
+                        )
+                      ),
+            
+            
+                      Expanded(
+                        flex: 4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "Welcome back!",
+                              // style: TextStyle(color: Colors.grey[700],fontSize: 24),
+                              // style: TextStyle(color: palette.text1,fontSize: 24*scalor),
+                              style: palette.mainAppFont(
+                                textStyle: TextStyle(
+                                  fontSize: 34 * scalor, 
+                                  color: palette.text1
                                 ),
                               ),
-                              Expanded(
-                                child: Divider(thickness: 0.5 * scalor, color: palette.text1,),
-                              )                      
-                            ],
-                          )
-                        ),
-        
-                        // SizedBox(height: 20,),
-                    
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AuthProviderTile(
-                              palette: palette, 
-                              onTap: () => AuthService().signInWithGoogle(context), 
-
-                              
-                              iconData: Icons.g_mobiledata,
                             ),
-                            SizedBox(width: 10,),
-        
-                            AuthProviderTile(
-                              palette: palette, 
-                              onTap: () => AuthService().signInWithApple(context),
-                              iconData: Icons.apple,
-                            ),                        
-                                       
-                          ],
-                        ),
-                        // SizedBox(height: 20,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("not a member?", 
-                              style: TextStyle(
-                                color: palette.text2,
-                                fontSize: 16.0 * scalor
+                            // SizedBox(height: 15,),
+                            LoginTextField(controller: emailController, hintText: 'Email', obscureText: false, palette: palette,),
+                            // SizedBox(height: 25,),
+                            LoginTextField(controller: passwordController, hintText: 'Password', obscureText: true, palette: palette,),
+                            // SizedBox(height: 10,),
+                        
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "forgot password?",
+                                  style: palette.authFont(
+                                    textStyle: TextStyle(
+                                      fontSize: 18 * scalor, 
+                                      color: palette.text1
+                                    ),
+                                  ),
+                              ),
+                            ),
+                        
+                            // SizedBox(height: 20),
+                            LoginButton(onTap: signInUser, body: "Sign In", palette: palette,),
+                            // SizedBox(height: 20),
+                        
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25.0 * scalor),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Divider(thickness: 0.5 * scalor, color: palette.text1,),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10.0 * scalor),
+                                    child: Text(
+                                      "or continue with",
+                                      style: palette.authFont(
+                                        textStyle: TextStyle(
+                                          fontSize: 16 * scalor, 
+                                          color: palette.text1
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Divider(thickness: 0.5 * scalor, color: palette.text1,),
+                                  )                      
+                                ],
                               )
                             ),
-                            SizedBox(width: 5,),
-                            InkWell(
-                              onTap: widget.onTap,
-                              child: Text(
-                                "register now",
-                                style: TextStyle(
-                                  color: palette.text4,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16 * scalor
+            
+                            // SizedBox(height: 20,),
+                        
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AuthProviderTile(
+                                  palette: palette, 
+                                  onTap: () => AuthService().signInWithGoogle(context), 
+            
+                                  
+                                  iconData: Icons.g_mobiledata,
                                 ),
-                              ),
-                            )
-                    
+                                SizedBox(width: 10,),
+            
+                                AuthProviderTile(
+                                  palette: palette, 
+                                  onTap: () => AuthService().signInWithApple(context),
+                                  iconData: Icons.apple,
+                                ),                        
+                                           
+                              ],
+                            ),
+                            // SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("not a member?", 
+                                  style: palette.authFont(
+                                    textStyle: TextStyle(
+                                      fontSize: 16 * scalor, 
+                                      color: palette.text1
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 5,),
+                                InkWell(
+                                  onTap: widget.onTap,
+                                  child: Text(
+                                    "register now",
+                                    style: palette.authFont(
+                                      textStyle: TextStyle(
+                                        fontSize: 16 * scalor,
+                                        fontWeight: FontWeight.bold,
+                                        color: palette.text4
+                                      ),
+                                    ),
+                                  ),
+                                )
+                        
+                              ],
+                            ),                    
                           ],
-                        ),                    
-                      ],
-                    )
+                        )
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              )
             ),
-          )
+          ],
         );
       }
     );

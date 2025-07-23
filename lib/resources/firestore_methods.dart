@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class FirestoreMethods {
 
@@ -92,6 +97,22 @@ class FirestoreMethods {
   //   };
   // }
 
+  Future<Map<String, dynamic>?> getUserData(
+    String uid,
+  ) async {
+    late Map<String, dynamic>? res = {};
+    try {
+      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+      final docSnap = await docRef.get();
+      final Map<String, dynamic>? docData = docSnap.data();
+      res = docData;
+    } catch (e) {
+      print("error in getUserData: ${e.toString()}");
+    }
+    return res;
+  }
+
+
   Future<void> saveUserToDatabase(Map<String,dynamic> userData) async {
     late String os = "";
     if (Platform.isAndroid) {
@@ -115,14 +136,103 @@ class FirestoreMethods {
         "soundOn": true,
         "theme": 'default',
       },
-      "language": "english",
+      "gameHistory": [],
+      "language": "en",
       "createdAt": DateTime.now().toIso8601String(),
       "providerData": providerData,
       "os": os,
       "balance": 200,
-      "rank":"1_1",     
+      "coins": 0,
+      "xp": 0,
+      "rank":"1_1",    
     };
     await _firestore.collection("users").doc(uid).set(userDocument);
   }
 
+  Future<void> updateParameters(SettingsController settings, String parameter, dynamic updatedValue) async {
+    try {
+      Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      final docRef = FirebaseFirestore.instance.collection('users').doc(userData["uid"]);
+      final docSnap = await docRef.get();
+      final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
+      Map<String, dynamic> parameters = docData['parameters'];
+      parameters.update(parameter, (value) => updatedValue);
+
+      await docRef.update({"parameters": parameters});
+    } catch (e) {
+      debugPrint("caught an error running 'updateParameters()' ${e.toString()}");
+    }
+  }
+
+  Future<void> updateUserDoc(SettingsController settings, String field, dynamic updatedValue) async {
+    try {
+      Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      final docRef = FirebaseFirestore.instance.collection('users').doc(userData["uid"]);
+      await docRef.update({field: updatedValue});
+    } catch (e) {
+      debugPrint("caught an error running 'updateParameters()' ${e.toString()}");
+    }
+  }
+
+  Future<void> updateGameHistory(SettingsController settings, Map<String,dynamic> gameData) async {
+    try {
+      print("saving gmae data!");
+      Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      final docRef = FirebaseFirestore.instance.collection('users').doc(userData["uid"]);
+      final docSnap = await docRef.get();
+      final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
+      List<dynamic> gameHistory = docData['gameHistory'];
+      print("game data to save: ${gameData} | $gameHistory");
+
+      gameHistory.add(gameData);
+      print("game history now ... $gameHistory");
+      await docRef.update({"gameHistory": gameHistory});
+    } catch (e) {
+      debugPrint("caught an error running 'updateGameHistory()' ${e.toString()}");
+    }
+
+  }
+
+  
+
+  
+
+  Future<void> downloadWordList(String? language) async {
+    late String? actualLanguage = 'english';
+    if  (language != '' || language != null) {
+      actualLanguage = language;
+    }
+    final FirebaseStorage storage = FirebaseStorage.instance;
+    final String fileName = 'all_valid_${actualLanguage}_words.txt';
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final File downloadToFile = File('${appDocDir.path}/$fileName');
+    // late List<String> res = [];
+    late String contents = "";
+    final Box wordBox = Hive.box('wordBox');
+
+    try {
+      await storage.ref(fileName).writeToFile(downloadToFile);
+      // Read the file and convert it to a list
+      contents = await downloadToFile.readAsString();
+      // List<String> words = contents.split(',').map((word) => word.trim()).toList(); // Split by commas and trim whitespace
+
+      // res = words;
+      // Store words to local storage (e.g., shared_preferences or hive)
+      // ...
+
+      List<String> words = contents
+          .split(',')
+          .map((word) => word.trim())
+          .where((word) => word.isNotEmpty)
+          .toList();
+
+      // Save to Hive using the language as key
+      await wordBox.put('words_$actualLanguage', words);
+
+    } catch (e) {
+      // debugPrint("there was an error running downloadWordList() : ${e.toString()} ");
+      // Handle errors
+    }
+    // return contents;
+  }
 }

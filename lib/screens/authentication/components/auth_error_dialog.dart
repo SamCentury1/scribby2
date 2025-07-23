@@ -20,10 +20,14 @@ class AuthErrorDialog extends StatelessWidget {
     late double scalor = Helpers().getScalor(settings);
     final double sizeFactor = scalor;
     return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0 * scalor))),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8.0 * sizeFactor)),
-          color: palette.dialogBg1
+          gradient: RadialGradient(
+            radius: 0.6*scalor,
+            colors: [palette.dialogBg1,palette.dialogBg2,]
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(12.0*scalor))
         ),
         child: Padding(
           padding:  EdgeInsets.fromLTRB(22.0 * sizeFactor,8.0 * sizeFactor,22.0 *sizeFactor, 8.0 * sizeFactor,),
@@ -35,11 +39,13 @@ class AuthErrorDialog extends StatelessWidget {
                 fit: BoxFit.contain,
                 child: Text(
                   errorTitle,
-                  style: TextStyle(
-                    color: palette.text1,
-                    fontSize: 32 * sizeFactor,
-                    fontWeight: FontWeight.w300
-                  ),
+                  style:palette.mainAppFont(
+                    textStyle:TextStyle(
+                      color: palette.text1,
+                      fontSize: 32 * sizeFactor,
+                      fontWeight: FontWeight.w300
+                    ), 
+                  ) 
                 ),
               ),
               Padding(
@@ -63,16 +69,17 @@ class AuthErrorDialog extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        color: palette.text2
+                        color: palette.navigationButtonBg1
                       ),
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(12.0 * sizeFactor, 4.0 * sizeFactor, 12.0 * sizeFactor, 4.0 * sizeFactor),
                         child: Text(
                           "Okay",
-                          style: TextStyle(
-                            color: palette.text1,
-                            fontSize: 22 * sizeFactor,
-                            fontWeight: FontWeight.w300
+                          style: palette.authFont(
+                            textStyle: TextStyle(
+                              fontSize: 22*scalor,
+                              color: palette.navigationButtonText1,
+                            ) 
                           ),
                         ),
                       ),
@@ -98,11 +105,14 @@ List<Widget> displayErrors(List<String> errors, ColorPalette palette, double sca
       children: [
         Text(
           error,
-          style: TextStyle(
-            color: palette.text1,
-            fontSize: 22 * scalor,
-            fontWeight: FontWeight.w300
+          style: palette.authFont(
+            textStyle: TextStyle(
+              color: palette.text1,
+              fontSize: 18 * scalor,
+              fontWeight: FontWeight.w300
+            ), 
           ),
+          
           textAlign: TextAlign.start,
         ),
         Divider(thickness: 0.5 * scalor, color: palette.dialogBg1 ,)

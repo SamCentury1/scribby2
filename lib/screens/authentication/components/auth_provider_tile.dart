@@ -44,9 +44,10 @@ class AuthProviderTile extends StatelessWidget {
           icon: Icon(iconData, size: 50*scalor,),
           onPressed: onTap,
           style: ElevatedButton.styleFrom(
-            foregroundColor: const Color.fromARGB(255, 220, 220, 223),
-            backgroundColor: const Color.fromARGB(255, 44, 34, 185),
-            textStyle: GoogleFonts.lilitaOne(
+            foregroundColor: palette.navigationButtonText3, //const Color.fromARGB(255, 220, 220, 223),
+            backgroundColor: palette.navigationButtonBg3, //const Color.fromARGB(255, 44, 34, 185),
+            // shadowColor: palette.widgetShadow1,
+            textStyle: TextStyle(
               fontSize: 24*scalor
             ),                                    
             shape: RoundedRectangleBorder(

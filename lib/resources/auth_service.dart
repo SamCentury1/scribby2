@@ -78,17 +78,10 @@ class AuthService {
 
       showDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text("Sign In Failed"),
-          content: Text("Google sign-in failed.\n\nDetails: $e"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text("OK"),
-            ),
-          ],
-        ),
-      );        
+        builder: (ctx) => AuthErrorDialog(errorTitle: 'Google Sign-in Error', errors: [e.toString()],)
+      );
+      //
+             
       return null;
     }
   }
@@ -143,17 +136,8 @@ class AuthService {
 
       showDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text("Sign In Failed"),
-          content: Text("Apple sign-in failed.\n\nDetails: $e"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text("OK"),
-            ),
-          ],
-        ),
-      );      
+        builder: (ctx) => AuthErrorDialog(errorTitle: 'Apple Sign-in Error', errors: [e.toString()],)
+      );   
       return null;
     }
   }

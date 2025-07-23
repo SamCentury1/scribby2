@@ -17,6 +17,8 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   List<dynamic> userGameHistory = [];
   Object userData = {};
   List<dynamic> rankData = [];
+  List<dynamic> alphabet = [];
+  String dictionary = "";
   List<dynamic> achievementData = [];
   int xp = 10;  
 
@@ -63,6 +65,12 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
 
   @override
   Future<List<dynamic>> getRankData() async => rankData;  
+
+  @override
+  Future<List<dynamic>> getAlphabet() async => alphabet;
+
+  @override
+  Future<String> getDictionary() async => dictionary;   
 
   @override
   Future<List<dynamic>> getAchievementData() async => achievementData;
@@ -117,6 +125,12 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
 
   @override
   Future<void> saveRankData(List<dynamic> value) async => rankData = value;
+
+  @override
+  Future<void> saveAlphabet(List<dynamic> value) async => alphabet = value;
+
+  @override
+  Future<void> saveDictionary(String value) async => dictionary = value;      
 
   @override
   Future<void> saveAchievementData(List<dynamic> value) async => achievementData = value;

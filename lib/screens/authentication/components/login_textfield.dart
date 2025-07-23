@@ -33,14 +33,14 @@ class LoginTextField extends StatelessWidget {
         contentPadding: EdgeInsets.all(16.0 * scalor),
         enabledBorder: OutlineInputBorder(
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          borderSide: BorderSide(color: palette.widget1),
+          borderSide: BorderSide(color: palette.inputFieldBorderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          borderSide: BorderSide(color: palette.widget1),
+          borderSide: BorderSide(color: palette.inputFieldBorderColor),
         ),
-        focusColor: palette.text1,
-        fillColor: palette.widget1,
+        focusColor: palette.inputFieldTextColor,
+        fillColor: palette.inputFieldBgColor,
         filled: true,
         hintText: hintText,
         hintStyle: TextStyle(

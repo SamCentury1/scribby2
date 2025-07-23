@@ -33,6 +33,9 @@ class SettingsController {
   // ValueNotifier<List<dynamic>> campaignData = ValueNotifier([]);
   ValueNotifier<List<dynamic>> gameInfoData = ValueNotifier([]);
 
+  ValueNotifier<List<dynamic>> alphabet = ValueNotifier([]);  
+  ValueNotifier<String> dictionary = ValueNotifier("");  
+
   // takes in the JSON document and sets it in local storage
   ValueNotifier<List<dynamic>> rankData = ValueNotifier([]);  
   // takes in the JSON document and sets it in local storage
@@ -61,6 +64,8 @@ class SettingsController {
       _persistence.getAchievements().then((value) => achievements.value = value),
       _persistence.getLevelData().then((value) => levelData.value = value),
       _persistence.getGameInfoData().then((value) => gameInfoData.value = value),
+      _persistence.getAlphabet().then((value) => alphabet.value = value),
+      _persistence.getDictionary().then((value) => dictionary.value = value),
       _persistence.getRankData().then((value) => rankData.value = value),
       _persistence.getAchievementData().then((value) => achievementData.value = value),
       // _persistence.getColorTheme().then((value) => colorTheme.value = value),
@@ -127,7 +132,17 @@ class SettingsController {
   void setGameInfoData(List<dynamic> value) {
     gameInfoData.value = value;
     _persistence.saveGameInfoData(gameInfoData.value);
-  }  
+  }
+
+  void setAlphabet(List<dynamic> alphabetObject) {
+    alphabet.value = alphabetObject;
+    _persistence.saveAlphabet(alphabet.value);
+  }
+
+  void setDictionary(String dictionaryRaw) {
+    dictionary.value = dictionaryRaw;
+    _persistence.saveDictionary(dictionary.value);
+  }
 
   void setRankData(List<dynamic> value) {
     rankData.value = value;

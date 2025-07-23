@@ -97,6 +97,18 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   }
 
   @override
+  Future<List<dynamic>> getAlphabet() async {
+    final prefs = await instanceFuture;
+    return json.decode(prefs.getString('alphabet') ?? json.encode([]));
+  }  
+
+  @override
+  Future<String> getDictionary() async {
+    final prefs = await instanceFuture;
+    return prefs.getString('dictionary') ?? "";
+  }   
+
+  @override
   Future<List<dynamic>> getAchievementData() async {
     final prefs = await instanceFuture;
     return json.decode(prefs.getString("achievementData")??json.encode([]));
@@ -202,7 +214,20 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   Future<void> saveRankData(List<dynamic> value) async {
     final prefs = await instanceFuture;
     prefs.setString("rankData", json.encode(value)); 
-  }       
+  }
+
+  @override
+  Future<void> saveAlphabet(List<dynamic> value) async {
+    final prefs = await instanceFuture;
+    await prefs.setString('alphabet', json.encode(value));
+  }
+
+  @override
+  Future<void> saveDictionary(String value) async {
+    final prefs = await instanceFuture;
+    await prefs.setString('dictionary', value);
+  }
+
   @override
   Future<void> saveAchievementData(List<dynamic> value) async {
     final prefs = await instanceFuture;
