@@ -87,7 +87,8 @@ class Animations extends ChangeNotifier {
       print("PROBLEM: more than one animation with key $key are playing");
     }
 
-    else {
+    else if (currentAnimation.length == 1) {
+      print("there is only one animation of this kind - start tap cancel animation");
       Map<String,dynamic> animationObject = currentAnimation[0];
       startTapCancelAnimation(gamePlayState, key, animationObject["progress"]);
       int animationObjectIndex = gamePlayState.animationData.indexOf(animationObject);
@@ -638,7 +639,7 @@ class Animations extends ChangeNotifier {
               gamePlayState.animationData.removeAt(animationObjectIndex);
               startScoreboardHighlightAnimation(gamePlayState);
             } catch (e) {
-              print("error caught in startTapCancelAnimation() => $e");
+              print("error caught in startScoreCountAnimation() => $e");
             }
           }
         } else {
@@ -1102,7 +1103,7 @@ class Animations extends ChangeNotifier {
             try {
               // gamePlayState.animationData.removeAt(animationObjectIndex);
             } catch (e) {
-              print("error caught in startTapCancelAnimation() => $e");
+              print("error caught in startGameOverOverlayAnimation() => $e");
             }
           }
         } else {
@@ -1282,7 +1283,7 @@ class Animations extends ChangeNotifier {
             try {
               gamePlayState.animationData.removeAt(animationObjectIndex);
             } catch (e) {
-              print("error caught in startTapCancelAnimation() => $e");
+              print("error caught in startAddPerksAnimation() => $e");
             }
           }
         } else {

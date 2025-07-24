@@ -224,6 +224,11 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                         gameTypeChoice = value;
                                         if (value == 'sprint') {
                                           durationInMinutes = null;
+                                          targetPoints = pointTargets[initialPointsItem]; 
+                                        }
+                                        if (gameTypeChoice == "classic") {
+                                          durationInMinutes = timesInMinutes[initialDurationItem];
+                                          targetPoints = null;
                                         }
                                       });              
                                     },

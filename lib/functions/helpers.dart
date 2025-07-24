@@ -140,7 +140,7 @@ class Helpers {
         }
       }
     }
-    print("vowels: $vows | cons: $cons");
+    // print("vowels: $vows | cons: $cons");
     return res;
   }  
 

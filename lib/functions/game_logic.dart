@@ -79,7 +79,7 @@ class GameLogic extends ChangeNotifier {
 
       String letterType = Helpers().getNextLetterType(alphabetReal);
 
-      print("letter type: $letterType");
+      // print("letter type: $letterType");
 
 
       String previousLetter = gamePlayState.randomLetterData.last["body"];
@@ -89,7 +89,7 @@ class GameLogic extends ChangeNotifier {
       List<String> availableConsonents = [];
       for (int i=0; i<alphabetReal.length; i++) {
         Map<String,dynamic> letterObject = alphabetReal[i];
-        print("letter: ${letterObject['letter']} | count: ${letterObject['count']} | inplay: ${letterObject['inPlay']}");
+        // print("letter: ${letterObject['letter']} | count: ${letterObject['count']} | inplay: ${letterObject['inPlay']}");
       }
       for (Map<String, dynamic> randomLetterObject in alphabetReal) {
         for (var i = 0; i < randomLetterObject["count"]; i++) {
@@ -98,7 +98,7 @@ class GameLogic extends ChangeNotifier {
           }
         }
       }
-      print("available letters: $availableLetters");
+      // print("available letters: $availableLetters");
 
       int availableLettersCount = availableLetters.length;
 
@@ -406,7 +406,7 @@ class GameLogic extends ChangeNotifier {
 
         // get the new letter body
         String newLetter = gamePlayState.randomLetterData[gamePlayState.randomLetterData.length-3]["body"];
-        print("new letter: $newLetter");
+        // print("new letter: $newLetter");
         Map<String,dynamic> newLetterDecoration = gamePlayState.randomLetterData[gamePlayState.randomLetterData.length-3]["decorationData"];
 
         // update the body of the tile element
@@ -1121,6 +1121,8 @@ class GameLogic extends ChangeNotifier {
 
         if (gamePlayState.gameParameters["gameType"]=='sprint') {
 
+          print("GAME PARAMS: ${gamePlayState.gameParameters}");
+          print("CHECK GAME OVER: IN SPRINT WITH TARGET ${gamePlayState.gameParameters['target']}: ");
           int currentScore= 0;
           for(int i=0;i<gamePlayState.scoreSummary.length; i++) {
             currentScore = currentScore + gamePlayState.scoreSummary[i]["score"] as int;
@@ -1130,7 +1132,7 @@ class GameLogic extends ChangeNotifier {
 
             gamePlayState.pauseTimer();
 
-            Future.delayed(const Duration(milliseconds: 3000), () {
+            Future.delayed(const Duration(milliseconds: 1000), () {
               print("*** game over due to target points reached! ***");
               didCompleteGame = true;
               didAchieveObjective = true;
