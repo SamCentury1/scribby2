@@ -271,7 +271,7 @@ class Gestures {
     // user tapped on the background - PAUSE the game
 
     try {
-      print("---------- tap up started ---------------");
+      // print("---------- tap up started ---------------");
       
       // late bool isTutorialFinished = Helpers().validateTutorialComplete(gamePlayState);
       // if (isTutorialFinished) {
@@ -282,12 +282,12 @@ class Gestures {
       Helpers().validateTutorialComplete(gamePlayState,context);
       // release is not in forbidden zone
       if (!isTapInForbiddenZone) {
-        print("- 1. tap is NOT in forbidden zone");
+        // print("- 1. tap is NOT in forbidden zone");
         
         if (!buyMoreModalOpen) {
-          print("-- 2. buy more modal is NOT activated");
+          // print("-- 2. buy more modal is NOT activated");
           if (!isOpenMenuTile) {
-            print("--- 3. perk menu is NOT activated");
+            // print("--- 3. perk menu is NOT activated");
               /// There are 6 possible outcomes out of 16 scenarios
               /// 1. releasing DRAGGING onto a BOARD tile that is ACTIVE and EMPTY
               /// 2. releasing while NOT DRAGGING onto a BOARD tile that is ACTIVE with a BODY
@@ -295,124 +295,65 @@ class Gestures {
               /// 4. releasing while NOT DRAGGING onto a BOARD tile that is INACTIVE that is EMPTY
               /// 5. releasing while NOT DRAGGING onto a RESERVE tile that is ACTIVE that is EMPTY
               if (isTileBeingDragged) {
-                print("---- 4. tile is being dragged");
+                // print("---- 4. tile is being dragged");
 
                 // if (elementType=="board" && isActive==true && body=="" && swappingTile.isEmpty && isDropPermitted) {
                 if (isDropPermitted) {
-                  print("----- 5. drop is permitted - execute move");
+                  // print("----- 5. drop is permitted - execute move");
                   GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
 
 
                 } else {
-                  print("----- 5. you can't release a dragged tile here");
+                  // print("----- 5. you can't release a dragged tile here");
                 }
               } else {
-                print("---- 4. tile is not being dragged");
+                // print("---- 4. tile is not being dragged");
 
                 if (isSwapActivated) {
-                  print("----- 5. SWAPPING TILE IS ACTIVE |  released over ${pointedElement}--");
+                  // print("----- 5. SWAPPING TILE IS ACTIVE |  released over ${pointedElement}--");
                   if (pointedElement.isEmpty) {
-                    print("------ 6. released over nothing - cancel swap");
+                    // print("------ 6. released over nothing - cancel swap");
                     GameLogic().cancelSwap(gamePlayState);
                   } else {
-                    print("------ 6. released over a tile");
+                    // print("------ 6. released over a tile");
                     if (pointedElement["body"]!="") {
-                      print("------- 7. released over a valid tile");
+                      // print("------- 7. released over a valid tile");
                       if (swappingTile["key"]!=pointedElement["key"]) {
-                        print("-------- 8. the tile is not the same as the initial swipe - execute swipe");
+                        // print("-------- 8. the tile is not the same as the initial swipe - execute swipe");
                         GameLogic().executeSwap(gamePlayState,palette, context, pointedElement);
                       } else {
-                        print("-------- 8. the tile is the same as the initial swipe - cancel the swipe");
+                        // print("-------- 8. the tile is the same as the initial swipe - cancel the swipe");
                         GameLogic().cancelSwap(gamePlayState);
                       }
                     }
                   }
                 } else {
-                  print("----- 5. SWAPPING IS NOT ACTIVE");
+                  // print("----- 5. SWAPPING IS NOT ACTIVE");
                   if (elementType=="board" && body=="") {
-                    print("------ 6. release on BOARD with body");
+                    // print("------ 6. release on BOARD with body");
                     if (isActive!) {
-                      print("------- 7. release on active tile");
+                      // print("------- 7. release on active tile");
                       GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
                     } else {
-                      print("------- 7. release on inactive tile");
+                      // print("------- 7. release on inactive tile");
                       if (gamePlayState.isLongPress) {
                         print("is long press");
                         GameLogic().executeOpenTileMenu(gamePlayState, pointedElement);
                       }
                     }
                   } else if (elementType=="reserve" && body=="") {
-                    print("------ 6. is  reserve - execute move");
+                    // print("------ 6. is  reserve - execute move");
                     GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement); 
                   }
-                }
-
-                // if (swappingTile.isEmpty) {
-                //   print("----- 5. SWAPPING TILE IS EMPTY | isTileBeingDragged : $isTileBeingDragged -- | in theory, nothing happens here?");
-                // //   print("open menu of options for a tile: explode, freeze, swap");
-                // //   GameLogic().executeOpenTileMenu(gamePlayState, pointedElement);
-                // } else {
-                //   print("----- 5. SWAPPING TILE IS **NOT** EMPTY |  released over ${pointedElement}--");
-                //   if (pointedElement.isEmpty) {
-                //     print("------ 6. released over nothing - cancel swap");
-                //     GameLogic().cancelSwap(gamePlayState);
-                //   } else {
-                //     print("------ 6. released over a tile");
-                //     if (pointedElement["body"]!="") {
-                //       print("------- 7. released over a valid tile");
-                //       if (swappingTile["key"]!=pointedElement["key"]) {
-                //         print("-------- 8. the tile is not the same as the initial swipe - execute swipe");
-                //         GameLogic().executeSwap(gamePlayState,palette, context, pointedElement);
-                //       } else {
-                //         print("-------- 8. the tile is the same as the initial swipe - cancel the swipe");
-                //         GameLogic().cancelSwap(gamePlayState);
-                //       }
-                //     }
-                //   }
-                // } 
-              
-
-                // if (elementType=="board" && isActive==true && body=="" && swappingTile.isEmpty) {
-                //   print("----- 5. the tile being released on is a board tile & is active & is empty & the swapping tile is empty - execute move");
-                //   GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
-                // }
-
-                // if (elementType=="board" && isActive==false && body=="" && !isTileBeingDragged) {
-                //   print("----- 5. released on a BOARD tile that is NOT ACTIVE & the body is EMPTY and a tile is NOT being dragged open menu of options for dead tile such as: revive, swap ");
-                //   if (swappingTile.isEmpty) {
-                //     print("------ 6. swapping not activated");
-                //     if (gamePlayState.isLongPress) {
-                //       print("------- 7. is long press is activated - open the perk menu");
-                //       GameLogic().executeOpenTileMenu(gamePlayState, pointedElement);
-                //     }
-                //   } else {
-                //     print("------ 6. swapping is not activated");
-                //     // print("acacaca??");
-                //     // print("swap with this inactive mf");
-                //     // executeSwap(gamePlayState,pointedElement);
-                //   }
-                // }
-
-                
-
-                // if (elementType=="board" && body=="" && swappingTile.isNotEmpty) {
-                //   print("----- 5. swapping tile is ACTIVE - released on an empty tile CANCEL the swipe");
-                //   GameLogic().cancelSwap(gamePlayState);
-                // }
-
-                // if (elementType=="reserve" && isActive==true && body=="" && swappingTile.isEmpty) {
-                //   print("----- 5. swapping tile is not active - released on a reserve tile that is active and empty - execute tile tapped on reserve");
-                //   // GameLogic().executeTileTappedLogic(gamePlayState,pointedElement);
-                //   GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement);
-                // }                
+                }            
               }
 
           } else {
-            print("--- 3. perk menu is open for tile ${gamePlayState.openMenuTile}");
+            // print("--- 3. perk menu is open for tile ${gamePlayState.openMenuTile}");
             if (gamePlayState.isLongPress) {
-              print("---- 4. is long press is activated - open the menu tile");
+              // print("---- 4. is long press is activated - open the menu tile");
             } else {
-              print("---- 4. is long press is not activated - close the perk menu - including executing perk");
+              // print("---- 4. is long press is not activated - close the perk menu - including executing perk");
               GameLogic().executeOpenMenuTapRelease(gamePlayState,palette, context,details);      
             }
           }

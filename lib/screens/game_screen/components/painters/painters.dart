@@ -12,54 +12,54 @@ import 'package:scribby_flutter_v2/screens/game_screen/components/painters/tile_
 
 class Painters {
 
-  // Canvas drawBonusArea(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
-  //   Offset bonusCenter = gamePlayState.elementPositions["bonusCenter"];
-  //   // Size tileSize = gamePlayState.elementSizes["tileSize"];
+  Canvas drawBonusArea(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
+    Offset bonusCenter = gamePlayState.elementPositions["bonusCenter"];
+    // Size tileSize = gamePlayState.elementSizes["tileSize"];
 
-  //   final List<Map<String,dynamic>> animationData = gamePlayState.animationData;
+    final List<Map<String,dynamic>> animationData = gamePlayState.animationData;
 
-  //   String content = '''''';
-  //   for (int i=0; i<animationData.length;i++) {
+    String content = '''''';
+    for (int i=0; i<animationData.length;i++) {
 
-  //     String body = "${animationData[i]["key"]} - ${animationData[i]["type"]} - progress: ${animationData[i]["progress"]} \n";
-  //     content = content + (body);
+      String body = "${animationData[i]["key"]} - ${animationData[i]["type"]} - progress: ${animationData[i]["progress"]} \n";
+      content = content + (body);
       
-  //   }
+    }
 
-  //   if (gamePlayState.isTutorial) {
-  //     content = content + "\n \n \n";
-  //     int currentTurn = gamePlayState.tutorialData["currentTurn"];
-  //     List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
-  //     Map<String,dynamic> step = steps.firstWhere((e)=>e["step"]==currentTurn,orElse: ()=>{});
-  //     if (step.isNotEmpty) {
-  //       step.forEach((k,v)  {
-  //         String body = "----  $k : $v  ---- \n"  ;
-  //         content = content+body;
-  //       });
-  //     }
-  //   }
+    if (gamePlayState.isTutorial) {
+      content = content + "\n \n \n";
+      int currentTurn = gamePlayState.tutorialData["currentTurn"];
+      List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
+      Map<String,dynamic> step = steps.firstWhere((e)=>e["step"]==currentTurn,orElse: ()=>{});
+      if (step.isNotEmpty) {
+        step.forEach((k,v)  {
+          String body = "----  $k : $v  ---- \n"  ;
+          content = content+body;
+        });
+      }
+    }
 
 
-  //   // Helpers().displayText(canvas, content, gamePlayState, bonusCenter, tileSize);
+    // Helpers().displayText(canvas, content, gamePlayState, bonusCenter, tileSize);
 
-  //   TextStyle textStyle = TextStyle(
-  //     color: palette.gameplayText1, //const Color.fromARGB(190, 123, 191, 255),
-  //     fontSize: 14* gamePlayState.scalor,
-  //   );
-  //   TextSpan textSpan = TextSpan(
-  //     text: content,
-  //     style: textStyle,
-  //   );
-  //   final textPainter = TextPainter(
-  //     text: textSpan,
-  //     textDirection: TextDirection.ltr,
-  //   );
-  //   textPainter.layout();
-  //   final position = Offset(bonusCenter.dx - (textPainter.width/2), bonusCenter.dy - (textPainter.height/2));
-  //   textPainter.paint(canvas, position);
-  //   // return textPainter;     
-  //   return canvas;
-  // }
+    TextStyle textStyle = TextStyle(
+      color: palette.gameplayText1, //const Color.fromARGB(190, 123, 191, 255),
+      fontSize: 14* gamePlayState.scalor,
+    );
+    TextSpan textSpan = TextSpan(
+      text: content,
+      style: textStyle,
+    );
+    final textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    final position = Offset(bonusCenter.dx - (textPainter.width/2), bonusCenter.dy - (textPainter.height/2));
+    textPainter.paint(canvas, position);
+    // return textPainter;     
+    return canvas;
+  }
 
 
   // Canvas drawPlayArea(Canvas canvas, GamePlayState gamePlayState) {
@@ -430,12 +430,22 @@ class Painters {
               int sourceKey = turnData["moveData"]["data"]["source"]["key"];
               int targetKey = turnData["moveData"]["data"]["target"]["key"];
 
+              
+
               Offset sourceTilePosition = turnData["moveData"]["data"]["source"]["center"];
               Offset targetTilePosition = turnData["moveData"]["data"]["target"]["center"];
 
+              Map<String,dynamic> sourceObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==sourceKey,orElse: ()=>{});
+              Map<String,dynamic> targetObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==targetKey,orElse: ()=>{});
+              Map<String,dynamic> sourceDecoration = sourceObject["decorationData"];
+              Map<String,dynamic> targetDecoration = targetObject["decorationData"];
+
+              // print("???????????????? $sourceDecoration | $targetDecoration");
               Offset updatedCenter = tileCenter;
               String updatedBody = tileObject["body"];
               late Size updatedSize = tileSize;
+              Map<String,dynamic> updatedDecoration = decorationData;
+
 
               if (tileObject["key"] == sourceKey) {
                 double sourceX = sourceTilePosition.dx + (targetTilePosition.dx-sourceTilePosition.dx)*progress;
@@ -446,9 +456,11 @@ class Painters {
                 //   sourceX = targetTilePosition.dx;
                 //   sourceY = targetTilePosition.dy;
                 // }
+                updatedDecoration = targetDecoration;
                 updatedCenter = Offset(sourceX,sourceY);
                 updatedBody = turnData["moveData"]["data"]["source"]["body"];
-                updatedSize = AnimationUtils().getSwappedTileSize(gamePlayState,animationObject);
+                updatedSize =  AnimationUtils().getSwappedTileSize(gamePlayState,animationObject);
+                print("source at progress: $progress size: $updatedSize | pos: $updatedCenter");
               }
 
               else if (tileObject["key"] == targetKey) {
@@ -459,10 +471,12 @@ class Painters {
                 // if (progress > 0.5) {
                 //   targetX = sourceTilePosition.dx;
                 //   targetY = sourceTilePosition.dy;
-                // }                
+                // }
+                updatedDecoration = sourceDecoration;         
                 updatedCenter = Offset(targetX,targetY);
                 updatedBody = turnData["moveData"]["data"]["target"]["body"];
                 updatedSize = AnimationUtils().getSwappedTileSize(gamePlayState,animationObject);
+                print("target at progress: $progress size: $updatedSize | pos: $updatedCenter");
               } else {
                 updatedBody = animationObject["body"]; 
               }
@@ -470,7 +484,7 @@ class Painters {
               
 
 
-              TilePainters().drawTile2(canvas,updatedCenter,updatedBody,updatedSize,'board',decorationData);  
+              TilePainters().drawTile2(canvas,updatedCenter,updatedBody,updatedSize,'board',updatedDecoration);  
 
             }
             else {

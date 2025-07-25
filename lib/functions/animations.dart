@@ -347,13 +347,13 @@ class Animations extends ChangeNotifier {
         && e["type"]=="tile-swap"
       ).toList();
       for (int j=0; j<existingOptionAnimations.length; j++) {
-        Map<String,dynamic> existinOptionAnimationObject = existingOptionAnimations[j];
+        Map<String,dynamic> existingOptionAnimationObject = existingOptionAnimations[j];
 
-        if (existinOptionAnimationObject["type"]=="tile-swap") {
+        if (existingOptionAnimationObject["type"]=="tile-swap") {
         //   // only for the target tile!
-          if (existinOptionAnimationObject["targetKey"] != id) {
+          if (existingOptionAnimationObject["targetKey"] != id) {
             Map<String,dynamic> targetAnimation = gamePlayState.animationData.firstWhere(
-              (e)=>e["key"]==existinOptionAnimationObject["targetKey"],
+              (e)=>e["key"]==existingOptionAnimationObject["targetKey"],
               orElse: ()=>{}
             );
             int targetAnimationIndex = gamePlayState.animationData.indexOf(targetAnimation);
@@ -361,8 +361,8 @@ class Animations extends ChangeNotifier {
             gamePlayState.animationData.removeAt(targetAnimationIndex); 
           }
         }
-        int existingOptionAnimationIndex = gamePlayState.animationData.indexOf(existinOptionAnimationObject);
-        print("removed ${existinOptionAnimationObject}");
+        int existingOptionAnimationIndex = gamePlayState.animationData.indexOf(existingOptionAnimationObject);
+        print("removed $existingOptionAnimationObject");
         gamePlayState.animationData.removeAt(existingOptionAnimationIndex);
       }
     }
@@ -370,7 +370,7 @@ class Animations extends ChangeNotifier {
 
 
 
-  void startPreWordFoundAnimation(GamePlayState gamePlayState,  int turn) {
+  void startPreWordFoundAnimation(GamePlayState gamePlayState, ColorPalette palette, int turn) {
 
     const String animationType = "pre-word-found";
     Map<String,dynamic> turnData = gamePlayState.scoreSummary.firstWhere((e)=>e["turn"]==turn,orElse: ()=>{});
@@ -420,7 +420,16 @@ class Animations extends ChangeNotifier {
           }
         }
 
-        timerLogic(gamePlayState,animationObject,count,target,animationDurationData["interval"]);
+        timerLogic2(
+          gamePlayState,
+          animationObject,
+          count,
+          target,
+          animationDurationData["interval"], 
+          ()=>GameLogic().executeWordFoundAnimations(gamePlayState, palette, turn)
+          );
+
+        // timerLogic(gamePlayState,animationObject,count,target,animationDurationData["interval"]);
     }
   }
 
@@ -1063,7 +1072,11 @@ class Animations extends ChangeNotifier {
       actualAnimation = {"key": key, "turn":turn, "type":animationType, "progress":0.0, "targetKey":targetKey};
       gamePlayState.animationData.add(actualAnimation);
     }
+
+
     timerLogic(gamePlayState,actualAnimation,count,target,interval);
+
+
   }        
 
 
@@ -1335,10 +1348,36 @@ class Animations extends ChangeNotifier {
 
   }
 
-
-
-
-
+  void timerLogic2(GamePlayState gamePlayState, Map<String,dynamic> actualAnimation, int count, int target, int durationMs, Function onEnd) {
+    Timer.periodic(Duration(milliseconds: durationMs), (Timer timer) {
+      if (gamePlayState.isGamePaused) {
+        timer.cancel();      
+      } else {
+        if (count == target) {
+          timer.cancel();
+          final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
+          if (animationObjectIndex>=0) {
+            try {
+              gamePlayState.animationData.removeAt(animationObjectIndex);
+              onEnd();
+            } catch (e) {
+              print("error caught in animation() => $e");
+            }
+          }
+        } else {
+          final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
+          if (animationObjectIndex<0) {
+            timer.cancel();
+          } else {
+            count++;
+            final double progress = double.parse((count/target).toStringAsFixed(2));
+            gamePlayState.animationData[animationObjectIndex].update("progress", (v) => progress);
+          }
+        }
+        gamePlayState.setAnimationData(gamePlayState.animationData);
+      }
+    });
+  }
 
 
 

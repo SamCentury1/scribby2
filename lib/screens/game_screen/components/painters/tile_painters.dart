@@ -624,22 +624,26 @@ class TilePainters {
     List<Map<String,dynamic>> swapAnimations = gamePlayState.animationData.where((e)=>e["type"]=="tile-swap").toList();
     Size tileSize = gamePlayState.elementSizes["tileSize"];
 
+    
 
     for (int i=0; i<swapAnimations.length; i++) {
       Map<String,dynamic> swapAnimation = swapAnimations[i];
+
+
 
       int sourceKey = swapAnimation["key"];
       int targetKey = swapAnimation["targetKey"];
 
       Map<String,dynamic> sourceTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==sourceKey,orElse: ()=>{});
       Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==targetKey,orElse: ()=>{});
+
       double progress = swapAnimation["progress"];
 
       if (sourceTile.isNotEmpty && targetTile.isNotEmpty) {
 
 
         Offset sourceTileCenter = sourceTile["center"];
-        Map<String,dynamic> sourceDecorationData = sourceTile["decorationData"];
+        Map<String,dynamic> sourceDecorationData = targetTile["decorationData"];
         Offset targetTileCenter = targetTile["center"];
         // Map<String,dynamic> targetDecorationData = targetTile["decorationData"];
 

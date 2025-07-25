@@ -44,7 +44,7 @@ class MainCanvasPainter extends CustomPainter {
     Painters().paintPerkCounts(canvas,gamePlayState);
 
 
-    // Painters().drawBonusArea(canvas,gamePlayState,palette);
+    Painters().drawBonusArea(canvas,gamePlayState,palette);
 
     BonusPainters().drawBonusArea(canvas,gamePlayState);
 

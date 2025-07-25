@@ -413,6 +413,15 @@ class Helpers {
     return res;
   }
 
+  void updateTileStyleAfterSwapAnimation(GamePlayState gamePlayState, int sourceKey, int targetKey) {
+    Map<String,dynamic> sourceTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==sourceKey,orElse: ()=>{});
+    Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==targetKey,orElse: ()=>{});
+
+    Map<String,dynamic> targetStyle = targetTile["decorationData"];
+    sourceTile.update("decorationData", (v) => targetStyle);
+    print("animation has ended for tile $sourceTile");
+  }  
+
 
   String getMenuBuyMoreMessage(String item) {
 

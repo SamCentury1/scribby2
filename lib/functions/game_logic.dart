@@ -155,13 +155,19 @@ class GameLogic extends ChangeNotifier {
       String tappedTileBody = pointedElement["body"];
 
       bool swappingTileActive = swappingTile["active"];
-      bool tappedTileActive = pointedElement["active"];      
+      bool tappedTileActive = pointedElement["active"];
+
+      Map<String,dynamic> swappingTileDecoration = swappingTile["decorationData"];
+      Map<String,dynamic> tappedTileDecoration = pointedElement["decorationData"];
 
       swappingTile.update("body", (v)=>tappedTileBody);
       pointedElement.update("body", (v)=>swappingTileBody);
 
       swappingTile.update("active", (v)=>tappedTileActive);
-      pointedElement.update("active", (v)=>swappingTileActive);      
+      pointedElement.update("active", (v)=>swappingTileActive);  
+
+      swappingTile.update("decorationData", (v)=>tappedTileDecoration);
+      pointedElement.update("decorationData", (v)=>swappingTileDecoration);    
 
       swappingTile.update("swapping", (v)=>false);
 
@@ -178,15 +184,27 @@ class GameLogic extends ChangeNotifier {
         }
       };
 
+      // Map<String,dynamic> swapAnimationObject = gamePlayState.animationLengths.firstWhere((e) => e["type"]=="tile-swap",orElse: ()=>{});
+      // if (swapAnimationObject.isNotEmpty) {
+      //   final int swapDuration = swapAnimationObject["stops"]*swapAnimationObject["interval"];
+      //   Future.delayed(Duration(milliseconds: swapDuration), () {
+
+      //     Map<String,dynamic> swappingTileDecorationData = swappingTile["decorationData"];
+      //     Map<String,dynamic> pointedElementDecorationData = pointedElement["decorationData"];
+
+      //     swappingTile.update("decorationData", (e) => pointedElementDecorationData);
+      //     pointedElement.update("decorationData",(e) => swappingTileDecorationData);
+      //   });
+      // }
+
+
       chargeMenuItem(gamePlayState,"swap");
-
-
       restartTimer(gamePlayState,"tile-swap"); 
       executeFoundWordLogic(gamePlayState,palette, moveData);
       executeTutorialStep(gamePlayState,context);
     }
 
-    
+
     gamePlayState.setTileData(gamePlayState.tileData);
     executeCloseTileMenu(gamePlayState);
 
@@ -551,24 +569,25 @@ class GameLogic extends ChangeNotifier {
       // gets the score from last turn
       int scoreTurn = gamePlayState.scoreSummary.last["turn"];
 
-      Animations().startPreWordFoundAnimation(gamePlayState, scoreTurn);
+      Animations().startPreWordFoundAnimation(gamePlayState,palette, scoreTurn);
 
       late  int duration = 300; // DEFAULT but ideally, this should be updated below
       if (animationDurationData.isNotEmpty) {
         duration = (animationDurationData["stops"]*animationDurationData["interval"]);
       } 
 
+
       Future.delayed(Duration(milliseconds: duration), () {
-        // animates the word tiles flashing and what not
-        Animations().startWordFoundAnimation(gamePlayState, palette, scoreTurn);
-        // animates the scoreboard counting and flashing
-        Animations().startScoreboardCountAnimation(gamePlayState,scoreTurn,"${scoreTurn}_count");
-        // animates the little +10, +20, elements flying in and out of view next to the scoreboard (for each word)
-        Animations().startScoreboardPlusNPoints(gamePlayState,scoreTurn);
-        // animates 2x streak, 4x words bonus items if there are any
-        Animations().startBonusAnimations(gamePlayState,scoreTurn);
-        // animates the +50 text over the play area board (for the turn)
-        Animations().startNewPointsScoredAnimation(gamePlayState,scoreTurn,"${scoreTurn}_new_points");
+        // // animates the word tiles flashing and what not
+        // Animations().startWordFoundAnimation(gamePlayState, palette, scoreTurn);
+        // // animates the scoreboard counting and flashing
+        // Animations().startScoreboardCountAnimation(gamePlayState,scoreTurn,"${scoreTurn}_count");
+        // // animates the little +10, +20, elements flying in and out of view next to the scoreboard (for each word)
+        // Animations().startScoreboardPlusNPoints(gamePlayState,scoreTurn);
+        // // animates 2x streak, 4x words bonus items if there are any
+        // Animations().startBonusAnimations(gamePlayState,scoreTurn);
+        // // animates the +50 text over the play area board (for the turn)
+        // Animations().startNewPointsScoredAnimation(gamePlayState,scoreTurn,"${scoreTurn}_new_points");
 
         // if the game mode has is_timed_move, stop the timer
         // if (gameType == "arcade" || gameType == "timed-move") {
@@ -582,6 +601,20 @@ class GameLogic extends ChangeNotifier {
     }
     // updates the board
     updateBoardAfterFoundWord(gamePlayState: gamePlayState);     
+  }
+
+
+  void executeWordFoundAnimations(GamePlayState gamePlayState, ColorPalette palette, int scoreTurn) {
+    // animates the word tiles flashing and what not
+    Animations().startWordFoundAnimation(gamePlayState, palette, scoreTurn);
+    // animates the scoreboard counting and flashing
+    Animations().startScoreboardCountAnimation(gamePlayState,scoreTurn,"${scoreTurn}_count");
+    // animates the little +10, +20, elements flying in and out of view next to the scoreboard (for each word)
+    Animations().startScoreboardPlusNPoints(gamePlayState,scoreTurn);
+    // animates 2x streak, 4x words bonus items if there are any
+    Animations().startBonusAnimations(gamePlayState,scoreTurn);
+    // animates the +50 text over the play area board (for the turn)
+    Animations().startNewPointsScoredAnimation(gamePlayState,scoreTurn,"${scoreTurn}_new_points");    
   }
 
 
@@ -615,7 +648,7 @@ class GameLogic extends ChangeNotifier {
         print("pause scope for tile ${gamePlayState.animationData[i]["key"]}");
         // int key = gamePlayState.animationData[i]["key"];
         int turn = gamePlayState.animationData[i]["turn"];
-        Animations().startPreWordFoundAnimation(gamePlayState, turn);        
+        Animations().startPreWordFoundAnimation(gamePlayState,palette, turn);        
       }
 
       if (type=="score-count") {
