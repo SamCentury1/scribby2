@@ -54,13 +54,13 @@ class _BuyMoreModalState extends State<BuyMoreModal> {
         return Consumer<GamePlayState>(
           builder: (context,gamePlayState,child) {
 
-
+            // print("in the buy more modal widget: ${gamePlayState.tileMenuBuyMoreModalData}");
             bool isModalOpen = gamePlayState.tileMenuBuyMoreModalData["open"]??false;
         
             if (isModalOpen) {
 
               Map<String,dynamic> tileMenuBuyMoreModalData = gamePlayState.tileMenuBuyMoreModalData;
-              String perk = tileMenuBuyMoreModalData["item"]["option"];
+              String perk = tileMenuBuyMoreModalData["item"];
 
               String perkImagePath = getPerkImagePath(perk);
               Map<String,dynamic> optionData = tileMenuBuyMoreModalData["options"].firstWhere((e)=>e["key"]==1,orElse:()=><String,dynamic>{});

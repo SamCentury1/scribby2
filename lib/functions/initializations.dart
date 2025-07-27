@@ -211,13 +211,16 @@ class Initializations {
     final double randomLettersHeightShare = randomLettersHeight/playAreaSize.height;
     final double boardHeightShare = boardHeight/playAreaSize.height;
     final double reserveLetterHeightShare = reserveLettersHeight/playAreaSize.height;
-    final double totalGap = 1.0-(scoreboardHeightShare+bonusAreaHeightShare+randomLettersHeightShare+boardHeightShare+reserveLetterHeightShare);
+    final double perksAreaHeightShare = 0.05;
+
+    final double totalGap = 1.0-(scoreboardHeightShare+bonusAreaHeightShare+perksAreaHeightShare+randomLettersHeightShare+boardHeightShare+reserveLetterHeightShare);
 
     final Size scoreboardAreaSize = Size(effectiveSize.width,scoreboardHeightShare*playAreaSize.height);
     final Size bonusAreaSize = Size(playAreaSize.width,bonusAreaHeightShare*playAreaSize.height);
     final Size randomLettersAreaSize = Size(playAreaSize.width,randomLettersHeightShare*playAreaSize.height);
     final Size boardAreaSize = Size(numCols*tileWidth,boardHeightShare*playAreaSize.height);
     final Size reserveLettersAreaSize = Size(playAreaSize.width,reserveLetterHeightShare*playAreaSize.height);
+    final Size perksAreaSize = Size(playAreaSize.width,perksAreaHeightShare*playAreaSize.height);
     final Size gapSize = Size(playAreaSize.width,(totalGap/3)*playAreaSize.height);
 
     Map<String,dynamic> sizeData = {
@@ -231,6 +234,7 @@ class Initializations {
       "randomLettersAreaSize":randomLettersAreaSize,
       "boardAreaSize":boardAreaSize,
       "reserveLettersAreaSize":reserveLettersAreaSize,
+      "perksAreaSize":perksAreaSize,
       "gapSize":gapSize,
     };
 
@@ -249,6 +253,7 @@ class Initializations {
     Size randomLettersAreaSize = sizeData["randomLettersAreaSize"];
     Size boardAreaSize = sizeData["boardAreaSize"];
     Size reserveLettersAreaSize = sizeData["reserveLettersAreaSize"];
+    Size perksAreaSize = sizeData["perksAreaSize"];
 
     print("size in initialization : ${mediaQuery.size}");
 
@@ -283,7 +288,9 @@ class Initializations {
 
     final double reserveLettersY = boardY + (boardAreaSize.height/2) + reserveLettersAreaSize.height/2;
 
-    final double gap3Y = reserveLettersY + (reserveLettersAreaSize.height/2) + gapSize.height/2;
+    final double perksY = reserveLettersY + (reserveLettersAreaSize.height/2) + perksAreaSize.height/2;
+
+    final double gap3Y = perksY + (perksAreaSize.height/2) + gapSize.height/2;
 
     Offset scoreboardCenter = Offset(commonCenterX,scoreboardY);
     Offset appBarCenter = Offset(commonCenterX, appBarY);
@@ -293,6 +300,7 @@ class Initializations {
     Offset randomLettersCenter = Offset(commonCenterX,randomLettersY);
     Offset boardCenter = Offset(commonCenterX,boardY);
     Offset reserveLettersCenter = Offset(commonCenterX,reserveLettersY);
+    Offset perksCenter = Offset(commonCenterX,perksY);
     Offset gap3Center = Offset(commonCenterX,gap3Y);
 
     Map<String,dynamic> positionData = {
@@ -306,13 +314,11 @@ class Initializations {
       "randomLettersCenter": randomLettersCenter,
       "boardCenter": boardCenter,
       "reserveLettersCenter": reserveLettersCenter,
+      "perksCenter":perksCenter,
       "gap3Center": gap3Center,
     };
 
-    
-
     gamePlayState.setElementPositions(positionData);
-
 
     initializeTilePositions(gamePlayState); 
   }
@@ -323,6 +329,8 @@ class Initializations {
     final Size tileSize = gamePlayState.elementSizes["tileSize"];
     final Offset boardCenter = elementPositions["boardCenter"];
     final Offset reserveLettersCenter = elementPositions["reserveLettersCenter"];
+    final Offset perksCenter = elementPositions["perksCenter"];
+    final Size perksAreaSize = gamePlayState.elementSizes["perksAreaSize"];
     // final Offset randomLettersCenter = elementPositions["randomLetters"];
 
     final int numRows = gamePlayState.gameParameters["rows"]; //Helpers().getNumAxis(gamePlayState.tileData)[0];
@@ -355,6 +363,7 @@ class Initializations {
     final Size reserveTileSize = Size(tileSize.width*0.8,tileSize.height*0.8);
     final double reserveLetterRectWidth = (gamePlayState.reserveTileData.length) * (reserveTileSize.width);
     final double reserveLetterLeftX = reserveLettersCenter.dx-(reserveLetterRectWidth/2);
+
     for (int i=0; i<gamePlayState.reserveTileData.length; i++) {
       final int col = i;
       final double tileCenterX = reserveLetterLeftX + (reserveTileSize.width*(col)) + (reserveTileSize.width/2);
@@ -370,6 +379,50 @@ class Initializations {
       tilePath.lineTo(tileCenter.dx-(reserveTileSize.width/2), tileCenter.dy+(reserveTileSize.height/2));
       tilePath.close();
       gamePlayState.reserveTileData[i]["path"] = tilePath;    
+    }
+
+    final Size perkSize = Size(perksAreaSize.height,perksAreaSize.height);
+    final int nPerks = gamePlayState.tileMenuOptions.length;
+    final double perksAreaWidth = perksAreaSize.width*0.8;
+    final double perksAreaLeftX = perksCenter.dx-(perksAreaWidth/2);
+    final double perksOccupiedWidth = perkSize.width * nPerks;
+    final double perksBarEmptyArea = perksAreaWidth-perksOccupiedWidth;
+    final int nGaps = nPerks+1;
+    final double perksGapWidth = perksBarEmptyArea/nGaps;
+
+    late int countGap = 0;
+    late int countPerk = 0;
+    late double runningDx = perksAreaLeftX;
+        
+    for (int i=0; i<(nPerks+nGaps); i++) {
+      
+
+      // if i%2 = 0 (is pair) - it's a gap
+      if (i%2==0) {
+        runningDx = runningDx + perksGapWidth;
+        countGap += 1;
+      } else {
+        
+        double perkCenterX = runningDx + perkSize.width/2;  
+        runningDx = runningDx + perkSize.width;
+        print("perk : $countPerk  = $perkCenterX");
+        Map<String,dynamic> perkObject = gamePlayState.tileMenuOptions[countPerk];
+        final Offset perkCenter = Offset(perkCenterX,perksCenter.dy);
+        perkObject["center"]= perkCenter;
+
+        Path perkPath = Path();
+        perkPath.moveTo(perkCenter.dx-(perkSize.width/2), perkCenter.dy-(perkSize.height/2));
+        perkPath.lineTo(perkCenter.dx+(perkSize.width/2), perkCenter.dy-(perkSize.height/2));
+        perkPath.lineTo(perkCenter.dx+(perkSize.width/2), perkCenter.dy+(perkSize.height/2));
+        perkPath.lineTo(perkCenter.dx-(perkSize.width/2), perkCenter.dy+(perkSize.height/2));
+        perkPath.close();
+        perkObject["path"] = perkPath;         
+        countPerk += 1;
+
+      }
+      // final int col = i;
+      // final double perkCenterX = reserveLetterLeftX + (reserveTileSize.width*(col)) + (reserveTileSize.width/2);
+      // final double perkCenterY = reserveLettersCenter.dy;        
     }
 
   }

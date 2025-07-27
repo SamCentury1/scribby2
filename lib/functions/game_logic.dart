@@ -206,8 +206,113 @@ class GameLogic extends ChangeNotifier {
 
 
     gamePlayState.setTileData(gamePlayState.tileData);
-    executeCloseTileMenu(gamePlayState);
+    // executeCloseTileMenu(gamePlayState);
 
+
+  }
+
+  // when a perk is selected on the bar - if it's the und button - do that. 
+  // else, highlight the available tiles for a perk
+  void executePerkSelectedBehaviour(GamePlayState gamePlayState) {
+    Map<String,dynamic> selectedPerkObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
+    if (selectedPerkObject.isNotEmpty) {
+      String perkType = selectedPerkObject["item"];
+      int perkCount = selectedPerkObject["count"];
+
+      if (perkCount<=0) {
+        print("do not start highlight effect");
+        gamePlayState.highlightEffectTimer.cancel();
+        openTileMenuBuyMoreModal(gamePlayState,selectedPerkObject);
+        cancelPerk(gamePlayState);
+      } else {
+        if (perkType == "undo") {
+          // undo function
+        } else {
+          // highlight all cells that can be selected
+          gamePlayState.startHighlightEffectTimer(); 
+
+        }
+      }
+
+
+    }
+  }
+
+  void executePerk(BuildContext context, GamePlayState gamePlayState, ColorPalette palette, int tileKey, ) {
+    
+    Map<String,dynamic> selectedTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+    Map<String,dynamic> perkOpen = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
+
+    if (perkOpen.isNotEmpty && selectedTileObject.isNotEmpty) {
+      print("perk: ${perkOpen} | ");
+      String perk = perkOpen["item"];
+      if (perk == "explode") {
+        if (selectedTileObject["body"]=="") {
+          cancelPerk(gamePlayState);
+        } else {
+          Animations().startTileExplodeAnimation(gamePlayState,tileKey,);
+          restartTimer(gamePlayState,"tile-explode");
+
+          selectedTileObject.update("body", (v) => "");
+          selectedTileObject.update("active", (v) => true);
+          executeTutorialStep(gamePlayState,context);
+          chargeMenuItem(gamePlayState,perk);       
+          perkOpen.update("open", (v)=>false);
+          gamePlayState.highlightEffectTimer.cancel();
+        }
+      } else if (perk=="freeze") {
+        if (selectedTileObject["body"]=="" || selectedTileObject["active"]) {
+          cancelPerk(gamePlayState);
+        } else {        
+          Animations().startTileFreezeAnimation(gamePlayState,tileKey);
+          if (selectedTileObject["frozen"]) {
+            selectedTileObject.update("frozen", (v) => false);
+            Map<String,dynamic> moveData = {
+              "type":"freeze",
+              "data": selectedTileObject
+            };
+            executeFoundWordLogic(gamePlayState,palette, moveData);
+          } else {
+            selectedTileObject.update("frozen", (v) => true);
+            chargeMenuItem(gamePlayState,"freeze");           
+          }
+          executeTutorialStep(gamePlayState,context);  
+          restartTimer(gamePlayState,"tile-freeze");  
+          perkOpen.update("open", (v)=>false);
+          gamePlayState.highlightEffectTimer.cancel();   
+        }        
+      } else if (perk == "swap") {
+        // print("selected swap. is source tile selected?");
+        Map<String,dynamic> swappingTileObject = gamePlayState.tileData.firstWhere((e)=>e["swapping"]==true,orElse: ()=>{});
+        if (selectedTileObject["body"]!=""&&selectedTileObject["active"]) {
+          if (swappingTileObject.isEmpty) {
+            // print("source tile NOT selected => selected : ${selectedTileObject["key"]}");
+            selectedTileObject.update("swapping", (v) => true);
+            executeTutorialStep(gamePlayState,context);
+          } else {
+            if (swappingTileObject["key"]!=tileKey) {
+              // print("source tile is selected as ${swappingTileObject["key"]} - target tile selected as ${tileKey}");
+              executeSwap(gamePlayState, palette, context, selectedTileObject);
+              
+            } else {
+              // cancelSwap(gamePlayState);
+              cancelPerk(gamePlayState);
+              cancelSwap(gamePlayState);
+            }
+            // cancelPerk(gamePlayState);
+            perkOpen.update("open", (v)=>false);
+          }
+        } else {
+          cancelPerk(gamePlayState);
+          cancelSwap(gamePlayState);
+        }
+
+
+      }
+    } else {
+      
+      cancelPerk(gamePlayState);
+    }
 
   }
 
@@ -372,7 +477,7 @@ class GameLogic extends ChangeNotifier {
 
     gamePlayState.setIsGamePaused(true);
     print("optionSelected => $optionSelected");
-    String item = optionSelected["option"];
+    String item = optionSelected["item"];
     String menuBuyMoreMessage = Helpers().getMenuBuyMoreMessage(item);
     List<Map<String,dynamic>> options = [
       {"key":0, "reward": 5, "cost":1, "costItem":"ad"},
@@ -380,13 +485,14 @@ class GameLogic extends ChangeNotifier {
       // {"key":2, "reward": 5, "cost": 10, "costItem":"ruby"},
       // {"key":3, "reward": 10, "cost": 30, "costItem":"jade"},
     ];
-    gamePlayState.tileMenuBuyMoreModalData.update("tile", (v)=>gamePlayState.openMenuTile);
+    gamePlayState.tileMenuBuyMoreModalData.update("tile", (v)=>null);
     gamePlayState.tileMenuBuyMoreModalData.update("open", (v)=>true);
-    gamePlayState.tileMenuBuyMoreModalData.update("item", (v)=>optionSelected);
+    gamePlayState.tileMenuBuyMoreModalData.update("item", (v)=>item);
     gamePlayState.tileMenuBuyMoreModalData.update("message", (v)=>menuBuyMoreMessage);
     gamePlayState.tileMenuBuyMoreModalData.update("options", (v)=>options);
 
     gamePlayState.setTileMenuBuyMoreModalData(gamePlayState.tileMenuBuyMoreModalData);
+    print("in the openTileMenuBuyMoreModal function: ${gamePlayState.tileMenuBuyMoreModalData}");
   }
 
   void chargeMenuItem(GamePlayState gamePlayState, String type) {
@@ -784,7 +890,7 @@ class GameLogic extends ChangeNotifier {
     Map<String,dynamic> tileMenuBuyMoreModalData = gamePlayState.tileMenuBuyMoreModalData;
     print("** tileMenuBuyMoreModalData $tileMenuBuyMoreModalData");
     
-    String item = tileMenuBuyMoreModalData["item"]["option"];
+    String item = tileMenuBuyMoreModalData["item"];
 
     // print(tileMenuBuyMoreModalData["options"]);
     List<Map<String,dynamic>> options = tileMenuBuyMoreModalData["options"];
@@ -1283,42 +1389,50 @@ class GameLogic extends ChangeNotifier {
     res.update("swapping", (v)=>false);
   }
 
-  void validateLongPress(BuildContext context, GamePlayState gamePlayState, ColorPalette palette) {
-    if (gamePlayState.isLongPress) {
-
-      Map<String,dynamic> pointedElement = Helpers().getPointerElement(gamePlayState, gamePlayState.currentGestureLocation!);
-      Map<String,dynamic> swappingTile = Helpers().getSwappingTile(gamePlayState);
-      bool isOpenMenuTile = gamePlayState.openMenuTile==null ? false : true;
-      bool isTileBeingDragged = gamePlayState.draggedElementData==null ? false : true;
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // setState(() {
-
-          if (!isOpenMenuTile) {
-            if (pointedElement["type"]!="reserve") {
-              if (swappingTile.isEmpty) {
-                if (pointedElement.isNotEmpty && !isTileBeingDragged) {
-                  print("open menu of options for a tile: explode, freeze, swap");
-                  executeOpenTileMenu(gamePlayState, pointedElement);
-                }
-              } else {
-                print("swap with this guy!");
-
-                if (swappingTile["key"]!=pointedElement["key"]) {
-                  print("swapping tile: ${swappingTile["key"]} | pointed element: ${pointedElement["key"]}");
-                  executeSwap(gamePlayState, palette, context, pointedElement);
-                  
-                } else {
-                  cancelSwap(gamePlayState);
-                }
-              }
-            }
-          }
-
-        });
-      // });            
-    }    
+  void cancelPerk(GamePlayState gamePlayState) {
+    Map<String,dynamic> perkOpen = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
+    if (perkOpen.isNotEmpty) {
+      perkOpen.update("open", (v)=>false);
+      perkOpen.update("selected", (v)=>false);
+    }  
   }
+
+  // void validateLongPress(BuildContext context, GamePlayState gamePlayState, ColorPalette palette) {
+  //   if (gamePlayState.isLongPress) {
+
+  //     Map<String,dynamic> pointedElement = Helpers().getPointerElement(gamePlayState, gamePlayState.currentGestureLocation!);
+  //     Map<String,dynamic> swappingTile = Helpers().getSwappingTile(gamePlayState);
+  //     bool isOpenMenuTile = gamePlayState.openMenuTile==null ? false : true;
+  //     bool isTileBeingDragged = gamePlayState.draggedElementData==null ? false : true;
+
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       // setState(() {
+
+  //         if (!isOpenMenuTile) {
+  //           if (pointedElement["type"]!="reserve") {
+  //             if (swappingTile.isEmpty) {
+  //               if (pointedElement.isNotEmpty && !isTileBeingDragged) {
+  //                 print("open menu of options for a tile: explode, freeze, swap");
+  //                 executeOpenTileMenu(gamePlayState, pointedElement);
+  //               }
+  //             } else {
+  //               print("swap with this guy!");
+
+  //               if (swappingTile["key"]!=pointedElement["key"]) {
+  //                 print("swapping tile: ${swappingTile["key"]} | pointed element: ${pointedElement["key"]}");
+  //                 executeSwap(gamePlayState, palette, context, pointedElement);
+                  
+  //               } else {
+  //                 cancelSwap(gamePlayState);
+  //               }
+  //             }
+  //           }
+  //         }
+
+  //       });
+  //     // });            
+  //   }    
+  // }
 
 
 

@@ -561,6 +561,30 @@ class TilePainters {
   //   return canvas;
   // }
 
+  Canvas highlightTilesOpenForPerk(Canvas canvas, GamePlayState gamePlayState,) {
+
+    Map<String,dynamic> openPerk = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
+    if (openPerk.isNotEmpty) {      
+      for (int i=0; i<gamePlayState.tileData.length; i++) {
+        Map<String,dynamic> tileObject = gamePlayState.tileData[i];
+        Size tileSize = gamePlayState.elementSizes["tileSize"];
+    
+        if ( tileObject["body"]!="" || !tileObject["active"]) {
+            Offset targetCenter = tileObject["center"];
+          if (tileObject["swapping"]) {
+
+          } else {
+            late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
+            drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);
+          }
+        }      
+
+      }
+
+    }
+    return canvas;
+  }
+
 
   Canvas drawSwappingTileShadow(Canvas canvas, GamePlayState gamePlayState,) {
 

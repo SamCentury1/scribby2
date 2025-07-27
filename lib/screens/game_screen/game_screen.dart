@@ -79,7 +79,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     
         GameLogic().checkTimeExpired(context,gamePlayState);
 
-        GameLogic().validateLongPress(context,gamePlayState,palette);
+        // GameLogic().validateLongPress(context,gamePlayState,palette);
 
         return PopScope(
           canPop: false,

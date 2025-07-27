@@ -247,9 +247,9 @@ class GamePlayState extends ChangeNotifier {
   List<Map<String,dynamic>> get animationLengths => _animationLengths;  
 
   late List<Map<String,dynamic>> _tileMenuOptions = [
-    {"item": "swap", "count": 3},
-    {"item": "explode", "count": 3 },
-    {"item": "freeze", "count": 3 },
+    {"item": "swap", "count": 3, "selected":false, "open":false},
+    {"item": "explode", "count": 3, "selected":false, "open":false},
+    {"item": "freeze", "count": 3, "selected":false, "open":false},
   ];
   List<Map<String,dynamic>> get tileMenuOptions => _tileMenuOptions;
   void setTileMenuOptions(List<Map<String,dynamic>> value) {
@@ -258,9 +258,9 @@ class GamePlayState extends ChangeNotifier {
   }
   void refreshTileMenuOptions() {
     _tileMenuOptions = [
-      {"item": "swap", "count": 3 },
-      {"item": "explode", "count": 3 },
-      {"item": "freeze", "count": 3 },
+      {"item": "swap", "count": 3, "selected":false, "open":false},
+      {"item": "explode", "count": 3, "selected":false, "open":false},
+      {"item": "freeze", "count": 3, "selected":false, "open":false},
     ];    
   }
  
@@ -392,74 +392,71 @@ class GamePlayState extends ChangeNotifier {
     notifyListeners();
   }
 
-  late bool _isLongPress = false;
-  bool get isLongPress => _isLongPress;
-  void setIsLongPress(bool value) {
-    _isLongPress = value;
-    notifyListeners();
-  }
+  // late bool _isLongPress = false;
+  // bool get isLongPress => _isLongPress;
+  // void setIsLongPress(bool value) {
+  //   _isLongPress = value;
+  //   notifyListeners();
+  // }
 
-  void detectLongPress() {
+  // void detectLongPress() {
 
-    int count = 0;
-    int target = 20;
+  //   int count = 0;
+  //   int target = 20;
+  //   // late Map<String,dynamic> downObject = {};
+  //   // late Map<String,dynamic> currentObject  = {};
+  //   late int? downKey = null;
+  //   late int? currentKey = null;
 
+  //   // currentObject = Helpers().getPointerElement2(_tileData,_currentGestureLocation);
 
+  //   print("*********** STARTING TIMER *****************");
 
-    // late Map<String,dynamic> downObject = {};
-    // late Map<String,dynamic> currentObject  = {};
-    late int? downKey = null;
-    late int? currentKey = null;
+  //   Timer.periodic(Duration(milliseconds: 20), (Timer t) {
+  //     if (count == target) {
+  //       t.cancel();
+  //       String currentBody = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["body"]??"";
+  //       bool isTileActive = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["active"]??true;
+  //       if (currentBody != "" && isTileActive) {
+  //         _isLongPress = true;
+  //       }
 
-    // currentObject = Helpers().getPointerElement2(_tileData,_currentGestureLocation);
-
-    print("*********** STARTING TIMER *****************");
-
-    Timer.periodic(Duration(milliseconds: 20), (Timer t) {
-      if (count == target) {
-        t.cancel();
-        String currentBody = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["body"]??"";
-        bool isTileActive = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["active"]??true;
-        if (currentBody != "" && isTileActive) {
-          _isLongPress = true;
-        }
-
-        if (currentBody == "" && !isTileActive) {
-          _isLongPress = true;
-        }
-        print("*********** FINISHED TIMER *****************");
-      } else if (_currentGestureLocation == null) {
-        t.cancel();
-        _isLongPress = false;
-        print("*********** TIMER INTERUPTED *****************");
-      } else if (count == 0) {
-        downKey = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["key"]??null;
-        count++;
-      } else {
-        currentKey = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["key"]??null;
-        Map<String,dynamic> pointedElement = Helpers().getPointerElement2(_tileData,_currentGestureLocation);
-        String currentBody = "";
-        bool isTileActive = true;
-        if (pointedElement.isNotEmpty) {
-          currentBody = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["body"];
-          isTileActive = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["active"];
-        } 
-        if (downKey != currentKey) {
-          t.cancel();
-          _isLongPress = false;
-          print("*********** TIMER INTERUPTED BECAUSE IT IS NOT THE SAME TILE *****************");
-        } else if (currentBody == "" && isTileActive == true) {
-          t.cancel();
-          _isLongPress = false;
-          print("*********** TIMER INTERUPTED BECAUSE THE TILE IS EMPTY AND NOT ACTIVE *****************");          
+  //       if (currentBody == "" && !isTileActive) {
+  //         _isLongPress = true;
+  //       }
+  //       print("*********** FINISHED TIMER *****************");
+  //     } else if (_currentGestureLocation == null) {
+  //       t.cancel();
+  //       _isLongPress = false;
+  //       print("*********** TIMER INTERUPTED *****************");
+  //     } else if (count == 0) {
+  //       downKey = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["key"]??null;
+  //       count++;
+  //     } else {
+  //       currentKey = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["key"]??null;
+  //       Map<String,dynamic> pointedElement = Helpers().getPointerElement2(_tileData,_currentGestureLocation);
+  //       String currentBody = "";
+  //       bool isTileActive = true;
+  //       if (pointedElement.isNotEmpty) {
+  //         currentBody = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["body"];
+  //         isTileActive = Helpers().getPointerElement2(_tileData,_currentGestureLocation)["active"];
+  //       } 
+  //       if (downKey != currentKey) {
+  //         t.cancel();
+  //         _isLongPress = false;
+  //         print("*********** TIMER INTERUPTED BECAUSE IT IS NOT THE SAME TILE *****************");
+  //       } else if (currentBody == "" && isTileActive == true) {
+  //         t.cancel();
+  //         _isLongPress = false;
+  //         print("*********** TIMER INTERUPTED BECAUSE THE TILE IS EMPTY AND NOT ACTIVE *****************");          
      
-        } else {
-          count++;
-        }
-      }
-    });
+  //       } else {
+  //         count++;
+  //       }
+  //     }
+  //   });
 
-  }
+  // }
   
   late Map<String,dynamic>? _tappedUpElement = {};
   Map<String,dynamic>? get tappedUpElement => _tappedUpElement;

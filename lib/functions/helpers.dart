@@ -33,6 +33,7 @@ class Helpers {
         element = gamePlayState.reserveTileData[i];
       }
     }
+    
     return element;    
   }
 
@@ -49,6 +50,30 @@ class Helpers {
     return element;    
   }  
 
+  Map<String,dynamic> detectPerkSelection(GamePlayState gamePlayState, Offset? location) {
+    Map<String,dynamic> element = {};
+    // check if a tile was tapped;
+    if (location != null) {
+      for (int i=0; i<gamePlayState.tileMenuOptions.length; i++) {
+        if (gamePlayState.tileMenuOptions[i]["path"].contains(location)) {
+          element = gamePlayState.tileMenuOptions[i];
+        }
+      }
+    }
+    return element;    
+  }    
+
+  Map<String,dynamic> getSelectedPerk(GamePlayState gamePlayState) {
+    Map<String,dynamic> element = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
+    return element;    
+  }      
+
+  void releaseSelectedPerk(GamePlayState gamePlayState, Offset? location) {
+     List<Map<String,dynamic>> elements = gamePlayState.tileMenuOptions.where((e)=>e["selected"]==true).toList();
+     for (int i=0; i<elements.length; i++) {
+      elements[i].update("selected", (v) => false);
+     }
+  }
 
   // Map<String, dynamic> generateRandomLetterData(GamePlayState gamePlayState) {
   //   List<Map<String, dynamic>> alphabet = gamePlayState.alphabet;
@@ -181,6 +206,8 @@ class Helpers {
     double val = double.parse(res.toStringAsFixed(4));
     return val;
   }
+
+
 
   int getPreviousScore(GamePlayState gamePlayState, int turn) {
     int res = 0;

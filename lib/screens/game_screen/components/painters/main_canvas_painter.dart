@@ -5,6 +5,7 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/bonus_painters.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/painters.dart';
+import 'package:scribby_flutter_v2/screens/game_screen/components/painters/perks_bar_painters.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/scoreboard_painters.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/stop_watch_painters.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/tile_painters.dart';
@@ -42,6 +43,7 @@ class MainCanvasPainter extends CustomPainter {
     ScoreboardPainters().drawScoreboardArea(canvas,gamePlayState,palette);
     Painters().drawCountDown(canvas,gamePlayState, palette);
     Painters().paintPerkCounts(canvas,gamePlayState);
+    PerksBarPainters().drawPerksArea(canvas,gamePlayState,palette);
 
 
     Painters().drawBonusArea(canvas,gamePlayState,palette);
@@ -64,7 +66,8 @@ class MainCanvasPainter extends CustomPainter {
     Painters().drawDraggedTileDroppedOnBoard(canvas,gamePlayState,palette);
     
     // this is the glow effect that applies to all tiles available for swapping
-    TilePainters().drawSwappingTileShadow(canvas,gamePlayState);
+    // TilePainters().drawSwappingTileShadow(canvas,gamePlayState);
+    TilePainters().highlightTilesOpenForPerk(canvas,gamePlayState);
     
     TilePainters().drawExplodingTile(canvas,gamePlayState);
 
@@ -84,6 +87,7 @@ class MainCanvasPainter extends CustomPainter {
 
     // Painters().drawTileMenuBuyMoreModal(canvas,gamePlayState);
     Painters().paintGameOverOverlay(canvas,size,gamePlayState);
+
 
     if (gamePlayState.isTutorial) {
       TutorialPainters().paintTutorialPainters(canvas,gamePlayState, palette);

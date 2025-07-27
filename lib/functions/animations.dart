@@ -10,10 +10,11 @@ import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 
 class Animations extends ChangeNotifier {
+
   void startTapDownAnimation(GamePlayState gamePlayState, int key) {
     print("starting tap down animation for $key");
 
-    gamePlayState.setIsLongPress(false);
+    // gamePlayState.setIsLongPress(false);
 
     const String animationType = "tap-down";
     Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
