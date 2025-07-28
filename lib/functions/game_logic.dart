@@ -261,7 +261,7 @@ class GameLogic extends ChangeNotifier {
           gamePlayState.highlightEffectTimer.cancel();
         }
       } else if (perk=="freeze") {
-        if (selectedTileObject["body"]=="" || selectedTileObject["active"]) {
+        if (selectedTileObject["body"]=="" || !selectedTileObject["active"]) {
           cancelPerk(gamePlayState);
         } else {        
           Animations().startTileFreezeAnimation(gamePlayState,tileKey);

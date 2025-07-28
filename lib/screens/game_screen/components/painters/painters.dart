@@ -1078,8 +1078,9 @@ class Painters {
     final double scoreboardBottomY = scoreboardCenter.dy+(scoreboardSize.height/2) + (18 * gamePlayState.scalor);
     final double scoreboardLeftX = scoreboardCenter.dx-(scoreboardSize.width*0.9/2) + (18 * gamePlayState.scalor);
 
+    final Color itemColor = Colors.white;
     Paint itemPaint = Paint()
-    ..color = Colors.white;
+    ..color = itemColor;
 
     double itemDiameter = 36 * gamePlayState.scalor;//tileSize.width*0.6;
 
@@ -1107,7 +1108,7 @@ class Painters {
         opacity = AnimationUtils().getAnimationTransition(perkAnimation["progress"],animationDetails);          
         count = perkAnimation["animation"]["body"];    
       }
-      TilePainters().drawOptionIcon(canvas, position, icon, Size(itemDiameter,itemDiameter), 1.0);
+      TilePainters().drawOptionIcon(canvas, position, icon, Size(itemDiameter,itemDiameter), 1.0, itemColor);
 
 
       TextStyle textStyle = TextStyle(

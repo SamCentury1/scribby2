@@ -79,8 +79,8 @@ class MainCanvasPainter extends CustomPainter {
     Painters().drawNewPointsAnimation(canvas,gamePlayState, palette);
     // Painters().drawMenuItemChargeAnimations(canvas,gamePlayState);
 
-    // if a tile menu is open, draw it over other elements
-    TilePainters().drawTileMenu(canvas, gamePlayState);
+    // // if a tile menu is open, draw it over other elements
+    // TilePainters().drawTileMenu(canvas, gamePlayState);
 
     // draw the hamburger menu
     // Painters().drawMenuButton(canvas,gamePlayState);

@@ -250,6 +250,7 @@ class GamePlayState extends ChangeNotifier {
     {"item": "swap", "count": 3, "selected":false, "open":false},
     {"item": "explode", "count": 3, "selected":false, "open":false},
     {"item": "freeze", "count": 3, "selected":false, "open":false},
+    {"item": "undo", "count": 3, "selected":false, "open":false},
   ];
   List<Map<String,dynamic>> get tileMenuOptions => _tileMenuOptions;
   void setTileMenuOptions(List<Map<String,dynamic>> value) {
@@ -261,6 +262,7 @@ class GamePlayState extends ChangeNotifier {
       {"item": "swap", "count": 3, "selected":false, "open":false},
       {"item": "explode", "count": 3, "selected":false, "open":false},
       {"item": "freeze", "count": 3, "selected":false, "open":false},
+      {"item": "undo", "count": 3, "selected":false, "open":false},
     ];    
   }
  

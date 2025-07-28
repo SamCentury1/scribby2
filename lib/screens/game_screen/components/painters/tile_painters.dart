@@ -420,104 +420,104 @@ class TilePainters {
   }
 
 
-  Canvas drawTileMenu(Canvas canvas, GamePlayState gamePlayState,) {
+  // Canvas drawTileMenu(Canvas canvas, GamePlayState gamePlayState,) {
 
-    // Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
+  //   // Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
 
-    Map<String,dynamic> tileMenuAnimation = gamePlayState.animationData.firstWhere(
-      (e)=>e["type"]=="tile-menu",
-      orElse: ()=>{}
-    );
+  //   Map<String,dynamic> tileMenuAnimation = gamePlayState.animationData.firstWhere(
+  //     (e)=>e["type"]=="tile-menu",
+  //     orElse: ()=>{}
+  //   );
 
-    if (tileMenuAnimation.isNotEmpty) {
+  //   if (tileMenuAnimation.isNotEmpty) {
 
-      // check if it's open or close
-      double progress = tileMenuAnimation["progress"];
-
-
-      Map<String,dynamic>? tileObject = tileMenuAnimation["animation"]["tile"];
-
-      if (tileObject != null) {
-
-        late double updatedProgress = progress;
-        if (tileMenuAnimation["animation"]["open"]==false) {
-          updatedProgress = (1.0-progress);
-        }
-        tileMenu(canvas,gamePlayState,tileObject,updatedProgress);
+  //     // check if it's open or close
+  //     double progress = tileMenuAnimation["progress"];
 
 
-      }
+  //     Map<String,dynamic>? tileObject = tileMenuAnimation["animation"]["tile"];
 
-    } else {
+  //     if (tileObject != null) {
 
-      Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
-      if (openMenuTile != null ) {
-        tileMenu(canvas,gamePlayState,openMenuTile,1.0);
-      }
-    }
-
-
+  //       late double updatedProgress = progress;
+  //       if (tileMenuAnimation["animation"]["open"]==false) {
+  //         updatedProgress = (1.0-progress);
+  //       }
+  //       tileMenu(canvas,gamePlayState,tileObject,updatedProgress);
 
 
-    return canvas;
-  }
+  //     }
 
-  Canvas tileMenu(Canvas canvas, GamePlayState gamePlayState, Map<String,dynamic> openMenuTile, double progress) {
-    Size tileSize = gamePlayState.elementSizes["tileSize"];
+  //   } else {
 
-    Paint paint = Paint()
-    ..color = ui.Color.fromRGBO(51, 51, 51, progress)
-    ..style = PaintingStyle.fill;
-
-    Paint optionPaint = Paint()
-    ..color = ui.Color.fromRGBO(233, 233, 233, progress)
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = tileSize.width*0.025
-    ..strokeJoin = StrokeJoin.round;
-
-    List<Map<String,dynamic>> menuData = openMenuTile["menuData"];
-
-    Offset tileCenter = openMenuTile["center"];
-    Path trianglePath = Path();
-    trianglePath.moveTo(tileCenter.dx, (tileCenter.dy-tileSize.height/2) + (tileSize.width*0.1));
-    trianglePath.lineTo(tileCenter.dx-(tileSize.width*0.2), (tileCenter.dy-(tileSize.height*1.2) + (tileSize.height*1.1)/2 ));
-    trianglePath.lineTo(tileCenter.dx+(tileSize.width*0.2), (tileCenter.dy-(tileSize.height*1.2) + (tileSize.height*1.1)/2 ));
-    canvas.drawPath(trianglePath, paint);  
-
-    for (int i=0; i<menuData.length; i++) {
-      Rect menuRect  = Rect.fromCenter(center: menuData[i]["center"], width: tileSize.width*1.1, height: tileSize.height*1.1);
-      RRect menuRRect = RRect.fromRectAndRadius(menuRect, Radius.circular(tileSize.width*0.1));
-      canvas.drawRRect(menuRRect, paint);
-      Path optionPath = menuData[i]["path"];
-      canvas.drawPath(optionPath, optionPaint);
-
-      Offset position = menuData[i]["center"];
-      String icon = menuData[i]["option"];
-      drawOptionIcon(canvas,position,icon,tileSize,progress);
-    }
-
-    // for (int i=0; i<menuData.length;i++) {
-    //   drawIconPrices(canvas,openMenuTile,menuData[i], tileSize,progress);
-    // }
-    return canvas;
-  }
+  //     Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
+  //     if (openMenuTile != null ) {
+  //       tileMenu(canvas,gamePlayState,openMenuTile,1.0);
+  //     }
+  //   }
 
 
 
-  Canvas drawOptionIcon(Canvas canvas, Offset position, String icon, Size size,double progress) {
+
+  //   return canvas;
+  // }
+
+  // Canvas tileMenu(Canvas canvas, GamePlayState gamePlayState, Map<String,dynamic> openMenuTile, double progress) {
+  //   Size tileSize = gamePlayState.elementSizes["tileSize"];
+
+  //   Paint paint = Paint()
+  //   ..color = ui.Color.fromRGBO(51, 51, 51, progress)
+  //   ..style = PaintingStyle.fill;
+
+  //   Paint optionPaint = Paint()
+  //   ..color = ui.Color.fromRGBO(233, 233, 233, progress)
+  //   ..style = PaintingStyle.stroke
+  //   ..strokeWidth = tileSize.width*0.025
+  //   ..strokeJoin = StrokeJoin.round;
+
+  //   List<Map<String,dynamic>> menuData = openMenuTile["menuData"];
+
+  //   Offset tileCenter = openMenuTile["center"];
+  //   Path trianglePath = Path();
+  //   trianglePath.moveTo(tileCenter.dx, (tileCenter.dy-tileSize.height/2) + (tileSize.width*0.1));
+  //   trianglePath.lineTo(tileCenter.dx-(tileSize.width*0.2), (tileCenter.dy-(tileSize.height*1.2) + (tileSize.height*1.1)/2 ));
+  //   trianglePath.lineTo(tileCenter.dx+(tileSize.width*0.2), (tileCenter.dy-(tileSize.height*1.2) + (tileSize.height*1.1)/2 ));
+  //   canvas.drawPath(trianglePath, paint);  
+
+  //   for (int i=0; i<menuData.length; i++) {
+  //     Rect menuRect  = Rect.fromCenter(center: menuData[i]["center"], width: tileSize.width*1.1, height: tileSize.height*1.1);
+  //     RRect menuRRect = RRect.fromRectAndRadius(menuRect, Radius.circular(tileSize.width*0.1));
+  //     canvas.drawRRect(menuRRect, paint);
+  //     Path optionPath = menuData[i]["path"];
+  //     canvas.drawPath(optionPath, optionPaint);
+
+  //     Offset position = menuData[i]["center"];
+  //     String icon = menuData[i]["option"];
+  //     drawOptionIcon(canvas,position,icon,tileSize,progress,color);
+  //   }
+
+  //   // for (int i=0; i<menuData.length;i++) {
+  //   //   drawIconPrices(canvas,openMenuTile,menuData[i], tileSize,progress);
+  //   // }
+  //   return canvas;
+  // }
+
+
+
+  Canvas drawOptionIcon(Canvas canvas, Offset position, String icon, Size size,double progress, Color color) {
     // Offset position = optionData["center"];
     // String icon = optionData["option"];
     if (icon == "freeze") {
       // Color color = tileData["frozen"] ? Colors.blueAccent : Colors.white;
-      drawSnowFlakeIcon(canvas, size, position,progress);
+      drawSnowFlakeIcon(canvas, size, position,progress, color);
     } 
     
     if (icon == "swap") {
-      drawSwapIcon(canvas, size, position,progress); 
+      drawSwapIcon(canvas, size, position,progress, color); 
     } 
     
     if (icon == "explode") {
-      drawBombIcon(canvas, size, position,progress);
+      drawBombIcon(canvas, size, position,progress, color);
     }
     return canvas;
   }
@@ -769,9 +769,15 @@ class TilePainters {
   }
 
 
-  Canvas drawSnowFlakeIcon(Canvas canvas, Size size, Offset position,double progress) {
+  Canvas drawSnowFlakeIcon(Canvas canvas, Size size, Offset position,double progress, Color color) {
+
+    final double red = color.r;
+    final double green = color.g;
+    final double blue = color.b;
+    final Color updatedColor = Color.fromARGB((255*progress).floor(),(255*red).floor(),(255*green).floor(),(255*blue).floor());
+
     Paint iconPaint = Paint()
-    ..color = ui.Color.fromRGBO(233, 233, 233, progress)
+    ..color = updatedColor //ui.Color.fromRGBO(233, 233, 233, progress)
     ..style = PaintingStyle.stroke
     ..strokeWidth = size.width*0.04
     ..strokeCap = StrokeCap.round;
@@ -811,9 +817,15 @@ class TilePainters {
   }
 
 
-  Canvas drawBombIcon(Canvas canvas, Size size, Offset position,double progress) {
+  Canvas drawBombIcon(Canvas canvas, Size size, Offset position,double progress, Color color) {
+
+    final double red = color.r;
+    final double green = color.g;
+    final double blue = color.b;
+    final Color updatedColor = Color.fromARGB((255*progress).floor(),(255*red).floor(),(255*green).floor(),(255*blue).floor());
+
     Paint iconPaint = Paint()
-    ..color = ui.Color.fromRGBO(233, 233, 233, progress)
+    ..color = updatedColor //ui.Color.fromRGBO(233, 233, 233, progress)
     ..style = PaintingStyle.fill;
 
     Offset bombCenter = Offset(position.dx-size.width*0.14,position.dy+size.height*0.08);
@@ -848,7 +860,7 @@ class TilePainters {
     final double collarDifferenceY = (bombCollarPoint4.dy-bombCollarPoint3.dy);
 
     Paint stringPaint = Paint()
-    ..color = ui.Color.fromRGBO(233, 233, 233, progress)
+    ..color = updatedColor
     ..style = PaintingStyle.stroke
     ..strokeWidth = size.width*0.03
     ..strokeCap = StrokeCap.round;
@@ -886,9 +898,15 @@ class TilePainters {
   }
 
 
-  Canvas drawSwapIcon(Canvas canvas, Size size, Offset position,double progress) {
+  Canvas drawSwapIcon(Canvas canvas, Size size, Offset position,double progress, Color color) {
+
+    final double red = color.r;
+    final double green = color.g;
+    final double blue = color.b;
+    final Color updatedColor = Color.fromARGB((255*progress).floor(),(255*red).floor(),(255*green).floor(),(255*blue).floor());
+
     Paint iconPaint = Paint()
-    ..color = ui.Color.fromRGBO(233, 233, 233, progress)
+    ..color = updatedColor //ui.Color.fromRGBO(233, 233, 233, progress)
     ..style = PaintingStyle.stroke
     ..strokeWidth = size.width*0.06
     ..strokeCap = StrokeCap.round

@@ -48,11 +48,12 @@ class PerksBarPainters {
       Offset perkCenter = gamePlayState.tileMenuOptions[i]["center"];
       String iconType = gamePlayState.tileMenuOptions[i]["item"];
       bool isSelected = gamePlayState.tileMenuOptions[i]["selected"];
+      bool isOpen = gamePlayState.tileMenuOptions[i]["open"];
       int count = gamePlayState.tileMenuOptions[i]["count"];
       // Rect perkRect = Rect.fromCenter(center: perkCenter, width: perkSize, height: perkSize);
 
       // canvas.drawRect(perkRect, perkPaint);
-      if (isSelected) {
+      if (isSelected || isOpen) {
         perkSize = Size(perkAreaSize.height*1.1,perkAreaSize.height*1.1,);
       } 
 
@@ -61,13 +62,20 @@ class PerksBarPainters {
       Map<String,dynamic> perkAnimation = gamePlayState.animationData.firstWhere((e)=>e["key"]==iconType,orElse: ()=>{});
 
       late double opacity = 1.0;
+      late Color unselectedColor = Colors.white;
+      late Color selectedColor = const Color.fromARGB(255, 4, 17, 133);
 
+      late Color perkColor = unselectedColor;
+      if (isSelected || isOpen) {
+        perkColor = selectedColor;
+      }
 
-      TilePainters().drawOptionIcon(canvas,perkCenter,iconType,perkSize,1.0);
+      TilePainters().drawOptionIcon(canvas,perkCenter,iconType,perkSize,1.0,perkColor);
 
+      
 
       TextStyle textStyle = TextStyle(
-        color: isSelected ? Colors.red : ui.Color.fromRGBO(255, 255, 255, opacity) ,
+        color: perkColor ,
         fontSize: itemDiameter*0.5 * gamePlayState.scalor ,
         shadows: perkAnimation.isNotEmpty ? [
           Shadow(color: Colors.white,offset: Offset.zero, blurRadius: 22.0 * opacity,)
