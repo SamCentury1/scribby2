@@ -411,7 +411,7 @@ class Painters {
             
 
             if (turnData["moveData"]["type"]=="freeze") {
-              int frozenTileKey = turnData["moveData"]["data"]["key"];
+              int frozenTileKey = turnData["moveData"]["data"]["tileObject"]["key"];
               if (tileObject["key"]==frozenTileKey) {
                 List<Map<String,dynamic>> ids = turnData["ids"];
                 var frozenTile = ids.firstWhere((e)=>e["id"]==frozenTileKey, orElse: ()=>{});

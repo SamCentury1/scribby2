@@ -198,7 +198,7 @@ class GameLogic extends ChangeNotifier {
       // }
 
 
-      chargeMenuItem(gamePlayState,"swap");
+      chargeMenuItem(gamePlayState,"swap",-1);
       restartTimer(gamePlayState,"tile-swap"); 
       executeFoundWordLogic(gamePlayState,palette, moveData);
       executeTutorialStep(gamePlayState,context);
@@ -227,9 +227,11 @@ class GameLogic extends ChangeNotifier {
       } else {
         if (perkType == "undo") {
           // undo function
+          executeUndoPerk(gamePlayState);
         } else {
           // highlight all cells that can be selected
-          gamePlayState.startHighlightEffectTimer(); 
+          gamePlayState.startHighlightEffectTimer();
+           
 
         }
       }
@@ -252,30 +254,42 @@ class GameLogic extends ChangeNotifier {
         } else {
           Animations().startTileExplodeAnimation(gamePlayState,tileKey,);
           restartTimer(gamePlayState,"tile-explode");
+          String explodedTileBody =selectedTileObject["body"]; 
 
           selectedTileObject.update("body", (v) => "");
           selectedTileObject.update("active", (v) => true);
           executeTutorialStep(gamePlayState,context);
-          chargeMenuItem(gamePlayState,perk);       
+          chargeMenuItem(gamePlayState,perk,-1);       
           perkOpen.update("open", (v)=>false);
           gamePlayState.highlightEffectTimer.cancel();
+          Map<String,dynamic> moveData = {
+            "type": "explode",
+            "data": {"tileObject":selectedTileObject,"body":explodedTileBody}
+          };
+          executeFoundWordLogic(gamePlayState, palette, moveData);
         }
       } else if (perk=="freeze") {
         if (selectedTileObject["body"]=="" || !selectedTileObject["active"]) {
           cancelPerk(gamePlayState);
         } else {        
           Animations().startTileFreezeAnimation(gamePlayState,tileKey);
+          Map<String,dynamic> moveData = {};
           if (selectedTileObject["frozen"]) {
             selectedTileObject.update("frozen", (v) => false);
-            Map<String,dynamic> moveData = {
+            moveData = {
               "type":"freeze",
-              "data": selectedTileObject
+              "data": {"tileObject":selectedTileObject,"thaw":true}
             };
-            executeFoundWordLogic(gamePlayState,palette, moveData);
+            // executeFoundWordLogic(gamePlayState,palette, moveData);
           } else {
             selectedTileObject.update("frozen", (v) => true);
-            chargeMenuItem(gamePlayState,"freeze");           
+            moveData = {
+              "type":"freeze",
+              "data": {"tileObject":selectedTileObject,"thaw":false}
+            };            
+            chargeMenuItem(gamePlayState,"freeze",-1);           
           }
+          executeFoundWordLogic(gamePlayState, palette, moveData);
           executeTutorialStep(gamePlayState,context);  
           restartTimer(gamePlayState,"tile-freeze");  
           perkOpen.update("open", (v)=>false);
@@ -314,6 +328,124 @@ class GameLogic extends ChangeNotifier {
       cancelPerk(gamePlayState);
     }
 
+  }
+
+  void executeUndoPerk(GamePlayState gamePlayState) {
+    // get the previous turn state
+
+    try {
+      if (gamePlayState.scoreSummary.length > 2) {
+        Map<String,dynamic> previousTurnData = gamePlayState.scoreSummary.last;
+        int lastTurnIndex = gamePlayState.scoreSummary.indexOf(previousTurnData);
+        gamePlayState.scoreSummary.removeAt(lastTurnIndex);
+
+        List<String> randomLetters = [];
+        for (int i=0; i<gamePlayState.randomLetterData.length; i++) {
+          randomLetters.add(gamePlayState.randomLetterData[i]["body"]);
+        }
+
+        previousTurnData.forEach((key,value) {
+          print("$key | $value");
+        });
+        print("""
+  ================ LAST TURN =====================
+  ${previousTurnData}
+  {randomLetters}
+  ================================================
+
+  """);
+
+      String moveType = previousTurnData["moveData"]["type"];
+      if (moveType=="swap") {
+        print("hello ?? swap???: $previousTurnData");
+        Map<String,dynamic> sourceTile = previousTurnData["moveData"]["data"]["source"];
+        Map<String,dynamic> targetTile = previousTurnData["moveData"]["data"]["target"];
+        
+        if (previousTurnData["score"]>0) {
+          for (int i=0;i<previousTurnData["ids"].length; i++) {
+            int tileKey = previousTurnData["ids"][i]["id"];
+            String tileBody = previousTurnData["ids"][i]["body"];
+            Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+            targetTile.update("body",(v)=> tileBody);
+          }
+        }
+
+        Map<String,dynamic> sourceTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==sourceTile["key"],orElse:()=>{});
+        Map<String,dynamic> targetTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==targetTile["key"],orElse:()=>{});
+
+        if (sourceTileObject.isNotEmpty && targetTileObject.isNotEmpty) {
+          String sourceBody = sourceTile["body"];
+          String targetBody = targetTile["body"];
+          sourceTileObject.update("body", (v) => sourceBody);
+          targetTileObject.update("body", (v) => targetBody);
+        }
+
+        chargeMenuItem(gamePlayState, "swap", 1);
+        
+      } else if (moveType=="freeze") {
+        Map<String,dynamic> frozenTileObject = previousTurnData["moveData"]["data"]["tileObject"];
+        bool thaw = previousTurnData["moveData"]["data"]["thaw"];
+        Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==frozenTileObject["key"],orElse:()=>{});
+        if (previousTurnData["score"]>0) {
+          for (int i=0;i<previousTurnData["ids"].length; i++) {
+            int tileKey = previousTurnData["ids"][i]["id"];
+            String tileBody = previousTurnData["ids"][i]["body"];
+            Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+            targetTile.update("body",(v)=> tileBody);
+            if (tileKey==frozenTileObject["key"]) {
+              targetTile.update("frozen", (v)=>true);
+            }
+          }
+        } else {
+          if (tileObject.isNotEmpty) {
+            tileObject.update("frozen", (v)=>thaw);
+          }
+        }
+        chargeMenuItem(gamePlayState, "freeze", 1);
+        
+      } else if (moveType=="explode") {
+        Map<String,dynamic> explodedTileObject = previousTurnData["moveData"]["data"]["tileObject"];
+        String body = previousTurnData["moveData"]["data"]["body"];
+        Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==explodedTileObject["key"],orElse:()=>{});
+        if (tileObject.isNotEmpty) {
+          tileObject.update("body", (v)=>body);
+        }
+        chargeMenuItem(gamePlayState, "explode", 1);
+      } else if (moveType=="placed") {
+        String tileType = previousTurnData["moveData"]["data"]["type"];
+        int tilePlacedId = previousTurnData["moveData"]["data"]["key"];
+        if (tileType == "board") {
+          Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tilePlacedId,orElse:()=>{});
+          if (tileObject.isNotEmpty) {
+            tileObject.update("body", (v) => "");
+          }
+        }
+        int lastLetterIndex = gamePlayState.randomLetterData.indexOf(gamePlayState.randomLetterData.last);
+        gamePlayState.randomLetterData.removeAt(lastLetterIndex);        
+      } else if (moveType=="dropped") {
+
+      }
+
+
+      // // removes last random letter
+
+
+
+
+      Map<String,dynamic> undoObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]=="undo",orElse: ()=>{});
+      undoObject.update("open", (v) => false);
+      undoObject.update("selected", (v) => false);
+      }
+      // update the random letter data
+
+      // update the board
+
+      // update reserve tiles 
+
+      // charge item
+    } catch (e) {
+      print("caught error: ${e.toString()}");
+    }
   }
 
 
@@ -386,91 +518,91 @@ class GameLogic extends ChangeNotifier {
     return res;
   } 
 
-  void executeCloseTileMenu(GamePlayState gamePlayState) {
-    Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
-    int turn = gamePlayState.scoreSummary.last["turn"];
+  // void executeCloseTileMenu(GamePlayState gamePlayState) {
+  //   Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
+  //   int turn = gamePlayState.scoreSummary.last["turn"];
 
     
-    if (openMenuTile != null) {
-      print("this has been called!");
-      var deepCopyMenuTile = Map<String,dynamic>.from(openMenuTile);
-      int openMenuTileKey = deepCopyMenuTile["key"];
-      Animations().startTileMenuControlAnimation(gamePlayState,"${turn}_$openMenuTileKey", turn, openMenuTileKey, false,deepCopyMenuTile);
+  //   if (openMenuTile != null) {
+  //     print("this has been called!");
+  //     var deepCopyMenuTile = Map<String,dynamic>.from(openMenuTile);
+  //     int openMenuTileKey = deepCopyMenuTile["key"];
+  //     Animations().startTileMenuControlAnimation(gamePlayState,"${turn}_$openMenuTileKey", turn, openMenuTileKey, false,deepCopyMenuTile);
       
-      openMenuTile.update("menuOpen", (v)=> false);
-      openMenuTile.update("menuData", (v)=> null);
+  //     openMenuTile.update("menuOpen", (v)=> false);
+  //     openMenuTile.update("menuData", (v)=> null);
 
 
-      gamePlayState.startHighlightEffectTimer();
+  //     gamePlayState.startHighlightEffectTimer();
       
-    }
+  //   }
 
-    gamePlayState.setOpenMenuTile(null);
+  //   gamePlayState.setOpenMenuTile(null);
     
     
-  }
+  // }
 
-  void executeOpenMenuTapRelease(GamePlayState gamePlayState, ColorPalette palette, BuildContext context, PointerEvent details,) {
-    Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
-    if (openMenuTile != null) {
+  // void executeOpenMenuTapRelease(GamePlayState gamePlayState, ColorPalette palette, BuildContext context, PointerEvent details,) {
+  //   Map<String,dynamic>? openMenuTile = gamePlayState.openMenuTile;
+  //   if (openMenuTile != null) {
       
-      Map<String,dynamic> optionSelected = {};
+  //     Map<String,dynamic> optionSelected = {};
 
-      for (int i=0; i<openMenuTile["menuData"].length; i++) {
-        if (openMenuTile["menuData"][i]["path"].contains(details!.localPosition)) {
-          optionSelected = openMenuTile["menuData"][i];
-        }
-      }
+  //     for (int i=0; i<openMenuTile["menuData"].length; i++) {
+  //       if (openMenuTile["menuData"][i]["path"].contains(details!.localPosition)) {
+  //         optionSelected = openMenuTile["menuData"][i];
+  //       }
+  //     }
 
-      if (optionSelected.isNotEmpty) {
+  //     if (optionSelected.isNotEmpty) {
 
-        if (optionSelected["available"]) {
-          optionSelected.update("selected", (v) => true);
+  //       if (optionSelected["available"]) {
+  //         optionSelected.update("selected", (v) => true);
 
-          if (optionSelected["option"]=="swap") {
-            openMenuTile.update("swapping", (v) => true);
-            executeTutorialStep(gamePlayState,context);  
-          }
+  //         if (optionSelected["option"]=="swap") {
+  //           openMenuTile.update("swapping", (v) => true);
+  //           executeTutorialStep(gamePlayState,context);  
+  //         }
 
-          if (optionSelected["option"]=="freeze") {
-            Animations().startTileFreezeAnimation(gamePlayState,openMenuTile["key"]);
-            if (openMenuTile["frozen"]) {
-              openMenuTile.update("frozen", (v) => false);
-              Map<String,dynamic> moveData = {
-                "type":"freeze",
-                "data": openMenuTile
-              };
-              executeFoundWordLogic(gamePlayState,palette, moveData);
-            } else {
-              openMenuTile.update("frozen", (v) => true);
-              chargeMenuItem(gamePlayState,"freeze");           
-            }
-            executeTutorialStep(gamePlayState,context);  
-            restartTimer(gamePlayState,"tile-freeze"); 
-          }
+  //         if (optionSelected["option"]=="freeze") {
+  //           Animations().startTileFreezeAnimation(gamePlayState,openMenuTile["key"]);
+  //           if (openMenuTile["frozen"]) {
+  //             openMenuTile.update("frozen", (v) => false);
+  //             Map<String,dynamic> moveData = {
+  //               "type":"freeze",
+  //               "data": openMenuTile
+  //             };
+  //             executeFoundWordLogic(gamePlayState,palette, moveData);
+  //           } else {
+  //             openMenuTile.update("frozen", (v) => true);
+  //             chargeMenuItem(gamePlayState,"freeze");           
+  //           }
+  //           executeTutorialStep(gamePlayState,context);  
+  //           restartTimer(gamePlayState,"tile-freeze"); 
+  //         }
 
-          if (optionSelected["option"]=="explode") {
-            chargeMenuItem(gamePlayState,"explode");
-            Animations().startTileExplodeAnimation(gamePlayState,openMenuTile["key"],);
-            restartTimer(gamePlayState,"tile-explode"); 
+  //         if (optionSelected["option"]=="explode") {
+  //           chargeMenuItem(gamePlayState,"explode");
+  //           Animations().startTileExplodeAnimation(gamePlayState,openMenuTile["key"],);
+  //           restartTimer(gamePlayState,"tile-explode"); 
             
-            openMenuTile.update("body", (v) => "");
-            openMenuTile.update("active", (v) => true);
+  //           openMenuTile.update("body", (v) => "");
+  //           openMenuTile.update("active", (v) => true);
 
-            executeTutorialStep(gamePlayState,context);        
-          }
-        } else {
-          print("you do not have this perk!");
-          openTileMenuBuyMoreModal(gamePlayState,optionSelected);
-        }
-      } else {
+  //           executeTutorialStep(gamePlayState,context);        
+  //         }
+  //       } else {
+  //         print("you do not have this perk!");
+  //         openTileMenuBuyMoreModal(gamePlayState,optionSelected);
+  //       }
+  //     } else {
 
-      }
+  //     }
 
-      executeCloseTileMenu(gamePlayState);
+  //     executeCloseTileMenu(gamePlayState);
       
-    }
-  }
+  //   }
+  // }
 
 
   void openTileMenuBuyMoreModal(GamePlayState gamePlayState, Map<String,dynamic> optionSelected) {
@@ -495,12 +627,12 @@ class GameLogic extends ChangeNotifier {
     print("in the openTileMenuBuyMoreModal function: ${gamePlayState.tileMenuBuyMoreModalData}");
   }
 
-  void chargeMenuItem(GamePlayState gamePlayState, String type) {
+  void chargeMenuItem(GamePlayState gamePlayState, String type, int amount) {
     Map<String,dynamic> itemObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]==type,orElse: ()=>{});
     if (itemObject.isNotEmpty) {
       int count = itemObject["count"];
       if (count > 0) {
-        itemObject.update("count", (v)=>count-1);
+        itemObject.update("count", (v)=>count + amount);
       }
     }
     gamePlayState.setTileMenuOptions(gamePlayState.tileMenuOptions);
