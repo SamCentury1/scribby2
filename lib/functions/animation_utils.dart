@@ -607,6 +607,8 @@ class AnimationUtils {
     
     } else if (type == "swap") {
       animationType = "tile-swap";
+    } else if (type=="explode") {
+      animationType="explode";
     }
     Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType); 
     return animationDurationData;

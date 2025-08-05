@@ -23,12 +23,13 @@ class GameLogic extends ChangeNotifier {
 
     late Map<String,dynamic> moveData = {};
     if (gamePlayState.draggedElementData != null) {
+      print("dragged element data: ${gamePlayState.draggedElementData}");
+      moveData = {"type":"dropped","data":{"target":pointedElement,"source":gamePlayState.draggedElementData}};
       executeTileDroppedLogic(gamePlayState,pointedElement,details);
-      moveData = {"type":"dropped","data":pointedElement};
     } else {
       print("tile is tapped");
       executeTileTappedLogic(gamePlayState,pointedElement);
-      moveData = {"type":"placed","data":pointedElement};
+      moveData = {"type":"placed","data":{"target":pointedElement,"source":null}};
     }
     
     // now check if words have been found
@@ -136,6 +137,81 @@ class GameLogic extends ChangeNotifier {
 
   }
 
+  void executeUndoSwapAnimation(GamePlayState gamePlayState, Map<String,dynamic> previousTurn) {
+    try {
+
+      Map<String,dynamic> sourceTile = previousTurn["moveData"]["data"]["source"];
+      Map<String,dynamic> targetTile = previousTurn["moveData"]["data"]["target"];
+      int turn = previousTurn["turn"]; //gamePlayState.scoreSummary.last["turn"];
+
+      gamePlayState.highlightEffectTimer.cancel();
+
+      int sourceTileKey = sourceTile["key"];
+      int targetTileKey = targetTile["key"];
+
+      Map<String,dynamic> sourceTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==sourceTileKey,orElse: ()=>{});
+      Map<String,dynamic> targetTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==targetTileKey,orElse: ()=>{});
+
+      if (sourceTileObject.isNotEmpty && targetTileObject.isNotEmpty) {
+        String sourceTileBody = sourceTile["body"];
+        String targetTileBody = targetTile["body"];
+
+        Map<String,dynamic> sourceTileDecoration = sourceTileObject["decorationData"];
+        Map<String,dynamic> targetTileDecoration = targetTileObject["decorationData"];
+
+        sourceTileObject.update("body", (v)=>sourceTileBody);
+        targetTileObject.update("body", (v)=>targetTileBody);
+
+        sourceTileObject.update("decorationData", (v)=>targetTileDecoration);
+        targetTileObject.update("decorationData", (v)=>sourceTileDecoration);    
+
+      }    
+
+      // String sourceTileBody = sourceTile["body"];
+      // String targetTileBody = targetTile["body"];
+
+      // bool sourceTileActive = sourceTile["active"];
+      // bool targetTileActive = targetTile["active"];
+
+      // Map<String,dynamic> sourceTileDecoration = sourceTile["decorationData"];
+      // Map<String,dynamic> targetTileDecoration = targetTile["decorationData"];
+
+      // sourceTile.update("body", (v)=>sourceTileBody);
+      // targetTile.update("body", (v)=>targetTileBody);
+
+      // sourceTile.update("active", (v)=>targetTileActive);
+      // targetTile.update("active", (v)=>sourceTileActive);  
+
+      // sourceTile.update("decorationData", (v)=>targetTileDecoration);
+      // targetTile.update("decorationData", (v)=>sourceTileDecoration);    
+
+      // sourceTile.update("source", (v)=>false);
+
+
+
+      Animations().startTileSwapAnimation(gamePlayState,turn,sourceTileKey,targetTileKey);
+      Animations().startTileSwapAnimation(gamePlayState,turn,targetTileKey,sourceTileKey);
+
+      // Map<String,dynamic> moveData = {
+      //   "type": "swap",
+      //   "data": {
+      //     "source": {"key":sourceTileKey,"body":sourceTileBody,"center":sourceTile["center"]},
+      //     "target": {"key":targetTileKey,"body":tappedTileBody,"center":targetTile["center"]}
+      //   }
+      // };
+
+      // chargeMenuItem(gamePlayState,"undo",-1);
+      restartTimer(gamePlayState,"tile-swap"); 
+      // executeFoundWordLogic(gamePlayState,palette, moveData);
+      // executeTutorialStep(gamePlayState,context);
+    // }
+      gamePlayState.setTileData(gamePlayState.tileData);
+    } catch (e,s) {
+      debugPrint("error in **executeUndoSwapAnimation** | ${e.toString()} | $s");
+    } 
+  
+  }
+
   void executeSwap(GamePlayState gamePlayState, ColorPalette palette, BuildContext context, Map<String,dynamic> pointedElement) {
     Map<String,dynamic> swappingTile = Helpers().getSwappingTile(gamePlayState);
     int turn = gamePlayState.scoreSummary.last["turn"];
@@ -184,18 +260,6 @@ class GameLogic extends ChangeNotifier {
         }
       };
 
-      // Map<String,dynamic> swapAnimationObject = gamePlayState.animationLengths.firstWhere((e) => e["type"]=="tile-swap",orElse: ()=>{});
-      // if (swapAnimationObject.isNotEmpty) {
-      //   final int swapDuration = swapAnimationObject["stops"]*swapAnimationObject["interval"];
-      //   Future.delayed(Duration(milliseconds: swapDuration), () {
-
-      //     Map<String,dynamic> swappingTileDecorationData = swappingTile["decorationData"];
-      //     Map<String,dynamic> pointedElementDecorationData = pointedElement["decorationData"];
-
-      //     swappingTile.update("decorationData", (e) => pointedElementDecorationData);
-      //     pointedElement.update("decorationData",(e) => swappingTileDecorationData);
-      //   });
-      // }
 
 
       chargeMenuItem(gamePlayState,"swap",-1);
@@ -203,40 +267,40 @@ class GameLogic extends ChangeNotifier {
       executeFoundWordLogic(gamePlayState,palette, moveData);
       executeTutorialStep(gamePlayState,context);
     }
-
-
     gamePlayState.setTileData(gamePlayState.tileData);
-    // executeCloseTileMenu(gamePlayState);
-
-
   }
 
   // when a perk is selected on the bar - if it's the und button - do that. 
   // else, highlight the available tiles for a perk
   void executePerkSelectedBehaviour(GamePlayState gamePlayState) {
-    Map<String,dynamic> selectedPerkObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
-    if (selectedPerkObject.isNotEmpty) {
-      String perkType = selectedPerkObject["item"];
-      int perkCount = selectedPerkObject["count"];
+    try {
+      Map<String,dynamic> selectedPerkObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
+      if (selectedPerkObject.isNotEmpty) {
+        print(" SELECTED PERK OBJECT: ${selectedPerkObject} ");
 
-      if (perkCount<=0) {
-        print("do not start highlight effect");
-        gamePlayState.highlightEffectTimer.cancel();
-        openTileMenuBuyMoreModal(gamePlayState,selectedPerkObject);
-        cancelPerk(gamePlayState);
-      } else {
-        if (perkType == "undo") {
-          // undo function
-          executeUndoPerk(gamePlayState);
+        String perkType = selectedPerkObject["item"];
+        int perkCount = selectedPerkObject["count"];
+
+        if (perkCount<=0) {
+          print("do not start highlight effect");
+          // gamePlayState.highlightEffectTimer.cancel();
+          openTileMenuBuyMoreModal(gamePlayState,selectedPerkObject);
+          cancelPerk(gamePlayState);
         } else {
-          // highlight all cells that can be selected
-          gamePlayState.startHighlightEffectTimer();
-           
+          if (perkType == "undo") {
+            // undo function
+            print("perkCount: ${perkCount}",);
+            executeUndoPerk(gamePlayState);
+          } else {
+            // highlight all cells that can be selected
+            gamePlayState.startHighlightEffectTimer();
+            
 
+          }
         }
       }
-
-
+    } catch (e, s) {
+      print("ERROR IN **executePerkSelectedBehaviour** | ${e.toString()} | $s");
     }
   }
 
@@ -264,7 +328,7 @@ class GameLogic extends ChangeNotifier {
           gamePlayState.highlightEffectTimer.cancel();
           Map<String,dynamic> moveData = {
             "type": "explode",
-            "data": {"tileObject":selectedTileObject,"body":explodedTileBody}
+            "data": {"target":selectedTileObject,"body":explodedTileBody}
           };
           executeFoundWordLogic(gamePlayState, palette, moveData);
         }
@@ -278,14 +342,14 @@ class GameLogic extends ChangeNotifier {
             selectedTileObject.update("frozen", (v) => false);
             moveData = {
               "type":"freeze",
-              "data": {"tileObject":selectedTileObject,"thaw":true}
+              "data": {"target":selectedTileObject,"thaw":true}
             };
             // executeFoundWordLogic(gamePlayState,palette, moveData);
           } else {
             selectedTileObject.update("frozen", (v) => true);
             moveData = {
               "type":"freeze",
-              "data": {"tileObject":selectedTileObject,"thaw":false}
+              "data": {"target":selectedTileObject,"thaw":false}
             };            
             chargeMenuItem(gamePlayState,"freeze",-1);           
           }
@@ -334,10 +398,9 @@ class GameLogic extends ChangeNotifier {
     // get the previous turn state
 
     try {
-      if (gamePlayState.scoreSummary.length > 2) {
+      if (gamePlayState.scoreSummary.isNotEmpty) {
         Map<String,dynamic> previousTurnData = gamePlayState.scoreSummary.last;
-        int lastTurnIndex = gamePlayState.scoreSummary.indexOf(previousTurnData);
-        gamePlayState.scoreSummary.removeAt(lastTurnIndex);
+
 
         List<String> randomLetters = [];
         for (int i=0; i<gamePlayState.randomLetterData.length; i++) {
@@ -348,138 +411,193 @@ class GameLogic extends ChangeNotifier {
           print("$key | $value");
         });
         print("""
-  ================ LAST TURN =====================
-  ${previousTurnData}
-  {randomLetters}
-  ================================================
+        ================ LAST TURN =====================
+        ${previousTurnData}
+        {randomLetters}
+        ================================================
 
-  """);
+        """);
 
-      String moveType = previousTurnData["moveData"]["type"];
-      if (moveType=="swap") {
-        print("hello ?? swap???: $previousTurnData");
-        Map<String,dynamic> sourceTile = previousTurnData["moveData"]["data"]["source"];
-        Map<String,dynamic> targetTile = previousTurnData["moveData"]["data"]["target"];
-        
-        if (previousTurnData["score"]>0) {
-          for (int i=0;i<previousTurnData["ids"].length; i++) {
-            int tileKey = previousTurnData["ids"][i]["id"];
-            String tileBody = previousTurnData["ids"][i]["body"];
-            Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
-            targetTile.update("body",(v)=> tileBody);
+        String moveType = previousTurnData["moveData"]["type"];
+        if (moveType=="swap") {
+          print("hello ?? swap???: $previousTurnData");
+          Map<String,dynamic> sourceTile = previousTurnData["moveData"]["data"]["source"];
+          Map<String,dynamic> targetTile = previousTurnData["moveData"]["data"]["target"];
+          
+          if (previousTurnData["score"]>0) {
+            for (int i=0;i<previousTurnData["ids"].length; i++) {
+              int tileKey = previousTurnData["ids"][i]["id"];
+              String tileBody = previousTurnData["ids"][i]["body"];
+              Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+              targetTile.update("body",(v)=> tileBody);
+            }
+            Animations().startUndoAnimation(gamePlayState,previousTurnData["turn"]);
+          } 
+
+          if (previousTurnData["score"]==0) {
+            executeUndoSwapAnimation(gamePlayState, previousTurnData);
           }
-        }
 
-        Map<String,dynamic> sourceTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==sourceTile["key"],orElse:()=>{});
-        Map<String,dynamic> targetTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==targetTile["key"],orElse:()=>{});
+          Map<String,dynamic> sourceTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==sourceTile["key"],orElse:()=>{});
+          Map<String,dynamic> targetTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==targetTile["key"],orElse:()=>{});
+          
+          if (sourceTileObject.isNotEmpty && targetTileObject.isNotEmpty) {
 
-        if (sourceTileObject.isNotEmpty && targetTileObject.isNotEmpty) {
-          String sourceBody = sourceTile["body"];
-          String targetBody = targetTile["body"];
-          sourceTileObject.update("body", (v) => sourceBody);
-          targetTileObject.update("body", (v) => targetBody);
-        }
-
-        chargeMenuItem(gamePlayState, "swap", 1);
+            String sourceBody = sourceTile["body"];
+            String targetBody = targetTile["body"];
+            sourceTileObject.update("body", (v) => sourceBody);
+            targetTileObject.update("body", (v) => targetBody);
+          }
         
-      } else if (moveType=="freeze") {
-        Map<String,dynamic> frozenTileObject = previousTurnData["moveData"]["data"]["tileObject"];
-        bool thaw = previousTurnData["moveData"]["data"]["thaw"];
-        Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==frozenTileObject["key"],orElse:()=>{});
-        if (previousTurnData["score"]>0) {
-          for (int i=0;i<previousTurnData["ids"].length; i++) {
-            int tileKey = previousTurnData["ids"][i]["id"];
-            String tileBody = previousTurnData["ids"][i]["body"];
-            Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
-            targetTile.update("body",(v)=> tileBody);
-            if (tileKey==frozenTileObject["key"]) {
-              targetTile.update("frozen", (v)=>true);
+          chargeMenuItem(gamePlayState, "swap", 1);
+          chargeMenuItem(gamePlayState, "undo", -1);
+          
+        } else if (moveType=="freeze") {
+          Map<String,dynamic> frozenTileObject = previousTurnData["moveData"]["data"]["target"];
+          bool thaw = previousTurnData["moveData"]["data"]["thaw"];
+          Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==frozenTileObject["key"],orElse:()=>{});
+          if (previousTurnData["score"]>0) {
+            for (int i=0;i<previousTurnData["ids"].length; i++) {
+              int tileKey = previousTurnData["ids"][i]["id"];
+              String tileBody = previousTurnData["ids"][i]["body"];
+              Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+              targetTile.update("body",(v)=> tileBody);
+              if (tileKey==frozenTileObject["key"]) {
+                targetTile.update("frozen", (v)=>true);
+              }
+            }
+          } else {
+            if (tileObject.isNotEmpty) {
+              tileObject.update("frozen", (v)=>thaw);
             }
           }
-        } else {
+          chargeMenuItem(gamePlayState, "freeze", 1);
+          
+        } else if (moveType=="explode") {
+          Map<String,dynamic> explodedTileObject = previousTurnData["moveData"]["data"]["target"];
+          String body = previousTurnData["moveData"]["data"]["body"];
+          Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==explodedTileObject["key"],orElse:()=>{});
           if (tileObject.isNotEmpty) {
-            tileObject.update("frozen", (v)=>thaw);
+            tileObject.update("body", (v)=>body);
           }
-        }
-        chargeMenuItem(gamePlayState, "freeze", 1);
-        
-      } else if (moveType=="explode") {
-        Map<String,dynamic> explodedTileObject = previousTurnData["moveData"]["data"]["tileObject"];
-        String body = previousTurnData["moveData"]["data"]["body"];
-        Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==explodedTileObject["key"],orElse:()=>{});
-        if (tileObject.isNotEmpty) {
-          tileObject.update("body", (v)=>body);
-        }
-        chargeMenuItem(gamePlayState, "explode", 1);
-      } else if (moveType=="placed") {
-        String tileType = previousTurnData["moveData"]["data"]["type"];
-        int tilePlacedId = previousTurnData["moveData"]["data"]["key"];
-        if (tileType == "board") {
+          chargeMenuItem(gamePlayState, "explode", 1);
+        } else if (moveType=="placed") {
+          String tileType = previousTurnData["moveData"]["data"]["target"]["type"];
+          int tilePlacedId = previousTurnData["moveData"]["data"]["target"]["key"];
+          Map<String,dynamic> tileObject = {};
+          if (tileType == "board") {
+            tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tilePlacedId,orElse:()=>{});
+          } else if (tileType=="reserve") {
+            tileObject = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==tilePlacedId,orElse:()=>{});
+          }
+          if (tileObject.isNotEmpty) {
+            if (previousTurnData["score"]>0) {
+              for (int i=0;i<previousTurnData["ids"].length; i++) {
+                int tileKey = previousTurnData["ids"][i]["id"];
+                String tileBody = previousTurnData["ids"][i]["body"];
+                Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+                targetTile.update("body",(v)=> tileBody);
+              }
+            } 
+            Animations().startUndoAnimation(gamePlayState,previousTurnData["turn"]);
+            if (tileObject.isNotEmpty) {
+              tileObject.update("body", (v) => "");
+            }
+            chargeMenuItem(gamePlayState, "undo", -1);
+            int lastLetterIndex = gamePlayState.randomLetterData.indexOf(gamePlayState.randomLetterData.last);
+            gamePlayState.randomLetterData.removeAt(lastLetterIndex);        
+          }
+        } else if (moveType=="dropped") {
+          // String tileType = previousTurnData["moveData"]["data"]["type"];
+          print("IN EXECUTE UNDO PERK: => move data = : ${previousTurnData["moveData"]}");
+          int tilePlacedId = previousTurnData["moveData"]["data"]["target"]["key"];
           Map<String,dynamic> tileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tilePlacedId,orElse:()=>{});
+
+
+          int sourceTileId = previousTurnData["moveData"]["data"]["source"]["key"];
+          Map<String,dynamic> reserveTileObject = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==sourceTileId,orElse:()=>{});
           if (tileObject.isNotEmpty) {
+            String tileBody = tileObject["body"];
+
+
+    
+            if (previousTurnData["score"]>0) {
+              for (int i=0;i<previousTurnData["ids"].length; i++) {
+                int tileKey = previousTurnData["ids"][i]["id"];
+                String tileBody = previousTurnData["ids"][i]["body"];
+                Map<String,dynamic> targetTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+                if (reserveTileObject.isNotEmpty) {
+                  if (tileKey == tilePlacedId) {
+                    targetTile = reserveTileObject;
+                  }
+                }
+                targetTile.update("body",(v)=> tileBody);
+              }
+            } else {
+              if (reserveTileObject.isNotEmpty) {
+                print("re populate the reserve tile with body: $tileBody");
+                print("reserveTileObject: $reserveTileObject");
+                reserveTileObject.update("body", (v) => tileBody);
+              }   
+            }
+
+            Animations().startUndoAnimation(gamePlayState,previousTurnData["turn"]);
+
             tileObject.update("body", (v) => "");
+            
+
+
+            chargeMenuItem(gamePlayState, "undo", -1);
+     
           }
+        
         }
-        int lastLetterIndex = gamePlayState.randomLetterData.indexOf(gamePlayState.randomLetterData.last);
-        gamePlayState.randomLetterData.removeAt(lastLetterIndex);        
-      } else if (moveType=="dropped") {
-
-      }
-
-
-      // // removes last random letter
-
-
-
-
-      Map<String,dynamic> undoObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]=="undo",orElse: ()=>{});
-      undoObject.update("open", (v) => false);
-      undoObject.update("selected", (v) => false);
-      }
-      // update the random letter data
-
-      // update the board
-
-      // update reserve tiles 
-
-      // charge item
-    } catch (e) {
-      print("caught error: ${e.toString()}");
-    }
-  }
-
-
-  void executeOpenTileMenu(GamePlayState gamePlayState, Map<String,dynamic> pointedTile) {
-    int key = pointedTile["key"];
-    Map<String,dynamic> openMenuTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
-    print("executeOpenTileMenu : $openMenuTile");
-    if (openMenuTile.isNotEmpty) {
-      openMenuTile.update("menuOpen", (v)=> true);
-      if (openMenuTile["active"]) {
-
-        if (openMenuTile["frozen"]) {
-          openMenuTile.update("menuData", (v) => getOpenMenuTileData(gamePlayState,["freeze"]));          
-        } else {
-          openMenuTile.update("menuData", (v) => getOpenMenuTileData(gamePlayState,["swap","explode","freeze"])   
-          );
-        } 
-
+        int lastTurnIndex = gamePlayState.scoreSummary.indexOf(previousTurnData);
+        gamePlayState.scoreSummary.removeAt(lastTurnIndex);        
+        Map<String,dynamic> undoObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]=="undo",orElse: ()=>{});
+        undoObject.update("open", (v) => false);
+        undoObject.update("selected", (v) => false);
       } else {
-        openMenuTile.update("menuData", (v) => getOpenMenuTileData(gamePlayState,["explode"]) 
-        );        
+        print("cancel the perk!!");
+        cancelPerk(gamePlayState);
       }
-
-      // if (gamePlayState.isTutorial) {
-      //   int turn = gamePlayState.tutorialData["currentTurn"];
-      //   gamePlayState.tutorialData.update("currentTurn", (v)=>turn+1);
-      // }
+    } catch (e, s) {
+      print("ERROR IN **executeUndoPerk** | ${e.toString()} | $s");
     }
-    int turn  = gamePlayState.scoreSummary.last["turn"];
-    Animations().startTileMenuControlAnimation(gamePlayState,"${turn}_$key",turn, key, true,openMenuTile);
-    gamePlayState.setOpenMenuTile(openMenuTile);
-
-    getMenuItemPositionData(gamePlayState);
   }
+
+
+  // void executeOpenTileMenu(GamePlayState gamePlayState, Map<String,dynamic> pointedTile) {
+  //   int key = pointedTile["key"];
+  //   Map<String,dynamic> openMenuTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
+  //   print("executeOpenTileMenu : $openMenuTile");
+  //   if (openMenuTile.isNotEmpty) {
+  //     openMenuTile.update("menuOpen", (v)=> true);
+  //     if (openMenuTile["active"]) {
+
+  //       if (openMenuTile["frozen"]) {
+  //         openMenuTile.update("menuData", (v) => getOpenMenuTileData(gamePlayState,["freeze"]));          
+  //       } else {
+  //         openMenuTile.update("menuData", (v) => getOpenMenuTileData(gamePlayState,["swap","explode","freeze"])   
+  //         );
+  //       } 
+
+  //     } else {
+  //       openMenuTile.update("menuData", (v) => getOpenMenuTileData(gamePlayState,["explode"]) 
+  //       );        
+  //     }
+
+  //     // if (gamePlayState.isTutorial) {
+  //     //   int turn = gamePlayState.tutorialData["currentTurn"];
+  //     //   gamePlayState.tutorialData.update("currentTurn", (v)=>turn+1);
+  //     // }
+  //   }
+  //   int turn  = gamePlayState.scoreSummary.last["turn"];
+  //   Animations().startTileMenuControlAnimation(gamePlayState,"${turn}_$key",turn, key, true,openMenuTile);
+  //   gamePlayState.setOpenMenuTile(openMenuTile);
+
+  //   getMenuItemPositionData(gamePlayState);
+  // }
 
   bool getMenuItemAvailability(GamePlayState gamePlayState, String item) {
     Map<String,dynamic> menuItem = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]==item,orElse: ()=>{});
@@ -606,25 +724,29 @@ class GameLogic extends ChangeNotifier {
 
 
   void openTileMenuBuyMoreModal(GamePlayState gamePlayState, Map<String,dynamic> optionSelected) {
+    print("***openTileMenuBuyMoreModal");
+    try {
+      gamePlayState.setIsGamePaused(true);
+      print("optionSelected => $optionSelected");
+      String item = optionSelected["item"];
+      String menuBuyMoreMessage = Helpers().getMenuBuyMoreMessage(item);
+      List<Map<String,dynamic>> options = [
+        {"key":0, "reward": 5, "cost":1, "costItem":"ad"},
+        {"key":1, "reward": 3, "cost": 2000, "costItem":"coins"},
+        // {"key":2, "reward": 5, "cost": 10, "costItem":"ruby"},
+        // {"key":3, "reward": 10, "cost": 30, "costItem":"jade"},
+      ];
+      gamePlayState.tileMenuBuyMoreModalData.update("tile", (v)=>null);
+      gamePlayState.tileMenuBuyMoreModalData.update("open", (v)=>true);
+      gamePlayState.tileMenuBuyMoreModalData.update("item", (v)=>item);
+      gamePlayState.tileMenuBuyMoreModalData.update("message", (v)=>menuBuyMoreMessage);
+      gamePlayState.tileMenuBuyMoreModalData.update("options", (v)=>options);
 
-    gamePlayState.setIsGamePaused(true);
-    print("optionSelected => $optionSelected");
-    String item = optionSelected["item"];
-    String menuBuyMoreMessage = Helpers().getMenuBuyMoreMessage(item);
-    List<Map<String,dynamic>> options = [
-      {"key":0, "reward": 5, "cost":1, "costItem":"ad"},
-      {"key":1, "reward": 3, "cost": 2000, "costItem":"coins"},
-      // {"key":2, "reward": 5, "cost": 10, "costItem":"ruby"},
-      // {"key":3, "reward": 10, "cost": 30, "costItem":"jade"},
-    ];
-    gamePlayState.tileMenuBuyMoreModalData.update("tile", (v)=>null);
-    gamePlayState.tileMenuBuyMoreModalData.update("open", (v)=>true);
-    gamePlayState.tileMenuBuyMoreModalData.update("item", (v)=>item);
-    gamePlayState.tileMenuBuyMoreModalData.update("message", (v)=>menuBuyMoreMessage);
-    gamePlayState.tileMenuBuyMoreModalData.update("options", (v)=>options);
-
-    gamePlayState.setTileMenuBuyMoreModalData(gamePlayState.tileMenuBuyMoreModalData);
-    print("in the openTileMenuBuyMoreModal function: ${gamePlayState.tileMenuBuyMoreModalData}");
+      gamePlayState.setTileMenuBuyMoreModalData(gamePlayState.tileMenuBuyMoreModalData);
+      print("in the openTileMenuBuyMoreModal function: ${gamePlayState.tileMenuBuyMoreModalData}");
+    } catch (e, s) {
+      print("ERROR IN **openTileMenuBuyMoreModal** | ${e.toString()} | $s");
+    }
   }
 
   void chargeMenuItem(GamePlayState gamePlayState, String type, int amount) {
@@ -686,8 +808,8 @@ class GameLogic extends ChangeNotifier {
         // });
         restartTimer(gamePlayState,"tap-up");   
       }
-    } catch (e) {
-      print("error in execute tile tapped logic function: $e");
+    } catch (e, s) {
+      print("ERROR IN **executeTileTappedLogic** | ${e.toString()} | $s");
     }
   }
 
@@ -1228,8 +1350,8 @@ class GameLogic extends ChangeNotifier {
         "moveData":moveData,
       };
       gamePlayState.setscoreSummary([...gamePlayState.scoreSummary,turnObject]);
-    } catch (e) {
-      print("error in validateStrings function: $e ");
+    } catch (e, s) {
+      print("ERROR IN **validateStrings** | ${e.toString()} | $s");
     }
   }
 

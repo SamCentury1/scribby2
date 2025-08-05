@@ -408,8 +408,6 @@ class Painters {
         } else if (animationType=="pre-word-found") {
           Map<String,dynamic> turnData = gamePlayState.scoreSummary.firstWhere((e)=>e["turn"]==animationObject["turn"],orElse: ()=>{});
           if (turnData.isNotEmpty) {
-            
-
             if (turnData["moveData"]["type"]=="freeze") {
               int frozenTileKey = turnData["moveData"]["data"]["tileObject"]["key"];
               if (tileObject["key"]==frozenTileKey) {
@@ -503,6 +501,36 @@ class Painters {
           } else {
             TilePainters().paintAnimatingTile(canvas, tileCenter, gamePlayState, tileObject["body"], tileSize, progress,'board-frozen','board',decorationData);
           }
+        } else if (animationType == "undo") {
+
+          if (animationObject["parameters"]["moveType"]=="dropped") {
+            final double updatedTileSize = tileSize.width*progress;
+            late Size updatedSize = Size(updatedTileSize,updatedTileSize);
+            TilePainters().drawTile2(canvas,tileCenter,"",updatedSize,'board',decorationData);
+
+            Map<String,dynamic> params = animationObject["parameters"];
+            double updatedTileSize2 = tileSize.width+((tileSize.width*0.9-tileSize.width)*progress);
+            Size updatedSize2 = Size(updatedTileSize2,updatedTileSize2);          
+            double updatedPositionX = tileCenter.dx + (params["destination"].dx-tileCenter.dx)*progress;
+            double updatedPositionY = tileCenter.dy + (params["destination"].dy-tileCenter.dy)*progress;
+            Offset updatedPosition = Offset(updatedPositionX,updatedPositionY);
+            TilePainters().drawTile2(canvas,updatedPosition,animationObject["body"],updatedSize2,'board',decorationData);
+
+
+          } else if (animationObject["parameters"]["moveType"]=="placed") {
+            final double updatedTileSize = tileSize.width*progress;
+            late Size updatedSize = Size(updatedTileSize,updatedTileSize);
+            TilePainters().drawTile2(canvas,tileCenter,"",updatedSize,'board',decorationData);
+
+            Map<String,dynamic> params = animationObject["parameters"];
+            double updatedTileSize2 = tileSize.width+((tileSize.width*1.5-tileSize.width)*progress);
+            Size updatedSize2 = Size(updatedTileSize2,updatedTileSize2);          
+            double updatedPositionX = tileCenter.dx + (params["destination"].dx-tileCenter.dx)*progress;
+            double updatedPositionY = tileCenter.dy + (params["destination"].dy-tileCenter.dy)*progress;
+            Offset updatedPosition = Offset(updatedPositionX,updatedPositionY);
+            TilePainters().drawTile2(canvas,updatedPosition,animationObject["body"],updatedSize2,'board',decorationData);
+          };
+
         }
       } else {
 
@@ -601,7 +629,8 @@ class Painters {
     final String randomLetter2 = randomLetter2Object["body"];
 
     List<Map<String,dynamic>> tapReleaseAnimations = gamePlayState.animationData.where((e)=>e["type"]=="tap-up").toList();
-
+    List<Map<String,dynamic>> undoAnimations = gamePlayState.animationData.where((e)=>e["type"]=="undo").toList();
+    List<Map<String,dynamic>> allTiles = gamePlayState.tileData+gamePlayState.reserveTileData;
     if (tapReleaseAnimations.isNotEmpty) {
 
       if (tapReleaseAnimations.length >= 2) {
@@ -611,17 +640,12 @@ class Painters {
 
         final double animatedWidth2 = tileSize.width*progress;
         final Size animatedSize2 = Size(animatedWidth2,animatedWidth2);
-        // TilePainters().drawTile(canvas,randomLetter2Center,gamePlayState,randomLetter2,animatedSize2);
-        // TilePainters().drawRandomTile(canvas,randomLetter2Center,gamePlayState,randomLetter2,animatedSize2);
         TilePainters().drawTile2(canvas,randomLetter2Center,randomLetter2,animatedSize2,'random',randomLetter2Decoration);
         final double dx1 = randomLetter2CenterX + ((randomLetter1CenterX-randomLetter2CenterX)*progress);
         final double dy1 = randomLetterCenterY;
         final Offset animatedCenter1 = Offset(dx1,dy1);
         final double animatedWidth1 = (tileSize.width*1.5)*progress;
         final Size animatedSize1 = Size(animatedWidth1,animatedWidth1);
-
-        // TilePainters().drawTile(canvas, animatedCenter1, gamePlayState,randomLetter1, animatedSize1);
-        // TilePainters().drawRandomTile(canvas, animatedCenter1, gamePlayState,randomLetter1, animatedSize1);
         TilePainters().drawTile2(canvas, animatedCenter1,randomLetter1, animatedSize1,'random',randomLetter1Decoration);
         
 
@@ -631,8 +655,6 @@ class Painters {
         final double progress = tapReleaseAnimations.last["progress"];
         final double animatedWidth2 = tileSize.width*progress;
         final Size animatedSize2 = Size(animatedWidth2,animatedWidth2);
-        // TilePainters().drawTile(canvas,randomLetter2Center,gamePlayState,randomLetter2,animatedSize2);
-        // TilePainters().drawRandomTile(canvas,randomLetter2Center,gamePlayState,randomLetter2,animatedSize2);
         TilePainters().drawTile2(canvas,randomLetter2Center,randomLetter2,animatedSize2,'random',randomLetter2Decoration);
 
         final double dx1 = randomLetter2CenterX + ((randomLetter1CenterX-randomLetter2CenterX)*progress);
@@ -640,12 +662,55 @@ class Painters {
         final Offset animatedCenter1 = Offset(dx1,dy1);
         final double animatedWidth1 = tileSize.width+(((tileSize.width*1.5)-tileSize.width)*progress);
         final Size animatedSize1 = Size(animatedWidth1,animatedWidth1);
-
-        // TilePainters().drawTile(canvas, animatedCenter1, gamePlayState,randomLetter1, animatedSize1);
-        // TilePainters().drawRandomTile(canvas, animatedCenter1, gamePlayState,randomLetter1, animatedSize1);
         TilePainters().drawTile2(canvas, animatedCenter1,randomLetter1, animatedSize1,'random',randomLetter1Decoration);
       }
+    } else if (undoAnimations.isNotEmpty) {
 
+        // Map<String,dynamic> undoAnimation = undoAnimations.firstWhere((e)=>e["body"]=="",orElse: ()=>{});
+        // Map<String,dynamic> sourceTile = allTiles.firstWhere((e)=>e["key"]==undoAnimation["key"],orElse: ()=>{});
+
+        // late double sizeFactor = 0.0;
+        // late double animatedWidth1 = tileSize.width;
+        // late Size animatedSize1 = Size(animatedWidth1,animatedWidth1);
+
+
+        // Offset updatedCenter = randomLetter1Center;
+    
+        // if (sourceTile.isNotEmpty) {
+        //   print("undoAnimation: ${sourceTile}");
+
+        //   if (sourceTile["type"]=="board") {
+        //     sizeFactor = 1.0;
+        //   } else if (sourceTile["type"]=="reserve") {
+        //     sizeFactor = 0.9;
+        //   }
+
+        //   final double dx1 = sourceTile["center"].dx + ((randomLetter1CenterX-sourceTile["center"].dx)*undoAnimation["progress"]);
+        //   final double dy1 = sourceTile["center"].dy + ((randomLetterCenterY-sourceTile["center"].dy)*undoAnimation["progress"]);
+        //   updatedCenter = Offset(dx1,dy1);          
+        //   // animatedWidth1 = (tileSize.width) + (((tileSize.width*1.5)-(tileSize.width))*undoAnimation["progress"]);
+        //   animatedWidth1 = (tileSize.width*sizeFactor) + (((tileSize.width*1.5)-(tileSize.width))*undoAnimation["progress"]);
+        //   animatedSize1 = Size(animatedWidth1,animatedWidth1);              
+          
+        // } 
+        // // print("undoAnimation: ${undoAnimation["key"]}");
+        // if (undoAnimation["parameters"]["moveType"]=="dropped") {
+
+
+        //   TilePainters().drawTile2(canvas,randomLetter1Center,randomLetter1,Size(tileSize.width*1.5,tileSize.height*1.5),'random',randomLetter1Decoration);
+        //   TilePainters().drawTile2(canvas,randomLetter2Center,randomLetter2,Size(tileSize.width,tileSize.height),'random',randomLetter2Decoration);
+        // } else {
+        //   // final double animatedWidth1 = (tileSize.width*1.5)*undoAnimation["progress"];
+        //   // final Size animatedSize1 = Size(animatedWidth1,animatedWidth1);
+        //   TilePainters().drawTile2(canvas,updatedCenter,randomLetter1,animatedSize1,'random',randomLetter1Decoration);
+
+        //   final double animatedWidth2 = tileSize.width + ((tileSize.width*1.5)-tileSize.width)*(1-undoAnimation["progress"]); //tileSize.width+(((tileSize.width*1.5)-tileSize.width)*undoAnimation["progress"]);
+        //   final Size animatedSize2 = Size(animatedWidth2,animatedWidth2);
+        //   final double dx2 = randomLetter2CenterX + ((randomLetter1CenterX-randomLetter2CenterX)*(1-undoAnimation["progress"]));
+        //   final double dy2 = randomLetterCenterY;
+        //   final Offset animatedCenter2 = Offset(dx2,dy2);        
+        //   TilePainters().drawTile2(canvas,animatedCenter2,randomLetter2,animatedSize2,'random',randomLetter2Decoration);
+        // }
 
     } else {
       // TilePainters().drawTile(canvas,randomLetter1Center,gamePlayState,randomLetter1,Size(tileSize.width*1.5,tileSize.height*1.5));

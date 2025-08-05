@@ -519,6 +519,10 @@ class TilePainters {
     if (icon == "explode") {
       drawBombIcon(canvas, size, position,progress, color);
     }
+
+    if (icon == "undo") {
+      drawUndoIcon(canvas,size,position,progress,color);
+    }
     return canvas;
   }
 
@@ -940,6 +944,37 @@ class TilePainters {
     bottomArrowHeadPath.lineTo(bottomArrowHead.dx, bottomArrowHead.dy,);
     bottomArrowHeadPath.lineTo(bottomArrowHead.dx-size.width*0.2, bottomArrowHead.dy+size.height*0.1);
     canvas.drawPath(bottomArrowHeadPath, iconPaint);
+
+    return canvas;
+  }
+
+  Canvas drawUndoIcon(Canvas canvas, Size size, Offset position,double progress, Color color) {
+
+    final double red = color.r;
+    final double green = color.g;
+    final double blue = color.b;
+    final Color updatedColor = Color.fromARGB((255*progress).floor(),(255*red).floor(),(255*green).floor(),(255*blue).floor());
+
+    Paint iconPaint = Paint()
+    ..color = updatedColor //ui.Color.fromRGBO(233, 233, 233, progress)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = size.width*0.06
+    ..strokeCap = StrokeCap.round
+    ..strokeJoin = StrokeJoin.round;
+
+    Path undoPath = Path();
+    undoPath.moveTo(position.dx+size.width*0.2, position.dy+size.height*0.3);  
+    undoPath.arcToPoint(
+      Offset(position.dx-size.width*0.2 ,position.dy+size.height*0.2),
+      radius: Radius.circular(size.width*0.25),
+      clockwise: false,
+      largeArc: true,
+    );
+    undoPath.relativeLineTo(-size.width*0.15, -size.height*0.15);
+    undoPath.relativeLineTo(size.width*0.15, size.height*0.15);
+    undoPath.relativeLineTo(size.width*0.15, -size.height*0.15);
+
+    canvas.drawPath(undoPath, iconPaint);
 
     return canvas;
   }

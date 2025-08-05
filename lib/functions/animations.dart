@@ -270,7 +270,11 @@ class Animations extends ChangeNotifier {
       }
 
 
-      Map<String,dynamic> existingAnimationObject = animationData.firstWhere((e)=>e["key"]==key&&e["type"]==animationType,orElse: ()=>{});
+      Map<String,dynamic> existingAnimationObject = animationData.firstWhere( (e)=>
+        e["key"]==key&&
+        [animationType,"undo"].contains(e["type"]),
+        orElse: ()=>{}
+      );
       
       late Map<String,dynamic> animationObject = {};
 
@@ -1226,6 +1230,123 @@ class Animations extends ChangeNotifier {
 
     timerLogic(gamePlayState,actualAnimation,count,target,interval);
   }
+
+  void startUndoAnimation(GamePlayState gamePlayState, int turn) {
+    const String animationType = "undo";
+    Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
+    int target = animationDurationData["stops"];
+    int interval = animationDurationData["interval"];
+    int count = 0;
+    Map<String,dynamic> turnData = gamePlayState.scoreSummary.firstWhere((e)=>e["turn"]==turn,orElse: ()=>{});
+    List<Map<String,dynamic>> animationData = gamePlayState.animationData;
+    print(" IN UNDO ANIMATION FUNC: $turn | ${turnData} ");
+    Map<String,dynamic> targetTile = turnData["tileTapped"];
+    Map<String,dynamic>? randomLetterObject = null;
+    Offset? destination = null;
+
+    final double randomLetterCenterY = gamePlayState.elementPositions["randomLettersCenter"].dy;
+    final double randomLetter1CenterX = gamePlayState.elementPositions["randomLettersCenter"].dx;
+    final Offset randomLetter1Center = Offset(randomLetter1CenterX,randomLetterCenterY);
+
+    List<Map<String,dynamic>> affectedIds = [];
+    print("AFFECTED IDS: $affectedIds");
+    if (turnData["score"]>0) {
+      affectedIds = turnData["ids"];
+      Map<String,dynamic> targetIdObject = affectedIds.firstWhere((e)=>e["id"]==targetTile["key"],orElse: ()=>{});
+      if (targetIdObject.isNotEmpty) {
+        targetIdObject.update("body", (v)=>"");
+      }
+      // for (int i=0;i<turnData["ids"];i++) {
+      //   Map<String,dynamic> affectedId = turnData["ids"]
+      // }
+    } else {
+
+      if (turnData["moveData"]["type"]=="placed") {
+        affectedIds.add({"id": targetTile["key"],"body":targetTile["body"]});
+        destination = randomLetter1Center;
+      } else if (turnData["moveData"]["type"]=="dropped") {
+        Map<String,dynamic> reserveTile = turnData["moveData"]["data"]["source"];
+        print("startUndoAnimation: $reserveTile");
+        affectedIds.add({"id": targetTile["key"],"body":targetTile["body"]});
+        affectedIds.add({"id": reserveTile["key"],"body":targetTile["body"]});
+        Map<String,dynamic> reserveObject = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==reserveTile["key"]);
+
+        destination = reserveObject["center"];
+      }
+    }
+    
+    for (int i=0; i<affectedIds.length; i++) {
+
+      print("affected id: ${affectedIds[i]}");
+      int key = affectedIds[i]["id"];
+      String body = affectedIds[i]["body"];
+      if (turnData["score"]>0 && targetTile["key"]==key) {
+        body = "";
+      }
+
+      List<Map<String,dynamic>> otherAnimations = animationData.where((e)=>e["key"]==key&&e["type"]!=animationType).toList();
+      for (int j=0;j<otherAnimations.length;j++) {
+        Map<String,dynamic> otherAnimation = otherAnimations[j];
+        final int otherAnimationIndex = animationData.indexOf(otherAnimation);
+        animationData.removeAt(otherAnimationIndex);        
+      }
+
+
+      Map<String,dynamic> existingAnimationObject = animationData.firstWhere( (e)=>
+        e["key"]==key&&
+        [animationType,"undo"].contains(e["type"]),
+        orElse: ()=>{}
+      );
+      
+      late Map<String,dynamic> animationObject = {};
+
+      late int count = 0;
+
+      if (existingAnimationObject.isNotEmpty) {
+        final double progress = existingAnimationObject["progress"];
+        count = (progress*target).round();
+        animationObject = existingAnimationObject;
+
+      } else {
+        List<Map<String,dynamic>> allTiles = gamePlayState.tileData+gamePlayState.reserveTileData;
+        late Map<String,dynamic> tileObject = allTiles.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
+
+        // Map<String,dynamic> animationParametersObject = animationParameters.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
+        animationObject = {
+          "key": key, 
+          "progress": 0.0, 
+          "type": "undo",
+          "turn": turn,
+          "body": body, 
+          "parameters": {"moveType": turnData["moveData"]["type"], "destination":destination}
+        };
+
+        if (tileObject.isNotEmpty) {
+          animationData.add(animationObject);
+        }
+      }
+      timerLogic(gamePlayState, animationObject, count, target, animationDurationData["interval"]);
+    }
+    // late Map<String,dynamic> actualAnimation = {}; 
+    // Map<String,dynamic> existingAnimationObject = gamePlayState.animationData.firstWhere( (e) => 
+    //   e["type"]==animationType &&
+    //   e["key"]==key,
+    //   orElse:()=>{}
+    // );
+
+    // if (existingAnimationObject.isNotEmpty) {
+    //   final double progress = existingAnimationObject["progress"];
+    //   count = (progress*target).round();
+    //   actualAnimation = existingAnimationObject;      
+    // }  else {
+    //   actualAnimation = {"key": null, "type":animationType, "progress":0.0, "animation": {} };
+    //   gamePlayState.animationData.add(actualAnimation);
+    // }
+
+    // timerLogic(gamePlayState,actualAnimation,count,target,interval);
+  }
+
+
 
   void startAddPerksAnimation(GamePlayState gamePlayState,String key, Map<String,dynamic> itemData) {
 
