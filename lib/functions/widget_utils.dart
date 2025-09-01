@@ -9,12 +9,19 @@ import 'package:scribby_flutter_v2/providers/palette_state.dart';
 class WidgetUtils {
 
 
-  TextPainter displayTileText(Canvas canvas, String body, Color color, Offset location, double fontSize, Function googleFont) {
+  TextPainter displayTileText(Canvas canvas, String body, Color color, Offset location, double fontSize, ColorPalette palette) {
 
-    TextStyle textStyle = googleFont( //akayaKanadaka
-      color: color, //const Color.fromARGB(190, 123, 191, 255),
-      fontSize: fontSize,
+
+    TextStyle textStyle = palette.tileFont(
+      textStyle: TextStyle(
+        color: color,
+        fontSize: fontSize
+      ),
     );
+    // TextStyle textStyle = googleFont( //akayaKanadaka
+    //   color: color, //const Color.fromARGB(190, 123, 191, 255),
+    //   fontSize: fontSize,
+    // );
     TextSpan textSpan = TextSpan(
       text: body,
       style: textStyle,

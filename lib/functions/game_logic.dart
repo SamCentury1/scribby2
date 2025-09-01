@@ -27,7 +27,7 @@ class GameLogic extends ChangeNotifier {
       moveData = {"type":"dropped","data":{"target":pointedElement,"source":gamePlayState.draggedElementData}};
       executeTileDroppedLogic(gamePlayState,pointedElement,details);
     } else {
-      print("tile is tapped");
+      print("@@@@@ tile is tapped");
       executeTileTappedLogic(gamePlayState,pointedElement);
       moveData = {"type":"placed","data":{"target":pointedElement,"source":null}};
     }
@@ -42,6 +42,7 @@ class GameLogic extends ChangeNotifier {
     checkGameOver(gamePlayState,context);
 
     executeTutorialStep(gamePlayState,context);
+
 
     // Helpers().closeTileMenu(gamePlayState);   
   }
@@ -272,7 +273,7 @@ class GameLogic extends ChangeNotifier {
 
   // when a perk is selected on the bar - if it's the und button - do that. 
   // else, highlight the available tiles for a perk
-  void executePerkSelectedBehaviour(GamePlayState gamePlayState) {
+  void executePerkSelectedBehaviour(BuildContext context, GamePlayState gamePlayState) {
     try {
       Map<String,dynamic> selectedPerkObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
       if (selectedPerkObject.isNotEmpty) {
@@ -291,6 +292,10 @@ class GameLogic extends ChangeNotifier {
             // undo function
             print("perkCount: ${perkCount}",);
             executeUndoPerk(gamePlayState);
+            if (gamePlayState.isTutorial) {
+              executeTutorialStep(gamePlayState,context);
+            }
+
           } else {
             // highlight all cells that can be selected
             gamePlayState.startHighlightEffectTimer();
@@ -308,20 +313,39 @@ class GameLogic extends ChangeNotifier {
     
     Map<String,dynamic> selectedTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
     Map<String,dynamic> perkOpen = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
-
     if (perkOpen.isNotEmpty && selectedTileObject.isNotEmpty) {
       print("perk: ${perkOpen} | ");
       String perk = perkOpen["item"];
       if (perk == "explode") {
-        if (selectedTileObject["body"]=="") {
+
+        // logic that would prevent a tutorial tile to be exploded
+        bool preventExplosion = false;
+        if (gamePlayState.isTutorial) {
+          Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
+          if (tutorialStep["focusTile"] != tileKey) {
+            preventExplosion = true;
+          }
+        }
+        if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
+          preventExplosion = true;
+        }
+
+        if (preventExplosion) {
           cancelPerk(gamePlayState);
         } else {
+          
           Animations().startTileExplodeAnimation(gamePlayState,tileKey,);
           restartTimer(gamePlayState,"tile-explode");
-          String explodedTileBody =selectedTileObject["body"]; 
+          String explodedTileBody =selectedTileObject["body"];
+          Map<String,dynamic> alphabetObject = gamePlayState.alphabet.firstWhere((e)=>e["letter"]==explodedTileBody,orElse: ()=>{});
+          if (alphabetObject.isNotEmpty) {
+            alphabetObject.update("count", (v)=>v+1);
+            alphabetObject.update("inPlay", (v)=>v-1);
+          }
 
           selectedTileObject.update("body", (v) => "");
           selectedTileObject.update("active", (v) => true);
+          selectedTileObject.update("frozen", (v)=> false);
           executeTutorialStep(gamePlayState,context);
           chargeMenuItem(gamePlayState,perk,-1);       
           perkOpen.update("open", (v)=>false);
@@ -333,7 +357,18 @@ class GameLogic extends ChangeNotifier {
           executeFoundWordLogic(gamePlayState, palette, moveData);
         }
       } else if (perk=="freeze") {
-        if (selectedTileObject["body"]=="" || !selectedTileObject["active"]) {
+
+        bool preventFreeze = false;
+        if (gamePlayState.isTutorial) {
+          Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
+          if (tutorialStep["focusTile"] != tileKey) {
+            preventFreeze = true;
+          }
+        }
+        if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
+          preventFreeze = true;
+        }        
+        if (preventFreeze) {
           cancelPerk(gamePlayState);
         } else {        
           Animations().startTileFreezeAnimation(gamePlayState,tileKey);
@@ -362,6 +397,18 @@ class GameLogic extends ChangeNotifier {
       } else if (perk == "swap") {
         // print("selected swap. is source tile selected?");
         Map<String,dynamic> swappingTileObject = gamePlayState.tileData.firstWhere((e)=>e["swapping"]==true,orElse: ()=>{});
+
+        bool preventSwap = false;
+        if (gamePlayState.isTutorial) {
+          Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
+          if (tutorialStep["focusTile"] != tileKey || tutorialStep["targetKey"] != tileKey) {
+            preventSwap = true;
+          }
+        }
+        if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
+          preventSwap = true;
+        }  
+
         if (selectedTileObject["body"]!=""&&selectedTileObject["active"]) {
           if (swappingTileObject.isEmpty) {
             // print("source tile NOT selected => selected : ${selectedTileObject["key"]}");
@@ -471,7 +518,10 @@ class GameLogic extends ChangeNotifier {
               tileObject.update("frozen", (v)=>thaw);
             }
           }
-          chargeMenuItem(gamePlayState, "freeze", 1);
+          Animations().startUndoAnimation(gamePlayState,previousTurnData["turn"]);
+          if (!tileObject["frozen"]) {
+            chargeMenuItem(gamePlayState, "freeze", 1);
+          }
           
         } else if (moveType=="explode") {
           Map<String,dynamic> explodedTileObject = previousTurnData["moveData"]["data"]["target"];
@@ -480,6 +530,8 @@ class GameLogic extends ChangeNotifier {
           if (tileObject.isNotEmpty) {
             tileObject.update("body", (v)=>body);
           }
+          print("yo execute this shit");
+          Animations().startUndoAnimation(gamePlayState,previousTurnData["turn"]);
           chargeMenuItem(gamePlayState, "explode", 1);
         } else if (moveType=="placed") {
           String tileType = previousTurnData["moveData"]["data"]["target"]["type"];
@@ -540,6 +592,7 @@ class GameLogic extends ChangeNotifier {
                 reserveTileObject.update("body", (v) => tileBody);
               }   
             }
+
 
             Animations().startUndoAnimation(gamePlayState,previousTurnData["turn"]);
 
@@ -780,7 +833,6 @@ class GameLogic extends ChangeNotifier {
         // generate a new random letter
         generateNewRandomLetter(gamePlayState);
 
-        // Helpers().generateRandomLetterData(gamePlayState);
 
         // get the new letter body
         String newLetter = gamePlayState.randomLetterData[gamePlayState.randomLetterData.length-3]["body"];
@@ -801,11 +853,6 @@ class GameLogic extends ChangeNotifier {
           gamePlayState.setReserveTileData(gamePlayState.reserveTileData);
         }
 
-        // get the tile animation duration for the delay value
-        // Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]=="tap-up",orElse: ()=>{}); 
-        // Future.delayed(Duration(milliseconds: (animationDurationData["stops"]*animationDurationData["interval"])), () {
-        //   gamePlayState.startStopWatch();
-        // });
         restartTimer(gamePlayState,"tap-up");   
       }
     } catch (e, s) {
@@ -897,15 +944,15 @@ class GameLogic extends ChangeNotifier {
         });
 
 
-        if (step["moveType"]=="finish") {
+        // if (step["moveType"]=="finish") {
 
-          print("message at game over => ${step["message"]}");
-          gamePlayState.gameResultData.update("didCompleteGame", (v)=> true);
-          gamePlayState.gameResultData.update("didAchieveObjective", (v)=> true);
-          gamePlayState.gameResultData.update("reward", (v)=> 2000);
-          gamePlayState.gameResultData.update("xp", (v)=> 5);
-          executeGameOverLogic(context,gamePlayState);        
-        } 
+        //   print("message at game over => ${step["message"]}");
+        //   gamePlayState.gameResultData.update("didCompleteGame", (v)=> true);
+        //   gamePlayState.gameResultData.update("didAchieveObjective", (v)=> true);
+        //   gamePlayState.gameResultData.update("reward", (v)=> 2000);
+        //   gamePlayState.gameResultData.update("xp", (v)=> 5);
+        //   executeGameOverLogic(context,gamePlayState);        
+        // } 
       }
     
     }
@@ -1080,7 +1127,11 @@ class GameLogic extends ChangeNotifier {
 
       if (type=="stopwatch-rewind") {
         Animations().startStopwatchRewindAnimation(gamePlayState);
-      }   
+      }  
+      if (type=="undo") {
+        int turn = gamePlayState.animationData[i]["turn"];
+        Animations().startUndoAnimation(gamePlayState, turn);
+      } 
 
 
       // if (type=="menu-charge") {
@@ -1395,9 +1446,9 @@ class GameLogic extends ChangeNotifier {
         Random random = Random();
         tileIndex = random.nextInt(openCandidates.length);
       }
+
       Map<String,dynamic> tileObject = openCandidates[tileIndex];
       tileObject.update("active", (v) => false);
-
       Animations().startKillTileAnimation(gamePlayState,tileObject["key"]);
 
       validateStrings(gamePlayState, {"type":"kill","tiles":[tileObject["key"]]},);
@@ -1405,6 +1456,8 @@ class GameLogic extends ChangeNotifier {
       gamePlayState.restartStopWatchTimer();
 
       gamePlayState.setTileData(gamePlayState.tileData);
+
+
     } else {
       // in theory this should not happen because the game over logic should execute before getting to this point
       print("game over!");
@@ -1564,7 +1617,7 @@ class GameLogic extends ChangeNotifier {
     // navigates to the game over screen after a 500 ms delay
     Future.delayed(Duration(milliseconds: 500), () {
       if (context.mounted) {
-        Navigator.pop(context);
+        // Navigator.pop(context);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const GameOverScreen())
         );
@@ -1596,29 +1649,58 @@ class GameLogic extends ChangeNotifier {
       bool isTimeToPlace = gamePlayState.gameParameters["timeToPlace"]!=null;
       String gameType = gamePlayState.gameParameters["gameType"];
 
-      if (isTimeToPlace || gameType == "tutorial") {
-        
-        // print("gamePlayState.stopWatchDuration.inMilliseconds = ${gamePlayState.stopWatchDuration.inMilliseconds}");
-
+      if (isTimeToPlace) {
         if (gamePlayState.stopWatchDuration.inMilliseconds <= 0 ) {
           // kill spot
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            // setState(() {
-              killSpot(gamePlayState);
-
-              checkGameOver(gamePlayState, context);
-
-              if (gameType == "tutorial") {
-                int turn = gamePlayState.tutorialData["currentTurn"];
-                gamePlayState.tutorialData.update("currentTurn", (v)=>turn+1);
-                gamePlayState.setTutorialData(gamePlayState.tutorialData);
-                gamePlayState.pauseStopWatchTimer();
-              }
-            // });
+            killSpot(gamePlayState);
+            checkGameOver(gamePlayState, context);
           });
+        }
+      }
+
+      if (gameType == "tutorial") {
+        int turn = gamePlayState.tutorialData["currentTurn"];
+        Map<String,dynamic> tutorialStep = gamePlayState.tutorialData["steps"][turn];
+        if (tutorialStep["moveType"]=="kill") {
+          if (gamePlayState.stopWatchDuration.inMilliseconds <= 0 ) {
+            // kill spot
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              killSpot(gamePlayState);
+              checkGameOver(gamePlayState, context);
+              gamePlayState.tutorialData.update("currentTurn", (v)=>turn+1);
+              gamePlayState.setTutorialData(gamePlayState.tutorialData);
+              gamePlayState.pauseStopWatchTimer();
+        
+            });
+          }          
         }
 
       }
+
+      // if (isTimeToPlace || gameType == "tutorial") {
+        
+      //   // print("gamePlayState.stopWatchDuration.inMilliseconds = ${gamePlayState.stopWatchDuration.inMilliseconds}");
+
+      //   if (gamePlayState.stopWatchDuration.inMilliseconds <= 0 ) {
+      //     // kill spot
+      //     WidgetsBinding.instance.addPostFrameCallback((_) {
+      //       // setState(() {
+      //         killSpot(gamePlayState);
+
+      //         checkGameOver(gamePlayState, context);
+
+      //         if (gameType == "tutorial") {
+      //           int turn = gamePlayState.tutorialData["currentTurn"];
+      //           gamePlayState.tutorialData.update("currentTurn", (v)=>turn+1);
+      //           gamePlayState.setTutorialData(gamePlayState.tutorialData);
+      //           gamePlayState.pauseStopWatchTimer();
+      //         }
+      //       // });
+      //     });
+      //   }
+
+      // }
 
       if (gamePlayState.countDownDuration != null) {
         if (gamePlayState.countDownDuration!.inSeconds <= 0) {
@@ -1636,7 +1718,41 @@ class GameLogic extends ChangeNotifier {
 
     }
 
-  }  
+  }
+
+  void validateTutorialFinish(BuildContext context, GamePlayState gamePlayState, SettingsController settings) {
+    if (gamePlayState.isTutorial) {
+      // print("current step = ${gamePlayState.tutorialData["currentTurn"]}");
+      if (gamePlayState.tutorialData["currentTurn"]==gamePlayState.tutorialData["steps"].length-1) {
+
+        // Future.delayed(const Duration(milliseconds: 1500), () {
+       
+
+        // print("message at game over => ${step["message"]}");
+        Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+        late int rewardCoins = 0;
+        late int rewardXp = 0;
+        if (userData["parameters"]["tutorialComplete"]) {
+          rewardCoins = 0;
+          rewardXp = 0;
+        } else {
+          rewardCoins = 2000;
+          rewardXp = 5;
+          // userData["parameters"].update("tutorialComplete":)
+        }
+        gamePlayState.gameResultData.update("didCompleteGame", (v)=> true);
+        gamePlayState.gameResultData.update("didAchieveObjective", (v)=> true);
+        gamePlayState.gameResultData.update("reward", (v)=> rewardCoins);
+        gamePlayState.gameResultData.update("xp", (v)=> rewardXp);        
+
+        executeGameOverLogic(context,gamePlayState);        
+      
+        //   }
+        // });
+      }
+    }
+
+  }
 
   void cancelSwap(GamePlayState gamePlayState) {
     Map<String,dynamic> res = gamePlayState.tileData.firstWhere((e)=> e["swapping"]==true,orElse: ()=>{});
@@ -1693,13 +1809,16 @@ class GameLogic extends ChangeNotifier {
 
   void storeEndOfGameData(SettingsController settings, GamePlayState gamePlayState) {
 
+    late Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
     late List<String> badgeKeys = [];
     late List<int> multiWords = [];
     late List<int> streaks = [];
     late List<Map<dynamic,dynamic>> badgesEarned = [];
     late List<dynamic> achievementData = settings.achievementData.value;
     late int xpEarnedFromBadges = 0;
+    // final bool isTutorialComplete = userData["parameters"]["tutorialComplete"];
 
+    // if (!isTutorialComplete) {
     for (int i=0; i < gamePlayState.scoreSummary.length; i++) {
       Map<String,dynamic> scoreObject = gamePlayState.scoreSummary[i];
       int wordsMultiplier = scoreObject["multipliers"]["words"];
@@ -1848,51 +1967,57 @@ class GameLogic extends ChangeNotifier {
       badge.update("dateCompleted", (v)=>DateTime.now().toIso8601String());
     }
 
-    final int currentXP = settings.xp.value;
-    final int xpEarnedInGame = gamePlayState.gameResultData["xp"]??0;
-    gamePlayState.gameResultData.update("xp",(v) => xpEarnedInGame+xpEarnedFromBadges);
-    final int newXpValue = currentXP + xpEarnedFromBadges + xpEarnedInGame;
-    settings.setXP(newXpValue);
-    
-    final int currentCoins = settings.coins.value;
-    final int coinsAwarded = gamePlayState.gameResultData["reward"];
-    final int newCoinsValue = currentCoins+coinsAwarded;
-    settings.setCoins(newCoinsValue);
+    if (gamePlayState.gameParameters["gameType"]=="tutorial" && userData["parameters"]["tutorialComplete"]) {
+      // print("don't save, tutorial was completed");
+    } else {
+      final int currentXP = settings.xp.value;
+      final int xpEarnedInGame = gamePlayState.gameResultData["xp"]??0;
+      gamePlayState.gameResultData.update("xp",(v) => xpEarnedInGame+xpEarnedFromBadges);
+      final int newXpValue = currentXP + xpEarnedFromBadges + xpEarnedInGame;
+      settings.setXP(newXpValue);
+      
+      final int currentCoins = settings.coins.value;
+      final int coinsAwarded = gamePlayState.gameResultData["reward"];
+      final int newCoinsValue = currentCoins+coinsAwarded;
+      settings.setCoins(newCoinsValue);
 
 
-    final int score = Helpers().calculateScore(gamePlayState);
-    final int turns = Helpers().countTurns(gamePlayState);
-    final int streak = Helpers().getLongestStreak(gamePlayState);
-    final int crosswords = Helpers().countCrosswords(gamePlayState);
-    final int biggestTurn = Helpers().getBiggestTurn(gamePlayState);  
+      final int score = Helpers().calculateScore(gamePlayState);
+      final int turns = Helpers().countTurns(gamePlayState);
+      final int streak = Helpers().getLongestStreak(gamePlayState);
+      final int crosswords = Helpers().countCrosswords(gamePlayState);
+      final int biggestTurn = Helpers().getBiggestTurn(gamePlayState);  
 
-    final Map<String,dynamic> gameParams = Map<String,dynamic>.from(gamePlayState.gameParameters); 
-    gameParams.remove("mediaQueryData");     
+      final Map<String,dynamic> gameParams = Map<String,dynamic>.from(gamePlayState.gameParameters); 
+      gameParams.remove("mediaQueryData");     
 
-    final Map<String,dynamic> data = {
-      "createdAt": DateTime.now().toIso8601String(),
-      "score": score,
-      "uniqueWords":gameWords,
-      "turns":turns,
-      "streak":streak,
-      "crosswords":crosswords,
-      "biggestTurn":biggestTurn,
-      "durationSeconds":gamePlayState.duration.inSeconds,
-      "gameResultData": gamePlayState.gameResultData,
-      "gameParameters": gameParams, //{"gameType": gameType,"target":target,"targetType":targetType,"boardAxis":boardAxis,"durationInMinutes":durationInMinutes},
 
-    };
-    List<dynamic> history = settings.userGameHistory.value;
-    List<Map<String,dynamic>> updatedHistory = List<Map<String,dynamic>>.from(history);
-    updatedHistory.add(data);
+      final Map<String,dynamic> data = {
+        "createdAt": DateTime.now().toIso8601String(),
+        "score": score,
+        "uniqueWords":gameWords,
+        "turns":turns,
+        "streak":streak,
+        "crosswords":crosswords,
+        "biggestTurn":biggestTurn,
+        "durationSeconds":gamePlayState.duration.inSeconds,
+        "gameResultData": gamePlayState.gameResultData,
+        "gameParameters": gameParams, //{"gameType": gameType,"target":target,"targetType":targetType,"boardAxis":boardAxis,"durationInMinutes":durationInMinutes},
 
-    settings.setUserGameHistory(updatedHistory);
-    gamePlayState.gameResultData.update("badges", (v) => badgesEarned);
+      };
+      List<dynamic> history = settings.userGameHistory.value;
+      List<Map<String,dynamic>> updatedHistory = List<Map<String,dynamic>>.from(history);
+      updatedHistory.add(data);
 
-    settings.setAchievementData(achievementData);
-    FirestoreMethods().updateGameHistory(settings, data);
-    FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
-    FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
+      settings.setUserGameHistory(updatedHistory);
+      gamePlayState.gameResultData.update("badges", (v) => badgesEarned);
+
+      settings.setAchievementData(achievementData);
+      FirestoreMethods().updateGameHistory(settings, data);
+      FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
+      FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
+      FirestoreMethods().updateParameters(settings, "tutorialComplete", true);
+    }
   }
 
   void updateRank(SettingsController settings, GamePlayState gamePlayState) {

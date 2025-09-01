@@ -29,7 +29,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
   int colValue = 6;
   // int? target = null;
   String? targetType = null;
-  List<int> timesInMinutes = List.generate(59, (e)=>e+1).toList();
+  List<int> timesInMinutes = [1,2,3,4,5,6,7,8,9,10,15,20,30,40,50,60]; //List.generate(59, (e)=>e+1).toList();
   List<int> pointTargets = List.generate(20, (e)=>500 + (e*500)).toList();
   List<int> gridTargets = List.generate(4, (e)=>5 + e).toList();
   List<int?> timesToPlace = [null,3,4,5,6,7,8,9,10,11,12];
@@ -142,6 +142,8 @@ class _NewGameDialogState extends State<NewGameDialog> {
     gameTypeInfo = settings.gameInfoData.value.firstWhere((e) => e["name"]==gameTypeChoice, orElse: () => {});
 
 
+
+
     final double widgetHeight = 40*scalor;
     return Consumer<GamePlayState>(
       builder: (context,gamePlayState,child) {
@@ -166,9 +168,11 @@ class _NewGameDialogState extends State<NewGameDialog> {
                     padding: EdgeInsets.all(8.0*scalor),
                     child: Text(
                       "New Game!",
-                      style: GoogleFonts.lilitaOne(
-                        color: palette.text1,
-                        fontSize: 32*scalor
+                      style: palette.mainAppFont(
+                        textStyle: TextStyle(
+                          color: palette.text1,
+                          fontSize: 32*scalor
+                        ),
                       ),
                     ),
                   ),
@@ -267,7 +271,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               child: Text(
                                 "Duration:",
                                 style: GoogleFonts.lilitaOne(
-                                  color: palette.text1,
+                                  color: gameTypeChoice == "classic" ? palette.text1 : palette.text1.withOpacity(0.5),
                                   fontSize: 22*scalor
                                 ),
                               ),
@@ -299,7 +303,14 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                 ) : 
                                   
 
-                                Center(child: Text("Unlimited", style: GoogleFonts.lilitaOne(color: palette.text2),)),
+                                Center(
+                                  child: Text(
+                                    "Unlimited", 
+                                    style: GoogleFonts.lilitaOne(
+                                      color: palette.text1.withOpacity(0.5),
+                                    ),
+                                  )
+                                ),
                                   
                                 
                               ),
@@ -318,7 +329,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               child: Text(
                                 "Target: ",
                                 style: GoogleFonts.lilitaOne(
-                                  color: palette.text1,
+                                  color: gameTypeChoice == "sprint" ? palette.text1 : palette.text1.withOpacity(0.5),
                                   fontSize: 22*scalor
                                 ),
                               ),
@@ -352,7 +363,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                   child: Text(
                                     "Unlimited",
                                     style: GoogleFonts.lilitaOne(
-                                      color:  palette.text1,
+                                      color:  gameTypeChoice == "sprint" ? palette.text1 : palette.text1.withOpacity(0.5),
                                       fontSize: 22*scalor
                                     ),
                                   )

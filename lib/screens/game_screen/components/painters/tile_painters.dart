@@ -9,6 +9,7 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/styling_utils.dart';
 import 'package:scribby_flutter_v2/functions/widget_utils.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 
 class TilePainters {
 
@@ -22,91 +23,155 @@ class TilePainters {
     late Color bottomEdgeColor = Colors.transparent;
     late Color insideDecorationColor = Colors.transparent;
 
-    if (body=="") {
+    // if (body=="") {
 
-      if (type=='random') {
-        color1 = const ui.Color.fromARGB(255, 44, 60, 153);
-        color2 = const ui.Color.fromARGB(255, 84, 182, 206);
-        textColor = const ui.Color.fromARGB(187, 232, 230, 233);
-        rightEdgeColor = ui.Color.fromARGB(237, 47, 41, 136);
-        bottomEdgeColor = ui.Color.fromARGB(235, 139, 75, 223);
-        insideDecorationColor = ui.Color.fromARGB(132, 216, 96, 204);
-      }
+    //   if (type=='random') {
+    //     color1 = const ui.Color.fromARGB(255, 44, 60, 153);
+    //     color2 = const ui.Color.fromARGB(255, 84, 182, 206);
+    //     textColor = const ui.Color.fromARGB(187, 232, 230, 233);
+    //     rightEdgeColor = ui.Color.fromARGB(237, 47, 41, 136);
+    //     bottomEdgeColor = ui.Color.fromARGB(235, 139, 75, 223);
+    //     insideDecorationColor = ui.Color.fromARGB(132, 216, 96, 204);
+    //   }
 
-      if (type=='board') {
-        color1 = Color.fromARGB(255,156,224,255);
-        color2 = ui.Color.fromARGB(239, 217, 255, 255);
-        textColor = Colors.transparent;
-        rightEdgeColor = ui.Color.fromARGB(239, 137, 241, 255);
-        bottomEdgeColor = ui.Color.fromARGB(236, 16, 14, 126);
-        insideDecorationColor = Colors.transparent;
-      }   
+    //   if (type=='board') {
+    //     color1 = Color.fromARGB(255,156,224,255);
+    //     color2 = ui.Color.fromARGB(239, 217, 255, 255);
+    //     textColor = Colors.transparent;
+    //     rightEdgeColor = ui.Color.fromARGB(239, 137, 241, 255);
+    //     bottomEdgeColor = ui.Color.fromARGB(236, 16, 14, 126);
+    //     insideDecorationColor = Colors.transparent;
+    //   }   
 
-      if (type=='reserve') {
-        color1 = const ui.Color.fromARGB(255, 241, 231, 247);
-        color2 = const ui.Color.fromARGB(255, 210, 255, 242);
-        textColor = Colors.transparent;
-        rightEdgeColor = ui.Color.fromARGB(238, 137, 139, 255);
-        bottomEdgeColor = ui.Color.fromARGB(236, 78, 87, 1);
-        insideDecorationColor = Colors.transparent;
-      }
+    //   if (type=='reserve') {
+    //     color1 = const ui.Color.fromARGB(255, 241, 231, 247);
+    //     color2 = const ui.Color.fromARGB(255, 210, 255, 242);
+    //     textColor = Colors.transparent;
+    //     rightEdgeColor = ui.Color.fromARGB(238, 137, 139, 255);
+    //     bottomEdgeColor = ui.Color.fromARGB(236, 78, 87, 1);
+    //     insideDecorationColor = Colors.transparent;
+    //   }
 
-      if (type=='reserve') {
-        color1 = const ui.Color.fromARGB(255, 241, 231, 247);
-        color2 = const ui.Color.fromARGB(255, 210, 255, 242);
-        textColor = Colors.transparent;
-        rightEdgeColor = ui.Color.fromARGB(238, 137, 139, 255);
-        bottomEdgeColor = ui.Color.fromARGB(236, 78, 87, 1);
-        insideDecorationColor = Colors.transparent;
-      }
+    //   if (type=='reserve') {
+    //     color1 = const ui.Color.fromARGB(255, 241, 231, 247);
+    //     color2 = const ui.Color.fromARGB(255, 210, 255, 242);
+    //     textColor = Colors.transparent;
+    //     rightEdgeColor = ui.Color.fromARGB(238, 137, 139, 255);
+    //     bottomEdgeColor = ui.Color.fromARGB(236, 78, 87, 1);
+    //     insideDecorationColor = Colors.transparent;
+    //   }
 
-      if (type=='dead') {
-        color1 = const ui.Color.fromARGB(255, 83, 83, 83);
-        color2 = const ui.Color.fromARGB(255, 36, 36, 36);
-        textColor = const ui.Color.fromARGB(0, 0, 0, 0);
-        rightEdgeColor = ui.Color.fromARGB(236, 138, 138, 138);
-        bottomEdgeColor = ui.Color.fromARGB(235, 20, 20, 20);
-        insideDecorationColor = ui.Color.fromARGB(0, 255, 186, 248);
-      }            
-    } else {
+    //   if (type=='dead') {
+    //     color1 = const ui.Color.fromARGB(255, 83, 83, 83);
+    //     color2 = const ui.Color.fromARGB(255, 36, 36, 36);
+    //     textColor = const ui.Color.fromARGB(0, 0, 0, 0);
+    //     rightEdgeColor = ui.Color.fromARGB(236, 138, 138, 138);
+    //     bottomEdgeColor = ui.Color.fromARGB(235, 20, 20, 20);
+    //     insideDecorationColor = ui.Color.fromARGB(0, 255, 186, 248);
+    //   }            
+    // } else {
 
-      if (type=='random') {
-        color1 = decorationData["faceColors"][0]; //const ui.Color.fromARGB(255, 90, 100, 247);
-        color2 = decorationData["faceColors"][1]; //const ui.Color.fromARGB(255, 29, 27, 165);
-        textColor = decorationData["bodyColor"]; //const ui.Color.fromARGB(187, 204, 214, 235);
-        rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
-        bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
-        insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"]; //ui.Color.fromARGB(132, 170, 235, 255);
-      }      
+    //   if (type=='random') {
+    //     color1 = decorationData["faceColors"][0]; //const ui.Color.fromARGB(255, 90, 100, 247);
+    //     color2 = decorationData["faceColors"][1]; //const ui.Color.fromARGB(255, 29, 27, 165);
+    //     textColor = decorationData["bodyColor"]; //const ui.Color.fromARGB(187, 204, 214, 235);
+    //     rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
+    //     bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
+    //     insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"]; //ui.Color.fromARGB(132, 170, 235, 255);
+    //   }      
 
-      if (type=='reserve') {
-        color1 = decorationData["faceColors"][0]; //const ui.Color.fromARGB(255, 9, 20, 83);
-        color2 = decorationData["faceColors"][1]; //const ui.Color.fromARGB(255, 13, 49, 126);
-        textColor = decorationData["bodyColor"]; //const ui.Color.fromARGB(188, 184, 191, 250);
-        rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
-        bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
-        insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"];  //ui.Color.fromARGB(132, 196, 243, 255);
-      }
+    //   if (type=='reserve') {
+    //     color1 = decorationData["faceColors"][0]; //const ui.Color.fromARGB(255, 9, 20, 83);
+    //     color2 = decorationData["faceColors"][1]; //const ui.Color.fromARGB(255, 13, 49, 126);
+    //     textColor = decorationData["bodyColor"]; //const ui.Color.fromARGB(188, 184, 191, 250);
+    //     rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
+    //     bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
+    //     insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"];  //ui.Color.fromARGB(132, 196, 243, 255);
+    //   }
 
-      if (type=='board') {
-        color1 = decorationData["faceColors"][0]; //Colors.lightBlue;
-        color2 = decorationData["faceColors"][1]; //Colors.indigo;
-        textColor = decorationData["bodyColor"]; //const Color.fromARGB(190, 123, 191, 255);
-        rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
-        bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
-        insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"];  //ui.Color.fromARGB(132, 196, 220, 255);
-      }
+    //   if (type=='board') {
+    //     color1 = decorationData["faceColors"][0]; //Colors.lightBlue;
+    //     color2 = decorationData["faceColors"][1]; //Colors.indigo;
+    //     textColor = decorationData["bodyColor"]; //const Color.fromARGB(190, 123, 191, 255);
+    //     rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
+    //     bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
+    //     insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"];  //ui.Color.fromARGB(132, 196, 220, 255);
+    //   }
 
-      if (type=='board-frozen') {
+    //   if (type=='board-frozen') {
         
-        color1 = const ui.Color.fromARGB(255, 165, 215, 238);
-        color2 = const ui.Color.fromARGB(255, 227, 228, 235);
-        textColor = const Color.fromARGB(190, 123, 191, 255);
-        rightEdgeColor = ui.Color.fromARGB(239, 137, 241, 255);
-        bottomEdgeColor = ui.Color.fromARGB(236, 50, 49, 143);
-        insideDecorationColor = decorationData["bodyColor"]; //ui.Color.fromARGB(132, 196, 220, 255);
-      }      
+    //     color1 = const ui.Color.fromARGB(255, 165, 215, 238);
+    //     color2 = const ui.Color.fromARGB(255, 227, 228, 235);
+    //     textColor = const Color.fromARGB(190, 123, 191, 255);
+    //     rightEdgeColor = ui.Color.fromARGB(239, 137, 241, 255);
+    //     bottomEdgeColor = ui.Color.fromARGB(236, 50, 49, 143);
+    //     insideDecorationColor = decorationData["bodyColor"]; //ui.Color.fromARGB(132, 196, 220, 255);
+    //   }      
+    // }  
+
+
+    if (type=='board-empty') {
+      color1 = Color.fromARGB(255,156,224,255);
+      color2 = ui.Color.fromARGB(239, 217, 255, 255);
+      textColor = Colors.transparent;
+      rightEdgeColor = ui.Color.fromARGB(239, 137, 241, 255);
+      bottomEdgeColor = ui.Color.fromARGB(236, 16, 14, 126);
+      insideDecorationColor = Colors.transparent;
     }   
+
+    if (type=='reserve-empty') {
+      color1 = const ui.Color.fromARGB(255, 241, 231, 247);
+      color2 = const ui.Color.fromARGB(255, 210, 255, 242);
+      textColor = Colors.transparent;
+      rightEdgeColor = ui.Color.fromARGB(238, 137, 139, 255);
+      bottomEdgeColor = ui.Color.fromARGB(236, 78, 87, 1);
+      insideDecorationColor = Colors.transparent;
+    }
+
+    if (type=='dead') {
+      color1 = const ui.Color.fromARGB(255, 83, 83, 83);
+      color2 = const ui.Color.fromARGB(255, 36, 36, 36);
+      textColor = const ui.Color.fromARGB(0, 0, 0, 0);
+      rightEdgeColor = ui.Color.fromARGB(236, 138, 138, 138);
+      bottomEdgeColor = ui.Color.fromARGB(235, 20, 20, 20);
+      insideDecorationColor = ui.Color.fromARGB(0, 255, 186, 248);
+    }
+
+    if (type=='random') {
+      color1 = decorationData["faceColors"][0]; //const ui.Color.fromARGB(255, 90, 100, 247);
+      color2 = decorationData["faceColors"][1]; //const ui.Color.fromARGB(255, 29, 27, 165);
+      textColor = decorationData["bodyColor"]; //const ui.Color.fromARGB(187, 204, 214, 235);
+      rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
+      bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
+      insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"]; //ui.Color.fromARGB(132, 170, 235, 255);
+    }      
+
+    if (type=='reserve-full') {
+      color1 = decorationData["faceColors"][0]; //const ui.Color.fromARGB(255, 9, 20, 83);
+      color2 = decorationData["faceColors"][1]; //const ui.Color.fromARGB(255, 13, 49, 126);
+      textColor = decorationData["bodyColor"]; //const ui.Color.fromARGB(188, 184, 191, 250);
+      rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
+      bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
+      insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"];  //ui.Color.fromARGB(132, 196, 243, 255);
+    }
+
+    if (type=='board-full') {
+      color1 = decorationData["faceColors"][0]; //Colors.lightBlue;
+      color2 = decorationData["faceColors"][1]; //Colors.indigo;
+      textColor = decorationData["bodyColor"]; //const Color.fromARGB(190, 123, 191, 255);
+      rightEdgeColor = Color.lerp(decorationData["baseColor"], Colors.white, 0.5)??decorationData["baseColor"];
+      bottomEdgeColor = Color.lerp(decorationData["baseColor"], Colors.black, 0.4)??decorationData["baseColor"];
+      insideDecorationColor = Color.lerp(decorationData["bodyColor"], Colors.transparent, 0.2)??decorationData["bodyColor"];  //ui.Color.fromARGB(132, 196, 220, 255);
+    }
+
+    if (type=='board-frozen') {
+      color1 = const ui.Color.fromARGB(255, 165, 215, 238);
+      color2 = const ui.Color.fromARGB(255, 227, 228, 235);
+      textColor = const Color.fromARGB(190, 123, 191, 255);
+      rightEdgeColor = ui.Color.fromARGB(239, 137, 241, 255);
+      bottomEdgeColor = ui.Color.fromARGB(236, 50, 49, 143);
+      insideDecorationColor = decorationData["bodyColor"]; //ui.Color.fromARGB(132, 196, 220, 255);
+    }      
     res = {
       "faceColor1":color1,
       "faceColor2":color2,
@@ -164,6 +229,7 @@ class TilePainters {
     String source, 
     String target,
     Map<String,dynamic> decorationData,
+    ColorPalette palette
     ) {
     late Map<String,dynamic> paints = {};
 
@@ -237,14 +303,14 @@ class TilePainters {
     canvas.drawRRect(tileBorderRRect, bottomEdgePaint);
     canvas.drawRRect(tileRRect, tilePaint);
     canvas.drawRRect(insideBorderDecorationRRect, insideDecorationPaint);
-    WidgetUtils().displayTileText(canvas, body, textColor, tileFaceCenter,tileSize.width*0.4, GoogleFonts.akayaKanadaka);    
+    WidgetUtils().displayTileText(canvas, body, textColor, tileFaceCenter,tileSize.width*0.4, palette);    
 
     return canvas;
   }
 
 
 
-  Canvas drawTile2(Canvas canvas, Offset tileCenter, String body, Size tileSize, String type, Map<String,dynamic> decorationData) {
+  Canvas drawTile2(Canvas canvas, Offset tileCenter, String body, Size tileSize, String type, Map<String,dynamic> decorationData, ColorPalette palette) {
 
 //     print("""
 // ------------------------------
@@ -327,7 +393,7 @@ class TilePainters {
     canvas.drawRRect(tileRRect, tilePaint);
     canvas.drawRRect(insideBorderDecorationRRect, insideDecorationPaint);
 
-    WidgetUtils().displayTileText(canvas, body, textColor, tileFaceCenter,tileSize.width*0.4, GoogleFonts.akayaKanadaka);
+    WidgetUtils().displayTileText(canvas, body, textColor, tileFaceCenter,tileSize.width*0.4, palette);
 
     return canvas;
   }
@@ -341,7 +407,8 @@ class TilePainters {
       Size tileSize, 
       String type, 
       double opacity, 
-      Map<String,dynamic> decorationData
+      Map<String,dynamic> decorationData,
+      ColorPalette palette,
     ) {
     final double thicknessFactor = tileSize.width*0.05/2;
     final double radius = tileSize.width*0.15;
@@ -414,7 +481,7 @@ class TilePainters {
     canvas.drawRRect(tileBorderRRect, bottomEdgePaint);
     canvas.drawRRect(tileRRect, tilePaint);
     // canvas.drawRRect(insideBorderDecorationRRect, insideDecorationPaint);
-    AnimationUtils().displayAnimatingText(canvas, body, textColor, gamePlayState, tileFaceCenter,tileSize, GoogleFonts.akayaKanadaka);
+    AnimationUtils().displayAnimatingText(canvas, body, textColor, gamePlayState, tileFaceCenter,tileSize, palette);
 
     return canvas;    
   }
@@ -568,21 +635,36 @@ class TilePainters {
   Canvas highlightTilesOpenForPerk(Canvas canvas, GamePlayState gamePlayState,) {
 
     Map<String,dynamic> openPerk = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
-    if (openPerk.isNotEmpty) {      
-      for (int i=0; i<gamePlayState.tileData.length; i++) {
-        Map<String,dynamic> tileObject = gamePlayState.tileData[i];
-        Size tileSize = gamePlayState.elementSizes["tileSize"];
     
-        if ( tileObject["body"]!="" || !tileObject["active"]) {
-            Offset targetCenter = tileObject["center"];
-          if (tileObject["swapping"]) {
+    if (openPerk.isNotEmpty) {
 
-          } else {
-            late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
-            drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);
+      Size tileSize = gamePlayState.elementSizes["tileSize"];
+
+      if (gamePlayState.isTutorial) {
+        Map<String,dynamic> stepObject = Helpers().getTutorialStepObject(gamePlayState);
+        for (int i=0; i<gamePlayState.tileData.length; i++) {
+          if (gamePlayState.tileData[i]["key"]==stepObject["focusTile"]) {
+            Offset targetCenter = gamePlayState.tileData[i]["center"];
+            late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,gamePlayState.tileData[i]["key"]);
+            // drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);            
           }
-        }      
+        }
 
+      } else {
+        for (int i=0; i<gamePlayState.tileData.length; i++) {
+          Map<String,dynamic> tileObject = gamePlayState.tileData[i];
+          
+      
+          if ( tileObject["body"]!="" || !tileObject["active"]) {
+              Offset targetCenter = tileObject["center"];
+            if (tileObject["swapping"]) {
+
+            } else {
+              late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
+              drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);
+            }
+          }      
+        }
       }
 
     }
@@ -648,13 +730,15 @@ class TilePainters {
   }
 
 
-  Canvas drawTileSwapAnimation(Canvas canvas, GamePlayState gamePlayState) {
+  Canvas drawTileSwapAnimation(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     List<Map<String,dynamic>> swapAnimations = gamePlayState.animationData.where((e)=>e["type"]=="tile-swap").toList();
     Size tileSize = gamePlayState.elementSizes["tileSize"];
-
+    
     
 
     for (int i=0; i<swapAnimations.length; i++) {
+
+      
       Map<String,dynamic> swapAnimation = swapAnimations[i];
 
 
@@ -668,7 +752,7 @@ class TilePainters {
       double progress = swapAnimation["progress"];
 
       if (sourceTile.isNotEmpty && targetTile.isNotEmpty) {
-
+        print("EXECUTE THIS SHIT:drawTileSwapAnimation ");
 
         Offset sourceTileCenter = sourceTile["center"];
         Map<String,dynamic> sourceDecorationData = targetTile["decorationData"];
@@ -685,7 +769,7 @@ class TilePainters {
         Size updatedSize = AnimationUtils().getSwappedTileSize(gamePlayState,swapAnimation);
 
 
-        drawTile2(canvas, tilePosition, body, updatedSize, tileType,sourceDecorationData);
+        drawTile2(canvas, tilePosition, body, updatedSize, 'board-full',sourceDecorationData,palette);
       }
     }
     return canvas;
@@ -700,7 +784,7 @@ class TilePainters {
   }
 
 
-  Canvas drawExplodingTile(Canvas canvas, GamePlayState gamePlayState) {
+  Canvas drawExplodingTile(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     Map<String,dynamic> explodingAnimation = gamePlayState.animationData.firstWhere((e)=>e["type"]=="tile-explode",orElse: ()=>{});
 
     if (explodingAnimation.isNotEmpty) {
@@ -713,7 +797,7 @@ class TilePainters {
 
         double progress = explodingAnimation["progress"];
         Offset tileCenter = tileObject["center"];
-        String tileType = explodingAnimation["tileType"];
+        String tileType = explodingAnimation["tileType"]=="board"?"board-full":"dead";
         String tileBody = tileType == "board" ? "-" : "";
         Map<String,dynamic> decorationData = tileObject["decorationData"];
 
@@ -761,9 +845,11 @@ class TilePainters {
         //   {"source": 0.0, "target": 1.0, "duration": 0.30},
         // ];      
         // double updatedSizeFactor = AnimationUtils().getAnimationTransition(progress,updatedSizeFactorSequence); 
-        double updatedSizeFactor = 1.0;        
+        final double updatedProgress = progress <= 0.5 ? 0.0 : (progress-0.5)*2;
+        double updatedSizeFactor = 1.0*updatedProgress;
         Size updatedSize = Size(tileSize.width*updatedSizeFactor,tileSize.height*updatedSizeFactor);
-        paintAnimatingTile(canvas, tileCenter, gamePlayState, "", updatedSize,progress,"", "board",decorationData);    
+        // paintAnimatingTile(canvas, tileCenter, gamePlayState, "", updatedSize,progress,"", "board-",decorationData);
+        drawTile2(canvas, tileCenter, "", updatedSize, 'board-empty', decorationData, palette);  
       }
 
 

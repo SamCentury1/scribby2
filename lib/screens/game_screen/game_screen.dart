@@ -72,12 +72,16 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {
             Initializations().resizeScreen(gamePlayState, MediaQuery.of(context));
+
+            GameLogic().validateTutorialFinish(context, gamePlayState, settings);
           });
         });
 
 
     
         GameLogic().checkTimeExpired(context,gamePlayState);
+
+        
 
         // GameLogic().validateLongPress(context,gamePlayState,palette);
 
@@ -153,6 +157,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                         :  IconButton(
                           onPressed: () {
                             _scaffoldKey.currentState!.openDrawer();
+                            print("================ ALPHABET STATE =====================");
+                            for (Map<String,dynamic> alphabetObject in gamePlayState.alphabet) {
+                              print(alphabetObject);
+                            }
+                            print("=======================================================");
+
                             gamePlayState.setIsGamePaused(true);             
                           }, 
                           icon: Icon(

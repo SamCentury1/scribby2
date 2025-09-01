@@ -76,9 +76,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),             
             Scaffold(
               backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
+              // resizeToAvoidBottomInset: false,
               body: SafeArea(
-                child: Padding(
+                child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 12.0 * scalor),
                   child: Column(
                     children: [
@@ -90,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           // ),
                         )
                       ),
-            
+                          
                       Expanded(
                         flex: 4,
                         child: Column(
@@ -105,15 +105,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               ),
                             ),
-            
+                          
                             LoginTextField(controller: usernameController, hintText: 'Username', obscureText: false, palette: palette,),
                         
                             LoginTextField(controller: emailController, hintText: 'Email', obscureText: false, palette: palette,),
-            
+                          
                             LoginTextField(controller: password1Controller, hintText: 'Password', obscureText: true, palette: palette,),
                         
                             LoginTextField(controller: password2Controller, hintText: 'Confirm Password', obscureText: true, palette: palette,),
-            
+                          
                             LoginButton(onTap: registerUser, body: "Register", palette: palette,),
                         
                             Padding(
@@ -152,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   iconData: Icons.g_mobiledata,
                                 ),
                                 SizedBox(width: 10,),
-            
+                          
                                 AuthProviderTile(
                                   palette: palette, 
                                   onTap: () => AuthService().signInWithApple(context),
@@ -191,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ],
                         ),
                       ),
-            
+                          
                       // Expanded(flex: 4, child:SizedBox())
                     ],
                   ),

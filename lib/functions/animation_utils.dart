@@ -97,15 +97,17 @@ class AnimationUtils {
   }
 
 
-  TextPainter displayAnimatingText(Canvas canvas, String body, Color color, GamePlayState gamePlayState, Offset location, Size tileSize, Function googleFont) {
+  TextPainter displayAnimatingText(Canvas canvas, String body, Color color, GamePlayState gamePlayState, Offset location, Size tileSize, ColorPalette palette) {
     final double minTileSize = gamePlayState.minimumTileSize;
     final double minFontSize = gamePlayState.minimumFontSize;
 
     double fontSize = double.parse(((minFontSize / minTileSize) * tileSize.width).toStringAsFixed(2));
 
-    TextStyle textStyle = googleFont(
-      color: color,
-      fontSize: fontSize,
+    TextStyle textStyle = palette.tileFont(
+      textStyle: TextStyle(
+        color: color,
+        fontSize: fontSize,
+      ),
     );
 
     TextSpan textSpan = TextSpan(

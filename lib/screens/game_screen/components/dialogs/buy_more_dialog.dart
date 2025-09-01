@@ -32,7 +32,9 @@ class _BuyMoreModalState extends State<BuyMoreModal> {
     _adState = Provider.of<AdState>(context,listen: false);
 
     // _adState.loadGameOverRewardedAd();
-    _adState.loadRewardedAd();
+    GamePlayState gamePlayState = Provider.of<GamePlayState>(context,listen: false);
+    ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
+    _adState.loadRewardedAd(gamePlayState,palette);
 
   }
   
@@ -71,13 +73,14 @@ class _BuyMoreModalState extends State<BuyMoreModal> {
               void option1Callback() {
                 adState.gameRewardedAd?.show(
                   onUserEarnedReward: (ad, reward) {
-                    GameLogic().closeTileMenuBuyMoreModal(gamePlayState,palette,0);
+                    // GameLogic().closeTileMenuBuyMoreModal(gamePlayState,palette,0);
                     GameLogic().executePauseDialogPopScope(gamePlayState,palette);
                     if (optionData.isNotEmpty) {
                       Animations().startAddPerksAnimation(gamePlayState,perk,optionData);                                  
                     }
                   },
-                );
+                  // onAdDismissedFullScreenContent
+                );                
                 setState(() {
                   adState.setGameRewardedAd(null);
                   adState.setIsGameRewardedAdLoaded(false);

@@ -72,7 +72,7 @@ ${gameData}
                   backgroundColor: palette.widget2,
                   collapsedBackgroundColor: palette.widget2,
                   title: Text(
-                    getTitleString(gameData),
+                    Helpers().getTitleString(gameData["gameParameters"]),
                     style: TextStyle(
                       color: palette.widgetText2,
                       fontSize: 22 * scalor,
@@ -278,24 +278,24 @@ ${gameData}
 }
 
 
-String getTitleString(Map<String,dynamic> gameData) {
-  String res = "";
-  String gameType = gameData["gameParameters"]["gameType"];
-  String formattedGameType = Helpers().formatWord(gameType);
+// String getTitleString(Map<String,dynamic> gameData) {
+//   String res = "";
+//   String gameType = gameData["gameParameters"]["gameType"];
+//   String formattedGameType = Helpers().formatWord(gameType);
 
-  if (gameData["gameParameters"]["puzzleId"] != null) {
-    res = "Daily Puzzle";
-  }
+//   if (gameData["gameParameters"]["puzzleId"] != null) {
+//     res = "Daily Puzzle";
+//   }
 
-  else if (gameType == "classic" || gameType == "timed-move") {
-    res = "${gameData["gameParameters"]["durationInMinutes"]} Minute $formattedGameType";
-  } else if (gameType == "sprint") {
-    res = "${gameData['gameParameters']['target'].toString()} Point $formattedGameType";
-  } else if (gameType == "tutorial") {
-    res = "Tutorial";
-  }
-  return res;
-}
+//   else if (gameType == "classic" || gameType == "timed-move") {
+//     res = "${gameData["gameParameters"]["durationInMinutes"]} Minute $formattedGameType";
+//   } else if (gameType == "sprint") {
+//     res = "${gameData['gameParameters']['target'].toString()} Point $formattedGameType";
+//   } else if (gameType == "tutorial") {
+//     res = "Tutorial";
+//   }
+//   return res;
+// }
 
 List<Widget> getTargetSection(double scalor, Map<String,dynamic> gameParameters) {
 

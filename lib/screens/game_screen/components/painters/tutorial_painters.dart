@@ -30,6 +30,7 @@ class TutorialPainters {
     List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
     Map<String,dynamic> step = steps.firstWhere((e)=>e["step"]==currentTurn,orElse: ()=>{});
     if (step.isNotEmpty) {
+      
       int? targetKey = step["focusTile"];
       String elementType=step["type"];
       String moveType=step["moveType"];
@@ -45,28 +46,51 @@ class TutorialPainters {
 
       if (targetTile.isNotEmpty) {
         Offset tileCenter = targetTile["center"];
+        
 
         // print("TUTORIAL TESTING OPEN MENU STUFF ${targetTile["menuOpen"]}");
         // print("target tile => $targetTile");
         if (targetTile["type"]=="board") {
-          if (targetTile["menuOpen"]) {
-
-            if (targetOption != null) {
-              List<Map<String,dynamic>> perkMenu = targetTile["menuData"]; 
-              Map<String,dynamic> targetPerk = perkMenu.firstWhere((e)=>e["option"]==targetOption, orElse: ()=>{});
-              Offset perkCenter =  targetPerk["center"];
-
+          
+          if (step["perk"]!=null) {
+            Map<String,dynamic> focusPerk = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]==step["perk"],orElse: ()=>{});
+            
+            if (focusPerk.isNotEmpty) {
+              Offset perkCenter = focusPerk["center"];
+              
+              
               if (shouldGlow(gamePlayState)) {
                 late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,targetKey!);
-                TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*1.1,perkCenter);        
-              }
+                if (focusPerk["open"]) {
+                  TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*1.1,tileCenter);        
+                } else {
+                  TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*0.9,perkCenter); 
+                }
+              }            
             }
+
+            // print(gamePlayState.tileMenuOptions);
           } else {
             if (shouldGlow(gamePlayState)) {
               late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,targetKey!);
               TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*1.1,tileCenter);
             }
           }
+          // if (targetTile["menuOpen"]) {
+
+          //   if (targetOption != null) {
+          //     List<Map<String,dynamic>> perkMenu = targetTile["menuData"]; 
+          //     Map<String,dynamic> targetPerk = perkMenu.firstWhere((e)=>e["option"]==targetOption, orElse: ()=>{});
+          //     Offset perkCenter =  targetPerk["center"];
+
+          //     if (shouldGlow(gamePlayState)) {
+          //       late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,targetKey!);
+          //       TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*1.1,perkCenter);        
+          //     }
+          //   }
+          // } else {
+
+          // }
         } else {
           if (shouldGlow(gamePlayState)) {
             late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,targetKey!);
@@ -107,7 +131,7 @@ class TutorialPainters {
   bool shouldGlow(GamePlayState gamePlayState) {
     late bool res = false;
     if (gamePlayState.highlightEffectTimer.isActive) {
-      List<String> forbiddenAnimations = ["tile-freeze","tile-swap","tile-explode"];
+      List<String> forbiddenAnimations = [];//["tile-freeze","tile-swap","tile-explode"];
       List<Map<String,dynamic>> noGlowAnimations = gamePlayState.animationData.where((e)=>forbiddenAnimations.contains(e["type"])).toList();
       if (noGlowAnimations.isEmpty) {
         res = true;
@@ -122,50 +146,54 @@ class TutorialPainters {
 
       int currentStep = gamePlayState.tutorialData["currentTurn"];
       List<Map<String,dynamic>> tutorialSteps = gamePlayState.tutorialData["steps"];
-      Map<String,dynamic> dragStep = tutorialSteps.firstWhere((e)=>e["moveType"]=="drag",orElse: ()=>{}); // firstWhere((e)=> e["moveType"]=="drag", orElse: ()=>{} );
-      if (dragStep.isNotEmpty) {
-        if (currentStep == dragStep["step"]) {
-          final int reserveTileKey = dragStep["focusTile"];
-          final int boardTileKey = dragStep["targetKey"];
+      List<Map<String,dynamic>> dragSteps = tutorialSteps.where((e)=>e["moveType"]=="drag",).toList(); // firstWhere((e)=> e["moveType"]=="drag", orElse: ()=>{} );
+      for (int i=0; i<dragSteps.length; i++) {
+        Map<String,dynamic> dragStep = dragSteps[i];
+        if (dragStep.isNotEmpty) {
+          
+          if (currentStep == dragStep["step"]) {
+            final int reserveTileKey = dragStep["focusTile"];
+            final int boardTileKey = dragStep["targetKey"];
 
-          final Map<String,dynamic> reserveTile = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==reserveTileKey, orElse: ()=>{});
-          final Map<String,dynamic> boardTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==boardTileKey, orElse: ()=>{});
-
-
-          if (reserveTile.isNotEmpty && boardTile.isNotEmpty) {
-
-         
-            final Offset reserveTileCenter = reserveTile["center"];
-            final Offset boardTileCenter = boardTile["center"];
+            final Map<String,dynamic> reserveTile = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==reserveTileKey, orElse: ()=>{});
+            final Map<String,dynamic> boardTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==boardTileKey, orElse: ()=>{});
 
 
-            final int stops = 30;
-            final double dotSpacing = 1.0 / stops;
+            if (reserveTile.isNotEmpty && boardTile.isNotEmpty) {
+
+          
+              final Offset reserveTileCenter = reserveTile["center"];
+              final Offset boardTileCenter = boardTile["center"];
+
+
+              final int stops = 30;
+              final double dotSpacing = 1.0 / stops;
 
 
 
-            
-            for (int i = 5; i < stops-2; i++) {
+              
+              for (int i = 5; i < stops-2; i++) {
 
-              double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,i);
+                double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,i);
 
-              Paint linePaint = Paint()
-              ..color = ui.Color.fromRGBO(255, 255, 255, 1*opacity)
-              ..strokeCap = StrokeCap.round
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 3.0;              
-              double t1 = i * dotSpacing;
-              double t2 = (i + 1) * dotSpacing;
-              // Interpolate between start and end
-              Offset p1 = Offset.lerp(reserveTileCenter, boardTileCenter, t1)!;
-              Offset p2 = Offset.lerp(reserveTileCenter, boardTileCenter, t2)!;
+                Paint linePaint = Paint()
+                ..color = ui.Color.fromRGBO(255, 255, 255, 1*opacity)
+                ..strokeCap = StrokeCap.round
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 3.0;              
+                double t1 = i * dotSpacing;
+                double t2 = (i + 1) * dotSpacing;
+                // Interpolate between start and end
+                Offset p1 = Offset.lerp(reserveTileCenter, boardTileCenter, t1)!;
+                Offset p2 = Offset.lerp(reserveTileCenter, boardTileCenter, t2)!;
 
-              if (i % 2 == 1) {
-                if (shouldGlow(gamePlayState)) {
-                  canvas.drawLine(p1, p2, linePaint);
+                if (i % 2 == 1) {
+                  if (shouldGlow(gamePlayState)) {
+                    canvas.drawLine(p1, p2, linePaint);
+                  }
                 }
-              }
-            }   
+              }   
+            }
           }
         }
       }

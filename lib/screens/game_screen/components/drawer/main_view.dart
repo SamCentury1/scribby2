@@ -4,6 +4,7 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/initializations.dart';
 import 'package:scribby_flutter_v2/providers/ad_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/drawer/navigation_dialog.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
@@ -32,6 +33,7 @@ class MainDrawerView extends StatelessWidget {
       builder: (context,gamePlayState,child) {
 
         SettingsController settings = Provider.of<SettingsController>(context,listen: false);
+        ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
         // AdState adState = Provider.of<AdState>(context,listen: false);
 
         // String durationString = Helpers().formatDuration(gamePlayState.duration.inSeconds); 
@@ -43,8 +45,13 @@ class MainDrawerView extends StatelessWidget {
         // int highestMultiWord = getHighestValue(gamePlayState,"words");
         // int numberOfCrossWords = getNumberOfCrossWords(gamePlayState);  
         int currentTurn = getCurrentTurn(gamePlayState);
-        String gameType = gamePlayState.gameParameters["gameType"];
+        String gameType = Helpers().capitalize(gamePlayState.gameParameters["gameType"]);
         final double scalor = Helpers().getScalor(settings);
+        TextStyle listTileTextStyle = getListTileTextStyle(palette,scalor);
+        String puzzleTitle = Helpers().getTitleString(gamePlayState.gameParameters);
+
+        String timeString = getTimeString(gamePlayState,scalor);
+
         return SingleChildScrollView(
           child: Column(
             // Important: Remove any padding from the ListView.
@@ -52,11 +59,17 @@ class MainDrawerView extends StatelessWidget {
             key: const ValueKey('mainMenu'),
             crossAxisAlignment: CrossAxisAlignment.start,                
             children: [
-          
+              SizedBox(
+                height: 60 * scalor,
+              ),
               Container(
                 height: 200*scalor,
                 child: Center(
-                  child: Text("SCRIBBY!"),
+                  child: SizedBox(
+                    child: Center(
+                      child: Image.asset('assets/images/scribby_label_1.png'),
+                    ),
+                  )
                 ),
               ),
           
@@ -66,21 +79,90 @@ class MainDrawerView extends StatelessWidget {
 
               Padding(
                 padding: EdgeInsets.all(12.0*scalor),
-                child: Table(
-                  columnWidths: {
-                    0: FlexColumnWidth(1),
-                    1: FlexColumnWidth(4),
-                    2: FlexColumnWidth(4),
-                  },
+
+                child: Column(
                   children: [
-                    gameSummaryRow(Icons.emoji_events, "Game Type",gameType,scalor),
-                    timeStringWidget(gamePlayState,scalor),
-                    gameSummaryRow(Icons.numbers, "Turn",currentTurn,scalor),
-                    gameSummaryRow(Icons.score, "Score",currentScore,scalor),
-                    
-                    gameSummaryRow(Icons.list, "Words",countWords,scalor),                    
+                    Text(
+                      puzzleTitle,
+                      style: palette.mainAppFont(
+                        textStyle: TextStyle(
+                          color: palette.text1,
+                          fontSize: 22 * scalor
+                        )
+                      ),
+                    ),
+                    Helpers().getGameObjectiveString(
+                      gamePlayState.gameParameters["gameType"],
+                      gamePlayState.gameParameters["durationInMinutes"],
+                      gamePlayState.gameParameters["target"],
+                      gamePlayState.gameParameters["timeToPlace"],
+                      palette
+                    ),
+                    SizedBox(height: 20 * scalor,),
+                    getGameParameterWidget(
+                      palette,
+                      scalor,
+                      Icons.timer,
+                      gameType == "Classic" ? "Time Left" : "Duration",
+                      timeString
+                    ),
+
+                    getGameParameterWidget(
+                      palette,
+                      scalor,
+                      Icons.star,
+                      "Score",
+                      currentScore.toString(),
+                    ), 
+
+                    getGameParameterWidget(
+                      palette,
+                      scalor,
+                      Icons.fingerprint,
+                      "Moves",
+                      currentTurn.toString(),
+                    ),                                        
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Icon(Icons.timer, color: palette.text1,size: 18 *scalor,),
+                    //     ),
+
+                    //     Expanded(
+                    //       flex: 4,
+                    //       child: Text(
+                    //         gameType == "Classic" ? "Time Left" : "Duration",
+                    //         style: listTileTextStyle,
+                    //       ),
+                    //     ), 
+
+                    //     Expanded(
+                    //       flex: 2,
+                    //       child: Text(
+                    //         timeString,
+                    //         style: listTileTextStyle,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
+                // child: Table(
+                //   columnWidths: {
+                //     0: FlexColumnWidth(1),
+                //     1: FlexColumnWidth(4),
+                //     2: FlexColumnWidth(4),
+                //   },
+                //   children: [
+                //     gameSummaryRow(Icons.emoji_events, "Game Type",gameType,scalor),
+                //     timeStringWidget(gamePlayState,scalor),
+                //     gameSummaryRow(Icons.numbers, "Turn",currentTurn,scalor),
+                //     gameSummaryRow(Icons.score, "Score",currentScore,scalor),
+                    
+                //     gameSummaryRow(Icons.list, "Words",countWords,scalor),                    
+                //   ],
+                // ),
               ),
 
               Divider(thickness: 1.0, color: Colors.grey,),
@@ -90,6 +172,7 @@ class MainDrawerView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(8.0*scalor),
                   child: Card(
+                    color: palette.widget2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(9.0*scalor))
                     ),
@@ -100,8 +183,8 @@ class MainDrawerView extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.fromLTRB(22.0*scalor,4.0*scalor,4.0*scalor,4.0*scalor),
                           child: settings.soundsOn.value
-                          ? Text("Sound On", style: TextStyle(fontSize: 18 * scalor),)
-                          : Text("Sound Off", style: TextStyle(fontSize: 18 * scalor),)
+                          ? soundControlText("Sound On",palette,scalor)  //Text("Sound On", style: TextStyle(fontSize: 18 * scalor),)
+                          : soundControlText("Sound Off",palette,scalor) // Text("Sound Off", style: TextStyle(fontSize: 18 * scalor),)
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(0.0*scalor,0.0*scalor,22.0*scalor,0.0*scalor),
@@ -110,8 +193,8 @@ class MainDrawerView extends StatelessWidget {
                               settings.toggleSoundOn();
                             }, 
                             icon: settings.soundsOn.value 
-                            ? Icon(Icons.volume_up,color: Colors.blue,size: 30 * scalor,) 
-                            : Icon(Icons.volume_mute, size: 30 * scalor),
+                            ? Icon(Icons.volume_up,   color: palette.widgetText2, size: 30 * scalor,) 
+                            : Icon(Icons.volume_off, color: palette.widgetText2, size: 30 * scalor),
                           ),
                         )
                       ],
@@ -119,46 +202,35 @@ class MainDrawerView extends StatelessWidget {
                   ),
                 ),
               ),
-
-     
-          
-
-              // Divider(thickness: 1.0, color: Colors.grey,),
-          
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.summarize, color: Colors.white, size: 30 * scalor,),
-                title: Text("Summary", style: TextStyle(color: Colors.white, fontSize: 18.0 * scalor)),
+                leading: Icon(Icons.summarize, color: Colors.white, size: 26 * scalor,),
+                title: Text("Summary", style: listTileTextStyle),
                 onTap: navigateToSummary,
               ),
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.shopping_cart, color: Colors.white, size: 30 * scalor),
-                title: Text("Shop", style: TextStyle(color: Colors.white, fontSize: 18.0 * scalor)),
+                leading: Icon(Icons.shopping_cart, color: Colors.white, size: 26 * scalor),
+                title: Text("Shop", style: listTileTextStyle),
                 onTap: navigateToShop,
               ),
-              // ListTile(
-              //   leading: Icon(Icons.settings, color: Colors.white,),
-              //   title: const Text("Settings", style: TextStyle(color: Colors.white)),
-              //   onTap: navigateToSettings,
-              // ),
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.help, color: Colors.white, size: 30 * scalor),
-                title: Text("Instructions", style: TextStyle(color: Colors.white, fontSize: 18.0 * scalor)),
+                leading: Icon(Icons.help, color: Colors.white, size: 26 * scalor),
+                title: Text("Instructions", style: listTileTextStyle),
                 onTap: navigateToInstructions,
               ),   
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.home, color: Colors.white, size: 30 * scalor),
-                title: Text("Quit Game", style: TextStyle(color: Colors.white, fontSize: 18.0 * scalor)),
+                leading: Icon(Icons.home, color: Colors.white, size: 26 * scalor),
+                title: Text("Quit Game", style: listTileTextStyle),
                 onTap: () => openQuitGameDialog(context,gamePlayState),
               ),
 
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.refresh, color: Colors.white, size: 30 * scalor),
-                title: Text("Restart Game", style: TextStyle(color: Colors.white, fontSize: 18.0 * scalor)),
+                leading: Icon(Icons.refresh, color: Colors.white, size: 26 * scalor),
+                title: Text("Restart Game", style: listTileTextStyle),
                 onTap: () => openRestartGameDialog(context,settings,gamePlayState,scaffoldState),
               ),                                                         
             ]
@@ -167,6 +239,18 @@ class MainDrawerView extends StatelessWidget {
       }
     );
   }
+}
+
+Text soundControlText(String body, ColorPalette palette, double scalor) {
+  return Text(
+    body, 
+    style: palette.mainAppFont(
+      textStyle: TextStyle(
+        color: palette.widgetText2,
+        fontSize: 18 * scalor
+      ),
+    ),
+  );
 }
 
 TableRow timeStringWidget(GamePlayState gamePlayState, double scalor) {
@@ -179,6 +263,16 @@ TableRow timeStringWidget(GamePlayState gamePlayState, double scalor) {
     res = gameSummaryRow(Icons.timer_rounded, "Time Left",timeLeftString,scalor);
   }
   return res;
+}
+
+String getTimeString(GamePlayState gamePlayState, double scalor) {
+  String res = "";
+  if (gamePlayState.countDownDuration==null) {
+    res = Helpers().formatDuration(gamePlayState.duration.inSeconds); 
+  } else {
+    res = Helpers().formatDuration(gamePlayState.countDownDuration!.inSeconds);
+  }
+  return res;  
 }
 
 
@@ -242,7 +336,7 @@ TableRow gameSummaryRow(IconData icon, String body, dynamic data, double scalor)
       //   padding: const EdgeInsets.symmetric(vertical: 8.0),
       //   child: Align(alignment: Alignment.center, child: Icon(icon,color: Colors.white, size: 30*scalor,)),
       // ),),
-      getTableRowCell(alignment: Alignment.center, widget: Icon(icon,color: Colors.white, size: 25*scalor,),scalor: scalor),
+      getTableRowCell(alignment: Alignment.center, widget: Icon(icon,color: Colors.white, size: 22*scalor,),scalor: scalor),
       getTableRowCell(alignment: Alignment.centerLeft, widget: Text(body,style: textStyle),scalor: scalor),
       getTableRowCell(alignment: Alignment.centerRight, widget: Text("${data}",style: textStyle),scalor:scalor ),
       // SizedBox(child: Align(alignment: Alignment.centerLeft,  child: Text(body,style: textStyle)),),
@@ -286,13 +380,59 @@ Future<void> openQuitGameDialog(BuildContext context, GamePlayState gamePlayStat
     builder: (BuildContext context) {
       return NavigationDialog(
         title: "Quit Game",
-        body: "All your progress will be saved",
+        body: "Your game will be recorded",
         action: () => Initializations().terminateGame(context, gamePlayState),
       );
     }
   );
 }
 
+
+TextStyle getListTileTextStyle(ColorPalette palette, double scalor) {
+  return palette.mainAppFont(
+    textStyle: TextStyle(
+      color: palette.text1, 
+      fontSize: 18.0 * scalor
+    )
+  );
+}
+
+Widget getGameParameterWidget(ColorPalette palette, double scalor, IconData iconData, String parameter, String body) {
+  return Row(
+    children: [
+      Expanded(
+        flex: 1,
+        child: Icon(iconData, color: palette.text1,size: 18 *scalor,),
+      ),
+
+      Expanded(
+        flex: 4,
+        child: Text(
+          parameter,
+          style: palette.mainAppFont(
+            textStyle: TextStyle(
+              color: palette.text1, 
+              fontSize: 18.0 * scalor
+            )
+          ),
+        ),
+      ), 
+
+      Expanded(
+        flex: 2,
+        child: Text(
+          body,
+          style: palette.mainAppFont(
+            textStyle: TextStyle(
+              color: palette.text1, 
+              fontSize: 18.0 * scalor
+            )
+          ),
+        ),
+      ),
+    ],
+  );  
+}
 
 Future<void> openRestartGameDialog(BuildContext context, SettingsController settings, GamePlayState gamePlayState, ScaffoldState? scaffoldState) async {
 

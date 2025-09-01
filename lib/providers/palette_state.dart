@@ -188,6 +188,8 @@ class ColorPalette extends ChangeNotifier {
       _bg1 = colorsDictionary[themeValue]!["bg1"]!; 
       _bg2 = colorsDictionary[themeValue]!["bg2"]!; 
 
+      _drawerBg = colorsDictionary[themeValue]!["drawerBg"]!;
+
       _appBarText = colorsDictionary[themeValue]!["appBarText"]!; 
 
       _inputFieldBgColor = colorsDictionary[themeValue]!["inputFieldBgColor"]!; 
@@ -242,6 +244,7 @@ class ColorPalette extends ChangeNotifier {
       _scoreboardAnimationBorder1 = colorsDictionary[themeValue]!["scoreboardAnimationBorder1"]!; 
       _scoreboardAnimationBorder2 = colorsDictionary[themeValue]!["scoreboardAnimationBorder2"]!;    
 
+      _tileFont = GoogleFonts.rowdies;
 
     // if (themeValue == "default") {
     //   _bg1 = const Color.fromARGB(255, 55, 116, 173);
@@ -389,6 +392,8 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 38, 9, 92),
 
           "appBarText" : const Color.fromARGB(230, 240, 240, 240),
+          "drawerBg": const Color.fromARGB(255, 7, 13, 92),
+
 
           "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
           "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),
@@ -448,6 +453,7 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 235, 235, 235),
 
           "appBarText" : const Color.fromARGB(230, 24, 24, 24),
+          "drawerBg": const Color.fromARGB(255, 172, 219, 145),
 
           "inputFieldBgColor" : const Color.fromARGB(198, 166, 240, 224),
           "inputFieldBorderColor" : const Color.fromARGB(255, 63, 182, 190),
@@ -506,6 +512,7 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 38, 9, 92),
 
           "appBarText" : const Color.fromARGB(230, 240, 240, 240),
+          "drawerBg": const Color.fromARGB(255, 31, 31, 31),
 
           "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
           "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),
@@ -563,6 +570,7 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 38, 9, 92),
 
           "appBarText" : const Color.fromARGB(230, 240, 240, 240),
+          "drawerBg": const Color.fromARGB(255, 155, 247, 193),
 
           "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
           "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),
@@ -620,6 +628,7 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 38, 9, 92),
 
           "appBarText" : const Color.fromARGB(230, 240, 240, 240),
+          "drawerBg": const Color.fromARGB(255, 32, 32, 32),
 
           "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
           "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),
@@ -677,6 +686,7 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 38, 9, 92),
 
           "appBarText" : const Color.fromARGB(230, 240, 240, 240),
+          "drawerBg": const Color.fromARGB(255, 7, 13, 92),
 
           "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
           "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),

@@ -1239,41 +1239,121 @@ class Animations extends ChangeNotifier {
     int count = 0;
     Map<String,dynamic> turnData = gamePlayState.scoreSummary.firstWhere((e)=>e["turn"]==turn,orElse: ()=>{});
     List<Map<String,dynamic>> animationData = gamePlayState.animationData;
-    print(" IN UNDO ANIMATION FUNC: $turn | ${turnData} ");
+    print(" IN UNDO ANIMATION FUNC: $turn | ${turnData} | ");
+    // print("RANDOM LETTER -1 : ${gamePlayState.randomLetterData[gamePlayState.randomLetterData.length-1]}");
+    // print("RANDOM LETTER -2 : ${gamePlayState.randomLetterData[gamePlayState.randomLetterData.length-2]}");
+    // print("RANDOM LETTER -3 : ${gamePlayState.randomLetterData[gamePlayState.randomLetterData.length-3]}");
+
+    Map<String,dynamic> randomLetter3 = gamePlayState.randomLetterData[gamePlayState.randomLetterData.length-1];
+
+
     Map<String,dynamic> targetTile = turnData["tileTapped"];
     Map<String,dynamic>? randomLetterObject = null;
     Offset? destination = null;
+
 
     final double randomLetterCenterY = gamePlayState.elementPositions["randomLettersCenter"].dy;
     final double randomLetter1CenterX = gamePlayState.elementPositions["randomLettersCenter"].dx;
     final Offset randomLetter1Center = Offset(randomLetter1CenterX,randomLetterCenterY);
 
     List<Map<String,dynamic>> affectedIds = [];
-    print("AFFECTED IDS: $affectedIds");
-    if (turnData["score"]>0) {
-      affectedIds = turnData["ids"];
-      Map<String,dynamic> targetIdObject = affectedIds.firstWhere((e)=>e["id"]==targetTile["key"],orElse: ()=>{});
-      if (targetIdObject.isNotEmpty) {
-        targetIdObject.update("body", (v)=>"");
-      }
-      // for (int i=0;i<turnData["ids"];i++) {
-      //   Map<String,dynamic> affectedId = turnData["ids"]
-      // }
-    } else {
+    bool didScore = turnData["score"]>0;
+    List<int> focusIds = [];
+    if (turnData["moveData"]["data"]["target"]!=null) {
+      focusIds.add(turnData["moveData"]["data"]["target"]["key"]);
+    }
+    if (turnData["moveData"]["data"]["souce"]!=null) {
+      focusIds.add(turnData["moveData"]["data"]["source"]["key"]);
+    }    
+    // if (turnData["score"]>0) {
+    //   affectedIds = turnData["ids"];
+    //   Map<String,dynamic> targetIdObject = affectedIds.firstWhere((e)=>e["id"]==targetTile["key"],orElse: ()=>{});
+    //   if (targetIdObject.isNotEmpty) {
+    //     targetIdObject.update("body", (v)=>"");
+    //   }
+    //   // for (int i=0;i<turnData["ids"];i++) {
+    //   //   Map<String,dynamic> affectedId = turnData["ids"]
+    //   // }
+    // } else {
 
-      if (turnData["moveData"]["type"]=="placed") {
+    //   if (turnData["moveData"]["type"]=="placed") {
+    //     affectedIds.add({"id": targetTile["key"],"body":targetTile["body"]});
+    //     destination = randomLetter1Center;
+    //   } else if (turnData["moveData"]["type"]=="dropped") {
+    //     Map<String,dynamic> reserveTile = turnData["moveData"]["data"]["source"];
+    //     print("startUndoAnimation: $reserveTile");
+    //     affectedIds.add({"id": targetTile["key"],"body":targetTile["body"]});
+    //     affectedIds.add({"id": reserveTile["key"],"body":targetTile["body"]});
+    //     Map<String,dynamic> reserveObject = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==reserveTile["key"]);
+
+    //     destination = reserveObject["center"];
+    //   }
+    // }
+
+    if (turnData["moveData"]["type"]=="placed") {
+      
+      if (didScore) {
+        affectedIds = turnData["ids"];
+        Map<String,dynamic> targetIdObject = affectedIds.firstWhere((e)=>e["id"]==targetTile["key"],orElse: ()=>{});
+        if (targetIdObject.isNotEmpty) {
+          targetIdObject.update("body", (v)=>"");
+        }
+      } else {
         affectedIds.add({"id": targetTile["key"],"body":targetTile["body"]});
-        destination = randomLetter1Center;
-      } else if (turnData["moveData"]["type"]=="dropped") {
-        Map<String,dynamic> reserveTile = turnData["moveData"]["data"]["source"];
-        print("startUndoAnimation: $reserveTile");
+        destination = randomLetter1Center;        
+      }
+
+    } else if (turnData["moveData"]["type"]=="dropped") {
+      Map<String,dynamic> reserveTile = turnData["moveData"]["data"]["source"];
+      Map<String,dynamic> reserveObject = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==reserveTile["key"]);
+      if (didScore) {
+        affectedIds = turnData["ids"];
+        Map<String,dynamic> targetIdObject = affectedIds.firstWhere((e)=>e["id"]==targetTile["key"],orElse: ()=>{});
+        if (targetIdObject.isNotEmpty) {
+          affectedIds.add({"id": reserveTile["key"],"body":targetIdObject["body"]});
+          targetIdObject.update("body", (v)=>"");
+          // destination = reserveObject["center"];   
+        }
+      } else {
         affectedIds.add({"id": targetTile["key"],"body":targetTile["body"]});
         affectedIds.add({"id": reserveTile["key"],"body":targetTile["body"]});
-        Map<String,dynamic> reserveObject = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==reserveTile["key"]);
-
-        destination = reserveObject["center"];
+        
+        destination = reserveObject["center"];        
       }
+    } else if (turnData["moveData"]["type"]=="explode") {
+      print("turn data: ${turnData["moveData"]["data"]["target"]}");
+      affectedIds.add({"id": turnData["moveData"]["data"]["target"]["key"],"body":turnData["moveData"]["data"]["target"]["body"]});
+    } else if (turnData["moveData"]["type"]=="swap") {
+      Map<String,dynamic> sourceIdObject = {"id": turnData["moveData"]["data"]["source"]["key"],"body":turnData["moveData"]["data"]["target"]["body"]};
+      Map<String,dynamic> targetIdObject = {"id": turnData["moveData"]["data"]["target"]["key"],"body":turnData["moveData"]["data"]["source"]["body"]};
+      if (didScore) {
+        affectedIds = turnData["ids"];
+        List<dynamic> uniqueIds = turnData["ids"].map((product) => product['id'] as int).toList();
+        if (!uniqueIds.contains(turnData["moveData"]["data"]["source"]["key"])) {
+          affectedIds.add(sourceIdObject);
+        }
+        if (!uniqueIds.contains(turnData["moveData"]["data"]["target"]["key"])) {
+          affectedIds.add(targetIdObject);
+        }
+        // affectedIds = turn
+      } else {
+        affectedIds.add(sourceIdObject);
+        affectedIds.add(targetIdObject);
+      }
+    } else if (turnData["moveData"]["type"]=="freeze") {
+      print("freeze ${turnData["moveData"]}");
+      // affectedIds.add({"id": turnData["moveData"]["data"]["target"]["key"],"body":turnData["moveData"]["data"]["target"]["body"]});
+      if (didScore) {
+        affectedIds = turnData["ids"];
+      } else {
+        affectedIds.add({"id": turnData["moveData"]["data"]["target"]["key"],"body":turnData["moveData"]["data"]["target"]["body"]});
+      }
+      
     }
+
+    print("AFFECTED IDS: $affectedIds");
+
+
     
     for (int i=0; i<affectedIds.length; i++) {
 
@@ -1282,6 +1362,16 @@ class Animations extends ChangeNotifier {
       String body = affectedIds[i]["body"];
       if (turnData["score"]>0 && targetTile["key"]==key) {
         body = "";
+      }
+
+      bool isFocusTile = false;
+      // if (turnData["moveData"]["type"]=="freeze") {
+      //   if (turnData["moveData"]["data"]["target"]["key"]==key) {
+      //     isFocusTile = true;
+      //   }
+      // }
+      if (focusIds.contains(key)) {
+        isFocusTile = true;
       }
 
       List<Map<String,dynamic>> otherAnimations = animationData.where((e)=>e["key"]==key&&e["type"]!=animationType).toList();
@@ -1318,7 +1408,13 @@ class Animations extends ChangeNotifier {
           "type": "undo",
           "turn": turn,
           "body": body, 
-          "parameters": {"moveType": turnData["moveData"]["type"], "destination":destination}
+          "parameters": {
+            "moveType": turnData["moveData"]["type"], 
+            "destination":destination, 
+            "didScore":didScore,
+            "isFocusTile":isFocusTile,
+            "randomLetter3":randomLetter3
+          }
         };
 
         if (tileObject.isNotEmpty) {

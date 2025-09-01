@@ -40,7 +40,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
   late AdState _adState;
 
   late bool shouldShowInterstitialAd = false;
-  late List<Map<dynamic,dynamic>> badgeData = [];
+  late List<dynamic> badgeData = [];
 
 
   @override
@@ -728,7 +728,7 @@ class _DoubleCoinsDialogState extends State<DoubleCoinsDialog> {
                                 final int reward = gamePlayState.gameResultData["reward"];
                                 final int xpAmount = gamePlayState.gameResultData["xp"];
                                 final String? rank = gamePlayState.gameResultData["newRank"];
-                                List<Map<dynamic,dynamic>> badgeData = gamePlayState.gameResultData["badges"];
+                                List<dynamic> badgeData = gamePlayState.gameResultData["badges"];
                                 // settings.setCoins(coins + reward);
                                 settings.setAchievements({"coins":reward,"xp":xpAmount, "rank":rank,"badges":badgeData});    
                                 executeNavigateHome();     

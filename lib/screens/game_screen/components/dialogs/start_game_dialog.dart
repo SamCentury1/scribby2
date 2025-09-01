@@ -30,7 +30,7 @@ class _StartGameOverlayState extends State<StartGameOverlay> {
                 onTap: () {
                   bool isTimeToPlace = gamePlayState.gameParameters["timeToPlace"]!=null;
                   if (isTimeToPlace) {
-                    gamePlayState.setStopWatchLimit(6 * 1000);
+                    // gamePlayState.setStopWatchLimit(6 * 1000);
                     gamePlayState.restartStopWatchTimer();
                   }
                   if (gamePlayState.countDownDuration != null ) {

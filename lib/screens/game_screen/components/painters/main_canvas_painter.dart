@@ -46,21 +46,21 @@ class MainCanvasPainter extends CustomPainter {
     PerksBarPainters().drawPerksArea(canvas,gamePlayState,palette);
 
 
-    Painters().drawBonusArea(canvas,gamePlayState,palette);
+    // Painters().drawBonusArea(canvas,gamePlayState,palette); // shows the animation object
 
     BonusPainters().drawBonusArea(canvas,gamePlayState);
 
-    Painters().displayRandomLetters(canvas,size,gamePlayState);
+    Painters().displayRandomLetters(canvas,size,gamePlayState,palette);
 
     StopWatchPainters().drawStopWatch(canvas, gamePlayState,palette);
 
-    TilePainters().drawTileSwapAnimation(canvas,gamePlayState);
+    TilePainters().drawTileSwapAnimation(canvas,gamePlayState,palette);
 
-    Painters().drawBoardTiles(canvas,size,gamePlayState,);
+    Painters().drawBoardTiles(canvas,size,gamePlayState,palette);
 
     Painters().animateExplodingEmptyTile(canvas,gamePlayState,palette);
 
-    Painters().displayReserveLetters(canvas,size,gamePlayState,);
+    Painters().displayReserveLetters(canvas,size,gamePlayState,palette);
 
 
     Painters().drawDraggedTileDroppedOnBoard(canvas,gamePlayState,palette);
@@ -69,11 +69,12 @@ class MainCanvasPainter extends CustomPainter {
     // TilePainters().drawSwappingTileShadow(canvas,gamePlayState);
     TilePainters().highlightTilesOpenForPerk(canvas,gamePlayState);
     
-    TilePainters().drawExplodingTile(canvas,gamePlayState);
+    TilePainters().drawExplodingTile(canvas,gamePlayState, palette);
 
-    Painters().drawWordFoundTiles(canvas,gamePlayState);
+    Painters().drawWordFoundTiles(canvas,gamePlayState,palette);
 
-    Painters().drawTileAnimatingDownToPosition(canvas,gamePlayState);    
+    Painters().drawUndoAnimation(canvas,gamePlayState,palette);
+    Painters().drawTileAnimatingDownToPosition(canvas,gamePlayState,palette);    
     // drawPauseOverlay(canvas, size, gamePlayState);
 
     Painters().drawNewPointsAnimation(canvas,gamePlayState, palette);

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 
 class LoadingImage extends StatefulWidget {
   const LoadingImage({super.key});
@@ -41,78 +43,82 @@ class _LoadingImageState extends State<LoadingImage> {
 
 
 
-    return Stack(
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: CustomPaint(
-            painter: LoadingImgaeBackground(),
-          ),
-        ),
-        Column(
+    return Consumer<ColorPalette>(
+      builder: (context,palette,child) {
+        return Stack(
           children: [
-
-            Expanded(
-              flex: 1,
-              child: SizedBox()
-            ),  
-
-
-            Expanded(
-              flex: 4,
-              child:SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width,
-                child: Image(
-                  semanticLabel: "logo",
-                  image: AssetImage(
-                    'assets/images/scribby_label_1.png'
-                  )
-                ),
-              ),              
-            ),
-            
-            Expanded(
-              flex: 1,
-              child:SizedBox(
-                width: MediaQuery.of(context).size.width*0.5,
-                height: MediaQuery.of(context).size.width*0.15,                
-                child: CustomPaint(
-                  painter: LoadingDots(progress: progress),
-                ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: CustomPaint(
+                painter: LoadingImgaeBackground(palette: palette),
               ),
             ),
-                        
-
-            Expanded(
-              flex: 3,
-              child: SizedBox(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "created by",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16
-                      ),
-                    ),                    
-                    Text(
-                      "No Damn Good Studios",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24
-                      ),
+            Column(
+              children: [
+        
+                Expanded(
+                  flex: 1,
+                  child: SizedBox()
+                ),  
+        
+        
+                Expanded(
+                  flex: 4,
+                  child:SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width,
+                    child: Image(
+                      semanticLabel: "logo",
+                      image: AssetImage(
+                        'assets/images/scribby_label_1.png'
+                      )
                     ),
-                  ],
-
+                  ),              
                 ),
-              )
-            ),            
+                
+                Expanded(
+                  flex: 1,
+                  child:SizedBox(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    height: MediaQuery.of(context).size.width*0.15,                
+                    child: CustomPaint(
+                      painter: LoadingDots(progress: progress),
+                    ),
+                  ),
+                ),
+                            
+        
+                Expanded(
+                  flex: 3,
+                  child: SizedBox(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "created by",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16
+                          ),
+                        ),                    
+                        Text(
+                          "No Damn Good Studios",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24
+                          ),
+                        ),
+                      ],
+        
+                    ),
+                  )
+                ),            
+              ],
+            )
           ],
-        )
-      ],
+        );
+      }
     );
   }
 }
@@ -197,15 +203,20 @@ class LoadingDots extends CustomPainter {
 
 
 class LoadingImgaeBackground extends CustomPainter {
+  final ColorPalette palette;
+  const LoadingImgaeBackground({
+    required this.palette,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
+
 
     final Rect rect = Offset.zero & size;
 
     final Paint paint = Paint()
       ..shader = RadialGradient(
-        colors: [Colors.blue, Colors.purple],
+        colors: [palette.bg1, palette.bg2],
         center: Alignment.center, // You can also use Alignment.topLeft, etc.
         radius: 0.9,              // Relative to the shorter side of the rect
       ).createShader(rect);

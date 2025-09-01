@@ -1656,20 +1656,15 @@ class ScribbyLogoPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
 
+
+    // Map<dynamic,dynamic> userData = Map<dynamic,dynamic>.from(settings.userData.value as Map<dynamic,dynamic>);
+    // userData.forEach((k,v) {
+    //   print("$k : $v");
+    // });
+
+
     final Color baseColor = const Color.fromARGB(255, 239, 240, 241);
-
     const Map<String,dynamic> offsetData  = {"dx1":0,"dy1":0, "dx2": 50, "dy2":50};
-
-    // List<Map<String,dynamic>> decorationData = [
-    //   {"letter": "S", "offsets":[0.00,0.10], "angle": (0.40 * pi), "faceColor":const Color.fromARGB(255, 83, 157, 218), "gradientOffset": 1,},
-    //   {"letter": "C", "offsets":[0.05,0.27], "angle": (0.35 * pi), "faceColor":const Color.fromARGB(255, 79, 33, 243), "gradientOffset": 2,},
-    //   {"letter": "R", "offsets":[0.10,0.44], "angle": (0.30 * pi), "faceColor":const Color.fromARGB(255, 20, 116, 71), "gradientOffset": 3,},
-    //   {"letter": "I", "offsets":[0.18,0.58], "angle": (0.25 * pi), "faceColor":const Color.fromARGB(255, 92, 52, 19), "gradientOffset": 0,},
-    //   {"letter": "B", "offsets":[0.27,0.72], "angle": (0.20 * pi), "faceColor":const Color.fromARGB(255, 114, 28, 126), "gradientOffset": 3,},
-    //   {"letter": "B", "offsets":[0.38,0.82], "angle": (0.12 * pi), "faceColor":const Color.fromARGB(255, 238, 86, 26), "gradientOffset": 2,},
-    //   {"letter": "Y", "offsets":[0.50,0.90], "angle": (0.05 * pi), "faceColor":const Color.fromARGB(255, 223, 167, 16), "gradientOffset": 1,},
-    // ]; 
-
 
     List<Map<String,dynamic>> decorationData = [
       {"letter": "S", "offsets":[0.20,0.10], "angle": (1.90 * pi), "faceColor":const Color.fromARGB(255, 83, 157, 218), "gradientOffset": 1,},
@@ -1698,7 +1693,7 @@ class ScribbyLogoPainter extends CustomPainter {
       canvas.translate(tileCenter.dx, tileCenter.dy);
       canvas.rotate(tileAngle);
       canvas.translate(-tileCenter.dx, -tileCenter.dy);      
-      TilePainters().drawTile2(canvas, tileCenter, decorationObject["letter"], Size(45,45), "board", tileDecoration);
+      TilePainters().drawTile2(canvas, tileCenter, decorationObject["letter"], Size(45,45), "board-full", tileDecoration, palette);
       canvas.restore();      
 
     }

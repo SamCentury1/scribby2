@@ -282,12 +282,11 @@ class Gestures {
     Map<String,dynamic> swappingTile = Helpers().getSwappingTile(gamePlayState);
     bool buyMoreModalOpen = gamePlayState.tileMenuBuyMoreModalData["open"];
     bool isTapInForbiddenZone = Helpers().getIsTapInForbiddenZone(details,gamePlayState);
-    bool isDropPermitted = Helpers().validateTutorialDragDropGesture(gamePlayState,pointedElement);
+    bool isTutorialDropPermitted = Helpers().validateTutorialDragDropGesture(gamePlayState,pointedElement);
     bool isSwapActivated = swappingTile.isNotEmpty;
     Map<String,dynamic> isPerkSelectionDetected =  Helpers().detectPerkSelection(gamePlayState, details.localPosition);
     Map<String,dynamic> perkOpen =  Helpers().getSelectedPerk(gamePlayState);
 
-    print("selected perk: $isPerkSelectionDetected");
 
     // Map<String,dynamic> behavior = 
 
@@ -303,6 +302,7 @@ class Gestures {
       // }       
 
       Helpers().validateTutorialComplete(gamePlayState,context);
+      
       // release is not in forbidden zone
       if (!isTapInForbiddenZone) {
         // print("- 1. tap is NOT in forbidden zone");
@@ -328,8 +328,9 @@ class Gestures {
                 // print("---- 4. tile is being dragged");
 
                 // if (elementType=="board" && isActive==true && body=="" && swappingTile.isEmpty && isDropPermitted) {
-                if (isDropPermitted) {
+                if (isTutorialDropPermitted) {
                   // print("----- 5. drop is permitted - execute move");
+                  print("executed the move via drag and drop");
                   GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
 
 
@@ -359,21 +360,41 @@ class Gestures {
                   }
                 } else {
                   // print("----- 5. SWAPPING IS NOT ACTIVE");
-                  if (elementType=="board" && body=="") {
-                    // print("------ 6. release on BOARD with body");
-                    if (isActive!) {
-                      // print("------- 7. release on active tile");
-                      GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
-                    } else {
-                      // // print("------- 7. release on inactive tile");
-                      // if (gamePlayState.isLongPress) {
-                      //   print("is long press");
-                      //   GameLogic().executeOpenTileMenu(gamePlayState, pointedElement);
-                      // }
+                  if (gamePlayState.isTutorial) {
+                    Map<String,dynamic> step = Helpers().getTutorialStepObject(gamePlayState);
+                    if (step.isNotEmpty) {
+                      if (step["moveType"]=="tap") {
+                        if (elementType=="board" && body=="") {
+                          if (isActive!) {
+                            print("executing move via tile type being board and body is empty");
+                            GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
+                          } else {
+                          }
+                        } else if (elementType=="reserve" && body=="") {
+                          print("executing move via tile type being reserve and body is empty");
+                          GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement); 
+                        }                        
+                      }
                     }
-                  } else if (elementType=="reserve" && body=="") {
-                    // print("------ 6. is  reserve - execute move");
-                    GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement); 
+                  } else {
+                    if (elementType=="board" && body=="") {
+                      // print("------ 7. release on BOARD with body");
+                      if (isActive!) {
+                        // print("------- 8. release on active tile");
+                        print("executing move via tile type being board and body is empty");
+                        GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
+                      } else {
+                        // // print("------- 9. release on inactive tile");
+                        // if (gamePlayState.isLongPress) {
+                        //   print("is long press");
+                        //   GameLogic().executeOpenTileMenu(gamePlayState, pointedElement);
+                        // }
+                      }
+                    } else if (elementType=="reserve" && body=="") {
+                      // print("------ 7. is  reserve - execute move");
+                      print("executing move via tile type being reserve and body is empty");
+                      GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement); 
+                    }
                   }
                 }            
               }
@@ -381,7 +402,7 @@ class Gestures {
               print(" ------------------------- RELEASED WHILE PERK IS SELECTED BUT *NOT* ACTIVE  --------------------------- ");
               isPerkSelectionDetected["open"]=true;
 
-              GameLogic().executePerkSelectedBehaviour(gamePlayState);
+              GameLogic().executePerkSelectedBehaviour(context,gamePlayState,);
 
               
 

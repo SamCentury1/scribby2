@@ -24,7 +24,7 @@ class GamePlayState extends ChangeNotifier {
   late Map<String,dynamic> _tutorialData = {
     "randomLetters": ["C","A",],
     "currentTurn":0,
-    "dictionary": [ "CAT", "BAKER", "BAKE", "STICK", "TICK", "GET", "ARE", "TOP", "CROSS", "WORDS", "SMILE", "MILE", "ILE", "BLACK", "LACK", "SWAP", "TILES"],
+    "dictionary": [ "CAT", "BAKER", "BAKE", "STICK", "TICK", "GET", "ARE", "TOP", "CROSS", "WORDS", "SMILE", "MILE", "ILE", "BLACK", "LACK", "SWAP", "TILES", "SEA","SEAL"],
     "steps":[
 
       // first word complete
@@ -46,7 +46,7 @@ class GamePlayState extends ChangeNotifier {
 
 
       {"step":11,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 29, "isStepCompleted":false, "newLetter":"G", "shouldStartCountDown": false,"perk":null, "delay":0, "message": ""}, // C
-      {"step":12,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 35, "isStepCompleted":false, "newLetter":"T", "shouldStartCountDown": false,"perk":null, "delay":0, "message": ""}, // K
+      {"step":12,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 35, "isStepCompleted":false, "newLetter":"T", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // K
 
       // DRAG MOVE
       {"step":13,"type": "board", "moveType":"drag", "targetKey":23, "focusTile": 3000, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":null, "delay":3000, "message": "drag the letter from the reserve to the empty spot to complete the word"}, 
@@ -87,32 +87,44 @@ class GamePlayState extends ChangeNotifier {
       {"step":33,"type": "board", "moveType":"kill", "targetKey":8, "focusTile": null, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": true, "perk":null, "delay":300, "message": "in some games, you may have a limited amount of time to make a play - otherwise a tile gets blocked!"},
 
 
-      {"step":34,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 8, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false, "perk":"explode", "delay":300, "message": "press the tile for 1 second then tap the flashing bomb perk"},
-      {"step":35,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 35, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"explode", "delay":300, "message": "this also works for those pesky letters you can't get rid of (What word ends with Q???)"},
+      {"step":34,"type": "board", "moveType":"perk", "targetKey":null, "focusTile": 8, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false, "perk":"explode", "delay":300, "message": "press the tile for 1 second then tap the flashing bomb perk"},
+      {"step":35,"type": "board", "moveType":"perk", "targetKey":null, "focusTile": 35, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false, "perk":"explode", "delay":300, "message": "this also works for those pesky letters you can't get rid of (What word ends with Q???)"},
+      // {"step":35,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 35, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"explode", "delay":300, "message": "this also works for those pesky letters you can't get rid of (What word ends with Q???)"},
 
       {"step":36,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 24, "isStepCompleted":false, "newLetter":"A", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "Let's take a look at another perk!"}, // B
       {"step":37,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 25, "isStepCompleted":false, "newLetter":"C", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // L
       {"step":38,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 26, "isStepCompleted":false, "newLetter":"K", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // A
       {"step":39,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 27, "isStepCompleted":false, "newLetter":"S", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "Instead of completing the word black, freeze the L so we can cross it"}, // C
-      {"step":40,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 25, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"freeze", "delay":300, "message": "open up the perk menu for the L to freeze it"}, // L
+      {"step":40,"type": "board", "moveType":"perk", "targetKey":null, "focusTile": 25, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"freeze", "delay":300, "message": "open up the perk menu for the L to freeze it"}, // L
       {"step":41,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 28, "isStepCompleted":false, "newLetter":"M", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "now we can place the K and the word BLACK won't be counted"}, // K
       {"step":42,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 7, "isStepCompleted":false, "newLetter":"I", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "Let's make another word with an L to cross with"}, // S
       {"step":43,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 13, "isStepCompleted":false, "newLetter":"E", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // M
       {"step":44,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 19, "isStepCompleted":false, "newLetter":"S", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // I
-      {"step":45,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 31, "isStepCompleted":false, "newLetter":"W", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""},// E
-      {"step":46,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 25, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"freeze", "delay":3000, "message": "Now we can unfreeze (thaw?) the L and complete the cross word 'BLACK-SMILE' - long press on the tile to show the perk menu"}, // L
-      {"step":47,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 6, "isStepCompleted":false, "newLetter":"L", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "the last perk is the swap perk"}, // S
-      {"step":48,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 7, "isStepCompleted":false, "newLetter":"P", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // W
-      {"step":49,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 8, "isStepCompleted":false, "newLetter":"T", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // L
-      {"step":50,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 9, "isStepCompleted":false, "newLetter":"I", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // P
-      {"step":51,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 11, "isStepCompleted":false, "newLetter":"A", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // T
-      {"step":52,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 17, "isStepCompleted":false, "newLetter":"E", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // I
-      {"step":53,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 23, "isStepCompleted":false, "newLetter":"S", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // A
-      {"step":54,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 29, "isStepCompleted":false, "newLetter":"!", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // E
-      {"step":55,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 35, "isStepCompleted":false, "newLetter":"@", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // S
-      {"step":56,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 23, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"swap", "delay":300, "message": "long press to open up the perk menu, then tap the glowing switch perk"}, // 
-      {"step":57,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 8, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":null, "delay":2000, "message": "tap the glowing tile to swap the tiles"}, // 
-      {"step":58,"type": "board", "moveType":"finish", "targetKey":null, "focusTile": null, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":null, "delay":5000, "message": "well done! You're now ready to go!"},
+      {"step":45,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 31, "isStepCompleted":false, "newLetter":"E", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""},// E
+      {"step":46,"type": "board", "moveType":"perk", "targetKey":null, "focusTile": 25, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"freeze", "delay":3000, "message": "Now we can unfreeze (thaw?) the L and complete the cross word 'BLACK-SMILE' - tap the glowing perk"}, // L
+
+      {"step":47,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 18, "isStepCompleted":false, "newLetter":"A", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "The next perk is the 'UNDO' perk"}, // C
+      {"step":48,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 19, "isStepCompleted":false, "newLetter":"L", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // A   QtKey":null, "focusTile": 20, "isStepCompleted":false, "newLetter":"S", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "Sometimes when building a bigger word, you will complete a smaller one"}, // T
+      // {"step":50,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 21, "isStepCompleted":false, "newLetter":"W", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "In this case, we want to complete the word 'SEAL' but get the word 'SEA' first"},
+      
+      {"step":49,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 20, "isStepCompleted":false, "newLetter":'S', "shouldStartCountDown": false,"perk":null, "delay":1000, "message": "In this case, we want to complete the word 'SEAL' but get the word 'SEA' first"}, // S
+      {"step":50,"type": "board", "moveType":"perk", "targetKey":null, "focusTile": 0, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":'undo', "delay":500, "message": "Undo the last move so you can put the 'A' in the reserves"}, // S
+      {"step":51,"type": "reserve", "moveType":"tap", "targetKey":null, "focusTile": 2000, "isStepCompleted":false, "newLetter":'S', "shouldStartCountDown": false,"perk":null, "delay":300, "message": "tap the reserve tile"}, // S
+      {"step":52,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 21, "isStepCompleted":false, "newLetter":'W', "shouldStartCountDown": false,"perk":null, "delay":500, "message": "tap the board tile to place the 'L'"}, // S
+      {"step":53,"type": "board", "moveType":"drag", "targetKey":20, "focusTile": 2000, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":null, "delay":300, "message": "drag the 'A' into the word to make the words 'SEA' and 'SEAL' "},
+      
+      {"step":54,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 6, "isStepCompleted":false, "newLetter":'L', "shouldStartCountDown": false,"perk":null, "delay":300, "message": "Well done!"}, // S
+      {"step":55,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 7, "isStepCompleted":false, "newLetter":"P", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "The last perk is the 'SWAP' perk"}, // W
+      {"step":56,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 8, "isStepCompleted":false, "newLetter":"T", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // L
+      {"step":57,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 9, "isStepCompleted":false, "newLetter":"I", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // P
+      {"step":58,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 11, "isStepCompleted":false, "newLetter":"A", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // T
+      {"step":59,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 17, "isStepCompleted":false, "newLetter":"E", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // I
+      {"step":60,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 23, "isStepCompleted":false, "newLetter":"S", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // A
+      {"step":61,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 29, "isStepCompleted":false, "newLetter":"!", "shouldStartCountDown": false,"perk":null, "delay":300, "message": ""}, // E
+      {"step":62,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 35, "isStepCompleted":false, "newLetter":"@", "shouldStartCountDown": false,"perk":null, "delay":300, "message": "tap the glowing perk at the bottom"}, // S
+      {"step":63,"type": "board", "moveType":"perk", "targetKey":null, "focusTile": 23, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":"swap", "delay":300, "message": "tap the glowing 'A'"}, // 
+      {"step":64,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": 8, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":null, "delay":2000, "message": "tap the glowing 'L' to swap the tiles"}, // 
+      {"step":65,"type": "board", "moveType":"finish", "targetKey":null, "focusTile": null, "isStepCompleted":false, "newLetter":null, "shouldStartCountDown": false,"perk":null, "delay":5000, "message": "well done! You're now ready to go!"},
 
       // {"step":59,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": null, "isStepCompleted":false, "newLetter":"%", "shouldStartCountDown": false,"perk":null}, //
       // {"step":60,"type": "board", "moveType":"tap", "targetKey":null, "focusTile": null, "isStepCompleted":false, "newLetter":"%", "shouldStartCountDown": false,"perk":null}, //                         
@@ -183,7 +195,11 @@ class GamePlayState extends ChangeNotifier {
   }
   // ------------------------------------
 
-  late Map<String,dynamic> _gameParameters = {};
+  /// 
+    // gamePlayState.setGameParameters({
+    // });
+  /// 
+  late Map<String,dynamic> _gameParameters = {}; // "gameType":str,"target":int?,"targetType": null,"rows":int?,"columns":int?,"durationInMinutes":int?,"timeToPlace": int?,"puzzleId": String?,"mediaQueryData": mediaQueryData,
   Map<String,dynamic> get gameParameters => _gameParameters;
   void setGameParameters(Map<String,dynamic> value) {
     _gameParameters = value;
@@ -225,7 +241,7 @@ class GamePlayState extends ChangeNotifier {
     {"type": "tap-down", "stops": 15, "interval": 17},
     {"type": "tap-cancel", "stops": 15, "interval": 17 },
     {"type": "tap-up", "stops": 15, "interval": 17 },
-    {"type": "word-found", "stops": (3*60), "interval": 17 },
+    {"type": "word-found", "stops": (150), "interval": 17 },
     {"type": "pre-word-found", "stops": 15, "interval": 17 }, // stops: 15
     {"type": "tile-drop", "stops": 15, "interval": 17 },
     {"type": "kill-tile", "stops": 15, "interval": 17 },
@@ -240,7 +256,7 @@ class GamePlayState extends ChangeNotifier {
     {"type": "tile-freeze", "stops": 30, "interval": 17 },
     {"type": "tile-swap", "stops": 50, "interval": 17 },
     {"type": "tile-explode", "stops": 40, "interval": 15 },
-    {"type": "undo", "stops": 300, "interval": 15 },    
+    {"type": "undo", "stops": 30, "interval": 15 },    
     {"type": "stopwatch-rewind", "stops": 20, "interval": 17 },
     {"type": "add-perks", "stops": 20, "interval": 17 },
     {"type": "tutorial-message-fade", "stops": 25, "interval": 17 },

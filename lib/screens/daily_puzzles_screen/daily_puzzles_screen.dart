@@ -259,12 +259,19 @@ class _DailyPuzzlesScreenState extends State<DailyPuzzlesScreen> {
                                                               ),
                                                             ),
                                                   
-                                                            getDifficultyStars(todayPuzzle["difficulty"],palette)
+                                                            // getDifficultyStars(todayPuzzle["difficulty"],palette)
                                                           ],
                                                         ),
                                                   
                                                         SizedBox(height: 15,),
-                                                        getDescription(todayPuzzle,palette),
+                                                        Helpers().getGameObjectiveString(
+                                                          todayPuzzle["gameType"],
+                                                          todayPuzzle["duration"],
+                                                          todayPuzzle["target"],
+                                                          todayPuzzle["timeToPlace"],
+                                                          palette
+                                                        ),
+                                                        // getDescription(todayPuzzle,palette),
                                                         SizedBox(height: 15,),
                                                         SizedBox(
                                                           width: double.infinity,
@@ -464,82 +471,82 @@ String formatTitle(Map<String,dynamic> puzzleObject) {
   return "$dateWeekday, $dateMonth. $dateDay";
 }
 
-RichText getDescription(Map<String,dynamic> puzzleObject, ColorPalette palette) {
-  String bewareString = "";
-  String objectiveString = "";
+// RichText getDescription(Map<String,dynamic> puzzleObject, ColorPalette palette) {
+//   String bewareString = "";
+//   String objectiveString = "";
 
-  List<TextSpan> texts = [
-    TextSpan(
-      text: "Objective: ", 
-      style: TextStyle(
-        fontWeight: FontWeight.bold, 
-        decoration: TextDecoration.underline,decorationThickness: 2,
-        shadows: [
-          Shadow(
-            color:  const Color.fromARGB(255, 255, 255, 255),
-            offset: Offset(0, -3),
-          )
-        ],
-        color: Colors.transparent, //palette.widgetText1,
-        decorationColor: palette.widgetText1
+//   List<TextSpan> texts = [
+//     TextSpan(
+//       text: "Objective: ", 
+//       style: TextStyle(
+//         fontWeight: FontWeight.bold, 
+//         decoration: TextDecoration.underline,decorationThickness: 2,
+//         shadows: [
+//           Shadow(
+//             color:  const Color.fromARGB(255, 255, 255, 255),
+//             offset: Offset(0, -3),
+//           )
+//         ],
+//         color: Colors.transparent, //palette.widgetText1,
+//         decorationColor: palette.widgetText1
 
-      )
-    ),
-    TextSpan(text: objectiveString),
-  ];
+//       )
+//     ),
+//     TextSpan(text: objectiveString),
+//   ];
 
-  if (puzzleObject["gameType"]=="classic") {
-    String durationFormatted = Helpers().formatDuration(puzzleObject["duration"]*60);
-    int mins = int.parse(durationFormatted.split(":")[0]);
-    String minutesText = mins > 1 ? "${mins.toString()} minutes" : "${mins.toString()} minute"; 
-    objectiveString = "\nScore as many points as you can within $minutesText. ";
+//   if (puzzleObject["gameType"]=="classic") {
+//     String durationFormatted = Helpers().formatDuration(puzzleObject["duration"]*60);
+//     int mins = int.parse(durationFormatted.split(":")[0]);
+//     String minutesText = mins > 1 ? "${mins.toString()} minutes" : "${mins.toString()} minute"; 
+//     objectiveString = "\nScore as many points as you can within $minutesText. ";
 
-    String part1 = "\nScore ";
-    String part2 = "as many points ";
-    String part3 = "as you can ";
-    String part4 = "within $minutesText. ";
-    texts.add(TextSpan(text: part1,),);
-    texts.add(TextSpan(text: part2, style: TextStyle(fontWeight: FontWeight.bold)),);
-    texts.add(TextSpan(text: part3,),);
-    texts.add(TextSpan(text: part4, style: TextStyle(fontWeight: FontWeight.bold)),);
+//     String part1 = "\nScore ";
+//     String part2 = "as many points ";
+//     String part3 = "as you can ";
+//     String part4 = "within $minutesText. ";
+//     texts.add(TextSpan(text: part1,),);
+//     texts.add(TextSpan(text: part2, style: TextStyle(fontWeight: FontWeight.bold)),);
+//     texts.add(TextSpan(text: part3,),);
+//     texts.add(TextSpan(text: part4, style: TextStyle(fontWeight: FontWeight.bold)),);
 
-  } else if (puzzleObject["gameType"]=="sprint") {
-    objectiveString = "\nReach ${puzzleObject["target"]} as quickly as possible. ";
-    String part1 = "\nReach ";
-    String part2 = "${puzzleObject["target"]} points ";
-    String part3 = "as ";
-    String part4 = "quickly ";
-    String part5 = "as possible. ";
+//   } else if (puzzleObject["gameType"]=="sprint") {
+//     objectiveString = "\nReach ${puzzleObject["target"]} as quickly as possible. ";
+//     String part1 = "\nReach ";
+//     String part2 = "${puzzleObject["target"]} points ";
+//     String part3 = "as ";
+//     String part4 = "quickly ";
+//     String part5 = "as possible. ";
 
-    texts.add(TextSpan(text: part1,),);
-    texts.add(TextSpan(text: part2, style: TextStyle(fontWeight: FontWeight.bold)),);
-    texts.add(TextSpan(text: part3,),);
-    texts.add(TextSpan(text: part4, style: TextStyle(fontWeight: FontWeight.bold)),);
-    texts.add(TextSpan(text: part5,),);
-  }
+//     texts.add(TextSpan(text: part1,),);
+//     texts.add(TextSpan(text: part2, style: TextStyle(fontWeight: FontWeight.bold)),);
+//     texts.add(TextSpan(text: part3,),);
+//     texts.add(TextSpan(text: part4, style: TextStyle(fontWeight: FontWeight.bold)),);
+//     texts.add(TextSpan(text: part5,),);
+//   }
 
 
-  if (puzzleObject["timeToPlace"] != null) {
-    String bewareString1 = "You only have ";
-    String bewareString2 = "${puzzleObject["timeToPlace"]} seconds ";
-    String bewareString3 = "to make a move... ";
-    texts.add(TextSpan(text: "\nBeware! ", style: TextStyle(fontWeight: FontWeight.bold)),);
-    texts.add(TextSpan(text: bewareString1),);
-    texts.add(TextSpan(text: bewareString2, style: TextStyle(fontWeight: FontWeight.bold)),);
-    texts.add(TextSpan(text: bewareString3),);
-  }
+//   if (puzzleObject["timeToPlace"] != null) {
+//     String bewareString1 = "You only have ";
+//     String bewareString2 = "${puzzleObject["timeToPlace"]} seconds ";
+//     String bewareString3 = "to make a move... ";
+//     texts.add(TextSpan(text: "\nBeware! ", style: TextStyle(fontWeight: FontWeight.bold)),);
+//     texts.add(TextSpan(text: bewareString1),);
+//     texts.add(TextSpan(text: bewareString2, style: TextStyle(fontWeight: FontWeight.bold)),);
+//     texts.add(TextSpan(text: bewareString3),);
+//   }
 
-  var text = RichText(
-    text: TextSpan(
-      children: texts,
-      style: TextStyle(
-        fontSize: 18.0,
-        color: palette.widgetText1
-      )
-    )
-  );
-  return text;
-}
+//   var text = RichText(
+//     text: TextSpan(
+//       children: texts,
+//       style: TextStyle(
+//         fontSize: 18.0,
+//         color: palette.widgetText1
+//       )
+//     )
+//   );
+//   return text;
+// }
 
 List<Map<String,dynamic>> dailyPuzzles = [
 {'uid': '6d7487203a104d5eadb656e3d6392abf', 'date': '2025-01-01T00:00:00.000Z', 'gameType': 'sprint', 'target': 1100, 'targetType': null, 'timeToPlace': null, 'minWordLength': 3, 'rows': 6, 'columns': 6, 'duration': null, 'difficulty': 2.0, 'xp': 5, 'coins': 600},

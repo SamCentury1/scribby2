@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/drawer/instructions_view.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/drawer/main_view.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/drawer/settings_view.dart';
@@ -33,12 +34,13 @@ class _GameScreenDrawerState extends State<GameScreenDrawer> {
     return res;
   }
 
-
+  late ColorPalette palette;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    palette = Provider.of<ColorPalette>(context, listen: false);
   }
 
   @override
@@ -52,11 +54,11 @@ class _GameScreenDrawerState extends State<GameScreenDrawer> {
     // print(currentView);
     return Consumer<GamePlayState>(
       builder: (context, gamePlayState, child) {
-
+        
         double left = currentView != null ? -MediaQuery.of(context).size.width * 0.8 : 0;
 
         return Drawer(
-          backgroundColor: const Color.fromARGB(255, 61, 61, 61),
+          backgroundColor: palette.drawerBg, // const Color.fromARGB(255, 61, 61, 61),
           width: MediaQuery.of(context).size.width * 0.8,
           child: Stack(
             children: [

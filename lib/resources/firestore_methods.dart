@@ -135,6 +135,7 @@ class FirestoreMethods {
       "parameters" : {
         "soundOn": true,
         "theme": 'default',
+        'tutorialComplete':false,
       },
       "gameHistory": [],
       "language": "en",
@@ -192,6 +193,8 @@ class FirestoreMethods {
     }
 
   }
+
+  
 
   
 

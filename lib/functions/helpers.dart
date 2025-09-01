@@ -9,6 +9,7 @@ import 'package:scribby_flutter_v2/components/bonus_icons.dart';
 import 'package:scribby_flutter_v2/functions/animations.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/tile_painters.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
@@ -48,7 +49,15 @@ class Helpers {
       }
     }
     return element;    
-  }  
+  }
+
+  Map<String,dynamic> getTileElement(GamePlayState gamePlayState, int key) {
+    Map<String,dynamic> elem = gamePlayState.tileData.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
+    if (elem.isEmpty) {
+      elem = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
+    }
+    return elem;
+  }
 
   Map<String,dynamic> detectPerkSelection(GamePlayState gamePlayState, Offset? location) {
     Map<String,dynamic> element = {};
@@ -322,36 +331,72 @@ class Helpers {
         if (targetTile.isNotEmpty) {
 
           if (moveType == "drag") {
-
             res = false;
+          } else if (moveType=="perk") {
+            res = true;
+            Map<String,dynamic> perkObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]==targetOption,orElse: ()=>{});
+            if (perkObject.isNotEmpty) {
 
+              if (targetTile["path"].contains(details.localPosition)) {
+                if (!perkObject["open"]) {
+                  print("do not execute: ${perkObject} ");
+                  res = true;
+                } else if (perkObject["open"]) {
+                  print("execute");
+                  res = false;
+                }
+              }   
+
+
+              if (perkObject["path"].contains(details.localPosition)) {
+                print("ya hit meh!");
+                res = false;
+              }
+
+              
+              
+
+            }
+
+            // print("kaka butt at $targetOption |  $perkObject | location => ${details.localPosition} ");
+            
           } else {
 
             if (targetTile["type"]=="board") {
-              if (targetTile["menuOpen"]) {
+
+              // if (step["perk"]!=null) {
+              //   Map<String,dynamic> isPerkSelectionDetected =  Helpers().detectPerkSelection(gamePlayState, details.localPosition);
+              //   if (isPerkSelectionDetected.isNotEmpty) {
+              //     Path perkPath = isPerkSelectionDetected["path"];
+              //     if (perkPath.contains(details.localPosition)) {
+              //       res = false;
+              //     }            
+              //   }                
+              // }
+              // if (targetTile["menuOpen"]) {
 
                 
-                if (targetOption != null) {
+                // if (targetOption != null) {
 
-                  List<Map<String,dynamic>> perkMenu = targetTile["menuData"]; 
-                  // Map<String,dynamic> targetPerk = perkMenu.firstWhere((e)=>e["option"]==targetOption, orElse: ()=>{});
-                  Map<String,dynamic> selectedPerk = perkMenu.firstWhere((e)=>e["path"].contains(details.position), orElse: ()=>{});
+                //   List<Map<String,dynamic>> perkMenu = targetTile["menuData"]; 
+                //   // Map<String,dynamic> targetPerk = perkMenu.firstWhere((e)=>e["option"]==targetOption, orElse: ()=>{});
+                //   Map<String,dynamic> selectedPerk = perkMenu.firstWhere((e)=>e["path"].contains(details.position), orElse: ()=>{});
 
 
-                  if (selectedPerk.isNotEmpty) {
-                    if (selectedPerk["option"]!=targetOption) {
-                      res = true;
-                    }
-                  }
+                //   if (selectedPerk.isNotEmpty) {
+                //     if (selectedPerk["option"]!=targetOption) {
+                //       res = true;
+                //     }
+                //   }
 
-                }
+                // }
 
-              } else {
+              // } else {
                 Path targetTilePath = targetTile["path"];
                 if (!targetTilePath.contains(details.position)) {
                   res = true;
                 }
-              }
+              // }
             } else if (targetTile["type"]=="reserve") {
               Path targetTilePath = targetTile["path"];
               if (!targetTilePath.contains(details.position)) {
@@ -371,6 +416,9 @@ class Helpers {
         }
       }
     }
+
+    print(res);
+    
     return res;
   }
 
@@ -392,7 +440,19 @@ class Helpers {
     // return res;
   }
 
+  Map<String,dynamic> getTutorialStepObject(GamePlayState gamePlayState) {
+    Map<String,dynamic> step = {};
+    if (gamePlayState.isTutorial) {
+      int currentTurn = gamePlayState.tutorialData["currentTurn"];
+      List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
+      step = steps.firstWhere((e)=>e["step"]==currentTurn,orElse: ()=>{});
+    }
+    return step;    
+  }
+
   bool validateTutorialDragDropGesture(GamePlayState gamePlayState, Map<String,dynamic> pointedElement) {
+
+    
     late bool res = false;
 
     String? elementType = pointedElement.isEmpty ? null : pointedElement["type"];
@@ -432,6 +492,7 @@ class Helpers {
         }
       }
     }
+    print("in validateTutorialDragDropGesture: ${res}");
     return res;
   }
 
@@ -799,6 +860,143 @@ class Helpers {
 
     return res;
   }
+
+
+  String capitalize(String input) {
+    if (input.isEmpty) return input;
+
+    return input.split(' ').map((word) {
+      // Handle hyphenated words
+      return word.split('-').map((part) {
+        if (part.isEmpty) return part;
+        return part[0].toUpperCase() + part.substring(1).toLowerCase();
+      }).join('-');
+    }).join(' ');
+  }
+
+  RichText getGameObjectiveString(String gameType, int? durationMinutes, int? target, int? timeToPlace, ColorPalette palette) {
+    String bewareString = "";
+    String objectiveString = "";
+
+    List<TextSpan> texts = [
+      // TextSpan(
+      //   text: "Objective: ", 
+      //   style: TextStyle(
+      //     fontWeight: FontWeight.bold, 
+      //     decoration: TextDecoration.underline,decorationThickness: 2,
+      //     shadows: [
+      //       Shadow(
+      //         color:  palette.text1,
+      //         offset: Offset(0, -3),
+      //       )
+      //     ],
+      //     color: Colors.transparent, //palette.widgetText1,
+      //     decorationColor: palette.widgetText1
+
+      //   )
+      // ),
+      // TextSpan(text: objectiveString),
+    ];
+
+    if (gameType=="classic") {
+      String durationFormatted = Helpers().formatDuration(durationMinutes!*60);
+      int mins = int.parse(durationFormatted.split(":")[0]);
+      String minutesText = mins > 1 ? "${mins.toString()} minutes" : "${mins.toString()} minute"; 
+      objectiveString = "\nScore as many points as you can within $minutesText. ";
+
+      String part1 = "\nScore ";
+      String part2 = "as many points ";
+      String part3 = "as you can ";
+      String part4 = "within $minutesText. ";
+      texts.add(TextSpan(text: part1,),);
+      texts.add(TextSpan(text: part2, style: TextStyle(fontWeight: FontWeight.bold)),);
+      texts.add(TextSpan(text: part3,),);
+      texts.add(TextSpan(text: part4, style: TextStyle(fontWeight: FontWeight.bold)),);
+
+    } else if (gameType=="sprint") {
+      objectiveString = "\nReach $target as quickly as possible. ";
+      String part1 = "\nReach ";
+      String part2 = "$target points ";
+      String part3 = "as ";
+      String part4 = "quickly ";
+      String part5 = "as possible. ";
+
+      texts.add(TextSpan(text: part1,),);
+      texts.add(TextSpan(text: part2, style: TextStyle(fontWeight: FontWeight.bold)),);
+      texts.add(TextSpan(text: part3,),);
+      texts.add(TextSpan(text: part4, style: TextStyle(fontWeight: FontWeight.bold)),);
+      texts.add(TextSpan(text: part5,),);
+    }
+
+
+    if (timeToPlace != null) {
+      String bewareString1 = "You only have ";
+      String bewareString2 = "$timeToPlace seconds ";
+      String bewareString3 = "to make a move... ";
+      texts.add(TextSpan(text: "\nBeware! ", style: TextStyle(fontWeight: FontWeight.bold)),);
+      texts.add(TextSpan(text: bewareString1),);
+      texts.add(TextSpan(text: bewareString2, style: TextStyle(fontWeight: FontWeight.bold)),);
+      texts.add(TextSpan(text: bewareString3),);
+    } else {
+      String timeToPlaceString1 = "You have ";
+      String timeToPlaceString2 = "unlimited ";
+      String timeToPlaceString3 = "time to make a move";
+      texts.add(TextSpan(text: "$timeToPlaceString1 ", style: TextStyle(fontWeight: FontWeight.normal)),);
+      texts.add(TextSpan(text: timeToPlaceString2, style: TextStyle(fontWeight: FontWeight.bold)),);
+      texts.add(TextSpan(text: timeToPlaceString3, style: TextStyle(fontWeight: FontWeight.normal)),);
+
+    }
+
+    var text = RichText(
+      text: TextSpan(
+        children: texts,
+        style: TextStyle(
+          fontSize: 18.0,
+          color: palette.widgetText1
+        )
+      )
+    );
+    return text;
+  }  
+
+  // String formatGameTitle(String? puzzleId, int? durationMinutes, String gameType, int? target){
+  //   String res = "";
+  //   if (date != null) {
+  //     var localeDate = DateTime.parse(date);
+  //     String dateWeekday = DateFormat.EEEE().format(localeDate);
+  //     String dateMonth = DateFormat.MMM().format(localeDate);
+  //     String dateDay = DateFormat.d().format(localeDate);
+  //     res = "Daily Puzzle - $dateWeekday, $dateMonth. $dateDay";
+  //   } else {
+  //     if (gameType == "classic") {
+  //       res = "$durationMinutes Minute Classic";
+  //     } else if (gameType == "sprint") {
+  //       res = "$target Point Sprint";
+  //     } else if (gameType == "tutoria") {
+  //       res = "Tutorial";
+  //     }
+  //   }
+
+  //   return res;
+  // }
+  String getTitleString(Map<String,dynamic> gameParameters) {
+    String res = "";
+    String gameType = gameParameters["gameType"];
+    String formattedGameType = Helpers().formatWord(gameType);
+
+    if (gameParameters["puzzleId"] != null) {
+      res = "Daily Puzzle";
+    }
+
+    else if (gameType == "classic" || gameType == "timed-move") {
+      res = "${gameParameters["durationInMinutes"]} Minute $formattedGameType";
+    } else if (gameType == "sprint") {
+      res = "${gameParameters['target'].toString()} Point $formattedGameType";
+    } else if (gameType == "tutorial") {
+      res = "Tutorial";
+    }
+    return res;
+  }  
 
 
 }

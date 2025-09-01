@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scribby_flutter_v2/ads/ad_mob_service.dart';
 import 'package:scribby_flutter_v2/functions/animations.dart';
+import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/home_screen/home_screen.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
@@ -145,7 +147,7 @@ void loadGameOverRewardedAd(BuildContext context, GamePlayState gamePlayState, S
     _gameRewardedAd = value;
     notifyListeners();
   }
-  void loadRewardedAd() {
+  void loadRewardedAd(GamePlayState gamePlayState,ColorPalette palette) {
     RewardedAd.load(
       adUnitId: AdMobService.rewardedAdUnitId!,
       request: const AdRequest(),
@@ -157,11 +159,12 @@ void loadGameOverRewardedAd(BuildContext context, GamePlayState gamePlayState, S
           _gameRewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) {
               ad.dispose();
-              loadRewardedAd(); // Reload for future use
+              loadRewardedAd(gamePlayState,palette); // Reload for future use
+              GameLogic().closeTileMenuBuyMoreModal(gamePlayState, palette, 0);
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               ad.dispose();
-              loadRewardedAd();
+              loadRewardedAd(gamePlayState,palette);
             },
           );
           notifyListeners();

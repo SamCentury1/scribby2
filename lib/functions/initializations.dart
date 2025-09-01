@@ -50,7 +50,7 @@ class Initializations {
     }
 
     if (settings.alphabet.value.isEmpty) {
-      print("just added the english alphabet");
+      // print("just added the english alphabet");
       await StorageMethods().saveAlphabetToSettings(settings,"english");
     }
 
