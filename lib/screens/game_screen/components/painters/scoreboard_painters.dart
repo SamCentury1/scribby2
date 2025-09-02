@@ -254,7 +254,7 @@ class ScoreboardPainters {
     // Offset scoreboardCenter = gamePlayState.elementPositions["scoreboardCenter"];
 
 
-    final double scoreboardHighlightProgress = getAcceleratedProgress(progress,1.0);
+    final double scoreboardHighlightProgress = AnimationUtils().getAcceleratedProgress(progress,1.0);
 
     Color colorRes = Colors.transparent;
     Color yellow = palette.scoreboardAnimationBorder1; // const Color.fromARGB(255, 240, 227, 118);
@@ -428,8 +428,8 @@ class ScoreboardPainters {
 
     // double opacityProgress = getPlusNPointsOpacity(progress);
 
-    double adjustedProgress = getAdjustedProgress(index,countAnimations,progress,animationDuration);
-    Color textColor = getPlusNPointsColor(adjustedProgress, palette);
+    double adjustedProgress = AnimationUtils().getAdjustedProgress(index,countAnimations,progress,animationDuration);
+    Color textColor = AnimationUtils().getPlusNPointsColor(adjustedProgress, palette);
 
     TextStyle textStyle = TextStyle(
       color: textColor, //Color.fromRGBO(255, 255, 255, opacityProgress),
@@ -567,67 +567,67 @@ Canvas drawPointsIcon(Canvas canvas, Size size, Offset position) {
       return canvas;
   }  
 
-  double getPlusNPointsOpacity(double progress) {
-    double res = progress * 2;
-    if (progress >= 0.5 ) {
-      res = (1-progress) * 2;
-    }
-    return res;
-  }
+  // double getPlusNPointsOpacity(double progress) {
+  //   double res = progress * 2;
+  //   if (progress >= 0.5 ) {
+  //     res = (1-progress) * 2;
+  //   }
+  //   return res;
+  // }
 
-  double getAcceleratedProgress(double progress, double accelerator,) {
-    double res = progress*accelerator;
-    double limit = 1.0/accelerator;
+  // double getAcceleratedProgress(double progress, double accelerator,) {
+  //   double res = progress*accelerator;
+  //   double limit = 1.0/accelerator;
 
-    if (progress < limit) {
-      res = progress*accelerator;
-    } else {
-      res = 0.0;
-    }
-    return res;
-  }
+  //   if (progress < limit) {
+  //     res = progress*accelerator;
+  //   } else {
+  //     res = 0.0;
+  //   }
+  //   return res;
+  // }
 
-  Color getPlusNPointsColor(double progress, ColorPalette palette) {
-    Color res = Colors.transparent;
-    Color baseColor = palette.text1; // Colors.white;
-    Color yellow = palette.scoreboardAnimationBorder1; //const Color.fromARGB(255, 240, 227, 118);
-    Color red = palette.scoreboardAnimationBorder2; //const Color.fromARGB(255, 253, 154, 147);
+  // Color getPlusNPointsColor(double progress, ColorPalette palette) {
+  //   Color res = Colors.transparent;
+  //   Color baseColor = palette.text1; // Colors.white;
+  //   Color yellow = palette.scoreboardAnimationBorder1; //const Color.fromARGB(255, 240, 227, 118);
+  //   Color red = palette.scoreboardAnimationBorder2; //const Color.fromARGB(255, 253, 154, 147);
 
-    List<Map<String,dynamic>> data = [
-      {"source": Colors.transparent, "target": baseColor, "duration": 0.15},
-      {"source": baseColor, "target": yellow, "duration": 0.15},
-      {"source": yellow, "target": red, "duration": 0.2},
-      {"source": red, "target": yellow, "duration": 0.2},
-      {"source": yellow, "target": baseColor, "duration": 0.15},
-      {"source": baseColor, "target": Colors.transparent, "duration": 0.15},
-    ];
+  //   List<Map<String,dynamic>> data = [
+  //     {"source": Colors.transparent, "target": baseColor, "duration": 0.15},
+  //     {"source": baseColor, "target": yellow, "duration": 0.15},
+  //     {"source": yellow, "target": red, "duration": 0.2},
+  //     {"source": red, "target": yellow, "duration": 0.2},
+  //     {"source": yellow, "target": baseColor, "duration": 0.15},
+  //     {"source": baseColor, "target": Colors.transparent, "duration": 0.15},
+  //   ];
 
-    res = StylingUtils().getColorLerp(data,progress);
-    return res;
-  }
-
-
-  double getAdjustedProgress(int index, int countAnimations, double progress, int durationMs) {
-    double res = 0.0;
-    double animDuration = durationMs/countAnimations; //double.parse((durationMs/countAnimations).toStringAsFixed(2));
-    double durationAdjustment = (animDuration + (countAnimations-1) * (animDuration/2))/durationMs;
-    double adjustedTotalDuration = durationMs * durationAdjustment; //double.parse((durationMs * durationAdjustment).toStringAsFixed(2));
-    double adjustedAllocation = animDuration/adjustedTotalDuration; //double.parse((animDuration/adjustedTotalDuration).toStringAsFixed(2));
-    // double startRatio = ((index * animDuration)/adjustedTotalDuration);
-    // double startAllocation = (startRatio) - ( startRatio*adjustedAllocation );
-    double startAllocation = index * (adjustedAllocation/2);
-    double endAllocation = startAllocation + adjustedAllocation;
+  //   res = StylingUtils().getColorLerp(data,progress);
+  //   return res;
+  // }
 
 
+  // double getAdjustedProgress(int index, int countAnimations, double progress, int durationMs) {
+  //   double res = 0.0;
+  //   double animDuration = durationMs/countAnimations; //double.parse((durationMs/countAnimations).toStringAsFixed(2));
+  //   double durationAdjustment = (animDuration + (countAnimations-1) * (animDuration/2))/durationMs;
+  //   double adjustedTotalDuration = durationMs * durationAdjustment; //double.parse((durationMs * durationAdjustment).toStringAsFixed(2));
+  //   double adjustedAllocation = animDuration/adjustedTotalDuration; //double.parse((animDuration/adjustedTotalDuration).toStringAsFixed(2));
+  //   // double startRatio = ((index * animDuration)/adjustedTotalDuration);
+  //   // double startAllocation = (startRatio) - ( startRatio*adjustedAllocation );
+  //   double startAllocation = index * (adjustedAllocation/2);
+  //   double endAllocation = startAllocation + adjustedAllocation;
 
-    if (progress >= startAllocation && progress < endAllocation) {
-      res = double.parse(((progress-startAllocation)/adjustedAllocation).toStringAsFixed(2));
-    } else if (progress >= endAllocation) {
-      res = 1.0;
-    }    
 
-    return res;
-  }
+
+  //   if (progress >= startAllocation && progress < endAllocation) {
+  //     res = double.parse(((progress-startAllocation)/adjustedAllocation).toStringAsFixed(2));
+  //   } else if (progress >= endAllocation) {
+  //     res = 1.0;
+  //   }    
+
+  //   return res;
+  // }
 
 
 

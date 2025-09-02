@@ -709,12 +709,7 @@ class Animations extends ChangeNotifier {
     int interval = animationDurationData["interval"];
     Random random = Random();
     double tileWidth = gamePlayState.elementSizes["tileSize"].width;
-
-
     int count = 0;
-
-
-
     late Map<String,dynamic> lastTurn =  gamePlayState.scoreSummary.firstWhere((e)=>e["turn"]==turn,orElse: ()=>{});
 
 
@@ -741,26 +736,9 @@ class Animations extends ChangeNotifier {
       Map<String,dynamic> stringData = lastTurn["validStrings"][i];
       String key = stringData["key"];
       int points = stringData["score"];
-
-
       double randomXOffset = (random.nextDouble() * (tileWidth) * -1);
       Map<String,dynamic> scoreObject = {"key":key, "body": points, "xOffset":randomXOffset};
       scoreObjects.add(scoreObject);
-
-
-      // Future.delayed(Duration(milliseconds: (stops*interval*i*0.5).round()), () {
-      //   if (existingAnimationObject.isNotEmpty) {
-      //     final double progress = existingAnimationObject["progress"];
-      //     count = (progress*target).round();
-      //     actualAnimation = existingAnimationObject;
-      //     randomXOffset = existingAnimationObject["animation"]["xOffset"];
-      //   }  else {
-      //     actualAnimation = {"key": key, "type":animationType, "turn": turn, "progress":0.0, "body":points, "animation": {"xOffset":randomXOffset} };
-      //     gamePlayState.animationData.add(actualAnimation);
-      //   }        
-      //   timerLogic(gamePlayState,actualAnimation,count,target,interval);
-      // });
-
 
     }
     if (existingAnimationObject.isNotEmpty) {
@@ -771,15 +749,6 @@ class Animations extends ChangeNotifier {
       actualAnimation = {"key": animationKey, "type":animationType, "turn": turn, "progress":0.0, "animation": scoreObjects };
       gamePlayState.animationData.add(actualAnimation);
     }
-    // int duration = (stops*interval*lastTurn["validStrings"].length*0.5).round() as int;
-
-    // int durationMs = count*stops*lastTurn["validStrings"].length as int;
-    // double animDuration = double.parse((durationMs/lastTurn["validStrings"].length).toStringAsFixed(2));
-    // double durationAdjustment = (animDuration + (lastTurn["validStrings"].length-1) * (animDuration/2))/durationMs;
-    // double adjustedTotalDuration = double.parse((durationMs * durationAdjustment).toStringAsFixed(2));
-    // double adjustedTarget = adjustedTotalDuration/interval;
-    // print("adjustedTarget : ${adjustedTarget.round()}");
-    //stops*lastTurn["validStrings"].length as int
     timerLogic(gamePlayState,actualAnimation,count,target, interval );
 
   }
@@ -950,7 +919,33 @@ class Animations extends ChangeNotifier {
     //   }
     // });
             
-  }  
+  }
+
+  // void startAddPerksAnimation2(GamePlayState gamePlayState, int key) {
+  //   print("launching startAddPerksAnimation2 animation");
+  //   const String animationType = "add-perks";
+  //   Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
+
+  //   int target = animationDurationData["stops"];
+  //   int count = 0;
+
+  //   late Map<String,dynamic> actualAnimation = {}; 
+  //   Map<String,dynamic> existingAnimationObject = gamePlayState.animationData.firstWhere((e)=>e["type"]==animationType,orElse:()=>{});
+
+  //   if (existingAnimationObject.isNotEmpty) {
+  //     // int existingAnimationIndex = gamePlayState.animationData.indexOf(existingAnimationObject);
+  //     // gamePlayState.animationData.removeAt(existingAnimationIndex);
+  //     final double progress = existingAnimationObject["progress"];
+  //     count = (progress*target).round();
+  //     actualAnimation = existingAnimationObject;      
+  //   }  else {
+
+  //     actualAnimation = {"key": key, "type":animationType, "progress":0.0, "animation": {} };
+  //     gamePlayState.animationData.add(actualAnimation);
+  //   }
+  //   timerLogic(gamePlayState,actualAnimation,count,target,animationDurationData["interval"]);
+  // }  
+
 
   void startLevelUpAnimation(GamePlayState gamePlayState,) {
     const String animationType = "level-up";
@@ -1357,71 +1352,63 @@ class Animations extends ChangeNotifier {
     
     for (int i=0; i<affectedIds.length; i++) {
 
-      print("affected id: ${affectedIds[i]}");
-      int key = affectedIds[i]["id"];
-      String body = affectedIds[i]["body"];
-      if (turnData["score"]>0 && targetTile["key"]==key) {
-        body = "";
-      }
-
-      bool isFocusTile = false;
-      // if (turnData["moveData"]["type"]=="freeze") {
-      //   if (turnData["moveData"]["data"]["target"]["key"]==key) {
-      //     isFocusTile = true;
-      //   }
-      // }
-      if (focusIds.contains(key)) {
-        isFocusTile = true;
-      }
-
-      List<Map<String,dynamic>> otherAnimations = animationData.where((e)=>e["key"]==key&&e["type"]!=animationType).toList();
-      for (int j=0;j<otherAnimations.length;j++) {
-        Map<String,dynamic> otherAnimation = otherAnimations[j];
-        final int otherAnimationIndex = animationData.indexOf(otherAnimation);
-        animationData.removeAt(otherAnimationIndex);        
-      }
-
-
-      Map<String,dynamic> existingAnimationObject = animationData.firstWhere( (e)=>
-        e["key"]==key&&
-        [animationType,"undo"].contains(e["type"]),
-        orElse: ()=>{}
-      );
-      
-      late Map<String,dynamic> animationObject = {};
-
-      late int count = 0;
-
-      if (existingAnimationObject.isNotEmpty) {
-        final double progress = existingAnimationObject["progress"];
-        count = (progress*target).round();
-        animationObject = existingAnimationObject;
-
-      } else {
-        List<Map<String,dynamic>> allTiles = gamePlayState.tileData+gamePlayState.reserveTileData;
-        late Map<String,dynamic> tileObject = allTiles.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
-
-        // Map<String,dynamic> animationParametersObject = animationParameters.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
-        animationObject = {
-          "key": key, 
-          "progress": 0.0, 
-          "type": "undo",
-          "turn": turn,
-          "body": body, 
-          "parameters": {
-            "moveType": turnData["moveData"]["type"], 
-            "destination":destination, 
-            "didScore":didScore,
-            "isFocusTile":isFocusTile,
-            "randomLetter3":randomLetter3
-          }
-        };
-
-        if (tileObject.isNotEmpty) {
-          animationData.add(animationObject);
+      if (affectedIds[i]["id"] != null && affectedIds[i]["body"] != null) {
+        int key = affectedIds[i]["id"];
+        String body = affectedIds[i]["body"];
+        if (turnData["score"]>0 && targetTile["key"]==key) {
+          body = "";
         }
+        bool isFocusTile = false;
+        if (focusIds.contains(key)) {
+          isFocusTile = true;
+        }
+        List<Map<String,dynamic>> otherAnimations = animationData.where((e)=>e["key"]==key&&e["type"]!=animationType).toList();
+        for (int j=0;j<otherAnimations.length;j++) {
+          Map<String,dynamic> otherAnimation = otherAnimations[j];
+          final int otherAnimationIndex = animationData.indexOf(otherAnimation);
+          animationData.removeAt(otherAnimationIndex);        
+        }
+        Map<String,dynamic> existingAnimationObject = animationData.firstWhere( (e)=>
+          e["key"]==key&&
+          [animationType,"undo"].contains(e["type"]),
+          orElse: ()=>{}
+        );
+        
+        late Map<String,dynamic> animationObject = {};
+
+        late int count = 0;
+
+        if (existingAnimationObject.isNotEmpty) {
+          final double progress = existingAnimationObject["progress"];
+          count = (progress*target).round();
+          animationObject = existingAnimationObject;
+
+        } else {
+          List<Map<String,dynamic>> allTiles = gamePlayState.tileData+gamePlayState.reserveTileData;
+          late Map<String,dynamic> tileObject = allTiles.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
+
+          // Map<String,dynamic> animationParametersObject = animationParameters.firstWhere((e)=>e["key"]==key,orElse: ()=>{});
+          animationObject = {
+            "key": key, 
+            "progress": 0.0, 
+            "type": "undo",
+            "turn": turn,
+            "body": body, 
+            "parameters": {
+              "moveType": turnData["moveData"]["type"], 
+              "destination":destination, 
+              "didScore":didScore,
+              "isFocusTile":isFocusTile,
+              "randomLetter3":randomLetter3
+            }
+          };
+
+          if (tileObject.isNotEmpty) {
+            animationData.add(animationObject);
+          }
+        }
+        timerLogic(gamePlayState, animationObject, count, target, animationDurationData["interval"]);
       }
-      timerLogic(gamePlayState, animationObject, count, target, animationDurationData["interval"]);
     }
     // late Map<String,dynamic> actualAnimation = {}; 
     // Map<String,dynamic> existingAnimationObject = gamePlayState.animationData.firstWhere( (e) => 
@@ -1444,96 +1431,127 @@ class Animations extends ChangeNotifier {
 
 
 
-  void startAddPerksAnimation(GamePlayState gamePlayState,String key, Map<String,dynamic> itemData) {
+  void startAddPerksAnimation(GamePlayState gamePlayState, String key, Map<String,dynamic> itemData) {
 
-    const String animationType = "add-perks";
-    late int previousScore = 0;
-    late int runningScore = previousScore;
+    try {
+      const String animationType = "add-perks";
+      Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
+      // late int previousScore = 0;
+      // late int runningScore = previousScore;
+
+      print("""
+    PERK ANIMATION":
+    key: $key |
+    ${itemData}
+  """);
+
+      final int numbersToIncrement = itemData["reward"] as int;
+      // int increment = 1;
+      int interval = animationDurationData["interval"];
+      // int target = (interval/15).round()*numbersToIncrement;
+      int target = animationDurationData["interval"]*animationDurationData["stops"];
+      // int duration = numbersToIncrement*interval;
+      int count = 0;
+      // previousScore = 0;
+
+      // newScore = previousScore + lastTurn["score"] as int;
 
 
-    // late Map<String,dynamic> lastTurn =  gamePlayState.scoreSummary.firstWhere((e)=>e["turn"]==turn,orElse: ()=>{});
-    final int numbersToIncrement = itemData["reward"] as int;
+      late List<Map<String,dynamic>> addPerksAnimations = gamePlayState.animationData.where((e)=>e["type"]==animationType).toList();
 
-    // Map<String,dynamic> animationProperties = Helpers().getScoreCountAnimationDuration(numbersToIncrement);
-    int increment = 1;
-    int interval = 500;
-    int target = (interval/15).round()*numbersToIncrement;
-    int duration = numbersToIncrement*interval;
+      late Map<String,dynamic> actualAnimation = {};
 
-    previousScore = 0;
+      late String animationKey = "add-${key}";
+      Map<String,dynamic> existingAnimationObject = addPerksAnimations.firstWhere((e)=>e["key"]==animationKey,orElse:()=>{});
+      List<Map<String,dynamic>> plusOneObjects = [];
 
-    // newScore = previousScore + lastTurn["score"] as int;
+      Random random = Random();
+      double tileSize = gamePlayState.elementSizes["tileSize"].width;
+      for (int i=0; i<numbersToIncrement; i++) {
+        double randomXOffset = (random.nextDouble() * (tileSize) * -1);
+        Map<String,dynamic> plusOneObject = {"key":key, "body": 1, "xOffset":randomXOffset};
+        plusOneObjects.add(plusOneObject);
 
-
-
-    int count = 0;
-
-    late Map<String,dynamic> actualAnimation = {}; 
-    Map<String,dynamic> existingAnimationObject = gamePlayState.animationData.firstWhere(
-      (e)=>e["type"]==animationType && e["key"]==key,
-      orElse:()=>{}
-    );
-
-    List<Map<String,dynamic>> otherCountAnimations = gamePlayState.animationData.where((e)=>e["type"]==animationType).toList();
-
-    for (int i=0; i<otherCountAnimations.length;i++) {
-      if (otherCountAnimations[i]["key"]!=key) {
-        // remove anim
-        int animationIndex = gamePlayState.animationData.indexOf(otherCountAnimations[i]);
-        gamePlayState.animationData.removeAt(animationIndex);
       }
-    }
+      if (existingAnimationObject.isNotEmpty) {
+        final double progress = existingAnimationObject["progress"];
+        count = (progress*target).round();
+        actualAnimation = existingAnimationObject;
+      }  else {
+        actualAnimation = {"key": animationKey, "type":animationType, "perk": key, "progress":0.0, "animation": plusOneObjects };
+        gamePlayState.animationData.add(actualAnimation);
+      }
+
+      print("PLUS ONE OBJECTS: $plusOneObjects");
+
+
+      timerLogic(gamePlayState,actualAnimation,count,target, interval );
+
+    } catch (e,s) {
+      debugPrint("error in **executeUndoSwapAnimation** | ${e.toString()} | $s");
+    } 
+
+
+    // List<Map<String,dynamic>> otherCountAnimations = gamePlayState.animationData.where((e)=>e["type"]==animationType).toList();
+
+    // for (int i=0; i<otherCountAnimations.length;i++) {
+    //   if (otherCountAnimations[i]["key"]!=key) {
+    //     // remove anim
+    //     int animationIndex = gamePlayState.animationData.indexOf(otherCountAnimations[i]);
+    //     gamePlayState.animationData.removeAt(animationIndex);
+    //   }
+    // }
   
-    if (existingAnimationObject.isNotEmpty) {
-      final double progress = existingAnimationObject["progress"];
-      count = (progress*target).round();
-      runningScore = previousScore + (numbersToIncrement * progress).round();
-      actualAnimation = existingAnimationObject;   
-    }  else {
-      // List<double> oscillatingColorData = Helpers().generateWave(numPoints: target, amplitude: 0.5, frequency: 2.0, phaseShift: 0.0);
-      // print(oscillatingColorData);
+    // if (existingAnimationObject.isNotEmpty) {
+    //   final double progress = existingAnimationObject["progress"];
+    //   count = (progress*target).round();
+    //   runningScore = previousScore + (numbersToIncrement * progress).round();
+    //   actualAnimation = existingAnimationObject;   
+    // }  else {
+    //   // List<double> oscillatingColorData = Helpers().generateWave(numPoints: target, amplitude: 0.5, frequency: 2.0, phaseShift: 0.0);
+    //   // print(oscillatingColorData);
 
-      actualAnimation = {
-        "key": key, 
-        "type":animationType, 
-        "progress":0.0, 
-        "animation": {"data":itemData,"body":runningScore,"duration":duration}
-      };
-      gamePlayState.animationData.add(actualAnimation);
-    }
+    //   actualAnimation = {
+    //     "key": key, 
+    //     "type":animationType, 
+    //     "progress":0.0, 
+    //     "animation": {"data":itemData,"body":runningScore,"duration":duration}
+    //   };
+    //   gamePlayState.animationData.add(actualAnimation);
+    // }
 
-    Timer.periodic(Duration(milliseconds: 15), (Timer timer) {
-      if (gamePlayState.isGamePaused) {
-        timer.cancel();      
-      } else {
-        // if (count == target) {
-        if (runningScore == numbersToIncrement) {
-          timer.cancel();
-          final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
-          if (animationObjectIndex>=0) {
-            try {
-              gamePlayState.animationData.removeAt(animationObjectIndex);
-            } catch (e) {
-              print("error caught in startAddPerksAnimation() => $e");
-            }
-          }
-        } else {
-          final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
-          if (animationObjectIndex<0) {
-            timer.cancel();
-          } else {
-            count++;
-            if (count % (500/15).round()*numbersToIncrement == 0) {
-              runningScore = runningScore + increment;
-            }
-            final double progress = double.parse((count/target).toStringAsFixed(2));
-            gamePlayState.animationData[animationObjectIndex].update("progress", (v) => progress);
-            gamePlayState.animationData[animationObjectIndex]["animation"].update("body", (v) => runningScore);
-          }
-        }
-        gamePlayState.setAnimationData(gamePlayState.animationData);
-      }
-    });
+    // Timer.periodic(Duration(milliseconds: 15), (Timer timer) {
+    //   if (gamePlayState.isGamePaused) {
+    //     timer.cancel();      
+    //   } else {
+    //     // if (count == target) {
+    //     if (runningScore == numbersToIncrement) {
+    //       timer.cancel();
+    //       final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
+    //       if (animationObjectIndex>=0) {
+    //         try {
+    //           gamePlayState.animationData.removeAt(animationObjectIndex);
+    //         } catch (e) {
+    //           print("error caught in startAddPerksAnimation() => $e");
+    //         }
+    //       }
+    //     } else {
+    //       final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
+    //       if (animationObjectIndex<0) {
+    //         timer.cancel();
+    //       } else {
+    //         count++;
+    //         if (count % (500/15).round()*numbersToIncrement == 0) {
+    //           runningScore = runningScore + increment;
+    //         }
+    //         final double progress = double.parse((count/target).toStringAsFixed(2));
+    //         gamePlayState.animationData[animationObjectIndex].update("progress", (v) => progress);
+    //         gamePlayState.animationData[animationObjectIndex]["animation"].update("body", (v) => runningScore);
+    //       }
+    //     }
+    //     gamePlayState.setAnimationData(gamePlayState.animationData);
+    //   }
+    // });
 
   }
 

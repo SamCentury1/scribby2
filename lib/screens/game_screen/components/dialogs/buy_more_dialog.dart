@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/animations.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
@@ -70,21 +71,57 @@ class _BuyMoreModalState extends State<BuyMoreModal> {
               Widget option1Image = Icon(Icons.play_arrow_rounded, size: 30*gamePlayState.scalor,);
               Widget option2Image = Image(width: 30*gamePlayState.scalor, height: 30*gamePlayState.scalor, image: AssetImage("assets/images/coin_image.png"),);
 
+              // void option1Callback() {
+              //   adState.gameRewardedAd?.show(
+              //     onUserEarnedReward: (ad, reward) {
+              //       GameLogic().closeTileMenuBuyMoreModal(gamePlayState,palette,0);
+              //       GameLogic().executePauseDialogPopScope(gamePlayState,palette);
+              //       if (optionData.isNotEmpty) {
+              //         Animations().startAddPerksAnimation(gamePlayState,perk,optionData);                                  
+              //       }
+              //     },
+              //   );
+              //   // adState.gameRewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+              //   //   onAdDismissedFullScreenContent: (ad) {
+              //   //     ad.dispose();
+              //   //     GameLogic().executePauseDialogPopScope(gamePlayState,palette);
+              //   //     if (optionData.isNotEmpty) {
+              //   //       Animations().startAddPerksAnimation(gamePlayState,perk,optionData);                                  
+              //   //     }
+              //   //   },
+              //   //   onAdFailedToShowFullScreenContent: (ad, error) {
+              //   //     ad.dispose();
+              //   //   },                  
+              //   // ) ;             
+              //   setState(() {
+              //     adState.setGameRewardedAd(null);
+              //     adState.setIsGameRewardedAdLoaded(false);
+              //   });       
+              // }
               void option1Callback() {
-                adState.gameRewardedAd?.show(
-                  onUserEarnedReward: (ad, reward) {
-                    // GameLogic().closeTileMenuBuyMoreModal(gamePlayState,palette,0);
-                    GameLogic().executePauseDialogPopScope(gamePlayState,palette);
-                    if (optionData.isNotEmpty) {
-                      Animations().startAddPerksAnimation(gamePlayState,perk,optionData);                                  
-                    }
-                  },
-                  // onAdDismissedFullScreenContent
-                );                
-                setState(() {
-                  adState.setGameRewardedAd(null);
-                  adState.setIsGameRewardedAdLoaded(false);
-                });       
+                final adState = Provider.of<AdState>(context, listen: false);
+
+                if (adState.isgameRewardedAdLoaded && adState.gameRewardedAd != null) {
+                  adState.showRewardedAd(
+                    gamePlayState: gamePlayState,
+                    palette: palette,
+                    onRewardEarned: () {
+                      if (optionData.isNotEmpty) {
+                        // GameLogic().closeTileMenuBuyMoreModal(gamePlayState, palette, 0);
+                      }
+                    },
+                    onAdClosed: () {
+                      Map<String,dynamic> optionData = tileMenuBuyMoreModalData["options"].firstWhere((e)=>e["key"]==0,orElse:()=><String,dynamic>{});
+                      GameLogic().closeTileMenuBuyMoreModal(gamePlayState, palette, 0);
+                      GameLogic().executePauseDialogPopScope(gamePlayState, palette);
+                      Animations().startAddPerksAnimation(gamePlayState, perk, optionData);
+                    },
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Ad is not ready yet, please try again.")),
+                  );
+                }
               }
 
               void option2Callback() {

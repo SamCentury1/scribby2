@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/tile_painters.dart';
@@ -11,6 +12,7 @@ class PerksBarPainters {
   Canvas drawPerksArea(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     drawPerksBarBackground(canvas, gamePlayState, palette);
     drawPerksIcons(canvas,gamePlayState,palette);
+    drawAddPerkAnimation(canvas,gamePlayState,palette);
     return canvas;
   }
 
@@ -97,6 +99,77 @@ class PerksBarPainters {
     }
     return canvas;
   }
+
+
+  Canvas drawAddPerkAnimation(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
+
+    // List<Map<String,dynamic>> scorePointsAnimations = gamePlayState.animationData.where((e)=>e["type"]=="score-points").toList();
+    Map<String,dynamic> scorePointsAnimation = gamePlayState.animationData.firstWhere((e)=>e["type"]=="add-perks",orElse: ()=>{});
+    if (scorePointsAnimation.isNotEmpty) {
+      String perkType = scorePointsAnimation["perk"];
+      Map<String,dynamic> perkObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]==perkType,orElse: ()=>{});
+      Offset perkCenter = perkObject["center"];
+
+      List<Map<String,dynamic>> scoreObjects = scorePointsAnimation["animation"];
+      double progress = scorePointsAnimation["progress"];
+
+      for (int i=0; i<scoreObjects.length; i++) {
+        Map<String,dynamic> animationObject = scoreObjects[i];
+        
+        int points = animationObject["body"];
+        double xOffset = animationObject["xOffset"];
+        String body = "+$points";
+
+        drawPlusOnePerkAnimation(canvas,palette, gamePlayState,perkCenter,body,progress,xOffset, i, scoreObjects.length);
+      }
+    }
+    return canvas;
+  }  
+
+  Canvas drawPlusOnePerkAnimation(Canvas canvas, ColorPalette palette, GamePlayState gamePlayState, Offset center, String body, double progress, double xOffset, int index, int countAnimations) {
+
+
+    // Size scoreboardSize = gamePlayState.elementSizes["scoreboardAreaSize"];
+    // Offset scoreboardCenter = gamePlayState.elementPositions["scoreboardCenter"];
+    Map<String,dynamic> animationDurations = gamePlayState.animationLengths.firstWhere((e)=>e["type"]=="add-perks",orElse: ()=>{});
+    int animationDuration = (animationDurations["stops"]*animationDurations["interval"]*countAnimations);
+
+    // double opacityProgress = getPlusNPointsOpacity(progress);
+
+    double adjustedProgress = AnimationUtils().getAdjustedProgress(index,countAnimations,progress,animationDuration);
+    // Color textColor = getPlusNPointsColor(adjustedProgress, palette);
+    Color textColor = AnimationUtils().getPlusNPerksColor(adjustedProgress, palette);
+
+    TextStyle textStyle = TextStyle(
+      color: textColor, //Color.fromRGBO(255, 255, 255, opacityProgress),
+      fontSize: 22 * gamePlayState.scalor //tileSize.width*0.4,
+    );
+    TextSpan textSpan = TextSpan(
+      text: body.toString(),
+      style: textStyle,
+    );
+
+    final TextPainter textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.rtl,
+    );
+    textPainter.layout();
+
+    
+    double positionX = (center.dx + (40)/4) + xOffset;
+    double positionY = center.dy + 40 - (40*adjustedProgress);
+    // final Offset position = Offset(positionX, positionY);
+
+    double textPositionX = positionX - (textPainter.width/2);
+    double textPositionY = positionY - (textPainter.height/2);
+    final Offset textPosition = Offset(textPositionX, textPositionY);
+
+
+    // canvas.drawRRect(plusNPointsRRect, plusNPointsContainerPaint);
+    textPainter.paint(canvas, textPosition);  
+
+    return canvas;
+  }  
 
 
 }

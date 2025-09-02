@@ -46,7 +46,7 @@ class MainCanvasPainter extends CustomPainter {
     PerksBarPainters().drawPerksArea(canvas,gamePlayState,palette);
 
 
-    // Painters().drawBonusArea(canvas,gamePlayState,palette); // shows the animation object
+    Painters().drawBonusArea(canvas,gamePlayState,palette); // shows the animation object
 
     BonusPainters().drawBonusArea(canvas,gamePlayState);
 

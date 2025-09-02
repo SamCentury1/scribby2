@@ -147,41 +147,135 @@ void loadGameOverRewardedAd(BuildContext context, GamePlayState gamePlayState, S
     _gameRewardedAd = value;
     notifyListeners();
   }
-  void loadRewardedAd(GamePlayState gamePlayState,ColorPalette palette) {
-    RewardedAd.load(
-      adUnitId: AdMobService.rewardedAdUnitId!,
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          _gameRewardedAd = ad;
-          _isGameRewardedAdLoaded = true;
+  // void loadRewardedAd(GamePlayState gamePlayState,ColorPalette palette) {
+  //   RewardedAd.load(
+  //     adUnitId: AdMobService.rewardedAdUnitId!,
+  //     request: const AdRequest(),
+  //     rewardedAdLoadCallback: RewardedAdLoadCallback(
+  //       onAdLoaded: (ad) {
+  //         _gameRewardedAd = ad;
+  //         _isGameRewardedAdLoaded = true;
 
-          _gameRewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              ad.dispose();
-              loadRewardedAd(gamePlayState,palette); // Reload for future use
-              GameLogic().closeTileMenuBuyMoreModal(gamePlayState, palette, 0);
-            },
-            onAdFailedToShowFullScreenContent: (ad, error) {
-              ad.dispose();
-              loadRewardedAd(gamePlayState,palette);
-            },
-          );
-          notifyListeners();
+  //         _gameRewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+  //           onAdDismissedFullScreenContent: (ad) {
+  //             ad.dispose();
+  //             loadRewardedAd(gamePlayState,palette); // Reload for future use
+  //             GameLogic().closeTileMenuBuyMoreModal(gamePlayState, palette, 0);
+  //           },
+  //           onAdFailedToShowFullScreenContent: (ad, error) {
+  //             ad.dispose();
+  //             loadRewardedAd(gamePlayState,palette);
+  //           },
+  //         );
+  //         notifyListeners();
+  //       },
+        
+  //       onAdFailedToLoad: (error) {
+  //         debugPrint("Failed to load rewarded ad: $error");
+  //         _isGameRewardedAdLoaded = false;
+  //         notifyListeners();
+  //       },
+  //     ),
+      
+  //   );
+  // } 
+
+
+
+    // --- Load Rewarded Ad ---
+    void loadRewardedAd(GamePlayState gamePlayState, ColorPalette palette) {
+      RewardedAd.load(
+        adUnitId: AdMobService.rewardedAdUnitId!,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (ad) {
+            _gameRewardedAd = ad;
+            _isGameRewardedAdLoaded = true;
+
+            _gameRewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+              onAdDismissedFullScreenContent: (ad) {
+                ad.dispose();
+                _gameRewardedAd = null;
+                _isGameRewardedAdLoaded = false;
+                notifyListeners();
+
+                // Reload the next ad automatically
+                loadRewardedAd(gamePlayState, palette);
+              },
+              onAdFailedToShowFullScreenContent: (ad, error) {
+                ad.dispose();
+                _gameRewardedAd = null;
+                _isGameRewardedAdLoaded = false;
+                notifyListeners();
+
+                // Reload the next ad
+                loadRewardedAd(gamePlayState, palette);
+              },
+            );
+
+            notifyListeners();
+          },
+          onAdFailedToLoad: (error) {
+            debugPrint("Failed to load rewarded ad: $error");
+            _isGameRewardedAdLoaded = false;
+            notifyListeners();
+          },
+        ),
+      );
+    }
+
+    // --- Show Rewarded Ad ---
+    void showRewardedAd({
+      required GamePlayState gamePlayState,
+      required ColorPalette palette,
+      required VoidCallback onRewardEarned,
+      required VoidCallback onAdClosed,
+    }) {
+      final rewardedAd = _gameRewardedAd;
+
+      if (rewardedAd == null) {
+        debugPrint("No rewarded ad ready!");
+        return;
+      }
+
+      bool didEarnReward = false;
+
+      rewardedAd.show(
+        onUserEarnedReward: (ad, reward) {
+          didEarnReward = true;
+          onRewardEarned(); // grant the reward
         },
-        onAdFailedToLoad: (error) {
-          debugPrint("Failed to load rewarded ad: $error");
+      );
+
+      // The FullScreenContentCallback will fire after the ad closes
+      rewardedAd.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _gameRewardedAd = null;
           _isGameRewardedAdLoaded = false;
           notifyListeners();
+
+          // Reload next ad
+          loadRewardedAd(gamePlayState, palette);
+
+          // Always run the logic after the ad is closed
+          onAdClosed();
         },
-      ),
-      
-    );
-  } 
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _gameRewardedAd = null;
+          _isGameRewardedAdLoaded = false;
+          notifyListeners();
 
+          // Reload next ad
+          loadRewardedAd(gamePlayState, palette);
 
-
-
+          // Run close logic even if ad fails
+          onAdClosed();
+        },
+      );
+    }
+  
 
 
 

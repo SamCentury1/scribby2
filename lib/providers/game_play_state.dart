@@ -258,7 +258,7 @@ class GamePlayState extends ChangeNotifier {
     {"type": "tile-explode", "stops": 40, "interval": 15 },
     {"type": "undo", "stops": 30, "interval": 15 },    
     {"type": "stopwatch-rewind", "stops": 20, "interval": 17 },
-    {"type": "add-perks", "stops": 20, "interval": 17 },
+    {"type": "add-perks", "stops": 15, "interval": 17 },
     {"type": "tutorial-message-fade", "stops": 25, "interval": 17 },
   ];
   List<Map<String,dynamic>> get animationLengths => _animationLengths;  

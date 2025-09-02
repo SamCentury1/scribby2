@@ -1133,6 +1133,11 @@ class GameLogic extends ChangeNotifier {
         Animations().startUndoAnimation(gamePlayState, turn);
       } 
 
+      if (type =="add-perks") {
+        int turn = gamePlayState.animationData[i]["turn"];
+        // Animations().startAddPerksAnimation(gamePlayState, key, itemData)
+      }
+
 
       // if (type=="menu-charge") {
       //   String key = gamePlayState.animationData[i]["key"];
@@ -1334,13 +1339,14 @@ class GameLogic extends ChangeNotifier {
         if (dictionary.contains(word)) {
 
           int score = 0;
-          for (int k=0;k<word.length;k++) {
+          int wordLength = word.length;
+          for (int k=0; k<wordLength; k++) {
             Map<String,dynamic> letterObject = gamePlayState.alphabet.firstWhere((e)=>e["letter"]==word[k],orElse:()=>{});
             if (letterObject.isNotEmpty) {
               score = score + letterObject["value"] as int;
             }
           }
-          totalScore = totalScore + score;
+          totalScore = totalScore + (score * (wordLength-2)); ;
           String key = "${turn}_${validStrings.length}";
           validStrings.add({"key":key, "word":word,"ids":idsInString, "score":score});
         }
