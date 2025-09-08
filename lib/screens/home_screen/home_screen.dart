@@ -175,8 +175,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     
                                       SizedBox(height: AppBar().preferredSize.height),
                                                     
-                                  
-                                      DrawerAvatar(),
+                                      Container(
+                                        height: 200*scalor,
+                                        child: Center(
+                                          child: SizedBox(
+                                            child: Center(
+                                              child: Image.asset('assets/images/scribby_label_1.png'),
+                                            ),
+                                          )
+                                        ),
+                                      ),
       
                                       SizedBox(height: 22 * scalor,),
                                       HomeScreenDrawerButton(
@@ -184,15 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         body: "How to Play?", 
                                         onPress: () => HomeScreenUtils().navigateToInstructionsScreen(context,true)
                                       ),
-
-
-
-
-
-
-
-                                
-                                                                                                                                            
+                                                                                        
                                       HomeScreenDrawerButton(
                                         icon: Icons.bar_chart,
                                         body: "Statistics", 
@@ -433,23 +433,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 elevation: 3.0 *scalor
                                                               ),
                                                               onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings),
-                                                              child: FittedBox(
-                                                                fit: BoxFit.scaleDown,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Icon(Icons.play_arrow,size: 18 * scalor,),
-                                                                    SizedBox(width: 10*scalor,),
-                                                                    Text(
-                                                                    "Tutorial",
-                                                                      style: palette.mainAppFont(
-                                                                        // color: Colors.white,
-                                                                        textStyle: TextStyle(
-                                                                          fontSize: 18*scalor,
-                                                                        ),
+                                                              child: Row(
+                                                                children: [
+                                                                  Icon(Icons.play_arrow,size: 18 * scalor,),
+                                                                  SizedBox(width: 10*scalor,),
+                                                                  Text(
+                                                                  "Tutorial",
+                                                                    style: palette.mainAppFont(
+                                                                      // color: Colors.white,
+                                                                      textStyle: TextStyle(
+                                                                        fontSize: 18*scalor,
                                                                       ),
                                                                     ),
-                                                                  ],
-                                                                ),
+                                                                  ),
+                                                                ],
                                                               ),                                                                
                                                               
                                                             ),                                                            
@@ -1694,6 +1691,7 @@ class ScribbyLogoPainter extends CustomPainter {
       canvas.rotate(tileAngle);
       canvas.translate(-tileCenter.dx, -tileCenter.dy);      
       TilePainters().drawTile2(canvas, tileCenter, decorationObject["letter"], Size(45,45), "board-full", tileDecoration, palette);
+      
       canvas.restore();      
 
     }

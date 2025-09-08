@@ -862,6 +862,42 @@ class Helpers {
   }
 
 
+  // Future<Map<String,dynamic>> fetchDailyPuzzles() async {
+
+  //   Map<String,dynamic> res = {};
+
+  //   String baseUrl_1 = "https://firebasestorage.googleapis.com/v0/b/scribby-6934e.appspot.com/o/daily_puzzles";
+
+  //   // String baseUrl_2 = "%2F";
+  
+  //   // String baseUrl_3 = ".json?alt=media&token=511d5629-7808-4821-a455-b66360cbf707";
+    
+  //   String url = baseUrl_1;
+
+  //   final response = await http.get(Uri.parse(url));
+
+  //   if (response.statusCode == 200) {
+  //     final String decodedBody = utf8.decode(response.bodyBytes);
+  //     final Map<String,dynamic> jsonMap = json.decode(decodedBody);
+  //     res = {
+  //       "result": "success",
+  //       "data": jsonMap['data']
+  //     };
+  //   } else {
+  //     res = {
+  //       "result" : "fail",
+  //       "data": "No definition available at this time",
+  //     };
+  //   }      
+  //   return res;
+  // }
+  
+
+  
+
+
+
+
   String capitalize(String input) {
     if (input.isEmpty) return input;
 
@@ -876,7 +912,7 @@ class Helpers {
 
   RichText getGameObjectiveString(String gameType, int? durationMinutes, int? target, int? timeToPlace, ColorPalette palette) {
     String bewareString = "";
-    String objectiveString = "";
+    // String objectiveString = "";
 
     List<TextSpan> texts = [
       // TextSpan(
@@ -902,9 +938,9 @@ class Helpers {
       String durationFormatted = Helpers().formatDuration(durationMinutes!*60);
       int mins = int.parse(durationFormatted.split(":")[0]);
       String minutesText = mins > 1 ? "${mins.toString()} minutes" : "${mins.toString()} minute"; 
-      objectiveString = "\nScore as many points as you can within $minutesText. ";
+      // objectiveString = "\nScore as many points as you can within $minutesText. ";
 
-      String part1 = "\nScore ";
+      String part1 = "Score ";
       String part2 = "as many points ";
       String part3 = "as you can ";
       String part4 = "within $minutesText. ";
@@ -914,8 +950,8 @@ class Helpers {
       texts.add(TextSpan(text: part4, style: TextStyle(fontWeight: FontWeight.bold)),);
 
     } else if (gameType=="sprint") {
-      objectiveString = "\nReach $target as quickly as possible. ";
-      String part1 = "\nReach ";
+      // objectiveString = "\nReach $target as quickly as possible. ";
+      String part1 = "Reach ";
       String part2 = "$target points ";
       String part3 = "as ";
       String part4 = "quickly ";

@@ -136,7 +136,18 @@ class StorageMethods {
   }
 
 
+  Map<dynamic,dynamic> getDailyPuzzles(SettingsController settings) {
+    late Map<dynamic,dynamic> res = {};
+    try {
+      Map<dynamic,dynamic> puzzles = settings.dailyPuzzleData.value as Map<dynamic,dynamic>;
+      res = puzzles;
+    } catch (e) {
+      print("error in getDailyPuzzles: ${e.toString()}");
+    }
 
+    print("res: $res");
+    return res;
+  }  
 
   // Future<void> saveWordListToLocalStorage(List<String> wordList, String fileName) async {
   //   final directory = await getApplicationDocumentsDirectory();

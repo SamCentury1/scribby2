@@ -111,15 +111,20 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   @override
   Future<List<dynamic>> getAchievementData() async {
     final prefs = await instanceFuture;
-    return json.decode(prefs.getString("achievementData")??json.encode([]));
+    return json.decode(prefs.getString("achievementData")??json.encode({}));
   }
 
   @override
   Future<int> getXP() async {
     final prefs = await instanceFuture;
     return prefs.getInt('xp')??0;
-  }  
+  }
 
+  @override
+  Future<Object> getDailyPuzzleData() async {
+    final prefs = await instanceFuture;
+    return json.decode(prefs.getString("dailyPuzzleData")??json.encode([]));
+  }  
 
 
   /// ========= SAVE THE DATA =================
@@ -238,6 +243,12 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   Future<void> saveXP(int value) async {
     final prefs = await instanceFuture;
     prefs.setInt("xp", value); 
-  }   
+  }
+
+  @override
+  Future<void> saveDailyPuzzleData(Object value) async {
+    final prefs = await instanceFuture;
+    prefs.setString("dailyPuzzleData", json.encode(value)); 
+  }    
 
 }

@@ -480,7 +480,8 @@ class TilePainters {
     canvas.drawRRect(tileBorderRRect, rightEdgePaint);
     canvas.drawRRect(tileBorderRRect, bottomEdgePaint);
     canvas.drawRRect(tileRRect, tilePaint);
-    // canvas.drawRRect(insideBorderDecorationRRect, insideDecorationPaint);
+    
+    // this is just the tile appearing after it's done animating
     AnimationUtils().displayAnimatingText(canvas, body, textColor, gamePlayState, tileFaceCenter,tileSize, palette);
 
     return canvas;    

@@ -54,6 +54,10 @@ class Initializations {
       await StorageMethods().saveAlphabetToSettings(settings,"english");
     }
 
+    // if (settings.dailyPuzzleData.value.isEmpty) {
+    await FirestoreMethods().saveDailyPuzzlesToLocalStorage(settings);
+    // }
+
 
     final Box wordBox = Hive.box('wordBox');
     if (wordBox.isEmpty) {

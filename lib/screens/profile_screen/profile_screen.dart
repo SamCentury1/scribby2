@@ -40,23 +40,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ]; // ['english', 'Español', 'Français', 'Deutsch'];
   final List<String> _colorThemes = ['default', 'light', 'dark', 'nature','techno','beach',]; // ['english', 'Español', 'Français', 'Deutsch'];
 
-  Future<void> _pickImage(SettingsController settings) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  // Future<void> _pickImage(SettingsController settings) async {
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    final pickedFilePath = pickedFile?.path;
+  //   final pickedFilePath = pickedFile?.path;
 
-    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
-    // await userData.update("photoUrl", (v) => pickedFilePath);
-    userData["photoUrl"] = pickedFilePath;
+  //   Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+  //   // await userData.update("photoUrl", (v) => pickedFilePath);
+  //   userData["photoUrl"] = pickedFilePath;
     
-    if (pickedFile != null ) {
-      setState(() {
-        _avatarImage = File(pickedFile.path);
-        settings.setUserData(userData);
-      });
-    }
-  }
+  //   if (pickedFile != null ) {
+  //     setState(() {
+  //       _avatarImage = File(pickedFile.path);
+  //       settings.setUserData(userData);
+  //     });
+  //   }
+  // }
 
   Future<void> _pickLanguage(SettingsController settings, String? value) async {
 
@@ -194,21 +194,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 
                                     SizedBox(height: 60 * scalor,),
                                     // Avatar
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: GestureDetector(
-                                        onTap: () => _pickImage(settings),
-                                        child: CircleAvatar(
-                                          radius: 50*scalor,
-                                          backgroundColor: const Color.fromARGB(47, 255, 255, 255),
-                                          foregroundColor: const Color.fromARGB(214, 243, 243, 243),
-                                          backgroundImage: _avatarImage != null ? FileImage(_avatarImage!) : null,
-                                          child: _avatarImage == null
-                                              ? const Icon(Icons.camera_alt, size: 40)
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
+                                    // Align(
+                                    //   alignment: Alignment.center,
+                                    //   child: GestureDetector(
+                                    //     onTap: () => _pickImage(settings),
+                                    //     child: CircleAvatar(
+                                    //       radius: 50*scalor,
+                                    //       backgroundColor: const Color.fromARGB(47, 255, 255, 255),
+                                    //       foregroundColor: const Color.fromARGB(214, 243, 243, 243),
+                                    //       backgroundImage: _avatarImage != null ? FileImage(_avatarImage!) : null,
+                                    //       child: _avatarImage == null
+                                    //           ? const Icon(Icons.camera_alt, size: 40)
+                                    //           : null,
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     // _usernameTile(scalor: scalor,settings: settings),
                                     // UsernameCard(),
                                     ValueListenableBuilder(

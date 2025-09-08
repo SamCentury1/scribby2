@@ -792,13 +792,13 @@ class Painters {
     ..color= Color.fromRGBO(hlRed, hlGreen, hlBlue, 0.7*(1.0-progress))
     ..style=PaintingStyle.stroke
     ..strokeCap=StrokeCap.round
-    ..strokeWidth= 3.0  * (1.0-progress);
+    ..strokeWidth= (3.0*gamePlayState.scalor)  * (1.0-progress);
 
     Paint highlightShadowPaint = Paint()
     ..color=Color.fromRGBO(hlRed, hlGreen, hlBlue, (1.0-progress))
     ..style=PaintingStyle.stroke
     ..strokeCap=StrokeCap.round
-    ..strokeWidth= 5.0 
+    ..strokeWidth= (5.0*gamePlayState.scalor) 
     ..maskFilter = MaskFilter.blur(BlurStyle.outer, 2.0 + (3.0*progress));
 
     final double hightlightRectSizeStart = actualTileWidth*0.9;
@@ -864,7 +864,7 @@ class Painters {
       Paint tilePaint = Paint()
       ..color = Color(colorRange[progressIndex])
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 3.0 * gamePlayState.scalor
+      ..strokeWidth = tileSize.width * 0.05
       ..style=PaintingStyle.stroke;
 
       Rect rect = Rect.fromCenter(center: tileCenter, width: updatedTileWidth, height: updatedTileWidth);

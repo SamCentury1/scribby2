@@ -41,7 +41,8 @@ class _NewGameDialogState extends State<NewGameDialog> {
 
   FixedExtentScrollController? durationController;
   FixedExtentScrollController? pointsController;
-  FixedExtentScrollController? gridController;
+  FixedExtentScrollController? gridRowController;
+  FixedExtentScrollController? gridColumnController;
   FixedExtentScrollController? timesToPlaceController;
 
   int? durationInMinutes = null;
@@ -59,7 +60,8 @@ class _NewGameDialogState extends State<NewGameDialog> {
 
     durationController = FixedExtentScrollController(initialItem: initialDurationItem);
     pointsController = FixedExtentScrollController(initialItem: initialPointsItem);
-    gridController = FixedExtentScrollController(initialItem: initialGridItem);
+    gridRowController = FixedExtentScrollController(initialItem: initialGridItem);
+    gridColumnController = FixedExtentScrollController(initialItem: initialGridItem);
     timesToPlaceController = FixedExtentScrollController(initialItem: initialTimeToPlaceItem);
 
     // int? item = null;
@@ -489,7 +491,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                 child: ListWheelScrollView.useDelegate(
                                   
                                   physics: FixedExtentScrollPhysics(),
-                                  controller: gridController,
+                                  controller: gridRowController,
                                   itemExtent: widgetHeight*0.6 ,
                                   perspective: 0.0001,
                                   childDelegate: ListWheelChildLoopingListDelegate(
@@ -530,7 +532,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                 child: ListWheelScrollView.useDelegate(
                                   
                                   physics: FixedExtentScrollPhysics(),
-                                  controller: gridController,
+                                  controller: gridColumnController,
                                   itemExtent: widgetHeight*0.6 ,
                                   perspective: 0.0001,
                                   childDelegate: ListWheelChildLoopingListDelegate(
@@ -642,14 +644,17 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               setState(() {
                                 gameTypeChoice=_gameType;
                                 durationController!.animateToItem(durationIndex,duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                                gridController!.animateToItem(random.nextInt(gridTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+                                gridRowController!.animateToItem(random.nextInt(gridTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+                                gridColumnController!.animateToItem(random.nextInt(gridTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
                                 if (_gameType=="classic") {
-                                  durationController!.animateToItem(random.nextInt(timesInMinutes.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+                                  List<dynamic> newDurationList = List.generate(5, (e) => e+1).toList();
+                                  durationController!.animateToItem(random.nextInt(newDurationList.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
                                 } else {
-                                  pointsController!.animateToItem(random.nextInt(pointTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+                                  List<int> newPointTargets = List.generate(5, (e) => 300 + (e+100)).toList();
+                                  pointsController!.animateToItem(random.nextInt(newPointTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
                                 }
-                                
-                                timesToPlaceController!.animateToItem(random.nextInt(timesToPlace.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+                                List<int?> newTimesToPlace = [null,null,null,null,null,null,null,5] + timesToPlace;
+                                timesToPlaceController!.animateToItem(random.nextInt(newTimesToPlace.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
                               });
 
                             }, 

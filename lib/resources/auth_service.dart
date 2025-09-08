@@ -26,13 +26,13 @@ class AuthService {
         final String uid = cred.user!.uid;
         final String displayName = username;
         final String userEmail = email;
-        final String photoURL = cred.user!.photoURL??"";
+        // final String photoURL = cred.user!.photoURL??"";
         const String providerData = "none";
         final Map<String,dynamic> userData = {
           "uid":uid,
           "displayName": displayName,
           "email": userEmail,
-          "photoURL": photoURL,
+          // "photoURL": photoURL,
           "providerData": providerData,
         };      
       FirestoreMethods().saveUserToDatabase(userData);
@@ -58,13 +58,13 @@ class AuthService {
         final String uid = cred.user!.uid;
         final String displayName = cred.user!.displayName??"User";
         final String email = cred.user!.email??"user@email.com";
-        final String photoURL = cred.user!.photoURL??"";
+        // final String photoURL = cred.user!.photoURL??"";
         const String providerData = "google";
         final Map<String,dynamic> userData = {
           "uid":uid,
           "displayName": displayName,
           "email": email,
-          "photoURL": photoURL,
+          // "photoURL": photoURL,
           "providerData": providerData,
         };
         FirestoreMethods().saveUserToDatabase(userData);
@@ -112,13 +112,13 @@ class AuthService {
         final String uid = cred.user!.uid;
         final String displayName = cred.user!.displayName??"User";
         final String email = cred.user!.email??"user@email.com";
-        final String photoURL = cred.user!.photoURL??"";
+        // final String photoURL = cred.user!.photoURL??"";
         const String providerData = "apple";
         final Map<String,dynamic> userData = {
           "uid":uid,
           "displayName": displayName,
           "email": email,
-          "photoURL": photoURL,
+          // "photoURL": photoURL,
           "providerData": providerData,
         };
         FirestoreMethods().saveUserToDatabase(userData);

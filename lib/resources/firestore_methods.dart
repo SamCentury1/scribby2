@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
@@ -124,14 +125,14 @@ class FirestoreMethods {
     final String uid = userData["uid"];
     final String displayName = userData["displayName"];
     final String email = userData["email"];
-    final String photoURL = userData["photoURL"];
+    // final String photoURL = userData["photoURL"];
     final String providerData = userData["providerData"];
 
     final Map<String,dynamic> userDocument = {
       "uid": uid,
       "username": displayName,
       "email": email,
-      "photoUrl": photoURL,
+      // "photoUrl": photoURL,
       "parameters" : {
         "soundOn": true,
         "theme": 'default',
@@ -238,4 +239,84 @@ class FirestoreMethods {
     }
     // return contents;
   }
+
+
+  // Future<List<dynamic>> getDailyPuzzles() async {
+  //   late List<dynamic> res = [];
+  //   try {
+  //     final now = DateTime.now().toUtc();
+  //     final year = now.year.toString().padLeft(4, '0');
+  //     final month = now.month.toString().padLeft(2, '0');
+  //     final day = now.day.toString().padLeft(2, '0');
+  //     String dateString = '$year-$month-${day}T00:00:00.000Z';      
+  //     QuerySnapshot docRefs = await FirebaseFirestore.instance.collection('puzzles').where("date", isEqualTo: dateString).get();
+  //     List<dynamic> puzzles = [];
+
+  //     for (DocumentSnapshot qDocSnap in docRefs.docs) {
+  //       late Map<dynamic,dynamic> levelData = qDocSnap.data() as Map;
+  //       puzzles.add(levelData);
+  //       print("docRefs: $levelData");
+  //     }
+  //     res = puzzles;
+  //   } catch (e) {
+  //     print("error in getDailyPuzzles: ${e.toString()}");
+  //   }
+
+  //   print("res: $res");
+  //   return res;
+  // }  
+
+  Future<void> saveDailyPuzzlesToLocalStorage(SettingsController settings) async {
+    try {
+      final now = DateTime.now().toUtc();
+      final year = now.year.toString().padLeft(4, '0');
+      final month = now.month.toString().padLeft(2, '0');
+      final day = now.day.toString().padLeft(2, '0');
+      String dateString = '$year-$month-${day}T00:00:00.000Z';
+      String date = '$year-$month-${day}';
+      // String dateString = '2025-03-11T00:00:00.000Z';   
+
+      bool syncPuzzles = false;
+      print("""
+
+
+  ${settings.dailyPuzzleData.value}
+
+
+""");
+      Map<dynamic,dynamic> puzzleData = settings.dailyPuzzleData.value as Map;
+
+      print("puzzleData in saveDailyPuzzlesToLocalStorage | $puzzleData");
+
+      if (puzzleData.isEmpty) {
+        syncPuzzles = true;
+      } else {
+        if (puzzleData["date"]!=date) {
+          print("${puzzleData["date"]} | $date");
+          print("there's data in settings but date don't match up");
+          syncPuzzles = true;
+        }
+      }
+      print("should sync puzz? $syncPuzzles");
+
+      if (syncPuzzles) {
+
+        final docRef = FirebaseFirestore.instance.collection('puzzles').doc(date);
+        final docSnap = await docRef.get();
+        final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
+        print("doc data: $docData");     
+        settings.setDailyPuzzleData(docData);        
+      }
+      
+
+    } catch (e) {
+      print("error in saveDailyPuzzlesToLocalStorage: ${e.toString()}");
+    }
+
+    // print("res: $res");
+    // return res;
+  }    
+
+
+
 }

@@ -37,7 +37,9 @@ abstract class SettingsPersistence {
 
   Future<List<dynamic>> getAchievementData();
 
-  Future<int> getXP();  
+  Future<int> getXP();
+
+  Future<Object> getDailyPuzzleData();
 
 
 
@@ -80,5 +82,5 @@ abstract class SettingsPersistence {
 
   Future<void> saveXP(int value);       
 
-
+  Future<void> saveDailyPuzzleData(Object value); 
 }
