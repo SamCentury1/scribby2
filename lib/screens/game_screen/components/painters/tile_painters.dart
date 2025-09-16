@@ -654,17 +654,38 @@ class TilePainters {
       } else {
         for (int i=0; i<gamePlayState.tileData.length; i++) {
           Map<String,dynamic> tileObject = gamePlayState.tileData[i];
-          
-      
-          if ( tileObject["body"]!="" || !tileObject["active"]) {
-              Offset targetCenter = tileObject["center"];
-            if (tileObject["swapping"]) {
+          Offset targetCenter = tileObject["center"];
 
-            } else {
+          if (["swap","freeze"].contains(openPerk["item"])) {
+            if (tileObject["body"]!="" && tileObject["active"]) {
+              if (!tileObject["swapping"]) {
+                late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
+                drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);
+              }
+            }
+          } else {
+            if (tileObject["body"]!=""|| !tileObject["active"]) {
               late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
               drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);
             }
-          }      
+          }
+                    
+
+          
+      
+          // if ( tileObject["body"]!="" || !tileObject["active"]) {
+          //     Offset targetCenter = tileObject["center"];
+          //   if (tileObject["swapping"]) {
+          //     // print("swapping?: ${tileObject["key"]}");
+          //   } else {
+          //     // late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
+          //     late double opacity = 1.0;
+          //     if (openPerk["item"]=="swap" && !tileObject["active"]) {
+          //       // print("caca butt: ${tileObject["key"]}");
+          //     }
+          //     
+          //   }
+          // }      
         }
       }
 
@@ -673,36 +694,36 @@ class TilePainters {
   }
 
 
-  Canvas drawSwappingTileShadow(Canvas canvas, GamePlayState gamePlayState,) {
+  // Canvas drawSwappingTileShadow(Canvas canvas, GamePlayState gamePlayState,) {
 
-    Map<String,dynamic> swappingTile = gamePlayState.tileData.firstWhere((e)=>e["swapping"]==true, orElse: ()=>{});
-    if (swappingTile.isNotEmpty) {
-      Size tileSize = gamePlayState.elementSizes["tileSize"];
-      Offset tileCenter = swappingTile["center"];
+  //   Map<String,dynamic> swappingTile = gamePlayState.tileData.firstWhere((e)=>e["swapping"]==true, orElse: ()=>{});
+  //   if (swappingTile.isNotEmpty) {
+  //     Size tileSize = gamePlayState.elementSizes["tileSize"];
+  //     Offset tileCenter = swappingTile["center"];
 
-      drawTileShadow(canvas,Colors.white,Colors.white,tileSize,tileCenter);
+  //     drawTileShadow(canvas,Colors.white,Colors.white,tileSize,tileCenter);
 
-      for (int i=0; i<gamePlayState.tileData.length; i++) {
-        Map<String,dynamic> tileObject = gamePlayState.tileData[i];
-        Map<String,dynamic> animatingObject = gamePlayState.animationData.firstWhere((e)=>e["key"]==tileObject["key"],orElse: ()=>{});
+  //     for (int i=0; i<gamePlayState.tileData.length; i++) {
+  //       Map<String,dynamic> tileObject = gamePlayState.tileData[i];
+  //       Map<String,dynamic> animatingObject = gamePlayState.animationData.firstWhere((e)=>e["key"]==tileObject["key"],orElse: ()=>{});
         
-        bool isAnimating = animatingObject.isEmpty ? false : true;
-        String body = tileObject["body"];
-        bool frozen = tileObject["frozen"];
-        bool swapping = tileObject["swapping"];
+  //       bool isAnimating = animatingObject.isEmpty ? false : true;
+  //       String body = tileObject["body"];
+  //       bool frozen = tileObject["frozen"];
+  //       bool swapping = tileObject["swapping"];
         
 
-        if (!isAnimating && body!="" && !frozen && !swapping && !gamePlayState.isTutorial) {
-          Offset targetCenter = tileObject["center"];
+  //       if (!isAnimating && body!="" && !frozen && !swapping && !gamePlayState.isTutorial) {
+  //         Offset targetCenter = tileObject["center"];
 
-          late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
-          drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);
-        }
-      }
-    }
+  //         late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,tileObject["key"]);
+  //         drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,targetCenter);
+  //       }
+  //     }
+  //   }
 
-    return canvas;
-  }
+  //   return canvas;
+  // }
 
   Canvas drawTileShadow(Canvas canvas, Color color1, Color color2, Size tileSize, Offset tileCenter) {
       final double thicknessFactor = tileSize.width*0.05/2;

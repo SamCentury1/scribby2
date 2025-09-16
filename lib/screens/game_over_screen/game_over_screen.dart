@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -41,6 +42,15 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
   late bool shouldShowInterstitialAd = false;
   late List<dynamic> badgeData = [];
+  late bool isLoading = true;
+
+
+  final adUnitId = Platform.isAndroid
+      // ? 'ca-app-pub-2459167095237263/4958251976' // prod
+      ? 'ca-app-pub-3940256099942544/1033173712' // test
+
+      // : 'ca-app-pub-2459167095237263/7967558693'; // prod
+      : 'ca-app-pub-3940256099942544/4411468910'; // test
 
 
   @override
@@ -48,322 +58,415 @@ class _GameOverScreenState extends State<GameOverScreen> {
     // TODO: implement initState
     super.initState();
     gamePlayState = Provider.of<GamePlayState>(context,listen: false);
-    _adState = Provider.of<AdState>(context,listen: false);
+    // _adState = Provider.of<AdState>(context,listen: false);
     settings = Provider.of<SettingsController>(context,listen: false);
+    
+    // if (gamePlayState.gameResultData["didCompleteGame"]==false) {
+    //   setState(() {
+    //     shouldShowInterstitialAd = true;
+    //     _adState.loadGameOverInterstitialAd(gamePlayState);
+    //   });
+    // } else {
+    //   setState(() {
+    //     shouldShowInterstitialAd = false;
+    //   });
 
-    if (gamePlayState.gameResultData["didCompleteGame"]==false) {
-      setState(() {
-        shouldShowInterstitialAd = true;
-        _adState.loadGameOverInterstitialAd(gamePlayState);
-      });
-    } else {
-      setState(() {
-        shouldShowInterstitialAd = false;
-      });
+    //   GameLogic().storeEndOfGameData(settings,gamePlayState);
+    //   // Helpers().saveUserGameHistoryData(settings,gamePlayState);
+    //   GameLogic().updateRank(settings,gamePlayState);
 
-      GameLogic().storeEndOfGameData(settings,gamePlayState);
-      // Helpers().saveUserGameHistoryData(settings,gamePlayState);
-      GameLogic().updateRank(settings,gamePlayState);
+    //   print("game result data: ${gamePlayState.gameResultData}");
 
-      print("game result data: ${gamePlayState.gameResultData}");
+    //   badgeData = gamePlayState.gameResultData["badges"];
+    //   Animations().startGameOverScreenCountAnimation(gamePlayState);
+    // }
 
-      badgeData = gamePlayState.gameResultData["badges"];
-      Animations().startGameOverScreenCountAnimation(gamePlayState);
-    }
-    _adState.loadGameOverRewardedAd(context,gamePlayState,settings);
+
+
+
+
+
+      // setState(() {
+      //   shouldShowInterstitialAd = false;
+      // });
+
+    // setState(() {
+    //   _adState.loadGameOverInterstitialAd(gamePlayState);
+    // });      
+    GameLogic().storeEndOfGameData(settings,gamePlayState);
+    GameLogic().updateRank(settings,gamePlayState);
+
+    print("game result data: ${gamePlayState.gameResultData}");
+
+    badgeData = gamePlayState.gameResultData["badges"];
+    // Animations().startGameOverScreenCountAnimation(gamePlayState);
+
+    loadAd();
+ 
+    // setState(() {
+    //   _adState.loadGameOverRewardedAd(context,gamePlayState,settings);
+    // });
     // Animations().startGameOverScreenCountAnimation(gamePlayState);
 
   }
 
+
+
+
+
+
+
+
+
+
+  void loadAd() {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      InterstitialAd.load(
+          adUnitId: adUnitId,
+          request: const AdRequest(),
+          adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: (InterstitialAd ad) {
+
+            
+              setFullScreenContentCallback(ad);
+              ad.show();
+              // debugPrint('ad #${adsLoaded} loaded.');
+            },
+            // Called when an ad request failed.
+            onAdFailedToLoad: (LoadAdError error) {
+              setState(() {
+                isLoading = false;
+              });
+              // debugPrint('InterstitialAd failed to load: $error');
+            },
+          ));
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+
+  void setFullScreenContentCallback(InterstitialAd ad, ) {
+    ad.fullScreenContentCallback = FullScreenContentCallback(
+        // Called when the ad showed the full screen content.
+        onAdShowedFullScreenContent: (ad) {
+          setState(() {
+            isLoading = false;
+          });
+        },
+        // Called when an impression occurs on the ad.
+        onAdImpression: (ad) {},
+        // Called when the ad failed to show full screen content.
+        onAdFailedToShowFullScreenContent: (ad, err) {
+          // Dispose the ad here to free resources.
+          ad.dispose();
+
+        },
+        // Called when the ad dismissed full screen content.
+        onAdDismissedFullScreenContent: (ad) {
+          Animations().startGameOverScreenCountAnimation(gamePlayState);
+          // Dispose the ad here to free resources.
+          ad.dispose();
+        },
+        // Called when a click is recorded for an ad.
+        onAdClicked: (ad) {});
+  }  
+
   @override
   Widget build(BuildContext context) {
     
-    return Consumer<AdState>(
-      builder: (context,adState,child) {
+    // return Consumer<AdState>(
+    //   builder: (context,adState,child) {
 
-        if (adState.isInterstitialAdLoading && shouldShowInterstitialAd) {
+        if (isLoading) {
           return Center(child: CircularProgressIndicator(),);
 
         } else {
-          return Consumer<GamePlayState>(          
-            builder: (context,gamePlayState,child) {
-              ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-              final double scalor = Helpers().getScalor(settings);
-              double scoreFontSize = Helpers().getScoreFontSize(MediaQuery.of(context),0.045);
-              final int uniqueWords = Helpers().countUniqueWords(gamePlayState);
-              final int turns = Helpers().countTurns(gamePlayState);
-              final int streak = Helpers().getLongestStreak(gamePlayState);
-              final int crosswords = Helpers().countCrosswords(gamePlayState);
-              final int biggestTurn = Helpers().getBiggestTurn(gamePlayState);
-              final String duration = Helpers().formatDuration(gamePlayState.duration.inSeconds);
-              
-              
-
-              // double scoreBorderSize = getScoreBorderWidth(MediaQuery.of(context));
-              return PopScope(
-                canPop: false,
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Stack(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: CustomPaint(painter: GradientBackground(settings: settings, palette: palette, decorationData: []),)
-                      ),
-                      Column(
+          return Builder(
+            builder: (context) {
+              return Consumer<GamePlayState>(          
+                builder: (context,gamePlayState,child) {
+                  ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
+                  final double scalor = Helpers().getScalor(settings);
+                  double scoreFontSize = Helpers().getScoreFontSize(MediaQuery.of(context),0.045);
+                  final int uniqueWords = Helpers().countUniqueWords(gamePlayState);
+                  final int turns = Helpers().countTurns(gamePlayState);
+                  final int streak = Helpers().getLongestStreak(gamePlayState);
+                  final int crosswords = Helpers().countCrosswords(gamePlayState);
+                  final int biggestTurn = Helpers().getBiggestTurn(gamePlayState);
+                  final String duration = Helpers().formatDuration(gamePlayState.duration.inSeconds);
+                  
+                  // double scoreBorderSize = getScoreBorderWidth(MediaQuery.of(context));
+                  return PopScope(
+                    canPop: false,
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: Stack(
                         children: [
-                                
-                          // top section
-                          Expanded(
-                            flex: 1,
-                            child: SizedBox()
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: CustomPaint(painter: GradientBackground(settings: settings, palette: palette, decorationData: []),)
                           ),
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        child: GameOverCounter(settings: settings,),
+                          Column(
+                            children: [
+                                    
+                              // top section
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox()
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                        ),
                                       ),
-                                    ),
-                                  ),
-          
-
-                                    Builder(
-                                      builder: (context) {
-                                        if (badgeData.isNotEmpty) {
-                                          return Container(
-                                            child: Center(
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    "New Badges:",
-                                                    style: TextStyle(
-                                                      fontSize: 16*scalor,
-                                                      color: Color.fromARGB(255, 220, 220, 223),
-                                                    ),
-                                                  ),
-                                                  Builder(
-                                                    builder: (context) {
-                                                      List<Widget> res = [];
-                                                      final double itemWidth = min(50*scalor,gamePlayState.elementSizes["screenSize"].width/badgeData.length);
-                                                      for (int i=0; i<badgeData.length; i++){
-                                                        Map<String ,dynamic> badgeDetails = badgeData[i] as Map<String ,dynamic>;
-                                                        Widget badge = Container(
-                                                          width: itemWidth,
-                                                          height: itemWidth,
-                                                          // color: Colors.yellow,
-                                                          child: CustomPaint(
-                                                            painter: BadgePainter(badgeData: badgeDetails),
-                                                          ),
-                                                        );
-                                                        res.add(badge);
-                                                      } 
-                                                      return Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: res,
-                                                      );
-                                                    }
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          return SizedBox();
-                                        }
-                                      }
-                                    ),
-                                ],
-                              ),
-                            )
-                          ),
-                          // Text(gamePlayState.gameResultData.toString()),
-          
-                          // middle section
-                          Expanded(
-                            flex: 8,
-                            child: Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                
-                                  summaryItem(Icons.gamepad, "Game Type", gamePlayState.gameParameters["gameType"],scoreFontSize*0.36 ),
-                                  summaryItem(Icons.library_books, "Unique Words",uniqueWords ,scoreFontSize*0.36 ),
-                                  ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth:500,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
-                                      child: Divider(),
-                                    ),
-                                  ),
-                                
-                                  gamePlayState.gameParameters["gameType"]!="sprint"
-                                  ? summaryItem(Icons.timer, "Duration", duration,scoreFontSize*0.36 )
-                                  : SizedBox(),
-                                
-                                  summaryItem(Icons.control_point_rounded, "Turns", turns,scoreFontSize*0.36 ),
-                                  summaryItem(Icons.bar_chart, "Level", gamePlayState.currentLevel,scoreFontSize*0.36 ),
-                                  ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth:500,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
-                                      child: Divider(),
-                                    ),
-                                  ),
-                                
-                                  summaryItem(Icons.bolt, "Longest Streak", streak,scoreFontSize*0.36 ),
-                                  summaryItem(Icons.close, "Crosswords", crosswords,scoreFontSize*0.36 ),
-                                  summaryItem(Icons.star, "Biggest Turn", biggestTurn,scoreFontSize*0.36 ),
-                                
-                                ],
-                              ),
-                            ),
-                          ),
-                                
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8.0*scalor),
-                                  child: Container(
-                                    child: Center(
-                                      child:ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(255, 220, 220, 223),
-                                          foregroundColor: const Color.fromARGB(255, 44, 34, 185),
-                                          textStyle: GoogleFonts.lilitaOne(
-                                            fontSize: 24*scalor
-                                          ),                                    
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            child: GameOverCounter(settings: settings,),
                                           ),
-                                          minimumSize: Size(200*scalor,scoreFontSize*0.7)
-                                        ),                          
-                                        onPressed: () => openViewSummaryDialog(context,settings,palette), 
-                                        child: Text("View Points Summary")
-                                      ),                        
-                                    ),
+                                        ),
+                                      ),
+              
+              
+                                        Builder(
+                                          builder: (context) {
+                                            if (badgeData.isNotEmpty) {
+                                              return Container(
+                                                child: Center(
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        "New Badges:",
+                                                        style: TextStyle(
+                                                          fontSize: 16*scalor,
+                                                          color: Color.fromARGB(255, 220, 220, 223),
+                                                        ),
+                                                      ),
+                                                      Builder(
+                                                        builder: (context) {
+                                                          List<Widget> res = [];
+                                                          final double itemWidth = min(50*scalor,gamePlayState.elementSizes["screenSize"].width/badgeData.length);
+                                                          for (int i=0; i<badgeData.length; i++){
+                                                            Map<String ,dynamic> badgeDetails = badgeData[i] as Map<String ,dynamic>;
+                                                            Widget badge = Container(
+                                                              width: itemWidth,
+                                                              height: itemWidth,
+                                                              // color: Colors.yellow,
+                                                              child: CustomPaint(
+                                                                painter: BadgePainter(badgeData: badgeDetails),
+                                                              ),
+                                                            );
+                                                            res.add(badge);
+                                                          } 
+                                                          return Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: res,
+                                                          );
+                                                        }
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            } else {
+                                              return SizedBox();
+                                            }
+                                          }
+                                        ),
+                                    ],
+                                  ),
+                                )
+                              ),
+                              // Text(gamePlayState.gameResultData.toString()),
+              
+                              // middle section
+                              Expanded(
+                                flex: 8,
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                    
+                                      summaryItem(Icons.gamepad, "Game Type", gamePlayState.gameParameters["gameType"],scoreFontSize*0.36 ),
+                                      summaryItem(Icons.library_books, "Unique Words",uniqueWords ,scoreFontSize*0.36 ),
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          maxWidth:500,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
+                                          child: Divider(),
+                                        ),
+                                      ),
+                                    
+                                      gamePlayState.gameParameters["gameType"]!="sprint"
+                                      ? summaryItem(Icons.timer, "Duration", duration,scoreFontSize*0.36 )
+                                      : SizedBox(),
+                                    
+                                      summaryItem(Icons.control_point_rounded, "Turns", turns,scoreFontSize*0.36 ),
+                                      summaryItem(Icons.bar_chart, "Level", gamePlayState.currentLevel,scoreFontSize*0.36 ),
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          maxWidth:500,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
+                                          child: Divider(),
+                                        ),
+                                      ),
+                                    
+                                      summaryItem(Icons.bolt, "Longest Streak", streak,scoreFontSize*0.36 ),
+                                      summaryItem(Icons.close, "Crosswords", crosswords,scoreFontSize*0.36 ),
+                                      summaryItem(Icons.star, "Biggest Turn", biggestTurn,scoreFontSize*0.36 ),
+                                    
+                                    ],
                                   ),
                                 ),
-
-                                Padding(
-                                  padding: EdgeInsets.all(8.0*scalor),
-                                  child: Container(
-                                    child: Center(
-                                      child:ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(255, 4, 19, 87),
-                                          foregroundColor: Colors.white,
-                                          textStyle: GoogleFonts.lilitaOne(
-                                            fontSize: 24*scalor
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
-                                          ),
-                                          minimumSize: Size(200*scalor,scoreFontSize*0.7)
+                              ),
+                                    
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0*scalor),
+                                      child: Container(
+                                        child: Center(
+                                          child:ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color.fromARGB(255, 220, 220, 223),
+                                              foregroundColor: const Color.fromARGB(255, 44, 34, 185),
+                                              textStyle: GoogleFonts.lilitaOne(
+                                                fontSize: 24*scalor
+                                              ),                                    
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
+                                              ),
+                                              minimumSize: Size(200*scalor,scoreFontSize*0.7)
+                                            ),                          
+                                            onPressed: () => openViewSummaryDialog(context,settings,palette), 
+                                            child: Text("View Points Summary")
+                                          ),                        
                                         ),
-                                        onPressed: () {
-                                  
-                                          if (gamePlayState.gameResultData["didCompleteGame"]) {
-                                            openDoubleCoinsDialog(context,settings);
-                                          } else {
-                                            final int rewardAmount = gamePlayState.gameResultData["reward"];
-                                            final int xpAmount = gamePlayState.gameResultData["xp"];
-                                            final String? rank = gamePlayState.gameResultData["newRank"];
-                                            settings.setAchievements({"coins":rewardAmount,"xp": xpAmount, "rank":rank, "badges":badgeData});  
-                                            
-                                  
-                                            print("navigating home");
-                                            Navigator.of(context).pushAndRemoveUntil(
-                                        
-                                              MaterialPageRoute(builder: (context) => const HomeScreen()),
-                                              (Route<dynamic> route) => false,
-                                            );
-                                            gamePlayState.refreshAllData();  
-                                                                              
-                                          }
-                                  
-                                        }, 
-                                        child: Text("Home"),
-                                      ),                        
+                                      ),
                                     ),
-                                  ),
-                                ),                                
-                              ],
-                            ),
-                          ),                  
-                                
-                          // // bottom section
-                          // Expanded(
-                          //   flex: 2,
-                          //   child: Container(
-                          //     child: Center(
-                          //       child:ElevatedButton(
-                          //         style: ElevatedButton.styleFrom(
-                          //           backgroundColor: const Color.fromARGB(255, 4, 19, 87),
-                          //           foregroundColor: Colors.white,
-                          //           textStyle: GoogleFonts.lilitaOne(
-                          //             fontSize: 24*scalor
-                          //           ),
-                          //           shape: RoundedRectangleBorder(
-                          //             borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
-                          //           ),
-                          //           minimumSize: Size(200*scalor,scoreFontSize*0.7)
-                          //         ),
-                          //         onPressed: () {
-
-                          //           if (gamePlayState.gameResultData["didCompleteGame"]) {
-                          //             openDoubleCoinsDialog(context,settings);
-                          //           } else {
-                          //             final int rewardAmount = gamePlayState.gameResultData["reward"];
-                          //             settings.setAchievements({"coins":rewardAmount,"rank":null, "badges":badgeData});  
+              
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0*scalor),
+                                      child: Container(
+                                        child: Center(
+                                          child:ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color.fromARGB(255, 4, 19, 87),
+                                              foregroundColor: Colors.white,
+                                              textStyle: GoogleFonts.lilitaOne(
+                                                fontSize: 24*scalor
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
+                                              ),
+                                              minimumSize: Size(200*scalor,scoreFontSize*0.7)
+                                            ),
+                                            onPressed: () {
                                       
-
-                          //             print("navigating home");
-                          //             Navigator.of(context).pushAndRemoveUntil(
-                                   
-                          //               MaterialPageRoute(builder: (context) => const HomeScreen()),
-                          //               (Route<dynamic> route) => false,
-                          //             );
-                          //             gamePlayState.refreshAllData();  
-                                                                        
-                          //           }
-
-                          //         }, 
-                          //         child: Text("Home"),
-                          //       ),                        
-                          //     ),
-                          //   ),
-                          // ),
-                        ]
+                                              // if (gamePlayState.gameResultData["didCompleteGame"]) {
+                                                openDoubleCoinsDialog(context,settings);
+                                              // } else {
+                                                // final int rewardAmount = gamePlayState.gameResultData["reward"];
+                                                // final int xpAmount = gamePlayState.gameResultData["xp"];
+                                                // final String? rank = gamePlayState.gameResultData["newRank"];
+                                                // settings.setAchievements({"coins":rewardAmount,"xp": xpAmount, "rank":rank, "badges":badgeData});  
+                                                
+                                      
+                                                // print("navigating home");
+                                                // Navigator.of(context).pushAndRemoveUntil(
+                                            
+                                                //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                                                //   (Route<dynamic> route) => false,
+                                                // );
+                                                // gamePlayState.refreshAllData();  
+                                                                                  
+                                              // }
+                                      
+                                            }, 
+                                            child: Text("Home"),
+                                          ),                        
+                                        ),
+                                      ),
+                                    ),                                
+                                  ],
+                                ),
+                              ),                  
+                                    
+                              // // bottom section
+                              // Expanded(
+                              //   flex: 2,
+                              //   child: Container(
+                              //     child: Center(
+                              //       child:ElevatedButton(
+                              //         style: ElevatedButton.styleFrom(
+                              //           backgroundColor: const Color.fromARGB(255, 4, 19, 87),
+                              //           foregroundColor: Colors.white,
+                              //           textStyle: GoogleFonts.lilitaOne(
+                              //             fontSize: 24*scalor
+                              //           ),
+                              //           shape: RoundedRectangleBorder(
+                              //             borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
+                              //           ),
+                              //           minimumSize: Size(200*scalor,scoreFontSize*0.7)
+                              //         ),
+                              //         onPressed: () {
+              
+                              //           if (gamePlayState.gameResultData["didCompleteGame"]) {
+                              //             openDoubleCoinsDialog(context,settings);
+                              //           } else {
+                              //             final int rewardAmount = gamePlayState.gameResultData["reward"];
+                              //             settings.setAchievements({"coins":rewardAmount,"rank":null, "badges":badgeData});  
+                                          
+              
+                              //             print("navigating home");
+                              //             Navigator.of(context).pushAndRemoveUntil(
+                                       
+                              //               MaterialPageRoute(builder: (context) => const HomeScreen()),
+                              //               (Route<dynamic> route) => false,
+                              //             );
+                              //             gamePlayState.refreshAllData();  
+                                                                            
+                              //           }
+              
+                              //         }, 
+                              //         child: Text("Home"),
+                              //       ),                        
+                              //     ),
+                              //   ),
+                              // ),
+                            ]
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                }
               );
             }
           );
         }
-
-      }
-    );
+    //   }
+    // );
   }
 }
 
@@ -523,12 +626,31 @@ class DoubleCoinsDialog extends StatefulWidget {
 
 class _DoubleCoinsDialogState extends State<DoubleCoinsDialog> {
 
+  late AdState _adState;
+  late GamePlayState gamePlayState;
+  late SettingsController settings;
+
+
   @override
   void initState() {
     // TODO: implement initState
+
+    gamePlayState = Provider.of<GamePlayState>(context,listen: false);
+    _adState = Provider.of<AdState>(context,listen: false);
+    settings = Provider.of<SettingsController>(context,listen: false);
+    
     super.initState();
     // _loadRewardedAd();
+    setState(() {
+      _adState.loadGameOverRewardedAd(context, gamePlayState, settings);
+    });    
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  
 
 
   @override

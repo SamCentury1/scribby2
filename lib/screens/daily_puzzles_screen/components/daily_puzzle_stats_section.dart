@@ -33,11 +33,12 @@ class _DailyPuzzleStatsSectionState extends State<DailyPuzzleStatsSection> {
     scalor = Helpers().getScalor(widget.settings);
 
 
-    final Map<dynamic,dynamic> userData = widget.settings.userData.value as Map<dynamic,dynamic>;
+    // final Map<dynamic,dynamic> userData = widget.settings.userData.value as Map<dynamic,dynamic>;
 
     print("GAME HISTORY");
 
-    List<dynamic> gameHistory = userData["gameHistory"];
+    // List<dynamic> gameHistory = userData["gameHistory"];
+    List<dynamic> gameHistory = widget.settings.userGameHistory.value;
     completedPuzzles = [];
 
     for (dynamic game in gameHistory) {
@@ -152,7 +153,7 @@ int calculateStreak(List<dynamic> games) {
       .map((g) => DateTime(DateTime.parse(g["createdAt"]).year,DateTime.parse(g["createdAt"]).month,DateTime.parse(g["createdAt"]).day))
       .toSet();
 
-  print(completedDates);
+  print("completedDates: $completedDates");
   final today = DateTime.now();
   final todayDate = DateTime(today.year, today.month, today.day);
   final yesterdayDate = todayDate.subtract(Duration(days: 1));
@@ -160,7 +161,7 @@ int calculateStreak(List<dynamic> games) {
   // If no game was played yesterday, streak is zero
   if (!completedDates.contains(yesterdayDate)) {
     // Optional: add today if user already played today? No, streak still 0 until tomorrow
-    return 0;
+    return 1;
   }
 
   // Count consecutive days ending with yesterday

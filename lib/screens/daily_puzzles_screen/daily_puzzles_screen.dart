@@ -93,6 +93,10 @@ class _DailyPuzzlesScreenState extends State<DailyPuzzlesScreen> {
         final Map<dynamic,dynamic> userData = settings.userData.value as Map<dynamic,dynamic>;
 
         GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
+        List<dynamic> dailyChallenges = settings.userGameHistory.value;
+
+
+
         
 
 
@@ -149,8 +153,8 @@ class _DailyPuzzlesScreenState extends State<DailyPuzzlesScreen> {
                                       height: 50 * scalor,
 
                                     ),
-                                    DailyPuzzleCard(puzzleObject: todayPuzzleEasy),
-                                    DailyPuzzleCard(puzzleObject: todayPuzzleHard)
+                                    DailyPuzzleCard(puzzleObject: todayPuzzleEasy, mediaQueryData: MediaQuery.of(context),),
+                                    DailyPuzzleCard(puzzleObject: todayPuzzleHard, mediaQueryData: MediaQuery.of(context),)
                                   ],
                                 ),
                               ),

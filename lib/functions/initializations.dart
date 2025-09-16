@@ -322,6 +322,16 @@ class Initializations {
       "gap3Center": gap3Center,
     };
 
+    print("""
+=================================
+element sizes at initialization:
+---------------------------------
+
+${positionData}
+
+==================================
+""");
+
     gamePlayState.setElementPositions(positionData);
 
     initializeTilePositions(gamePlayState); 

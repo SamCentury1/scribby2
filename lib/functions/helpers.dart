@@ -162,7 +162,7 @@ class Helpers {
     } else {
       if (shareOfVowels <= 0.40) {
         res = "vowel";
-      } else if (shareOfVowels > 0.60) {
+      } else if (shareOfVowels > 0.45) {
         res = "consonant";
       } else {
         Random random = Random();
@@ -1032,7 +1032,23 @@ class Helpers {
       res = "Tutorial";
     }
     return res;
-  }  
+  }
+
+  String getScoreValue(Map<String,dynamic> gameData) {
+
+    String gameType = gameData["gameParameters"]["gameType"];
+    String res = "";
+
+    if (gameType == "classic" || gameType == "timed-move") {
+      res = gameData["score"].toString();
+    } else if (gameType == "sprint") {
+      res = Helpers().formatDuration(gameData["durationSeconds"]);
+    } else if (gameType=="tutorial"){
+      res = gameData["score"].toString();
+    }
+    return res;
+  }
+
 
 
 }

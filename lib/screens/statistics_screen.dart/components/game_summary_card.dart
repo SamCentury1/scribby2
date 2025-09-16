@@ -81,7 +81,7 @@ ${gameData}
                   ),
               
                   trailing: Text(
-                    getScoreValue(gameData),
+                    Helpers().getScoreValue(gameData),
                     style: palette.counterFont(
                       textStyle: TextStyle(fontSize: 24 * scalor, color: palette.widgetText2),
                     )
@@ -340,20 +340,20 @@ List<Widget> getTargetSection(double scalor, Map<String,dynamic> gameParameters)
   return res;
 }
 
-String getScoreValue(Map<String,dynamic> gameData) {
+// String getScoreValue(Map<String,dynamic> gameData) {
 
-  String gameType = gameData["gameParameters"]["gameType"];
-  String res = "";
+//   String gameType = gameData["gameParameters"]["gameType"];
+//   String res = "";
 
-  if (gameType == "classic" || gameType == "timed-move") {
-    res = gameData["score"].toString();
-  } else if (gameType == "sprint") {
-    res = Helpers().formatDuration(gameData["durationSeconds"]);
-  } else if (gameType=="tutorial"){
-    res = gameData["score"].toString();
-  }
-  return res;
-}
+//   if (gameType == "classic" || gameType == "timed-move") {
+//     res = gameData["score"].toString();
+//   } else if (gameType == "sprint") {
+//     res = Helpers().formatDuration(gameData["durationSeconds"]);
+//   } else if (gameType=="tutorial"){
+//     res = gameData["score"].toString();
+//   }
+//   return res;
+// }
 
 Future<void> openViewWordsSummary(BuildContext context, Map<String, dynamic> gameData, double scalor) async {
   return showDialog<void>(

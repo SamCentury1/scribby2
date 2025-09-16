@@ -1565,7 +1565,8 @@ class GameLogic extends ChangeNotifier {
               gamePlayState.gameResultData.update("reward", (v)=> reward);
               gamePlayState.gameResultData.update("xp", (v)=> xp);
               print("xp in checkGameOver => $xp | ${gamePlayState.gameResultData}");
-              executeGameOverLogic(context,gamePlayState);       
+              executeGameOverLogic(context,gamePlayState);
+
             }
           }
         }
@@ -1822,6 +1823,12 @@ class GameLogic extends ChangeNotifier {
     late List<Map<dynamic,dynamic>> badgesEarned = [];
     late List<dynamic> achievementData = settings.achievementData.value;
     late int xpEarnedFromBadges = 0;
+    late bool shouldSaveData = true;
+    
+
+    if (gamePlayState.gameParameters["gameType"]=="tutorial" && userData["parameters"]["tutorialComplete"]) {
+      shouldSaveData = false;
+    }
     // final bool isTutorialComplete = userData["parameters"]["tutorialComplete"];
 
     // if (!isTutorialComplete) {
@@ -1973,9 +1980,8 @@ class GameLogic extends ChangeNotifier {
       badge.update("dateCompleted", (v)=>DateTime.now().toIso8601String());
     }
 
-    if (gamePlayState.gameParameters["gameType"]=="tutorial" && userData["parameters"]["tutorialComplete"]) {
+    if (shouldSaveData) {
       // print("don't save, tutorial was completed");
-    } else {
       final int currentXP = settings.xp.value;
       final int xpEarnedInGame = gamePlayState.gameResultData["xp"]??0;
       gamePlayState.gameResultData.update("xp",(v) => xpEarnedInGame+xpEarnedFromBadges);
@@ -2011,6 +2017,16 @@ class GameLogic extends ChangeNotifier {
         "gameParameters": gameParams, //{"gameType": gameType,"target":target,"targetType":targetType,"boardAxis":boardAxis,"durationInMinutes":durationInMinutes},
 
       };
+
+      print("""
+=1=1=1=1=1=1=1=1=1==1=1=1=1=1=1=1
+game params:
+${gameParams}
+in the store data function => 
+${data}
+=1=1=1=1=1=1=1=1=1==1=1=1=1=1=1=1
+""");
+
       List<dynamic> history = settings.userGameHistory.value;
       List<Map<String,dynamic>> updatedHistory = List<Map<String,dynamic>>.from(history);
       updatedHistory.add(data);
@@ -2022,7 +2038,9 @@ class GameLogic extends ChangeNotifier {
       FirestoreMethods().updateGameHistory(settings, data);
       FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
       FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
-      FirestoreMethods().updateParameters(settings, "tutorialComplete", true);
+      if (!userData["parameters"]["tutorialComplete"]) {
+        FirestoreMethods().updateParameters(settings, "tutorialComplete", true);
+      }
     }
   }
 
