@@ -181,7 +181,8 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
                                     widget.puzzleObject["levelName"],
                                     settings,   
                                     widget.mediaQueryData, 
-                                    context
+                                    context,
+                                    palette
                                   );
 
                                 }, 

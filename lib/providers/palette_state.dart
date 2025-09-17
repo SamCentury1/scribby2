@@ -165,7 +165,23 @@ class ColorPalette extends ChangeNotifier {
   Color get scoreboardAnimationBorder1 => _scoreboardAnimationBorder1;  
 
   late Color _scoreboardAnimationBorder2 = Colors.transparent;
-  Color get scoreboardAnimationBorder2 => _scoreboardAnimationBorder2;  
+  Color get scoreboardAnimationBorder2 => _scoreboardAnimationBorder2;
+
+
+  late Color _tileColor1 = Colors.transparent;
+  Color get tileColor1 => _tileColor1;
+
+  late Color _tileColor2 = Colors.transparent;
+  Color get tileColor2 => _tileColor2;
+
+  late Color _tileColor3 = Colors.transparent;
+  Color get tileColor3 => _tileColor3;
+
+  late Color _tileColor4 = Colors.transparent;
+  Color get tileColor4 => _tileColor4;
+
+  late Color _tileColor5 = Colors.transparent;
+  Color get tileColor5 => _tileColor5;        
 
   // FONTS
 
@@ -242,7 +258,13 @@ class ColorPalette extends ChangeNotifier {
       _gameplayDeadTileFill1 = colorsDictionary[themeValue]!["gameplayDeadTileFill1"]!; 
       _gameplayDeadTileFill2 = colorsDictionary[themeValue]!["gameplayDeadTileFill2"]!; 
       _scoreboardAnimationBorder1 = colorsDictionary[themeValue]!["scoreboardAnimationBorder1"]!; 
-      _scoreboardAnimationBorder2 = colorsDictionary[themeValue]!["scoreboardAnimationBorder2"]!;    
+      _scoreboardAnimationBorder2 = colorsDictionary[themeValue]!["scoreboardAnimationBorder2"]!; 
+
+      _tileColor1 = colorsDictionary[themeValue]!["tileColor1"]!;
+      _tileColor2 = colorsDictionary[themeValue]!["tileColor2"]!;
+      _tileColor3 = colorsDictionary[themeValue]!["tileColor3"]!;
+      _tileColor4 = colorsDictionary[themeValue]!["tileColor4"]!;
+      _tileColor5 = colorsDictionary[themeValue]!["tileColor5"]!;  
 
       _tileFont = GoogleFonts.rowdies;
 
@@ -445,6 +467,12 @@ class ColorPalette extends ChangeNotifier {
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 236, 215, 23),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 235, 55, 42),
+          
+          "tileColor1" : const Color.fromARGB(255, 0, 13, 131),
+          "tileColor2" : const Color.fromARGB(255, 7, 55, 94),
+          "tileColor3" : const Color.fromARGB(255, 86, 9, 158),
+          "tileColor4" : const Color.fromARGB(255, 15, 18, 218),
+          "tileColor5" : const Color.fromARGB(255, 25, 5, 99),
 
 
       },
@@ -503,7 +531,13 @@ class ColorPalette extends ChangeNotifier {
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
-          "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),          
+          "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "tileColor1" : const Color.fromARGB(255, 100, 13, 131),
+          "tileColor2" : const Color.fromARGB(255, 107, 55, 94),
+          "tileColor3" : const Color.fromARGB(255, 186, 9, 158),
+          "tileColor4" : const Color.fromARGB(255, 115, 18, 218),
+          "tileColor5" : const Color.fromARGB(255, 125, 5, 99),
 
 
       },
@@ -563,7 +597,13 @@ class ColorPalette extends ChangeNotifier {
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
-          "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),            
+          "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "tileColor1" : const Color.fromARGB(255, 74, 71, 75),
+          "tileColor2" : const Color.fromARGB(255, 20, 20, 20),
+          "tileColor3" : const Color.fromARGB(255, 65, 65, 65),
+          "tileColor4" : const Color.fromARGB(255, 51, 50, 51),
+          "tileColor5" : const Color.fromARGB(255, 34, 34, 34),                 
       },
       "nature" : {
           "bg1" : const Color.fromARGB(255, 55, 116, 173),
@@ -621,7 +661,13 @@ class ColorPalette extends ChangeNotifier {
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
-          "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),             
+          "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "tileColor1" : const Color.fromARGB(255, 27, 71, 10),
+          "tileColor2" : const Color.fromARGB(255, 10, 66, 8),
+          "tileColor3" : const Color.fromARGB(255, 9, 53, 4),
+          "tileColor4" : const Color.fromARGB(255, 17, 54, 14),
+          "tileColor5" : const Color.fromARGB(255, 3, 90, 57),
       },
       "techno" : {
           "bg1" : const Color.fromARGB(255, 55, 116, 173),
@@ -680,6 +726,12 @@ class ColorPalette extends ChangeNotifier {
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "tileColor1" : const Color.fromARGB(255, 212, 65, 212),
+          "tileColor2" : const Color.fromARGB(255, 70, 170, 31),
+          "tileColor3" : const Color.fromARGB(255, 25, 170, 180),
+          "tileColor4" : const Color.fromARGB(255, 206, 203, 41),
+          "tileColor5" : const Color.fromARGB(255, 105, 56, 161),          
       },
       "beach" : {
           "bg1" : const Color.fromARGB(255, 55, 116, 173),
@@ -738,6 +790,12 @@ class ColorPalette extends ChangeNotifier {
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "tileColor1" : const Color.fromARGB(255, 139, 79, 29),
+          "tileColor2" : const Color.fromARGB(255, 170, 137, 30),
+          "tileColor3" : const Color.fromARGB(255, 196, 160, 62),
+          "tileColor4" : const Color.fromARGB(255, 180, 152, 29),
+          "tileColor5" : const Color.fromARGB(255, 247, 174, 18),          
       },
   };
 }

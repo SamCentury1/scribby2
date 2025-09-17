@@ -22,39 +22,42 @@ class LoginButton extends StatelessWidget {
     late SettingsController settings = Provider.of<SettingsController>(context, listen:false);
     final double scalor = Helpers().getScalor(settings);
         
-    return ElevatedButton(
-      onPressed: onTap,
-      
-      child: Container(
-        padding: EdgeInsets.all(15.0*scalor),
-        margin: EdgeInsets.symmetric(horizontal: 25.0*scalor),
-        decoration: BoxDecoration(
-        //   color: palette.widget1,
-          borderRadius: BorderRadius.circular(8.0*scalor)
-        ),
-        child: Center(
-          child: Text(
-            body,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 12.0*scalor),
+      child: ElevatedButton(
+        onPressed: onTap,
+        
+        child: Container(
+          padding: EdgeInsets.all(15.0*scalor),
+          margin: EdgeInsets.symmetric(horizontal: 25.0*scalor),
+          decoration: BoxDecoration(
+          //   color: palette.widget1,
+            borderRadius: BorderRadius.circular(8.0*scalor)
           ),
-        ),
-
-
-
-      ),
-
-      style: ElevatedButton.styleFrom(
-        foregroundColor: palette.navigationButtonText2, //const Color.fromARGB(255, 220, 220, 223),
-        backgroundColor: palette.navigationButtonBg2, //const Color.fromARGB(255, 44, 34, 185),
-        // shadowColor: palette.widgetShadow1,
-
+          child: Center(
+            child: Text(
+              body,
+            ),
+          ),
       
-        textStyle: TextStyle(
-          fontSize: 24*scalor
-        ),                                    
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0 * scalor)),
+      
+      
         ),
-      ),       
+      
+        style: ElevatedButton.styleFrom(
+          foregroundColor: palette.navigationButtonText2, //const Color.fromARGB(255, 220, 220, 223),
+          backgroundColor: palette.navigationButtonBg2, //const Color.fromARGB(255, 44, 34, 185),
+          // shadowColor: palette.widgetShadow1,
+      
+        
+          textStyle: TextStyle(
+            fontSize: 24*scalor
+          ),                                    
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0 * scalor)),
+          ),
+        ),       
+      ),
     );
   }
 }

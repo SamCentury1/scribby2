@@ -436,7 +436,7 @@ Widget getGameParameterWidget(ColorPalette palette, double scalor, IconData icon
 
 Future<void> openRestartGameDialog(BuildContext context, SettingsController settings, GamePlayState gamePlayState, ScaffoldState? scaffoldState) async {
 
-void onPressRestart(BuildContext context, SettingsController settings, GamePlayState gamePlayState, ScaffoldState? scaffoldState) {
+void onPressRestart(BuildContext context, SettingsController settings, GamePlayState gamePlayState, ScaffoldState? scaffoldState, ColorPalette palette) {
   
 
   Map<String,dynamic> gameParameters = Map<String,dynamic>.from(gamePlayState.gameParameters);
@@ -450,7 +450,7 @@ void onPressRestart(BuildContext context, SettingsController settings, GamePlayS
   Initializations().initializeTileData(gamePlayState, gameParameters["rows"], gameParameters["columns"]);
   Initializations().initializeElementSizes(gamePlayState, mediaQuery);
   Initializations().initializeElementPositions(gamePlayState, mediaQuery);
-  Initializations().initializeGame(settings,gamePlayState);
+  Initializations().initializeGame(settings,gamePlayState,palette);
 
   scaffoldState?.closeDrawer();
   
@@ -463,10 +463,11 @@ void onPressRestart(BuildContext context, SettingsController settings, GamePlayS
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
+      ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
       return NavigationDialog(
         title: "Restart Game", 
         body: "All progress will be lost", 
-        action: () => onPressRestart(context,settings, gamePlayState,scaffoldState)
+        action: () => onPressRestart(context,settings, gamePlayState,scaffoldState,palette)
       );
     }
   );

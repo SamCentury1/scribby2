@@ -87,50 +87,6 @@ class _NewGameDialogState extends State<NewGameDialog> {
 
 
 
-  // void startGame(
-  //   GamePlayState gamePlayState, 
-  //   String gameTypeChoice, 
-  //   int? duration, 
-  //   int? targetPoints, 
-  //   int? rowValue, 
-  //   int? colValue, 
-  //   int? timeToPlace, 
-  //   SettingsController settings) {
-
-  //   gamePlayState.setGameParameters({
-  //     "gameType":gameTypeChoice,
-  //     "target":targetPoints,
-  //     "targetType": null,
-  //     "rows":rowValue,
-  //     "columns":colValue,
-  //     "durationInMinutes":duration,
-  //     "timeToPlace": timeToPlace,
-  //     "mediaQueryData": widget.mediaQueryData,
-  //   });
-  //   Map<String,dynamic> deviceSizeData = settings.deviceSizeInfo.value as Map<String,dynamic>;
-  //   gamePlayState.setScalor(deviceSizeData["scalor"]);
-  //   Initializations().initializeTime(gamePlayState,gameTypeChoice, durationInMinutes,timeToPlace,);
-  //   Initializations().initializeTileData(gamePlayState,rowValue!,colValue!);
-  //   Initializations().initializeElementSizes(gamePlayState,widget.mediaQueryData);
-  //   Initializations().initializeElementPositions(gamePlayState,widget.mediaQueryData);
-  //   // Initializations().initializeDictionary(settings,gamePlayState);
-
-  //   if (gameTypeChoice == "tutorial") {
-  //     Initializations().initializeTutorial(settings, gamePlayState);
-  //   } else {
-  //     Initializations().initializeGame(settings, gamePlayState);
-  //   }
-
-  //   print(gamePlayState.gameParameters);
-
-  //   Navigator.of(context).pushReplacement(
-  //     MaterialPageRoute(builder: (context) => const GameScreen())
-  //     // MaterialPageRoute(builder: (context) => const TempScreen())
-  //   );      
-  // }
-
-
-
   @override
   Widget build(BuildContext context) {
     // final _style = Theme.of(context).textTheme.displaySmall;
@@ -566,10 +522,20 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               )
                             ),
                             onPressed: () {        
-                              print("d: $durationInMinutes | p: $targetPoints | g: $gridAxis");
-
-                              Initializations().startGame(gamePlayState, "tutorial",null, null, gridTargets[1],gridTargets[1], null, null, settings,widget.mediaQueryData,context);
-
+                              Initializations().startGame(
+                                gamePlayState,
+                                "tutorial",
+                                null,
+                                null,
+                                gridTargets[1],
+                                gridTargets[1],
+                                null,
+                                null,
+                                settings,
+                                widget.mediaQueryData,
+                                context,
+                                palette,
+                              );
                             },
                             
                             child: Padding(
@@ -685,8 +651,20 @@ class _NewGameDialogState extends State<NewGameDialog> {
                             onPressed: () {        
                               print("d: $durationInMinutes | p: $targetPoints | g: $gridAxis"); 
                               print("user: ${settings.userData.value}");                 
-                              Initializations().startGame(gamePlayState, gameTypeChoice,durationInMinutes, targetPoints, rowValue,colValue,timeToPlace, null, settings,widget.mediaQueryData,context);
-
+                              Initializations().startGame(
+                                gamePlayState, 
+                                gameTypeChoice,
+                                durationInMinutes, 
+                                targetPoints, 
+                                rowValue,
+                                colValue,
+                                timeToPlace, 
+                                null, 
+                                settings,
+                                widget.mediaQueryData,
+                                context,
+                                palette
+                              );
                             },
                             
                             child: Padding(

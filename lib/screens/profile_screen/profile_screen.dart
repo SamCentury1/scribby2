@@ -125,7 +125,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         final Map<dynamic,dynamic> userData = settings.userData.value as Map<dynamic,dynamic>;
 
-        print("user Data: $userData");
+        print("========================");
+        userData.forEach((k,v) {
+          print("k: $k | v: $v");
+          print("-----------------");
+        });
+        print("========================");
         // _displayName = userData["displayName"];
         // _email = userData["email"];
         _username = userData["username"];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scribby_flutter_v2/functions/initializations.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/daily_puzzles_screen/daily_puzzles_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
@@ -90,8 +91,7 @@ class HomeScreenUtils {
 
 
 
-  void navigateToTutorial(BuildContext context, GamePlayState gamePlayState, SettingsController settings) async {
-    // void startGame(GamePlayState gamePlayState, String gameTypeChoice, int? duration, int? targetPoints, int? axis, SettingsController settings) {
+  void navigateToTutorial(BuildContext context, GamePlayState gamePlayState, SettingsController settings, ColorPalette palette) async {
 
       gamePlayState.setGameParameters({
         "gameType":"tutorial",
@@ -110,7 +110,7 @@ class HomeScreenUtils {
       Initializations().initializeElementPositions(gamePlayState,MediaQuery.of(context));
       // Initializations().initializeDictionary(settings,gamePlayState);
 
-      Initializations().initializeTutorial(settings, gamePlayState);
+      Initializations().initializeTutorial(settings, gamePlayState,palette);
 
       print(gamePlayState.gameParameters);
 

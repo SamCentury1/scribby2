@@ -28,7 +28,7 @@ class GameLogic extends ChangeNotifier {
       executeTileDroppedLogic(gamePlayState,pointedElement,details);
     } else {
       print("@@@@@ tile is tapped");
-      executeTileTappedLogic(gamePlayState,pointedElement);
+      executeTileTappedLogic(gamePlayState,pointedElement,palette);
       moveData = {"type":"placed","data":{"target":pointedElement,"source":null}};
     }
     
@@ -62,7 +62,7 @@ class GameLogic extends ChangeNotifier {
   }
 
 
-  void generateNewRandomLetter(GamePlayState gamePlayState) {
+  void generateNewRandomLetter(GamePlayState gamePlayState,ColorPalette palette) {
 
     Random random = Random();
     String newLetter = "";
@@ -133,7 +133,7 @@ class GameLogic extends ChangeNotifier {
     decorationObject["gradientOffset"] = random.nextInt(4);
     Map<String,dynamic> randomLetterObject = {"body":newLetter,"decorationData": decorationObject};
     gamePlayState.setRandomLetterData([ ...gamePlayState.randomLetterData,randomLetterObject]);      
-    updateDecorationData(gamePlayState,random);
+    updateDecorationData(gamePlayState,random,palette);
     
 
   }
@@ -814,7 +814,7 @@ class GameLogic extends ChangeNotifier {
   }
 
   /// logic that executes whether the tile is a reserve or a board
-  void executeTileTappedLogic(GamePlayState gamePlayState, Map<String,dynamic> tileObject) {
+  void executeTileTappedLogic(GamePlayState gamePlayState, Map<String,dynamic> tileObject, ColorPalette palette) {
 
     try {
       // get the element key
@@ -831,7 +831,7 @@ class GameLogic extends ChangeNotifier {
         gamePlayState.pauseStopWatchTimer();
 
         // generate a new random letter
-        generateNewRandomLetter(gamePlayState);
+        generateNewRandomLetter(gamePlayState,palette);
 
 
         // get the new letter body
@@ -2061,15 +2061,21 @@ ${data}
     } 
   }
 
-  void updateDecorationData(GamePlayState gamePlayState,Random random) {
+  void updateDecorationData(GamePlayState gamePlayState,Random random, ColorPalette palette) {
       final List<Color> colors = [
-        const Color.fromARGB(255, 182, 21, 21),
-        const Color.fromARGB(255, 253, 115, 35),
-        const Color.fromARGB(255, 18, 112, 21),
-        const Color.fromARGB(255, 90, 175, 168),
-        const Color.fromARGB(255, 66, 79, 201),
-        const Color.fromARGB(255, 142, 77, 180),
-        const Color.fromARGB(255, 176, 39, 96)
+        // const Color.fromARGB(255, 182, 21, 21),
+        // const Color.fromARGB(255, 253, 115, 35),
+        // const Color.fromARGB(255, 18, 112, 21),
+        // const Color.fromARGB(255, 90, 175, 168),
+        // const Color.fromARGB(255, 66, 79, 201),
+        // const Color.fromARGB(255, 142, 77, 180),
+        // const Color.fromARGB(255, 176, 39, 96)
+
+        palette.tileColor1,
+        palette.tileColor2,
+        palette.tileColor3,
+        palette.tileColor4,
+        palette.tileColor5,        
       ];
       
       if (gamePlayState.tileDecorationData["interval"] == 50) {

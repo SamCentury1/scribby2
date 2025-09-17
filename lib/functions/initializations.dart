@@ -458,16 +458,21 @@ ${positionData}
       
   }
 
-  void initializeTileDecorationData(GamePlayState gamePlayState) {
+  void initializeTileDecorationData(GamePlayState gamePlayState, ColorPalette palette) {
 
     final List<Color> colors = [
-      const Color.fromARGB(255, 182, 21, 21),
-      const Color.fromARGB(255, 253, 115, 35),
-      const Color.fromARGB(255, 18, 112, 21),
-      const Color.fromARGB(255, 90, 175, 168),
-      const Color.fromARGB(255, 66, 79, 201),
-      const Color.fromARGB(255, 142, 77, 180),
-      const Color.fromARGB(255, 176, 39, 96)
+      palette.tileColor1,
+      palette.tileColor2,
+      palette.tileColor3,
+      palette.tileColor4,
+      palette.tileColor5,
+      // const Color.fromARGB(255, 182, 21, 21),
+      // const Color.fromARGB(255, 253, 115, 35),
+      // const Color.fromARGB(255, 18, 112, 21),
+      // const Color.fromARGB(255, 90, 175, 168),
+      // const Color.fromARGB(255, 66, 79, 201),
+      // const Color.fromARGB(255, 142, 77, 180),
+      // const Color.fromARGB(255, 176, 39, 96)
     ];  
 
     Random random = Random();
@@ -615,9 +620,9 @@ ${positionData}
   }
 
 
-  void initializeGame(SettingsController settings, GamePlayState gamePlayState) {
+  void initializeGame(SettingsController settings, GamePlayState gamePlayState, ColorPalette palette) {
 
-    initializeTileDecorationData(gamePlayState);
+    initializeTileDecorationData(gamePlayState, palette);
 
     initializeAlphabet(settings, gamePlayState);
 
@@ -644,11 +649,11 @@ ${positionData}
 
 
 
-  void initializeTutorial(SettingsController settings, GamePlayState gamePlayState) {
+  void initializeTutorial(SettingsController settings, GamePlayState gamePlayState, ColorPalette palette) {
 
     gamePlayState.setIsTutorial(true);
     
-    initializeTileDecorationData(gamePlayState);
+    initializeTileDecorationData(gamePlayState,palette);
 
     initializeAlphabet(settings, gamePlayState);
 
@@ -692,6 +697,7 @@ ${positionData}
     SettingsController settings,
     MediaQueryData mediaQueryData,
     BuildContext context,
+    ColorPalette palette,
     ) {
 
     gamePlayState.setGameParameters({
@@ -714,9 +720,9 @@ ${positionData}
     // Initializations().initializeDictionary(settings,gamePlayState);
 
     if (gameTypeChoice == "tutorial") {
-      Initializations().initializeTutorial(settings, gamePlayState);
+      Initializations().initializeTutorial(settings, gamePlayState,palette);
     } else {
-      Initializations().initializeGame(settings, gamePlayState);
+      Initializations().initializeGame(settings, gamePlayState,palette);
     }
 
 

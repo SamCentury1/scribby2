@@ -154,71 +154,55 @@ class _HomeScreenState extends State<HomeScreen> {
                           
                             drawer: Drawer(
                               // backgroundColor: palette.bg1,
+                              backgroundColor: palette.drawerBg,
                               width: MediaQuery.of(context).size.width*0.8,
-                              child: Stack(
+                              child: Column(
                                 children: [
-                                  Positioned.fill(
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [palette.dialogBg1,palette.dialogBg2],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomCenter
-                                        )
-                                      ),
-                                    )
-                                  ),
-                                  Column(
-                                    children: [
-                                                    
-                                      SizedBox(height: AppBar().preferredSize.height),
-                                                    
-                                      Container(
-                                        height: 200*scalor,
+                                                
+                                  SizedBox(height: AppBar().preferredSize.height),
+                                                
+                                  Container(
+                                    height: 200*scalor,
+                                    child: Center(
+                                      child: SizedBox(
                                         child: Center(
-                                          child: SizedBox(
-                                            child: Center(
-                                              child: Image.asset('assets/images/scribby_label_1.png'),
-                                            ),
-                                          )
+                                          child: Image.asset('assets/images/scribby_label_1.png'),
                                         ),
-                                      ),
-      
-                                      SizedBox(height: 22 * scalor,),
-                                      HomeScreenDrawerButton(
-                                        icon: Icons.question_mark,
-                                        body: "How to Play?", 
-                                        onPress: () => HomeScreenUtils().navigateToInstructionsScreen(context,true)
-                                      ),
-                                                                                        
-                                      HomeScreenDrawerButton(
-                                        icon: Icons.bar_chart,
-                                        body: "Statistics", 
-                                        onPress: () => HomeScreenUtils().navigateToUserGameHistoryScreen(context,true)
-                                      ),
-                                                    
-                                      HomeScreenDrawerButton(
-                                        icon: Icons.person_4_outlined,
-                                        body: "User Profile", 
-                                        onPress: () => HomeScreenUtils().navigateToUserProfileScreen(context,true)
-                                      ),
-
-
-
-                                      Expanded(child: SizedBox()),
-                                  
-
-                                                    
-                                      HomeScreenDrawerButton(
-                                        icon: Icons.close,
-                                        body: "Sign Out", 
-                                        onPress: () => AuthService().signOut()
-                                      ),
-
-                                    ],
+                                      )
+                                    ),
                                   ),
+                                    
+                                  SizedBox(height: 22 * scalor,),
+                                  HomeScreenDrawerButton(
+                                    icon: Icons.question_mark,
+                                    body: "How to Play?", 
+                                    onPress: () => HomeScreenUtils().navigateToInstructionsScreen(context,true)
+                                  ),
+                                                                                    
+                                  HomeScreenDrawerButton(
+                                    icon: Icons.bar_chart,
+                                    body: "Statistics", 
+                                    onPress: () => HomeScreenUtils().navigateToUserGameHistoryScreen(context,true)
+                                  ),
+                                                
+                                  HomeScreenDrawerButton(
+                                    icon: Icons.person_4_outlined,
+                                    body: "User Profile", 
+                                    onPress: () => HomeScreenUtils().navigateToUserProfileScreen(context,true)
+                                  ),
+                              
+                              
+                              
+                                  Expanded(child: SizedBox()),
+                              
+                              
+                                                
+                                  HomeScreenDrawerButton(
+                                    icon: Icons.close,
+                                    body: "Sign Out", 
+                                    onPress: () => AuthService().signOut()
+                                  ),
+                              
                                 ],
                               ),
                           
@@ -432,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 padding: EdgeInsets.all(8.0*scalor),
                                                                 elevation: 3.0 *scalor
                                                               ),
-                                                              onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings),
+                                                              onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings, palette),
                                                               child: Row(
                                                                 children: [
                                                                   Icon(Icons.play_arrow,size: 18 * scalor,),
@@ -760,145 +744,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     )
                                   )
-                                            
-                                  // Expanded(
-                                  //   flex: 2,
-                                  //   child: SizedBox(
-                                  //     child: Center(child: Image.asset("assets/images/scribby_label_1.png")),
-                                  //   ),
-                                  // ),
-                                                
-                                  // Expanded(child: SizedBox()),
-                                                        
-                                  
-                                  // SizedBox(
-                                  //   height: 80*scalor,
-                                  //   width: double.infinity,
-                                  //   child: Padding(
-                                  //     padding: EdgeInsets.all(12.0*scalor),
-                                                
-                                  //     child: Container(
-                                  //       decoration: BoxDecoration(
-                                  //         boxShadow: [
-                                  //           BoxShadow(
-                                  //             color: palette.widgetShadow1,
-                                  //             blurRadius: 12.0 * scalor,
-                                  //             spreadRadius: 2.0 * scalor,
-                                  //             offset: Offset(0.0, 10.0 * scalor) 
-                                  //           ),
-                                  //         ]
-                                  //       ),
-                                  //       child: ElevatedButton(
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           backgroundColor: palette.navigationButtonBg3,
-                                  //           foregroundColor: palette.navigationButtonText3,
-                                  //           shape: RoundedRectangleBorder(
-                                  //             borderRadius: BorderRadius.all(Radius.circular(8*scalor))
-                                  //           ),
-                                  //           shadowColor: palette.widgetShadow1,
-                                        
-                                  //         ),
-                                  //         onPressed: () {
-                                  //           openNewGameDialog(context, MediaQuery.of(context));
-                                  //         },
                                           
-                                  //         child: Text(
-                                  //           "New Game!",
-                                  //           style: palette.mainAppFont(
-                                  //             // color: Colors.white,
-                                  //             textStyle: TextStyle(
-                                  //               fontSize: 36*scalor,
-                                  //             ),
-                                  //           ),
-                                  //         )
-                                  //       ),
-                                  //     ),                                
-                                  //   )
-                                  // ),
-                                  
-                              
-                                  // SizedBox(
-                                  //   height: 80*scalor,
-                                  //   width: double.infinity,
-                                  //   child: Padding(
-                                  //     padding: EdgeInsets.all(12.0*scalor),
-                                                
-                                  //     child: Container(
-                                  //       decoration: BoxDecoration(
-                                  //         boxShadow: [
-                                  //           BoxShadow(
-                                  //             color: palette.widgetShadow1,
-                                  //             blurRadius: 12.0 * scalor,
-                                  //             spreadRadius: 2.0 * scalor,
-                                  //             offset: Offset(0.0, 10.0 * scalor) 
-                                  //           ),
-                                  //         ]
-                                  //       ),
-                                  //       child: ElevatedButton(
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           backgroundColor: palette.navigationButtonBg2,
-                                  //           foregroundColor: palette.navigationButtonText2,
-                                  //           shape: RoundedRectangleBorder(
-                                  //             borderRadius: BorderRadius.all(Radius.circular(8*scalor))
-                                  //           ),
-                                  //           shadowColor: palette.widgetShadow1,
-                                        
-                                  //         ),
-                                  //         onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings),
-                                          
-                                  //         child: Text(
-                                  //           "Watch Tutorial",
-                                  //           style: palette.mainAppFont(
-                                  //             // color: Colors.white,
-                                  //             textStyle: TextStyle(
-                                  //               fontSize: 36*scalor,
-                                  //             ),
-                                  //           ),
-                                  //         )
-                                  //       ),
-                                  //     ),
-                                  //   )
-                                  // ),
-                              
-                                  // Expanded(child: SizedBox()),
-                                  // Flexible(
-                                  //   flex: 3,
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.all(12.0),
-                                  //     child: Column(
-                                  //       children: [
-                                  //         Text("Daily Puzzles"),
-                                  //         SingleChildScrollView(
-                                  //           scrollDirection: Axis.horizontal,
-                                  //           child: Row(
-                                  //             children: listDailyPuzzles(scalor),
-                                  //           ),
-                                  //         ),
-                                                
-                                                        
-                                  //         Divider(thickness: 1.0,color: Colors.grey,),
-                                                        
-                                  //         Text("Timed-Move Challenges"),
-                                            
-                                  //         Wrap(
-                                  //           children: listPuzzles(settings,"timed-move"),
-                                  //         ),                              
-                                            
-                                  //         SizedBox(height: 20*scalor,),
-                                            
-                                  //         Text("Sprint Challenges"),
-                                            
-                                  //         Wrap(
-                                  //           children: listPuzzles(settings,"sprint"),
-                                  //         ),
-                                                
-                                  //         Divider(),
-                                                
-                                            
-                                  //       ],
-                                  //     ),
-                                  //   ),
-                                  // )
                                 ],
                               ),
                             ),
@@ -913,320 +759,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
               );        
-    //     ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
-    //     return FutureBuilder(
-    //       // future: loadLevelData(settings),
-    //       future: initializeAppData(settings,palette),
-    //       builder: (context, AsyncSnapshot<void> futureSnapshot) {
-    //         if (futureSnapshot.connectionState == ConnectionState.waiting) {
-    //           print("LOADING HOME PAGE");
-    //           return const Scaffold(body: Center(child: Text("loading"),),);
-    //         } else if (futureSnapshot.hasError) {
-    //           print("AN ERROR HAS OCCURED WHILE LOADING HOME AGE ");
-    //           print(futureSnapshot.error);
-
-    //           print(futureSnapshot.stackTrace);
-    //           return const Scaffold(body: Center(child: Text("an error has occured"),),);
-    //         } else {
-
-    //           Map<String,dynamic> deviceSizeInfo = settings.deviceSizeInfo.value as Map<String,dynamic>;
-    //           final double scalor = deviceSizeInfo["scalor"];
-
-              
-
-    //           // Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
-    //           // print("user data ${settings.userData.value.toString()} ");
-    //           // File? profileImage;
-    //           // if ( userData["photoUrl"] != null ) {
-    //           //   if (userData["photoUrl"] != "" && File(userData["photoUrl"]).existsSync()) {
-    //           //     profileImage = File(userData["photoUrl"]);
-    //           //   } 
-    //           // }
-    //           // Map<String,dynamic> achievements = settings.achievements.value as Map<String,dynamic>;
-    //           // if (achievements.isNotEmpty) {
-    //           //   if (achievements["rank"] != null) {
-    //           //     print("increased to new rank! ${achievements["rank"]}");
-    //           //   }
-    //           // }
-
-              
-    //           return Consumer<ColorPalette>(
-    //             builder: (context,palette,child) {
-    //               return PopScope(
-    //                 canPop: false,
-    //                 child: SafeArea(
-                      
-    //                   child: Stack(
-    //                     children: [
-    //                       Positioned(
-    //                         // top: 1,
-    //                         child: SizedBox(
-    //                           width: MediaQuery.of(context).size.width,
-    //                           height: MediaQuery.of(context).size.height,//-MediaQuery.of(context).padding.top-MediaQuery.of(context).padding.bottom,
-    //                           child: CustomPaint(
-    //                             painter: GradientBackground(settings: settings, palette: palette),
-    //                           ),
-    //                         ),
-    //                       ),                   
-    //                       Scaffold(
-    //                         backgroundColor: const Color.fromARGB(0, 209, 209, 209),                   
-    //                         appBar: AppBar(
-    //                           backgroundColor: const Color.fromARGB(0, 49, 49, 49),
-    //                           leading: Builder(
-    //                             builder: (context) {
-    //                               return IconButton(
-    //                                 onPressed: () {
-                                      
-    //                                   // if (Scaffold.of(context).isDrawerOpen != null) {
-    //                                     if (Scaffold.of(context).isDrawerOpen) {
-    //                                       // _homeScaffoldKey.currentState!.closeDrawer();
-    //                                       Scaffold.of(context).closeDrawer();
-                          
-    //                                     } else {
-    //                                       // _homeScaffoldKey.currentState!.openDrawer();
-    //                                       Scaffold.of(context).openDrawer();
-    //                                     }
-    //                                   // }
-    //                                 }, 
-    //                                 color: palette.appBarText,
-    //                                 icon: Icon(Icons.menu, color: palette.appBarText,)
-    //                               );
-    //                             }
-    //                           ),
-    //                           actions: [
-    //                             XPHoldings(),
-    //                             CoinHoldings()
-    //                           ],
-    //                         ),
-                          
-    //                         drawer: Drawer(
-    //                           // backgroundColor: palette.bg1,
-    //                           width: MediaQuery.of(context).size.width*0.8,
-    //                           child: Stack(
-    //                             children: [
-    //                               Positioned.fill(
-    //                                 child: Container(
-    //                                   width: double.infinity,
-    //                                   height: double.infinity,
-    //                                   decoration: BoxDecoration(
-    //                                     gradient: LinearGradient(
-    //                                       colors: [palette.dialogBg1,palette.dialogBg2],
-    //                                       begin: Alignment.topLeft,
-    //                                       end: Alignment.bottomCenter
-    //                                     )
-    //                                   ),
-    //                                 )
-    //                               ),
-    //                               Column(
-    //                                 children: [
-                                                    
-    //                                   SizedBox(height: AppBar().preferredSize.height),
-                                                    
-                                  
-    //                                   DrawerAvatar(),
-      
-    //                                   SizedBox(height: 22 * scalor,),
-    //                                   HomeScreenDrawerButton(
-    //                                     icon: Icons.question_mark,
-    //                                     body: "How to Play?", 
-    //                                     onPress: () => HomeScreenUtils().navigateToInstructionsScreen(context)
-    //                                   ),
-
-
-
-
-
-
-
-                                
-                                                                                                                                            
-    //                                   HomeScreenDrawerButton(
-    //                                     icon: Icons.bar_chart,
-    //                                     body: "Statistics", 
-    //                                     onPress: () => HomeScreenUtils().navigateToUserGameHistoryScreen(context)
-    //                                   ),
-                                                    
-    //                                   HomeScreenDrawerButton(
-    //                                     icon: Icons.person_4_outlined,
-    //                                     body: "User Profile", 
-    //                                     onPress: () => HomeScreenUtils().navigateToUserProfileScreen(context)
-    //                                   ),
-
-
-
-    //                                   Expanded(child: SizedBox()),
-                                  
-
-                                                    
-    //                                   HomeScreenDrawerButton(
-    //                                     icon: Icons.close,
-    //                                     body: "Sign Out", 
-    //                                     onPress: () => AuthService().signOut()
-    //                                   ),
-
-    //                                 ],
-    //                               ),
-    //                             ],
-    //                           ),
-                          
-    //                         ),
-                              
-    //                         body: Column(
-    //                           children: [
-                                          
-    //                             Expanded(
-    //                               flex: 2,
-    //                               child: SizedBox(
-    //                                 child: Center(child: Image.asset("assets/images/scribby_label_1.png")),
-    //                               ),
-    //                             ),
-                  
-    //                             Expanded(child: SizedBox()),
-                          
-                                
-    //                             SizedBox(
-    //                               height: 80*scalor,
-    //                               width: double.infinity,
-    //                               child: Padding(
-    //                                 padding: EdgeInsets.all(12.0*scalor),
-                  
-    //                                 child: ElevatedButton(
-    //                                   style: ElevatedButton.styleFrom(
-    //                                     backgroundColor: palette.navigationButtonBg3,
-    //                                     foregroundColor: palette.navigationButtonText3,
-    //                                     shape: RoundedRectangleBorder(
-    //                                       borderRadius: BorderRadius.all(Radius.circular(8*scalor))
-    //                                     )
-    //                                   ),
-    //                                   onPressed: () {
-    //                                     openNewGameDialog(context, MediaQuery.of(context));
-    //                                   },
-                                      
-    //                                   child: Text(
-    //                                     "New Game!",
-    //                                     style: palette.mainAppFont(
-    //                                       // color: Colors.white,
-    //                                       textStyle: TextStyle(
-    //                                         fontSize: 36*scalor,
-    //                                       ),
-    //                                     ),
-    //                                   )
-    //                                 ),                                
-    //                               )
-    //                             ),
-                                
-    //                             Flexible(
-    //                               flex: 3,
-    //                               child: Padding(
-    //                                 padding: const EdgeInsets.all(12.0),
-    //                                 child: Column(
-    //                                   children: [
-    //                                     Text("Daily Puzzles"),
-    //                                     SingleChildScrollView(
-    //                                       scrollDirection: Axis.horizontal,
-    //                                       child: Row(
-    //                                         children: listDailyPuzzles(scalor),
-    //                                       ),
-    //                                     ),
-                  
-                          
-    //                                     Divider(thickness: 1.0,color: Colors.grey,),
-                          
-    //                                     Text("Timed-Move Challenges"),
-                                          
-    //                                     Wrap(
-    //                                       children: listPuzzles(settings,"timed-move"),
-    //                                     ),                              
-                                          
-    //                                     SizedBox(height: 20*scalor,),
-                                          
-    //                                     Text("Sprint Challenges"),
-                                          
-    //                                     Wrap(
-    //                                       children: listPuzzles(settings,"sprint"),
-    //                                     ),
-                  
-    //                                     Divider(),
-                  
-              
-    //                                   ],
-    //                                 ),
-    //                               ),
-    //                             )
-    //                           ],
-    //                         ),
-    //                         // bottomNavigationBar: GameScreenBannerAd(),
-    //                       ),
-
-    //                       // Overlay()
-    //                       NewRankOverlay()
-    //                     ],
-    //                   )
-    //                 ),
-    //               );
-    //             }
-    //           );
-    //         }
-    //       }
-    //     );
       }
     );
   }
 }
 
-// List<Widget> displayLevels(BuildContext context, GamePlayState gamePlayState, List<Map<String,dynamic>> levelData) {
-
-//   final double screenWidth = MediaQuery.of(context).size.width;
-//   final double screenHeight = MediaQuery.of(context).size.height;
-
-
-
-//   List<Widget> res = [];
-//   for (int i=0; i<levelData.length;i++) {
-//     final int rows = levelData[i]["rows"];
-//     final int columns = levelData[i]["columns"];
-//     String body = "$columns by $rows";
-//     Widget widget = Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: GestureDetector(
-//         onTap: () {
-
-//           Initializations().initializeTileData(gamePlayState, rows, columns);
-//           Initializations().initializeElementSizes(gamePlayState, MediaQuery.of(context));
-//           Initializations().initializeElementPositions(gamePlayState, MediaQuery.of(context));
-
-//           Initializations().initializeGame(gamePlayState);
-//           Navigator.of(context).pushReplacement(
-//             MaterialPageRoute(builder: (context) => const GameScreen())
-//             // MaterialPageRoute(builder: (context) => const TempScreen())
-//           );  
-//         },
-//         child: Container(
-//           width: 85,
-//           height: 85,
-//           // height: 50,
-//           decoration: BoxDecoration(
-//             color: const Color.fromARGB(255, 56, 56, 56)
-//           ),            
-//           child: Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Center(
-//               child: Text(
-//                 body,
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 18
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//     res.add(widget);
-//   }
-//   return res;
-// }
 
 List<Widget> listDailyPuzzles(double scalor) {
   List<Widget> res = [];
@@ -1259,54 +796,8 @@ List<Widget> listDailyPuzzles(double scalor) {
   return res;
 }
 
-List<Widget> listPuzzles(SettingsController settings, String gameType) {
-  final double scalor = Helpers().getScalor(settings);
-  List<dynamic> levels = settings.levelData.value.where((e)=>e["gameType"]==gameType).toList();
-  List<Widget> res = [];
-  for (int i=0; i<levels.length;i++) {
-    Widget widget = Padding(
-      padding: EdgeInsets.all(2.0*scalor),
-      child: Container(
-        width: 45*scalor,
-        height: 45*scalor,
-        // height: 50,
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 56, 56, 56)
-        ),            
-        child: Padding(
-          padding: EdgeInsets.all(8.0*scalor),
-          child: Center(
-            child: Text(
-              (i+1).toString(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18*scalor
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-    res.add(widget);
-  }
-  return res;
-}
 
-// Future<void> loadLevelData(SettingsController settings) async {
-//   // if local storage is empty - get the level data as json payload and set it
-//   if (settings.levelData.value.isEmpty) {
-//     print("data is empty - load it? => ${settings.levelData.value}");
-//     await StorageMethods().saveLevelDataFromJsonFileToLocalStorage(settings);
-//     await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
-//   } else {
-//     print("level data is not empty: ${settings.levelData.value}");
-//     await StorageMethods().saveLevelDataFromJsonFileToLocalStorage(settings);
-//     await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
-//   }
-//   // print("level data: $levelData");
-//   // List<dynamic> levelData = 
-//   // print(settings.levelData.value);
-// }
+
 
 Future<void> initializeAppData(SettingsController settings, ColorPalette palette) async {
 

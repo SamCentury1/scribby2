@@ -166,7 +166,7 @@ class Helpers {
         res = "consonant";
       } else {
         Random random = Random();
-        int randomNumber = random.nextInt(10);
+        int randomNumber = random.nextInt   (10);
         if (randomNumber > 5) {
           res ='vowel';
         } else {
