@@ -192,7 +192,58 @@ class FirestoreMethods {
     } catch (e) {
       debugPrint("caught an error running 'updateGameHistory()' ${e.toString()}");
     }
+  }
 
+  Future<void> updateDailyPuzzleGameComplete(SettingsController settings, Map<String,dynamic> gameData) async {
+    try {
+      print("printing puzzle id : ${gameData["gameParameters"]["puzzleId"]}");
+      Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      if (gameData["gameParameters"]["puzzleId"] != null) {
+        String puzzleId = gameData["gameParameters"]["puzzleId"];
+        List<String> puzzleIdComponents = puzzleId.split("-");
+        final String year = puzzleIdComponents[0];
+        final String month = puzzleIdComponents[1];
+        final String day = puzzleIdComponents[2];
+        final String difficulty = puzzleIdComponents[3];
+        String dateString = '$year-$month-$day';
+
+        final docRef = FirebaseFirestore.instance.collection('puzzles').doc(dateString);
+        final docSnap = await docRef.get();
+        final dynamic docData = docSnap.data() as dynamic;
+
+        Map<String,dynamic> completedPuzzle = docData[difficulty];
+        List<Map<String,dynamic>> scoreData = [];
+        if (completedPuzzle["data"] != null) {
+          scoreData = completedPuzzle["data"];
+        }
+        int scoreValue = gameData["score"];
+        if (completedPuzzle["gameType"]=='sprint') {
+          scoreValue = gameData["durationSeconds"];
+        }
+
+        Map<String,dynamic> userScoreObject = scoreData.firstWhere((e)=>e["uid"]==userData["uid"],orElse:() => <String,dynamic>{});
+        if (userScoreObject.isNotEmpty) {
+          userScoreObject.update("score", (v) => scoreValue);
+        } else {
+          scoreData.add({"uid":userData["uid"], "score": scoreValue});
+          completedPuzzle["data"]=scoreData;
+        }
+        
+        docData.update(difficulty, (v) => completedPuzzle);
+        Map<String,dynamic> savedPuzzleObject = settings.dailyPuzzleData.value as Map<String,dynamic>;
+        savedPuzzleObject.update(difficulty, (v) => completedPuzzle);
+        settings.setDailyPuzzleData(savedPuzzleObject);
+        // settings.setDailyPuzzleData(docData);
+
+        // await docRef.update({difficulty: completedPuzzle});
+
+        print("IN THE updateDailyPuzzleGameComplete FUNC:");
+        print("doc data: $docData");     
+        // await
+      }
+    } catch (e,s) {
+      debugPrint("Error: $e | Stack: $s");
+    }
   }
 
   
@@ -279,38 +330,40 @@ class FirestoreMethods {
       bool syncPuzzles = false;
       print("""
 
-
+in the saveDailyPuzzlesToLocalStorage???
   ${settings.dailyPuzzleData.value}
-
+---------------------------------------
 
 """);
-      Map<dynamic,dynamic> puzzleData = settings.dailyPuzzleData.value as Map;
+      // if ((settings.dailyPuzzleData.value as dynamic).length > 0) {
+        dynamic puzzleData = settings.dailyPuzzleData.value as dynamic;
+        print("puzzleData in saveDailyPuzzlesToLocalStorage | $puzzleData");
 
-      print("puzzleData in saveDailyPuzzlesToLocalStorage | $puzzleData");
-
-      if (puzzleData.isEmpty) {
-        syncPuzzles = true;
-      } else {
-        if (puzzleData["date"]!=date) {
-          print("${puzzleData["date"]} | $date");
-          print("there's data in settings but date don't match up");
+        if (puzzleData.isEmpty) {
           syncPuzzles = true;
+        } else {
+          if (puzzleData["date"]!=date) {
+            print("${puzzleData["date"]} | $date");
+            print("there's data in settings but date don't match up");
+            syncPuzzles = true;
+          }
         }
-      }
-      print("should sync puzz? $syncPuzzles");
+        print("should sync puzz? $syncPuzzles");
 
-      if (syncPuzzles) {
+        if (syncPuzzles) {
 
-        final docRef = FirebaseFirestore.instance.collection('puzzles').doc(date);
-        final docSnap = await docRef.get();
-        final Map<String, dynamic> docData = docSnap.data() as Map<String, dynamic>;
-        print("doc data: $docData");     
-        settings.setDailyPuzzleData(docData);        
-      }
+          final docRef = FirebaseFirestore.instance.collection('puzzles').doc(date);
+          final docSnap = await docRef.get();
+          final dynamic docData = docSnap.data() as dynamic;
+          print("doc data: $docData");     
+          settings.setDailyPuzzleData(docData);        
+        }
+      // }
+
       
 
-    } catch (e) {
-      print("error in saveDailyPuzzlesToLocalStorage: ${e.toString()}");
+    } catch (e,t) {
+      print("error in saveDailyPuzzlesToLocalStorage: ${e.toString() } | traceback: $t");
     }
 
     // print("res: $res");

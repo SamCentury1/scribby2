@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "712370123958-40vg98tf073nk8nmivh515bfcf9s7a10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scribby_flutter_v2",
+            "certificate_hash": "230a9aa9c2526ec31317bc0fc28c453a45961361"
+          }
+        },
+        {
           "client_id": "712370123958-r08g6e667hu25k4csv9jg0f43unlphkp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

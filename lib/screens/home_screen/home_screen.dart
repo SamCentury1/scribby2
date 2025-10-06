@@ -579,7 +579,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       padding: EdgeInsets.all(8.0*scalor)
                                                   
                                                     ),
-                                                    onPressed: () => HomeScreenUtils().navigateToLeaderboardsScreen(context,false),
+                                                    // onPressed: () => HomeScreenUtils().navigateToLeaderboardsScreen(context,false),
+                                                    onPressed: () => HomeScreenUtils().navigateToGameHistoryScreen(context,false),
                                                     child: Stack(
                                                       // crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [                                          

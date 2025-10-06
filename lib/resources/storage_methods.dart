@@ -136,13 +136,14 @@ class StorageMethods {
   }
 
 
-  Map<dynamic,dynamic> getDailyPuzzles(SettingsController settings) {
-    late Map<dynamic,dynamic> res = {};
+  dynamic getDailyPuzzles(SettingsController settings) {
+    late dynamic res = {};
     try {
-      Map<dynamic,dynamic> puzzles = settings.dailyPuzzleData.value as Map<dynamic,dynamic>;
+      // print("RUNTIME TYPE: ${settings.dailyPuzzleData.value.runtimeType}");
+      dynamic puzzles = settings.dailyPuzzleData.value as dynamic;
       res = puzzles;
-    } catch (e) {
-      print("error in getDailyPuzzles: ${e.toString()}");
+    } catch (e,t) {
+      print("error in getDailyPuzzles: ${e.toString()} | traceback: $t");
     }
 
     print("res: $res");

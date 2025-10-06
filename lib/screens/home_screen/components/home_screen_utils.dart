@@ -4,6 +4,7 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/daily_puzzles_screen/daily_puzzles_screen.dart';
+import 'package:scribby_flutter_v2/screens/game_history_screen/game_history_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/game_screen.dart';
 import 'package:scribby_flutter_v2/screens/home_screen/home_screen.dart';
 import 'package:scribby_flutter_v2/screens/leaderboards_screen/leaderboards_screen.dart';
@@ -84,6 +85,15 @@ class HomeScreenUtils {
       MaterialPageRoute(builder: (context) => const DailyPuzzlesScreen())
     );      
   }  
+
+  void navigateToGameHistoryScreen(BuildContext context, bool drawer) async {          
+    if (drawer) {
+      Navigator.pop(context);
+    }  
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const GameHistoryScreen())
+    );      
+  }    
 
 
 

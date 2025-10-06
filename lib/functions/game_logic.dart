@@ -2030,12 +2030,12 @@ ${data}
       List<dynamic> history = settings.userGameHistory.value;
       List<Map<String,dynamic>> updatedHistory = List<Map<String,dynamic>>.from(history);
       updatedHistory.add(data);
-
       settings.setUserGameHistory(updatedHistory);
       gamePlayState.gameResultData.update("badges", (v) => badgesEarned);
 
       settings.setAchievementData(achievementData);
       FirestoreMethods().updateGameHistory(settings, data);
+      FirestoreMethods().updateDailyPuzzleGameComplete(settings,data);
       FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
       FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
       if (!userData["parameters"]["tutorialComplete"]) {

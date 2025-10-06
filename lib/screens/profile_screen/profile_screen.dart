@@ -244,6 +244,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     // _infoTile(label: 'Username', value: _username, scalor: scalor),                              
                                 
                                     // Language (dropdown)
+
+
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0*scalor),
+                                      child: Container(
+                                        height: 60 * scalor,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
+                                          color: palette.widget1,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: palette.widgetShadow1,
+                                              spreadRadius: 2.0 * scalor,
+                                              blurRadius: 15.0 * scalor,
+                                              offset: Offset(0.0, 5.0 * scalor),
+                                            )
+                                          ]                                          
+                                        ),
+                                
+                                        child: ListTile(
+                                          leading: Icon(Icons.email,color: palette.widgetText1),
+                                          title: Text(
+                                            userData["email"],
+                                            style: TextStyle(color: palette.widgetText1),
+                                          )
+                                        
+                                        ),                                  
+                                
+                                      ),
+                                    ),                                    
                                 
                                     Padding(
                                       padding: EdgeInsets.all(8.0*scalor),

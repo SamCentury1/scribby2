@@ -62,15 +62,17 @@ class _DailyPuzzlesScreenState extends State<DailyPuzzlesScreen> {
 
 
   void loadDailyPuzzles(SettingsController settings) {
-    final tp = StorageMethods().getDailyPuzzles(settings);
+    final dynamic tp = StorageMethods().getDailyPuzzles(settings);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        todayPuzzles = tp; // save to a state variable for use in the UI
-        if (todayPuzzles['easy'].isNotEmpty) {
-          todayPuzzleEasy = todayPuzzles['easy'];
-        }
-        if (todayPuzzles['hard'].isNotEmpty) {
-          todayPuzzleHard = todayPuzzles['hard'];       
+        if (tp.isNotEmpty) {
+          todayPuzzles = tp as Map<dynamic,dynamic>; // save to a state variable for use in the UI
+          if (todayPuzzles['easy'].isNotEmpty) {
+            todayPuzzleEasy = todayPuzzles['easy'];
+          }
+          if (todayPuzzles['hard'].isNotEmpty) {
+            todayPuzzleHard = todayPuzzles['hard'];       
+          }
         }
       });
     });

@@ -54,6 +54,16 @@ class Initializations {
       await StorageMethods().saveAlphabetToSettings(settings,"english");
     }
 
+    // List<dynamic> userGameHistory = settings.userGameHistory.value;
+    // print('=============== userGameHistory ====================');
+    // print(userGameHistory.length);
+    // print('===================================');
+    
+    // userGameHistory.removeLast();
+    // settings.setUserGameHistory(userGameHistory);
+    
+
+
     // if (settings.dailyPuzzleData.value.isEmpty) {
     await FirestoreMethods().saveDailyPuzzlesToLocalStorage(settings);
     // }
