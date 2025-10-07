@@ -80,12 +80,12 @@ ${gameData}
                     ),
                   ),
               
-                  trailing: Text(
-                    Helpers().getScoreValue(gameData),
-                    style: palette.counterFont(
-                      textStyle: TextStyle(fontSize: 24 * scalor, color: palette.widgetText2),
-                    )
-                  ),
+                  // trailing: Text(
+                  //   Helpers().getScoreValue(gameData),
+                  //   style: palette.counterFont(
+                  //     textStyle: TextStyle(fontSize: 24 * scalor, color: palette.widgetText2),
+                  //   )
+                  // ),
                   showTrailingIcon: true,
                   subtitle: Text(formattedDate,style: TextStyle(fontSize: 14*scalor, color: palette.widgetText2),),
               

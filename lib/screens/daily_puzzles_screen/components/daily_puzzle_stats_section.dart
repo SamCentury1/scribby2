@@ -159,13 +159,13 @@ int calculateStreak(List<dynamic> games) {
   final yesterdayDate = todayDate.subtract(Duration(days: 1));
 
   // If no game was played yesterday, streak is zero
-  if (!completedDates.contains(yesterdayDate)) {
+  if (!completedDates.contains(yesterdayDate) && completedDates.contains(todayDate)) {
     // Optional: add today if user already played today? No, streak still 0 until tomorrow
     return 1;
   }
 
   // Count consecutive days ending with yesterday
-  int streak = 1;
+  int streak = 0;
   DateTime currentCheckDate = yesterdayDate.subtract(Duration(days: 1));
 
   while (completedDates.contains(currentCheckDate)) {

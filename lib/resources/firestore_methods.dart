@@ -223,19 +223,27 @@ class FirestoreMethods {
 
         Map<String,dynamic> userScoreObject = scoreData.firstWhere((e)=>e["uid"]==userData["uid"],orElse:() => <String,dynamic>{});
         if (userScoreObject.isNotEmpty) {
-          userScoreObject.update("score", (v) => scoreValue);
+          if (completedPuzzle["gameType"]=='sprint') {
+            if (userScoreObject["score"]>scoreValue) {
+              userScoreObject.update("score", (v) => scoreValue);
+            }
+          } else if (completedPuzzle["gameType"]=='classic') {
+            if (userScoreObject["score"]<scoreValue) {
+              userScoreObject.update("score", (v) => scoreValue);
+            }            
+          }
         } else {
-          scoreData.add({"uid":userData["uid"], "score": scoreValue});
+          scoreData.add({"uid":userData["uid"],"username":userData["username"], "score": scoreValue});
           completedPuzzle["data"]=scoreData;
         }
         
-        docData.update(difficulty, (v) => completedPuzzle);
+        // docData.update(difficulty, (v) => completedPuzzle);
         Map<String,dynamic> savedPuzzleObject = settings.dailyPuzzleData.value as Map<String,dynamic>;
         savedPuzzleObject.update(difficulty, (v) => completedPuzzle);
         settings.setDailyPuzzleData(savedPuzzleObject);
         // settings.setDailyPuzzleData(docData);
 
-        // await docRef.update({difficulty: completedPuzzle});
+        await docRef.update({difficulty: completedPuzzle});
 
         print("IN THE updateDailyPuzzleGameComplete FUNC:");
         print("doc data: $docData");     
@@ -315,7 +323,31 @@ class FirestoreMethods {
 
   //   print("res: $res");
   //   return res;
-  // }  
+  // }
+
+  Future<Map<String,dynamic>> getDailyPuzzleObject(String? puzzleId) async {
+
+    Map<String,dynamic> completedPuzzle = {};
+    try {
+      if (puzzleId != null) {
+        List<String> puzzleIdComponents = puzzleId.split("-");
+        final String year = puzzleIdComponents[0];
+        final String month = puzzleIdComponents[1];
+        final String day = puzzleIdComponents[2];
+        final String difficulty = puzzleIdComponents[3];
+        String dateString = '$year-$month-$day';
+
+        final docRef = FirebaseFirestore.instance.collection('puzzles').doc(dateString);
+        final docSnap = await docRef.get();
+        final dynamic docData = docSnap.data() as dynamic;
+
+        completedPuzzle = docData[difficulty];
+      }
+    } catch (e, t) {
+      print("error: $e | traceback: $t");
+    }
+    return completedPuzzle;
+  }
 
   Future<void> saveDailyPuzzlesToLocalStorage(SettingsController settings) async {
     try {

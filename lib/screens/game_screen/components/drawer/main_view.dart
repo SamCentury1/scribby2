@@ -96,7 +96,8 @@ class MainDrawerView extends StatelessWidget {
                       gamePlayState.gameParameters["durationInMinutes"],
                       gamePlayState.gameParameters["target"],
                       gamePlayState.gameParameters["timeToPlace"],
-                      palette
+                      palette,
+                      18 * scalor,
                     ),
                     SizedBox(height: 20 * scalor,),
                     getGameParameterWidget(

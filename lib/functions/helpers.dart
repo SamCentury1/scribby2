@@ -910,7 +910,7 @@ class Helpers {
     }).join(' ');
   }
 
-  RichText getGameObjectiveString(String gameType, int? durationMinutes, int? target, int? timeToPlace, ColorPalette palette) {
+  RichText getGameObjectiveString(String gameType, int? durationMinutes, int? target, int? timeToPlace, ColorPalette palette, double fontSize) {
     String bewareString = "";
     // String objectiveString = "";
 
@@ -987,7 +987,7 @@ class Helpers {
       text: TextSpan(
         children: texts,
         style: TextStyle(
-          fontSize: 18.0,
+          fontSize: fontSize,
           color: palette.widgetText1
         )
       )
@@ -1016,21 +1016,43 @@ class Helpers {
   //   return res;
   // }
   String getTitleString(Map<String,dynamic> gameParameters) {
+
     String res = "";
-    String gameType = gameParameters["gameType"];
-    String formattedGameType = Helpers().formatWord(gameType);
+    try {
+      String gameType = gameParameters["gameType"];
+      String formattedGameType = Helpers().formatWord(gameType);
 
-    if (gameParameters["puzzleId"] != null) {
-      res = "Daily Puzzle";
+      
+      if (gameParameters["puzzleId"] != null) {
+        List<String> puzzleIdPieces = gameParameters["puzzleId"].split("-");
+        if (puzzleIdPieces.length > 1) {
+          String year = puzzleIdPieces[0];
+          String month = puzzleIdPieces[1];
+          String day = puzzleIdPieces[2];
+          String difficulty = puzzleIdPieces[3];
+
+          String dateString = '$year-$month-${day}T00:00:00.000Z';
+          DateTime dateTime = DateTime.parse(dateString);
+          String formattedDate = DateFormat('MMM. d').format(dateTime);
+          res = "$formattedDate Daily Puzzle ($difficulty)";
+          
+
+        } else {
+
+        }
+      }
+
+      else if (gameType == "classic" || gameType == "timed-move") {
+        res = "${gameParameters["durationInMinutes"]} Minute $formattedGameType";
+      } else if (gameType == "sprint") {
+        res = "${gameParameters['target'].toString()} Point $formattedGameType";
+      } else if (gameType == "tutorial") {
+        res = "Tutorial";
+      }
+    } catch (e,s) {
+      print("error: $e | traceback: $s");
     }
 
-    else if (gameType == "classic" || gameType == "timed-move") {
-      res = "${gameParameters["durationInMinutes"]} Minute $formattedGameType";
-    } else if (gameType == "sprint") {
-      res = "${gameParameters['target'].toString()} Point $formattedGameType";
-    } else if (gameType == "tutorial") {
-      res = "Tutorial";
-    }
     return res;
   }
 

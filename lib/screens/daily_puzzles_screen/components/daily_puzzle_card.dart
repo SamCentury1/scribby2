@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/components/game_summary_widget.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/initializations.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -72,7 +73,8 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
 
 
       if (puzzlesPlayed.contains(widget.puzzleObject["levelName"])) {
-        return GameSummaryCard(gameData: matchingPuzzleObjects, palette: palette);
+        // return GameSummaryCard(gameData: matchingPuzzleObjects, palette: palette);
+        return GameSummaryWidget(gameData: matchingPuzzleObjects);
       } else {
         return Row(
           children: [
@@ -129,7 +131,8 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
                               widget.puzzleObject["duration"],
                               widget.puzzleObject["target"],
                               widget.puzzleObject["timeToPlace"],
-                              palette
+                              palette,
+                              18.0 * scalor
                             ),
                             // getDescription(todayPuzzle,palette),
                             SizedBox(height: 15,),
