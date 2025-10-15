@@ -212,7 +212,7 @@ class FirestoreMethods {
         final dynamic docData = docSnap.data() as dynamic;
 
         Map<String,dynamic> completedPuzzle = docData[difficulty];
-        List<Map<String,dynamic>> scoreData = [];
+        List<dynamic> scoreData = [];
         if (completedPuzzle["data"] != null) {
           scoreData = completedPuzzle["data"];
         }
