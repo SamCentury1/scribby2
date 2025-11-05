@@ -155,6 +155,18 @@ class ColorPalette extends ChangeNotifier {
   late Color _gameplayEmptyTileBorder2 = Colors.transparent;
   Color get gameplayEmptyTileBorder2 => _gameplayEmptyTileBorder2;    
 
+  late Color _gameplayEmptyReserveFill1 = Colors.transparent;
+  Color get gameplayEmptyReserveFill1 => _gameplayEmptyReserveFill1;
+
+  late Color _gameplayEmptyReserveFill2 = Colors.transparent;
+  Color get gameplayEmptyReserveFill2 => _gameplayEmptyReserveFill2;    
+
+  late Color _gameplayEmptyReserveBorder1 = Colors.transparent;
+  Color get gameplayEmptyReserveBorder1 => _gameplayEmptyReserveBorder1;   
+
+  late Color _gameplayEmptyReserveBorder2 = Colors.transparent;
+  Color get gameplayEmptyReserveBorder2 => _gameplayEmptyReserveBorder2;      
+
   late Color _gameplayDeadTileFill1 = Colors.transparent;
   Color get gameplayDeadTileFill1 => _gameplayDeadTileFill1;          
 
@@ -166,6 +178,18 @@ class ColorPalette extends ChangeNotifier {
 
   late Color _scoreboardAnimationBorder2 = Colors.transparent;
   Color get scoreboardAnimationBorder2 => _scoreboardAnimationBorder2;
+
+  late Color _perkBarBackgroundColor = Colors.transparent;
+  Color get perkBarBackgroundColor => _perkBarBackgroundColor;
+
+  late Color _perkSelectedColor = Colors.transparent;
+  Color get perkSelectedColor => _perkSelectedColor;
+
+  late Color _perkUnselectedColor = Colors.transparent;
+  Color get perkUnselectedColor => _perkUnselectedColor;
+
+  late Color _perkShadowColor = Colors.transparent;
+  Color get perkShadowColor => _perkShadowColor;    
 
 
   late Color _tileColor1 = Colors.transparent;
@@ -250,15 +274,27 @@ class ColorPalette extends ChangeNotifier {
       _gameplayText1 = colorsDictionary[themeValue]!["gameplayText1"]!; 
       _gameplayWordFound1 = colorsDictionary[themeValue]!["gameplayWordFound1"]!; 
       _gameplayWordFound2 = colorsDictionary[themeValue]!["gameplayWordFound2"]!; 
+
       _gameplayTileShadow1 = colorsDictionary[themeValue]!["gameplayTileShadow1"]!; 
       _gameplayEmptyTileFill1 = colorsDictionary[themeValue]!["gameplayEmptyTileFill1"]!; 
       _gameplayEmptyTileFill2 = colorsDictionary[themeValue]!["gameplayEmptyTileFill2"]!; 
       _gameplayEmptyTileBorder1 = colorsDictionary[themeValue]!["gameplayEmptyTileBorder1"]!; 
-      _gameplayEmptyTileBorder2 = colorsDictionary[themeValue]!["gameplayEmptyTileBorder2"]!; 
+      _gameplayEmptyTileBorder2 = colorsDictionary[themeValue]!["gameplayEmptyTileBorder2"]!;
+
+      _gameplayEmptyReserveFill1 = colorsDictionary[themeValue]!["gameplayEmptyReserveFill1"]!; 
+      _gameplayEmptyReserveFill2 = colorsDictionary[themeValue]!["gameplayEmptyReserveFill2"]!; 
+      _gameplayEmptyReserveBorder1 = colorsDictionary[themeValue]!["gameplayEmptyReserveBorder1"]!; 
+      _gameplayEmptyReserveBorder2 = colorsDictionary[themeValue]!["gameplayEmptyReserveBorder2"]!;      
+
       _gameplayDeadTileFill1 = colorsDictionary[themeValue]!["gameplayDeadTileFill1"]!; 
       _gameplayDeadTileFill2 = colorsDictionary[themeValue]!["gameplayDeadTileFill2"]!; 
       _scoreboardAnimationBorder1 = colorsDictionary[themeValue]!["scoreboardAnimationBorder1"]!; 
       _scoreboardAnimationBorder2 = colorsDictionary[themeValue]!["scoreboardAnimationBorder2"]!; 
+
+      _perkBarBackgroundColor = colorsDictionary[themeValue]!["perkBarBackgroundColor"]!;
+      _perkSelectedColor = colorsDictionary[themeValue]!["perkSelectedColor"]!;
+      _perkUnselectedColor = colorsDictionary[themeValue]!["perkUnselectedColor"]!;
+      _perkShadowColor = colorsDictionary[themeValue]!["perkShadowColor"]!;      
 
       _tileColor1 = colorsDictionary[themeValue]!["tileColor1"]!;
       _tileColor2 = colorsDictionary[themeValue]!["tileColor2"]!;
@@ -458,15 +494,27 @@ class ColorPalette extends ChangeNotifier {
           "gameplayText1" : const Color.fromARGB(225, 236, 236, 236),
           "gameplayWordFound1" : const Color.fromARGB(255, 255, 102, 13),
           "gameplayWordFound2" : const Color.fromARGB(255, 250, 231, 57),
+
           "gameplayTileShadow1" : const Color.fromARGB(255, 247, 247, 247),
           "gameplayEmptyTileFill1" : Color.fromARGB(239, 137, 241, 255),
           "gameplayEmptyTileFill2" : Color.fromARGB(239, 217, 255, 255),
           "gameplayEmptyTileBorder1" : Color.fromARGB(239, 137, 241, 255),
           "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),
+
+          "gameplayEmptyReserveFill1" : Color.fromARGB(255, 110, 77, 122),
+          "gameplayEmptyReserveFill2" : Color.fromARGB(236, 78, 56, 82),
+          "gameplayEmptyReserveBorder1" : Color.fromARGB(237, 220, 173, 241),
+          "gameplayEmptyReserveBorder2" : Color.fromARGB(235, 244, 215, 255),    
+
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 236, 215, 23),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 235, 55, 42),
+
+          "perkBarBackgroundColor": const Color.fromARGB(214, 221, 221, 221),
+          "perkSelectedColor": const Color.fromARGB(255, 103, 103, 112),
+          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
           
           "tileColor1" : const Color.fromARGB(255, 0, 13, 131),
           "tileColor2" : const Color.fromARGB(255, 7, 55, 94),
@@ -477,26 +525,26 @@ class ColorPalette extends ChangeNotifier {
 
       },
       "light" : {
-          "bg1" : const Color.fromARGB(255, 240, 240, 240),
-          "bg2" : const Color.fromARGB(255, 235, 235, 235),
+          "bg1" : const Color.fromARGB(255, 115, 163, 235),
+          "bg2" : const Color.fromARGB(255, 184, 229, 255),
 
           "appBarText" : const Color.fromARGB(230, 24, 24, 24),
-          "drawerBg": const Color.fromARGB(255, 172, 219, 145),
+          "drawerBg": const Color.fromARGB(255, 181, 219, 255),
 
-          "inputFieldBgColor" : const Color.fromARGB(198, 166, 240, 224),
-          "inputFieldBorderColor" : const Color.fromARGB(255, 63, 182, 190),
+          "inputFieldBgColor" : const Color.fromARGB(197, 166, 217, 240),
+          "inputFieldBorderColor" : const Color.fromARGB(255, 36, 71, 230),
           "inputFieldTextColor" : const Color.fromARGB(255, 26, 26, 26),
 
-          "navigationButtonBg1" : const Color.fromARGB(255, 66, 228, 206),
-          "navigationButtonBg2" : const Color.fromARGB(255, 133, 243, 201),
-          "navigationButtonBg3" : const Color.fromARGB(255, 114, 179, 240),
+          "navigationButtonBg1" : const Color.fromARGB(255, 66, 136, 228),
+          "navigationButtonBg2" : const Color.fromARGB(255, 133, 193, 243),
+          "navigationButtonBg3" : const Color.fromARGB(255, 167, 198, 233),
 
-          "navigationButtonText1" : const Color.fromARGB(255, 15, 15, 15),
+          "navigationButtonText1" : const Color.fromARGB(255, 240, 240, 240),
           "navigationButtonText2" : const Color.fromARGB(255, 10, 10, 10),
           "navigationButtonText3" : const Color.fromARGB(255, 14, 14, 14),
           
-          "dialogBg1" : const Color.fromARGB(255, 155, 187, 212),
-          "dialogBg2" : const Color.fromARGB(255, 238, 238, 238),
+          "dialogBg1" : const Color.fromARGB(255, 186, 215, 238),
+          "dialogBg2" : const Color.fromARGB(255, 151, 194, 250),
           "dialogText" : const Color.fromARGB(255, 15, 15, 15),
 
           "text1" : const Color.fromARGB(255, 19, 19, 19),
@@ -505,8 +553,8 @@ class ColorPalette extends ChangeNotifier {
           "text4" : const Color.fromARGB(255, 20, 20, 20),
           "text5" : const Color.fromARGB(255, 44, 44, 44),
 
-          "widget1" : const Color.fromARGB(255, 230, 181, 223),
-          "widget2" : const Color.fromARGB(246, 207, 229, 185),
+          "widget1" : const Color.fromARGB(255, 154, 170, 243),
+          "widget2" : const Color.fromARGB(246, 191, 210, 250),
 
           "widgetText1" : const Color.fromARGB(255, 24, 24, 24),
           "widgetText2" : const Color.fromARGB(232, 15, 15, 15),      
@@ -515,7 +563,7 @@ class ColorPalette extends ChangeNotifier {
           "widgetShadow2" : const Color.fromARGB(115, 26, 26, 26),
 
           "widgetParticulars1" : const Color.fromARGB(255, 26, 26, 26),
-          "widgetParticulars2" : const Color.fromARGB(255, 230, 186, 241),
+          "widgetParticulars2" : const Color.fromARGB(255, 8, 26, 126),
 
           "coinCounterBorder" : const Color.fromARGB(210, 19, 19, 19),
           "coinCounterText" : const Color.fromARGB(210, 34, 34, 34),
@@ -523,87 +571,111 @@ class ColorPalette extends ChangeNotifier {
           "gameplayText1" : const Color.fromARGB(255, 6, 9, 175),
           "gameplayWordFound1" : const Color.fromARGB(255, 250, 93, 2),
           "gameplayWordFound2" : const Color.fromARGB(255, 173, 10, 10),
+
           "gameplayTileShadow1" : const Color.fromARGB(255, 34, 5, 139),
           "gameplayEmptyTileFill1" : Color.fromARGB(255,156,224,255),
           "gameplayEmptyTileFill2" : Color.fromARGB(239, 217, 255, 255),
           "gameplayEmptyTileBorder1" : Color.fromARGB(239, 137, 241, 255),
-          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),          
+          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),
+
+          "gameplayEmptyReserveFill1" : Color.fromARGB(255, 110, 77, 122),
+          "gameplayEmptyReserveFill2" : Color.fromARGB(236, 78, 56, 82),
+          "gameplayEmptyReserveBorder1" : Color.fromARGB(237, 220, 173, 241),
+          "gameplayEmptyReserveBorder2" : Color.fromARGB(235, 244, 215, 255),    
+
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
 
-          "tileColor1" : const Color.fromARGB(255, 100, 13, 131),
-          "tileColor2" : const Color.fromARGB(255, 107, 55, 94),
-          "tileColor3" : const Color.fromARGB(255, 186, 9, 158),
-          "tileColor4" : const Color.fromARGB(255, 115, 18, 218),
-          "tileColor5" : const Color.fromARGB(255, 125, 5, 99),
+          "perkBarBackgroundColor": const Color.fromARGB(213, 126, 114, 231),
+          "perkSelectedColor": const Color.fromARGB(255, 221, 221, 240),
+          "perkUnselectedColor": const Color.fromARGB(213, 173, 159, 233),
+          "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),   
+
+          "tileColor1" : const Color.fromARGB(255, 13, 68, 131),
+          "tileColor2" : const Color.fromARGB(255, 55, 92, 107),
+          "tileColor3" : const Color.fromARGB(255, 9, 174, 186),
+          "tileColor4" : const Color.fromARGB(255, 18, 171, 218),
+          "tileColor5" : const Color.fromARGB(255, 5, 107, 125),
 
 
       },
       "dark" : {
-          "bg1" : const Color.fromARGB(255, 55, 116, 173),
-          "bg2" : const Color.fromARGB(255, 38, 9, 92),
+          "bg1" : const Color.fromARGB(255, 26, 26, 26),
+          "bg2" : const Color.fromARGB(255, 22, 22, 22),
 
-          "appBarText" : const Color.fromARGB(230, 240, 240, 240),
-          "drawerBg": const Color.fromARGB(255, 31, 31, 31),
+          "appBarText" : const Color.fromARGB(230, 231, 231, 231),
+          "drawerBg": const Color.fromARGB(255, 22, 22, 22),
 
-          "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
-          "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),
-          "inputFieldTextColor" : const Color.fromARGB(255, 238, 238, 238),
+          "inputFieldBgColor" : const Color.fromARGB(218, 32, 32, 32),
+          "inputFieldBorderColor" : const Color.fromARGB(255, 223, 223, 223),
+          "inputFieldTextColor" : const Color.fromARGB(255, 214, 214, 214),
 
-          "navigationButtonBg1" : const Color.fromARGB(255, 133, 164, 218),
-          "navigationButtonBg2" : const Color.fromARGB(255, 13, 22, 138),
-          "navigationButtonBg3" : const Color.fromARGB(255, 5, 12, 26),
+          "navigationButtonBg1" : const Color.fromARGB(255, 13, 3, 41),
+          "navigationButtonBg2" : const Color.fromARGB(255, 39, 39, 39),
+          "navigationButtonBg3" : const Color.fromARGB(255, 40, 32, 70),
 
-          "navigationButtonText1" : const Color.fromARGB(255, 0, 4, 59),
+          "navigationButtonText1" : const Color.fromARGB(255, 236, 236, 236),
           "navigationButtonText2" : Colors.white,
-          "navigationButtonText3" : Colors.white,
+          "navigationButtonText3" : const Color.fromARGB(255, 230, 230, 230),
           
-          "dialogBg1" : const Color.fromARGB(255, 2, 75, 134),
-          "dialogBg2" : const Color.fromARGB(255, 2, 26, 134),
+          "dialogBg1" : const Color.fromARGB(255, 31, 31, 31),
+          "dialogBg2" : const Color.fromARGB(255, 24, 22, 26),
           "dialogText" : const Color.fromARGB(255, 235, 235, 235),
 
           "text1" : const Color.fromARGB(255, 224, 224, 224),
           "text2" : const Color.fromARGB(255, 209, 209, 209),
-          "text3" : const Color.fromARGB(255, 13, 6, 110),
+          "text3" : const Color.fromARGB(255, 46, 46, 46),
           "text4" : const Color.fromARGB(255, 20, 20, 20),
           "text5" : const Color.fromARGB(255, 44, 44, 44),
 
-          "widget1" : const Color.fromARGB(255, 167, 228, 223),
-          "widget2" : const Color.fromARGB(246, 49, 68, 151),
+          "widget1" : const Color.fromARGB(255, 16, 12, 56),
+          "widget2" : const Color.fromARGB(255, 40, 32, 70),
 
-          "widgetText1" : const Color.fromARGB(255, 24, 24, 24),
-          "widgetText2" : const Color.fromARGB(232, 241, 241, 241),      
+          "widgetText1" : const Color.fromARGB(255, 235, 235, 235),
+          "widgetText2" : const Color.fromARGB(232, 212, 212, 212),      
 
-          "widgetShadow1" : const Color.fromARGB(174, 31, 31, 31),
-          "widgetShadow2" : const Color.fromARGB(232, 26, 26, 26),
+          "widgetShadow1" : const Color.fromARGB(172, 19, 19, 19),
+          "widgetShadow2" : const Color.fromARGB(232, 15, 15, 15),
 
-          "widgetParticulars1" : const Color.fromARGB(255, 4, 15, 173),
-          "widgetParticulars2" : const Color.fromARGB(255, 143, 197, 241),          
+          "widgetParticulars1" : const Color.fromARGB(255, 170, 170, 170),
+          "widgetParticulars2" : const Color.fromARGB(255, 47, 14, 70),          
 
 
-          "coinCounterBorder" : const Color.fromARGB(211, 236, 236, 236),
-          "coinCounterText" : const Color.fromARGB(211, 236, 236, 236),
+          "coinCounterBorder" : const Color.fromARGB(210, 194, 194, 194),
+          "coinCounterText" : const Color.fromARGB(210, 206, 206, 206),
 
-          "gameplayText1" : const Color.fromARGB(255, 79, 197, 252),
+          "gameplayText1" : const Color.fromARGB(255, 231, 231, 231),
           "gameplayWordFound1" : const Color.fromARGB(255, 255, 102, 13),
           "gameplayWordFound2" : const Color.fromARGB(255, 250, 231, 57),
-          "gameplayTileShadow1" : const Color.fromARGB(255, 74, 249, 255),
-          "gameplayEmptyTileFill1" : Color.fromARGB(255,156,224,255),
-          "gameplayEmptyTileFill2" : Color.fromARGB(239, 217, 255, 255),
-          "gameplayEmptyTileBorder1" : Color.fromARGB(239, 137, 241, 255),
-          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),          
+
+          "gameplayTileShadow1" : const Color.fromARGB(255, 246, 218, 252),
+          "gameplayEmptyTileFill1" : const Color.fromARGB(255, 75, 70, 92),
+          "gameplayEmptyTileFill2" : const Color.fromARGB(255, 89, 86, 102),
+          "gameplayEmptyTileBorder1" : Color.fromARGB(236, 191, 173, 241),
+          "gameplayEmptyTileBorder2" : Color.fromARGB(235, 218, 215, 255),
+
+          "gameplayEmptyReserveFill1" : Color.fromARGB(255, 179, 183, 218),
+          "gameplayEmptyReserveFill2" : Color.fromARGB(235, 165, 142, 207),
+          "gameplayEmptyReserveBorder1" : Color.fromARGB(235, 124, 79, 230),
+          "gameplayEmptyReserveBorder2" : Color.fromARGB(235, 221, 210, 252),             
+
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
 
-          "tileColor1" : const Color.fromARGB(255, 74, 71, 75),
-          "tileColor2" : const Color.fromARGB(255, 20, 20, 20),
-          "tileColor3" : const Color.fromARGB(255, 65, 65, 65),
-          "tileColor4" : const Color.fromARGB(255, 51, 50, 51),
-          "tileColor5" : const Color.fromARGB(255, 34, 34, 34),                 
+          "perkBarBackgroundColor": const Color.fromARGB(101, 179, 179, 179),
+          "perkSelectedColor": const Color.fromARGB(226, 216, 214, 214),
+          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
+
+          "tileColor1" : const Color.fromARGB(255, 40, 32, 70),
+          "tileColor2" : const Color.fromARGB(255, 63, 47, 124),
+          "tileColor3" : const Color.fromARGB(255, 31, 22, 66),
+          "tileColor4" : const Color.fromARGB(255, 63, 49, 116),
+          "tileColor5" : const Color.fromARGB(255, 32, 15, 87),                
       },
       "nature" : {
           "bg1" : const Color.fromARGB(255, 55, 116, 173),
@@ -653,15 +725,27 @@ class ColorPalette extends ChangeNotifier {
           "gameplayText1" : const Color.fromARGB(255, 79, 197, 252),
           "gameplayWordFound1" : const Color.fromARGB(255, 255, 102, 13),
           "gameplayWordFound2" : const Color.fromARGB(255, 250, 231, 57),
+
           "gameplayTileShadow1" : const Color.fromARGB(255, 74, 249, 255),
           "gameplayEmptyTileFill1" : Color.fromARGB(255,156,224,255),
           "gameplayEmptyTileFill2" : Color.fromARGB(239, 217, 255, 255),
           "gameplayEmptyTileBorder1" : Color.fromARGB(239, 137, 241, 255),
-          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),          
+          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),   
+
+          "gameplayEmptyReserveFill1" : Color.fromARGB(255, 110, 77, 122),
+          "gameplayEmptyReserveFill2" : Color.fromARGB(236, 78, 56, 82),
+          "gameplayEmptyReserveBorder1" : Color.fromARGB(237, 220, 173, 241),
+          "gameplayEmptyReserveBorder2" : Color.fromARGB(235, 244, 215, 255),    
+          
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "perkBarBackgroundColor": const Color.fromARGB(214, 221, 221, 221),
+          "perkSelectedColor": const Color.fromARGB(255, 103, 103, 112),
+          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),     
 
           "tileColor1" : const Color.fromARGB(255, 27, 71, 10),
           "tileColor2" : const Color.fromARGB(255, 10, 66, 8),
@@ -717,15 +801,27 @@ class ColorPalette extends ChangeNotifier {
           "gameplayText1" : const Color.fromARGB(255, 79, 197, 252),
           "gameplayWordFound1" : const Color.fromARGB(255, 255, 102, 13),
           "gameplayWordFound2" : const Color.fromARGB(255, 250, 231, 57),
+
           "gameplayTileShadow1" : const Color.fromARGB(255, 74, 249, 255),
           "gameplayEmptyTileFill1" : Color.fromARGB(255,156,224,255),
           "gameplayEmptyTileFill2" : Color.fromARGB(239, 217, 255, 255),
           "gameplayEmptyTileBorder1" : Color.fromARGB(239, 137, 241, 255),
-          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),          
+          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),
+
+          "gameplayEmptyReserveFill1" : Color.fromARGB(255, 110, 77, 122),
+          "gameplayEmptyReserveFill2" : Color.fromARGB(236, 78, 56, 82),
+          "gameplayEmptyReserveBorder1" : Color.fromARGB(237, 220, 173, 241),
+          "gameplayEmptyReserveBorder2" : Color.fromARGB(235, 244, 215, 255),    
+
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "perkBarBackgroundColor": const Color.fromARGB(214, 221, 221, 221),
+          "perkSelectedColor": const Color.fromARGB(255, 103, 103, 112),
+          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),     
 
           "tileColor1" : const Color.fromARGB(255, 212, 65, 212),
           "tileColor2" : const Color.fromARGB(255, 70, 170, 31),
@@ -781,15 +877,28 @@ class ColorPalette extends ChangeNotifier {
           "gameplayText1" : const Color.fromARGB(255, 79, 197, 252),
           "gameplayWordFound1" : const Color.fromARGB(255, 255, 102, 13),
           "gameplayWordFound2" : const Color.fromARGB(255, 250, 231, 57),
+
           "gameplayTileShadow1" : const Color.fromARGB(255, 74, 249, 255),
           "gameplayEmptyTileFill1" : Color.fromARGB(255,156,224,255),
           "gameplayEmptyTileFill2" : Color.fromARGB(239, 217, 255, 255),
           "gameplayEmptyTileBorder1" : Color.fromARGB(239, 137, 241, 255),
-          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),          
+          "gameplayEmptyTileBorder2" : Color.fromARGB(236, 16, 14, 126),
+
+          "gameplayEmptyReserveFill1" : Color.fromARGB(255, 110, 77, 122),
+          "gameplayEmptyReserveFill2" : Color.fromARGB(236, 78, 56, 82),
+          "gameplayEmptyReserveBorder1" : Color.fromARGB(237, 220, 173, 241),
+          "gameplayEmptyReserveBorder2" : Color.fromARGB(235, 244, 215, 255),    
+          
+                    
           "gameplayDeadTileFill1" : const Color.fromARGB(255, 0, 0, 0),
           "gameplayDeadTileFill2" : const Color.fromARGB(255, 87, 87, 87),
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 240, 227, 118),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 253, 154, 147),
+
+          "perkBarBackgroundColor": const Color.fromARGB(214, 221, 221, 221),
+          "perkSelectedColor": const Color.fromARGB(255, 103, 103, 112),
+          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
 
           "tileColor1" : const Color.fromARGB(255, 139, 79, 29),
           "tileColor2" : const Color.fromARGB(255, 170, 137, 30),

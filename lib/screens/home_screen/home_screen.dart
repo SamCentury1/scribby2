@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               Text(
                                                                 "Pick up where we left off...",
                                                                 style: TextStyle(
-                                                                  color: Colors.black,
+                                                                  color: palette.navigationButtonText1,
                                                                   fontWeight: FontWeight.w700,
                                                                   fontSize: 26
                                                                 ),

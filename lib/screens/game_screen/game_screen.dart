@@ -157,11 +157,6 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                         :  IconButton(
                           onPressed: () {
                             _scaffoldKey.currentState!.openDrawer();
-                            print("================ ALPHABET STATE =====================");
-                            for (Map<String,dynamic> alphabetObject in gamePlayState.alphabet) {
-                              print(alphabetObject);
-                            }
-                            print("=======================================================");
 
                             gamePlayState.setIsGamePaused(true);             
                           }, 

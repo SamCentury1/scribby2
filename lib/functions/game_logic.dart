@@ -279,11 +279,14 @@ class GameLogic extends ChangeNotifier {
       if (selectedPerkObject.isNotEmpty) {
         print(" SELECTED PERK OBJECT: ${selectedPerkObject} ");
 
+
+
         String perkType = selectedPerkObject["item"];
         int perkCount = selectedPerkObject["count"];
 
         if (perkCount<=0) {
           print("do not start highlight effect");
+          
           // gamePlayState.highlightEffectTimer.cancel();
           openTileMenuBuyMoreModal(gamePlayState,selectedPerkObject);
           cancelPerk(gamePlayState);
@@ -298,6 +301,7 @@ class GameLogic extends ChangeNotifier {
 
           } else {
             // highlight all cells that can be selected
+            
             gamePlayState.startHighlightEffectTimer();
             
 
@@ -1771,6 +1775,7 @@ class GameLogic extends ChangeNotifier {
     if (perkOpen.isNotEmpty) {
       perkOpen.update("open", (v)=>false);
       perkOpen.update("selected", (v)=>false);
+      Animations().startSelectPerkAnimation(gamePlayState, perkOpen["item"],false);
     }  
   }
 

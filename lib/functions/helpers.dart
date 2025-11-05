@@ -66,6 +66,8 @@ class Helpers {
       for (int i=0; i<gamePlayState.tileMenuOptions.length; i++) {
         if (gamePlayState.tileMenuOptions[i]["path"].contains(location)) {
           element = gamePlayState.tileMenuOptions[i];
+          // String perk = element["item"]; 
+          // Animations().startSelectPerkAnimation(gamePlayState,perk);
         }
       }
     }
@@ -647,7 +649,9 @@ class Helpers {
   double getScalor(SettingsController settings) {
     late double res = 1.0;
     final Map<String,dynamic> deviceSizeData = settings.deviceSizeInfo.value as Map<String,dynamic>;
-    res = deviceSizeData["scalor"];
+    if (deviceSizeData["scalor"] != null) {
+      res = deviceSizeData["scalor"];
+    }
     return res;  
   }
 

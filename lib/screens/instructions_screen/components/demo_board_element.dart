@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/instructions_screen/components/demo_board_painter.dart';
 
@@ -10,6 +11,7 @@ class DemoBoardElement extends StatelessWidget {
   final int ellapsedTimeMs;
   final double tilePlacedProgress;
   final double scalor;
+  final ColorPalette palette;
   const DemoBoardElement({
     super.key,
     required this.settingsState,
@@ -18,6 +20,7 @@ class DemoBoardElement extends StatelessWidget {
     required this.ellapsedTimeMs,
     required this.tilePlacedProgress,
     required this.scalor,
+    required this.palette
   });
 
   @override
@@ -32,7 +35,8 @@ class DemoBoardElement extends StatelessWidget {
             settingsState:settingsState,
             step: currentStep,
             elapsedTime: ellapsedTimeMs,
-            tilePlacementProgress: tilePlacedProgress
+            tilePlacementProgress: tilePlacedProgress,
+            palette: palette
           )
         ),
       ),

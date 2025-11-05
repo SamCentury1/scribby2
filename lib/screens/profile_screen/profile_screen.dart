@@ -252,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 60 * scalor,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
-                                          color: palette.widget1,
+                                          color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
                                               color: palette.widgetShadow1,
@@ -281,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 60 * scalor,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
-                                          color: palette.widget1,
+                                          color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
                                               color: palette.widgetShadow1,
@@ -327,7 +327,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 60 * scalor,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
-                                          color: palette.widget1,
+                                          color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
                                               color: palette.widgetShadow1,
@@ -365,13 +365,110 @@ class _ProfileScreenState extends State<ProfileScreen> {
               
                                     
                                 
+                                    // Padding(
+                                    //   padding: EdgeInsets.all(8.0*scalor),
+                                    //   child: Container(
+                                    //     height: 60 * scalor,
+                                    //     decoration: BoxDecoration(
+                                    //       borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
+                                    //       color: palette.widget1,
+                                    //       boxShadow: [
+                                    //         BoxShadow(
+                                    //           color: palette.widgetShadow1,
+                                    //           spreadRadius: 2.0 * scalor,
+                                    //           blurRadius: 15.0 * scalor,
+                                    //           offset: Offset(0.0, 5.0 * scalor),
+                                    //         )
+                                    //       ]
+                                    //     ),
+                                
+                                    //     child: ListTile(
+                                    //       leading: Icon(Icons.color_lens,color: palette.widgetText1),
+                                    //       title: DropdownButtonFormField<String>(
+                                    //         value: _selectedTheme,
+                                    //         alignment: AlignmentDirectional.centerStart,
+                                    //         dropdownColor: palette.widget1,
+                                    //         padding: EdgeInsets.all(0.0),
+                                    //         items: _colorThemes.map((theme) {
+                                    //           return DropdownMenuItem(
+                                    //             value: theme, 
+                                    //             child: Row(
+                                    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //               children: [
+                                    //                 Text(
+                                    //                   "${Helpers().formatWord(theme)} Theme",
+                                    //                   style: TextStyle(
+                                    //                     color: palette.widgetText1,
+                                    //                   ),
+                                    //                 ),
+                                    //                 SizedBox(width: 50,),
+                                                    
+                                    //                 Row(
+                                    //                   children: [
+                                    //                     SizedBox(
+                                    //                       width: 20 * scalor, 
+                                    //                       height: 20 * scalor,
+                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["bg2"],),
+                                    //                     ),
+                                                    
+                                    //                     SizedBox(
+                                    //                       width: 20 * scalor, 
+                                    //                       height: 20 * scalor,
+                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["dialog1"],),
+                                    //                     ),
+                                                    
+                                    //                     SizedBox(
+                                    //                       width: 20 * scalor, 
+                                    //                       height: 20 * scalor,
+                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["dialog2"],),
+                                    //                     ),
+                                                    
+                                    //                     SizedBox(
+                                    //                       width: 20 * scalor, 
+                                    //                       height: 20 * scalor,
+                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["widget1"],),
+                                    //                     ),
+                                                    
+                                    //                     SizedBox(
+                                    //                       width: 20 * scalor, 
+                                    //                       height: 20 * scalor,
+                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["widget2"],),
+                                    //                     ),
+                                    //                   ],
+                                    //                 )
+                                                                                                                                                                                                                        
+                                                    
+                                                                                                                                               
+                                                
+                                    //               ],
+                                    //             )
+                                    //           );
+                                    //         }).toList(),
+                                    //         onChanged: (value) => _pickColorTheme(settings,palette,value),
+                                    //         decoration: InputDecoration(
+                                    //           border: null,
+                                    //           focusedBorder: UnderlineInputBorder(
+                                    //             borderSide: BorderSide(color: palette.widgetText1)
+                                    //           )
+                                    //         ),
+                                    //       ),
+                                    //     ),
+
+                                        
+                                                                         
+                                
+                                    //   ),
+                                    // ),                            
+                                
+
+                                
                                     Padding(
                                       padding: EdgeInsets.all(8.0*scalor),
                                       child: Container(
                                         height: 60 * scalor,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
-                                          color: palette.widget1,
+                                          color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
                                               color: palette.widgetShadow1,
@@ -384,80 +481,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 
                                         child: ListTile(
                                           leading: Icon(Icons.color_lens,color: palette.widgetText1),
-                                          title: DropdownButtonFormField<String>(
-                                            value: _selectedTheme,
-                                            alignment: AlignmentDirectional.centerStart,
-                                            dropdownColor: palette.widget1,
-                                            padding: EdgeInsets.all(0.0),
-                                            items: _colorThemes.map((theme) {
-                                              return DropdownMenuItem(
-                                                value: theme, 
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      "${Helpers().formatWord(theme)} Theme",
-                                                      style: TextStyle(
-                                                        color: palette.widgetText1,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 50,),
-                                                    
-                                                    Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 20 * scalor, 
-                                                          height: 20 * scalor,
-                                                          child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["bg2"],),
-                                                        ),
-                                                    
-                                                        SizedBox(
-                                                          width: 20 * scalor, 
-                                                          height: 20 * scalor,
-                                                          child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["dialog1"],),
-                                                        ),
-                                                    
-                                                        SizedBox(
-                                                          width: 20 * scalor, 
-                                                          height: 20 * scalor,
-                                                          child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["dialog2"],),
-                                                        ),
-                                                    
-                                                        SizedBox(
-                                                          width: 20 * scalor, 
-                                                          height: 20 * scalor,
-                                                          child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["widget1"],),
-                                                        ),
-                                                    
-                                                        SizedBox(
-                                                          width: 20 * scalor, 
-                                                          height: 20 * scalor,
-                                                          child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["widget2"],),
-                                                        ),
-                                                      ],
-                                                    )
-                                                                                                                                                                                                                        
-                                                    
-                                                                                                                                               
-                                                
-                                                  ],
+                                          title: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "${Helpers().formatWord(_selectedTheme)} Theme",
+                                                style: TextStyle(
+                                                  color: palette.widgetText1,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () => openThemeDialog(context,scalor,_selectedTheme,_pickColorTheme), 
+                                                icon: Icon(
+                                                  Icons.edit_square,
+                                                  color: palette.widgetText1,
                                                 )
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) => _pickColorTheme(settings,palette,value),
-                                            decoration: InputDecoration(
-                                              border: null,
-                                              focusedBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(color: palette.widgetText1)
                                               )
-                                            ),
+                                            ],
                                           ),
-                                        ),                                  
+                                        ),
+
+                                        
+                                                                         
                                 
                                       ),
                                     ),                            
                                 
-                                    const SizedBox(height: 30),
+                                    const SizedBox(height: 30),                                    
                                 
                                   ],
                                 ),
@@ -507,7 +557,7 @@ class UsernameCard extends StatelessWidget {
               
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
-                color: palette.widget1,
+                color: palette.widget2,
                 boxShadow: [
                   BoxShadow(
                     color: palette.widgetShadow1,
@@ -566,7 +616,7 @@ Widget _rankCard({required String rank, required double scalor, required ColorPa
         
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
-          color: palette.widget1,
+          color: palette.widget2,
           boxShadow: [
             BoxShadow(
               color: palette.widgetShadow1,
@@ -705,8 +755,6 @@ class _UsernameDialogState extends State<UsernameDialog> {
 
   @override
   Widget build(BuildContext context) {
-    
-
       return Dialog(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -825,5 +873,192 @@ class _UsernameDialogState extends State<UsernameDialog> {
           )
         ),
       );    
+  }
+}
+Future<void> openThemeDialog(BuildContext context, double scalor, String selectedTheme, Function selectNewTheme) async {
+  return showDialog(
+    context: context, 
+    builder:(context) {
+      return SelectThemeDialog(scalor: scalor,selectedTheme: selectedTheme, selectNewTheme:selectNewTheme);
+    }
+  );
+}
+
+class SelectThemeDialog extends StatefulWidget {
+  final double scalor;
+  final String selectedTheme;
+  final Function selectNewTheme;
+  const SelectThemeDialog({
+    super.key,
+    required this.scalor,
+    required this.selectedTheme,
+    required this.selectNewTheme,
+  });
+
+  @override
+  State<SelectThemeDialog> createState() => _SelectThemeDialogState();
+}
+
+class _SelectThemeDialogState extends State<SelectThemeDialog> {
+
+  final List<String> _colorThemes = ['default', 'light', 'dark', 'nature','techno','beach',];
+  late String currentSelection = widget.selectedTheme;//_colorThemes[_colorThemes.indexOf(widget.selectedTheme)];
+  Map<String,Color> widgetThemeDict = {};
+
+  late ColorPalette palette;
+  late SettingsController settings;
+
+  @override
+  void initState() {
+    super.initState();
+    palette = Provider.of<ColorPalette>(context,listen: false);
+    settings = Provider.of<SettingsController>(context,listen: false);
+    setState(() {
+      widgetThemeDict = palette.colorsDictionary[currentSelection]!;
+    });
+    
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0*widget.scalor))),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            radius: 0.6*widget.scalor,
+            colors: [
+              widgetThemeDict["dialogBg1"]!,
+              widgetThemeDict["dialogBg2"]!,
+            ]
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(12.0*widget.scalor))
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Select Theme",
+                style: GoogleFonts.lilitaOne(
+                  color: widgetThemeDict['text1'],
+                  fontSize: 28*widget.scalor
+                ),
+              ),
+            ),
+    
+            
+            Column(
+              children: _colorThemes.map((theme) {
+                Map<String,Color> themeDict = palette.colorsDictionary[theme]!;
+    
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      currentSelection = theme;
+                      widgetThemeDict = palette.colorsDictionary[currentSelection]!;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Card(
+                      color: themeDict['widget1'],
+                      
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${Helpers().formatWord(theme)} Theme",
+                              style: GoogleFonts.lilitaOne(
+                                color: themeDict['widgetText1'],
+                                fontSize: 24*widget.scalor
+                              ),                                  
+                            ),
+            
+                            Radio(
+                              value: theme, 
+                              groupValue: currentSelection,
+                              activeColor: themeDict['widgetText1'],
+    
+                              onChanged: (val) {
+                                setState(() {
+                                  currentSelection = val!;
+                                  widgetThemeDict = palette.colorsDictionary[currentSelection]!;
+                                });
+                              }
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+        
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: widgetThemeDict['widget1'],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.all(Radius.circular(8.0))
+                        )
+                      ),
+                      child: Text(
+                        "Cancel",
+                        style: GoogleFonts.lilitaOne(
+                          color: widgetThemeDict['widgetText1'],
+                          fontSize: 20*widget.scalor
+                        ),                        
+                      )
+                    ),
+                  ),
+              
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        widget.selectNewTheme(settings,palette,currentSelection);
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: widgetThemeDict['widget2'],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.all(Radius.circular(8.0))
+                        ),                           
+                      ),                       
+                      child: Text(
+                        "Save",
+                        style: GoogleFonts.lilitaOne(
+                          color: widgetThemeDict['widgetText2'],
+                          fontSize: 20*widget.scalor
+                        ),                        
+                      )
+                    ),
+                  ),                    
+                ],
+              ),
+            )
+          ],
+        ),
+        
+      )
+    );
   }
 }

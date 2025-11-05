@@ -13,7 +13,7 @@ import 'package:scribby_flutter_v2/providers/palette_state.dart';
 
 class TilePainters {
 
-  Map<String,dynamic> getPaintSet(String type, String body, Map<String,dynamic> decorationData) {
+  Map<String,dynamic> getPaintSet(String type, String body, Map<String,dynamic> decorationData, ColorPalette palette) {
     late Map<String,dynamic> res = {}; 
 
     late Color color1 = Colors.transparent;
@@ -111,20 +111,20 @@ class TilePainters {
 
 
     if (type=='board-empty') {
-      color1 = Color.fromARGB(255,156,224,255);
-      color2 = ui.Color.fromARGB(239, 217, 255, 255);
-      textColor = Colors.transparent;
-      rightEdgeColor = ui.Color.fromARGB(239, 137, 241, 255);
-      bottomEdgeColor = ui.Color.fromARGB(236, 16, 14, 126);
+      color1 = palette.gameplayEmptyTileFill1; // Color.fromARGB(255,156,224,255);
+      color2 = palette.gameplayEmptyTileFill2; // ui.Color.fromARGB(239, 217, 255, 255);
+      textColor =  Colors.transparent;
+      rightEdgeColor = palette.gameplayEmptyTileBorder1; //ui.Color.fromARGB(239, 137, 241, 255);
+      bottomEdgeColor = palette.gameplayEmptyTileBorder2; //ui.Color.fromARGB(236, 16, 14, 126);
       insideDecorationColor = Colors.transparent;
     }   
 
     if (type=='reserve-empty') {
-      color1 = const ui.Color.fromARGB(255, 241, 231, 247);
-      color2 = const ui.Color.fromARGB(255, 210, 255, 242);
+      color1 = palette.gameplayEmptyReserveFill1; //const ui.Color.fromARGB(255, 241, 231, 247);
+      color2 = palette.gameplayEmptyReserveFill2;//const ui.Color.fromARGB(255, 210, 255, 242);
       textColor = Colors.transparent;
-      rightEdgeColor = ui.Color.fromARGB(238, 137, 139, 255);
-      bottomEdgeColor = ui.Color.fromARGB(236, 78, 87, 1);
+      rightEdgeColor = palette.gameplayEmptyReserveBorder1; //ui.Color.fromARGB(238, 137, 139, 255);
+      bottomEdgeColor = palette.gameplayEmptyReserveBorder2; //ui.Color.fromARGB(236, 78, 87, 1);
       insideDecorationColor = Colors.transparent;
     }
 
@@ -183,9 +183,9 @@ class TilePainters {
     return res;
   }
 
-  Map<String,dynamic> getAnimatingTilePaints(String sourceType, String targetType, double progress, String body,Map<String,dynamic> decorationData) {
-    Map<String,dynamic> sourcePaint = getPaintSet(sourceType,body,decorationData);
-    Map<String,dynamic> targetPaint = getPaintSet(targetType,body,decorationData);
+  Map<String,dynamic> getAnimatingTilePaints(String sourceType, String targetType, double progress, String body,Map<String,dynamic> decorationData, ColorPalette palette) {
+    Map<String,dynamic> sourcePaint = getPaintSet(sourceType,body,decorationData,palette);
+    Map<String,dynamic> targetPaint = getPaintSet(targetType,body,decorationData,palette);
 
     Color sourceColor1 = sourcePaint["faceColor1"];
     Color sourceColor2 = sourcePaint["faceColor2"];
@@ -233,7 +233,7 @@ class TilePainters {
     ) {
     late Map<String,dynamic> paints = {};
 
-    paints = getAnimatingTilePaints(source,target,progress,body,decorationData);
+    paints = getAnimatingTilePaints(source,target,progress,body,decorationData,palette);
     Color color1 = paints["faceColor1"];
     Color color2 = paints["faceColor2"];
     Color textColor = paints["textColor"];
@@ -346,7 +346,7 @@ class TilePainters {
     List<Offset> rightEdgeOffsets = StylingUtils().getEdgeGradientOffsets(tileBorderCenter,tileSize,'right');
     List<Offset> bottomEdgeOffsets = StylingUtils().getEdgeGradientOffsets(tileBorderCenter,tileSize,'bottom');
 
-    Map<String,dynamic> colors = getPaintSet(type,body,decorationData);
+    Map<String,dynamic> colors = getPaintSet(type,body,decorationData,palette);
 
     Color color1 = colors["faceColor1"];
     Color color2 = colors["faceColor2"];
@@ -437,7 +437,7 @@ class TilePainters {
     List<Offset> rightEdgeOffsets = StylingUtils().getEdgeGradientOffsets(tileBorderCenter,tileSize,'right');
     List<Offset> bottomEdgeOffsets = StylingUtils().getEdgeGradientOffsets(tileBorderCenter,tileSize,'bottom');
 
-    Map<String,dynamic> colors = getPaintSet(type,body,decorationData);
+    Map<String,dynamic> colors = getPaintSet(type,body,decorationData,palette);
     Color color1 = colors["faceColor1"].withOpacity(opacity);
     Color color2 = colors["faceColor2"].withOpacity(opacity);
     Color textColor = colors["textColor"].withOpacity(opacity);
@@ -837,7 +837,7 @@ class TilePainters {
           double opacityProgress = AnimationUtils().getAnimationTransition(progress,opacityAnimationDetails);            
 
 
-          Color color = AnimationUtils().getParticleColor(particleData["color"],tileType,tileBody,decorationData);
+          Color color = AnimationUtils().getParticleColor(particleData["color"],tileType,tileBody,decorationData,palette);
           // print("r: ${color.r} | g: ${color.g} | b: ${color.b}");
           // Color updatedColor = Color.fromRGBO(color.r., color.g, color.b, opacityProgress);
           int red = (color.r * 255).round();

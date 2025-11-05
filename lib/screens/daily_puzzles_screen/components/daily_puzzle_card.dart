@@ -89,7 +89,7 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
                       borderRadius: BorderRadius.all(Radius.circular(9.0*scalor))
                     ),
                     elevation: 10.0,
-                    shadowColor: const Color.fromARGB(255, 65, 65, 65),
+                    shadowColor: palette.widgetShadow1, // const Color.fromARGB(255, 65, 65, 65),
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -169,8 +169,8 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0)
                                   ),
-                                  foregroundColor: palette.navigationButtonText2,
-                                  backgroundColor: palette.navigationButtonBg2,
+                                  foregroundColor: palette.navigationButtonText3,
+                                  backgroundColor: palette.navigationButtonBg3,
                                 ),
                                 onPressed: () {
                                   Initializations().startGame(
@@ -193,6 +193,7 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
                                   "Play!",
                                   style: palette.mainAppFont(
                                     textStyle: TextStyle(
+                                      color: palette.navigationButtonText3
                                       // color: palette.navigationButtonText1
                                     )
                                   ),
@@ -259,11 +260,11 @@ Widget paramWidget(IconData icon, dynamic value, ColorPalette palette) {
     child: Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
-        color: const Color.fromARGB(255, 171, 181, 228), // palette.widget2,
+        color: palette.widget2, //const Color.fromARGB(255, 171, 181, 228), // palette.widget2,
         // border: Border.all(width: 1.0, color: Colors.black)
         boxShadow: [
           BoxShadow(
-            color: const Color.fromARGB(88, 22, 22, 22),
+            color: palette.widgetShadow2, //const Color.fromARGB(88, 22, 22, 22),
             offset: Offset(0.0, 2.0),
             spreadRadius: 2.0,
             blurRadius: 2.0
@@ -277,7 +278,7 @@ Widget paramWidget(IconData icon, dynamic value, ColorPalette palette) {
           children: [
             Icon(
               icon,
-              color: Color.fromARGB(255, 51, 51, 51),// palette.widgetText2,
+              color: palette.widgetText2 //Color.fromARGB(255, 51, 51, 51),// palette.widgetText2,
             ),
             SizedBox(width: 10,),
             Text(

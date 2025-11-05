@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/components/bonus_icons.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
@@ -30,6 +31,8 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
   late double demoBoardSize = widget.screenWidth;
   late double elementWidth = widget.screenWidth;
 
+  late ColorPalette palette;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,6 +42,8 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
     demoBoardSize = widget.screenWidth*0.55;    
     
     startTimer();
+
+    palette = Provider.of<ColorPalette>(context, listen: false);
 
   }
   
@@ -119,6 +124,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -134,6 +140,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -150,6 +157,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
 
@@ -169,6 +177,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
 
@@ -192,6 +201,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),                    
 
             InstructionsTextElement(
@@ -214,6 +224,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),                      
 
             InstructionsTextElement(
@@ -238,6 +249,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
             
 
@@ -255,6 +267,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -270,6 +283,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -285,6 +299,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -300,6 +315,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -315,6 +331,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -330,6 +347,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
             InstructionsTextElement(
               isLabel: false, 
@@ -344,6 +362,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
             InstructionsTextElement(
               isLabel: false, 
@@ -359,6 +378,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -374,6 +394,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
 
             InstructionsTextElement(
@@ -389,6 +410,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               ellapsedTimeMs: _elapsedMilliseconds,
               tilePlacedProgress: _tilePlacementProgress,
               scalor: widget.scalor,
+              palette: palette,
             ),
             
             InstructionsTextElement(

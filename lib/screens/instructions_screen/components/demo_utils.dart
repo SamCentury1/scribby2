@@ -1,10 +1,11 @@
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 
 class DemoUtils {
 
-  Canvas paintDemoTile(Canvas canvas,String tileId, Map<String,dynamic> boardState, Offset center, double tileSize,int elapsedTime) {
+  Canvas paintDemoTile(Canvas canvas,String tileId, Map<String,dynamic> boardState, Offset center, double tileSize,int elapsedTime, ColorPalette palette) {
 
     String body = boardState[tileId];
 
@@ -18,7 +19,7 @@ class DemoUtils {
     Rect randomLetter1Rect = Rect.fromCenter(center: center, width: updatedTileSize, height: updatedTileSize);
     RRect randomLetter1RRect = RRect.fromRectAndRadius(randomLetter1Rect, Radius.circular(updatedTileSize*0.15));
 
-    Paint tilePaint = getTilePaint(boardState,tileId,updatedTileSize,center,elapsedTime);
+    Paint tilePaint = getTilePaint(boardState,tileId,updatedTileSize,center,elapsedTime,palette);
     canvas.drawRRect(randomLetter1RRect, tilePaint);
     Color textColor = getWordFoundColor(boardState,tileId,elapsedTime);
     drawDemoText(canvas,tileSize*0.65,body,center,textColor);
@@ -34,13 +35,13 @@ class DemoUtils {
     return color; 
   }
 
-  Paint getTilePaint(Map<String,dynamic> boardState, String tileId, double tileSize, Offset tileCenter, int elapsedTime) {
+  Paint getTilePaint(Map<String,dynamic> boardState, String tileId, double tileSize, Offset tileCenter, int elapsedTime,ColorPalette palette) {
       List<Offset> offsets = [
         Offset(tileCenter.dx-(tileSize/2), tileCenter.dy-(tileSize/2)),
         Offset(tileCenter.dx+(tileSize/2), tileCenter.dy+(tileSize/2))
       ];
-      List<Color> emptyColors = [const Color.fromARGB(255, 53, 200, 245), const Color.fromARGB(255, 165, 211, 223)];
-      List<Color> fullColors = [const Color.fromARGB(255, 19, 40, 235), const Color.fromARGB(255, 93, 20, 228)];
+      List<Color> emptyColors = [palette.gameplayEmptyTileFill1, palette.gameplayEmptyTileFill2];
+      List<Color> fullColors = [palette.tileColor1, palette.tileColor2];
       List<Color> colors = boardState[tileId] == "" ? emptyColors : fullColors;
       Paint tilePaint = Paint();
       tilePaint.shader = ui.Gradient.linear(

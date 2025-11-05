@@ -128,9 +128,9 @@ class AnimationUtils {
   }  
 
 
-  Color getParticleColor(double index, String type, String body, Map<String,dynamic> decorationData) {
+  Color getParticleColor(double index, String type, String body, Map<String,dynamic> decorationData, ColorPalette palette) {
     // String body = type == "board" ? "-" : "";
-    Map<String,dynamic> tilePaint = TilePainters().getPaintSet(type,body,decorationData);
+    Map<String,dynamic> tilePaint = TilePainters().getPaintSet(type,body,decorationData,palette);
     Color res = Colors.transparent;
 
     if (index>=0.0 && index < 0.40) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/screens/instructions_screen/components/demo_utils.dart';
 
@@ -7,11 +8,13 @@ class DemoBoardPainter extends CustomPainter {
   final int step;
   final int elapsedTime;
   final double tilePlacementProgress;
+  final ColorPalette palette;
   DemoBoardPainter({
     required this.settingsState,
     required this.step,
     required this.elapsedTime,
     required this.tilePlacementProgress,
+    required this.palette,
   });
    
   @override  
@@ -55,10 +58,10 @@ class DemoBoardPainter extends CustomPainter {
             // actualTileSize = getTileSize(randomLetter1SizeOrigin, tileSize*0.9, tilePlacementProgress);
             // tilePosition = getTransitionPosition(randomLetter1PositionOrigin,tileCenter,tilePlacementProgress);
           } else {
-            DemoUtils().paintDemoTile(canvas,"${j}_$i",boardState,tilePosition,actualTileSize,elapsedTime,);
+            DemoUtils().paintDemoTile(canvas,"${j}_$i",boardState,tilePosition,actualTileSize,elapsedTime,palette);
           }
         } else {
-          DemoUtils().paintDemoTile(canvas,"${j}_$i",boardState,tilePosition,actualTileSize,elapsedTime,);
+          DemoUtils().paintDemoTile(canvas,"${j}_$i",boardState,tilePosition,actualTileSize,elapsedTime,palette);
         }
 
       }
@@ -77,10 +80,10 @@ class DemoBoardPainter extends CustomPainter {
           // actualTileSize = getTileSize(randomLetter1SizeOrigin, tileSize*0.75, tilePlacementProgress);
           // reservePosition = getTransitionPosition(randomLetter1PositionOrigin,reserveCenter,tilePlacementProgress);
         } else {
-          DemoUtils().paintDemoTile(canvas,"res_$i",boardState,reservePosition,actualTileSize,elapsedTime,); 
+          DemoUtils().paintDemoTile(canvas,"res_$i",boardState,reservePosition,actualTileSize,elapsedTime,palette); 
         }
       } else {
-        DemoUtils().paintDemoTile(canvas,"res_$i",boardState,reservePosition,actualTileSize,elapsedTime,);    
+        DemoUtils().paintDemoTile(canvas,"res_$i",boardState,reservePosition,actualTileSize,elapsedTime,palette);    
       }     
     }
 
@@ -149,7 +152,7 @@ class DemoBoardPainter extends CustomPainter {
 
         late double actualTileSize = DemoUtils().getTileSize(originSize, targetSize, tilePlacementProgress);
         late Offset actualPosition = DemoUtils().getTransitionPosition(originPosition,targetPosition,tilePlacementProgress);    
-        DemoUtils().paintDemoTile(canvas,destinationTile,boardState,actualPosition,actualTileSize,elapsedTime,);   
+        DemoUtils().paintDemoTile(canvas,destinationTile,boardState,actualPosition,actualTileSize,elapsedTime,palette);   
 
       }
     } 

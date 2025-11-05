@@ -699,6 +699,27 @@ class Animations extends ChangeNotifier {
     timerLogic(gamePlayState,actualAnimation,count,target,animationDurationData["interval"]);
   }
 
+  void startSelectPerkAnimation(GamePlayState gamePlayState, String perk, bool select) {
+    const String animationType = "select-perk";
+    Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
+
+    int target = animationDurationData["stops"];
+    int count = 0;
+
+    late Map<String,dynamic> actualAnimation = {}; 
+    Map<String,dynamic> existingAnimationObject = gamePlayState.animationData.firstWhere((e)=>e["type"]==animationType,orElse:()=>{});
+
+    if (existingAnimationObject.isNotEmpty) {
+      final double progress = existingAnimationObject["progress"];
+      count = (progress*target).round();
+      actualAnimation = existingAnimationObject;      
+    }  else {
+      actualAnimation = {"key": "${perk}_select", "type":animationType, "progress":0.0, "animation": {}, "select":select };
+      gamePlayState.animationData.add(actualAnimation);
+    }
+
+    timerLogic(gamePlayState,actualAnimation,count,target,animationDurationData["interval"]);
+  }
 
 
   void startScoreboardPlusNPoints(GamePlayState gamePlayState, int turn) {

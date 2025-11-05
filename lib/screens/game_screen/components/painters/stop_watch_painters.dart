@@ -20,8 +20,9 @@ class StopWatchPainters {
       );
 
       Size elementSize = gamePlayState.elementSizes["tileSize"]*1.125;
-      final double boardWidth = gamePlayState.elementSizes["tileSize"].width * gamePlayState.gameParameters["rows"]; // Helpers().getNumAxis(gamePlayState.tileData)[0];
-      final double locationX =  ((gamePlayState.elementSizes["screenSize"].width-boardWidth)/2) + (elementSize.width/2) +(elementSize.width/4);
+      final double boardWidth = gamePlayState.elementSizes["tileSize"].width * gamePlayState.gameParameters["rows"];
+      // final double locationX =  ((gamePlayState.elementSizes["screenSize"].width-boardWidth)/2) + (elementSize.width/4)*1 ;//+(elementSize.width/4);
+      final double locationX = ((gamePlayState.elementSizes["screenSize"].width-boardWidth)/2) + (elementSize.width/2); //((gamePlayState.elementSizes["screenSize"].width-boardWidth)/2) + (boardWidth/2) - ((boardWidth/2)/4);
       final double locationY = gamePlayState.elementPositions["randomLettersCenter"].dy;
       final Offset location = Offset(locationX, locationY);
 

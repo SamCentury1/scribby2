@@ -11,7 +11,10 @@ class PerksBarPainters {
 
   Canvas drawPerksArea(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     drawPerksBarBackground(canvas, gamePlayState, palette);
+
     drawPerksIcons(canvas,gamePlayState,palette);
+
+
     drawAddPerkAnimation(canvas,gamePlayState,palette);
     return canvas;
   }
@@ -22,11 +25,11 @@ class PerksBarPainters {
     Offset perksCenter = gamePlayState.elementPositions["perksCenter"];
     Size perksAreaSize = gamePlayState.elementSizes["perksAreaSize"];
 
-    Rect perksAreaRect = Rect.fromCenter(center: perksCenter, width: perksAreaSize.width*0.8, height: perksAreaSize.height);
-    RRect perksAreaRRect = RRect.fromRectAndRadius(perksAreaRect, Radius.circular(22.0));
+    Rect perksAreaRect = Rect.fromCenter(center: perksCenter, width: perksAreaSize.width*0.8, height: perksAreaSize.height*1.1);
+    RRect perksAreaRRect = RRect.fromRectAndRadius(perksAreaRect, Radius.circular(12.0));
 
     Paint perksAreaBg = Paint();
-    perksAreaBg.color = const Color.fromARGB(103, 255, 255, 255);
+    perksAreaBg.color = palette.perkBarBackgroundColor; //const Color.fromARGB(103, 245, 8, 8);
 
     canvas.drawRRect(perksAreaRRect, perksAreaBg);
     
@@ -45,7 +48,7 @@ class PerksBarPainters {
     
 
     for (int i=0; i<gamePlayState.tileMenuOptions.length; i++) {
-      late Size perkSize = Size(perkAreaSize.height*0.9,perkAreaSize.height*0.9);
+      late Size perkSize = Size(perkAreaSize.height*0.85,perkAreaSize.height*0.85);
       
       Offset perkCenter = gamePlayState.tileMenuOptions[i]["center"];
       String iconType = gamePlayState.tileMenuOptions[i]["item"];
@@ -55,32 +58,54 @@ class PerksBarPainters {
       // Rect perkRect = Rect.fromCenter(center: perkCenter, width: perkSize, height: perkSize);
 
       // canvas.drawRect(perkRect, perkPaint);
-      if (isSelected || isOpen) {
-        perkSize = Size(perkAreaSize.height*1.1,perkAreaSize.height*1.1,);
-      } 
+      // if (isOpen) {
+      //   perkSize = Size(perkAreaSize.height*1.1,perkAreaSize.height*1.1,);
+      // } 
 
       double itemDiameter = perkSize.width*0.75;//tileSize.width*0.6;
 
-      Map<String,dynamic> perkAnimation = gamePlayState.animationData.firstWhere((e)=>e["key"]==iconType,orElse: ()=>{});
+      Map<String,dynamic> addPerkAnimation = gamePlayState.animationData.firstWhere((e)=>e["key"]==iconType,orElse: ()=>{});
 
       late double opacity = 1.0;
-      late Color unselectedColor = Colors.white;
-      late Color selectedColor = const Color.fromARGB(255, 4, 17, 133);
+      late Color unselectedColor = palette.perkUnselectedColor;
+      late Color selectedColor = palette.perkSelectedColor;
 
       late Color perkColor = unselectedColor;
-      if (isSelected || isOpen) {
-        perkColor = selectedColor;
-      }
+      // if (isSelected || isOpen) {
+      //   perkColor = selectedColor;
+      // }
 
-      TilePainters().drawOptionIcon(canvas,perkCenter,iconType,perkSize,1.0,perkColor);
+      List<Map<String,dynamic>> selectPerkAnimations = gamePlayState.animationData.where( (e) => e["type"]=='select-perk' && e["key"]=="${iconType}_select" ).toList();
+      if (selectPerkAnimations.isNotEmpty) {
+        for (int i=0; i<selectPerkAnimations.length; i++) {
+          // canvas.drawRect(Rect.fromCenter(center: perkCenter, width: perkSize.width, height: perkSize.height), perkPaint);
+          late double progress = selectPerkAnimations[i]["progress"];
+          if (!selectPerkAnimations[i]["select"]) {
+            progress = 1.0-selectPerkAnimations[i]["progress"];
+          } 
+          final double updatedSizeValue = (perkAreaSize.height*0.85) + (perkAreaSize.height*0.85*0.3*progress);
+          final Size updatedSize = Size(updatedSizeValue,updatedSizeValue);
+          itemDiameter = updatedSize.width*0.75;
+          perkColor = Color.lerp(unselectedColor, selectedColor, progress)??selectedColor; 
+          TilePainters().drawOptionIcon(canvas,perkCenter,iconType,updatedSize,1.0,perkColor);
+        }
+      } else {
+        if (isOpen) {
+          perkSize = Size(perkAreaSize.height*0.85*1.3,perkAreaSize.height*0.85*1.3);
+          perkColor = selectedColor;
+          itemDiameter = perkSize.width*0.75;
+        }
+        TilePainters().drawOptionIcon(canvas,perkCenter,iconType,perkSize,1.0,perkColor);
+      }   
+
 
       
 
       TextStyle textStyle = TextStyle(
         color: perkColor ,
         fontSize: itemDiameter*0.5 * gamePlayState.scalor ,
-        shadows: perkAnimation.isNotEmpty ? [
-          Shadow(color: Colors.white,offset: Offset.zero, blurRadius: 22.0 * opacity,)
+        shadows: addPerkAnimation.isNotEmpty ? [
+          Shadow(color: palette.perkShadowColor,offset: Offset.zero, blurRadius: 22.0 * opacity,)
         ] : []
       );
       TextSpan textSpan = TextSpan(

@@ -82,6 +82,9 @@ class Gestures {
             // tapping while the tile is swapping
             print(" ------------------------- TAPPED WHILE PERK IS SELECTED BUT NOT ACTIVE --------------------------- ");
             isPerkSelectionDetected["selected"]=true;
+            String perk = isPerkSelectionDetected["item"]; 
+            Animations().startSelectPerkAnimation(gamePlayState,perk,true);             
+            
             
           }
         } else {
@@ -403,6 +406,7 @@ class Gestures {
               isPerkSelectionDetected["open"]=true;
 
               GameLogic().executePerkSelectedBehaviour(context,gamePlayState,);
+         
 
               
 
