@@ -19,6 +19,17 @@ class GameHistoryPageView extends StatefulWidget {
 }
 
 class _GameHistoryPageViewState extends State<GameHistoryPageView> {
+
+  late double scalor = 1.0;
+  late List<dynamic> gameHistory = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scalor = Helpers().getScalor(widget.settings);
+    gameHistory = Helpers().getGameHistory(widget.settings);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -30,7 +41,7 @@ class _GameHistoryPageViewState extends State<GameHistoryPageView> {
         padding: EdgeInsets.symmetric(horizontal: 12.0 * scalor),
         child: Builder(
           builder: (context) {
-            if (widget.settings.userGameHistory.value.isEmpty) {
+            if (gameHistory.isEmpty) {
               return SizedBox(
                 child: Text(
                   "No games played yet...",
@@ -44,9 +55,9 @@ class _GameHistoryPageViewState extends State<GameHistoryPageView> {
               );
             } else {
               return ListView.builder(
-                itemCount: widget.settings.userGameHistory.value.length,
+                itemCount: gameHistory.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GameSummaryCard(gameData: widget.settings.userGameHistory.value[index],palette: widget.palette,);
+                  return GameSummaryCard(gameData: gameHistory[index],palette: widget.palette,);
                 }
               );
             }

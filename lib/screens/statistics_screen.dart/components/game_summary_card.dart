@@ -80,12 +80,7 @@ ${gameData}
                     ),
                   ),
               
-                  // trailing: Text(
-                  //   Helpers().getScoreValue(gameData),
-                  //   style: palette.counterFont(
-                  //     textStyle: TextStyle(fontSize: 24 * scalor, color: palette.widgetText2),
-                  //   )
-                  // ),
+
                   showTrailingIcon: true,
                   subtitle: Text(formattedDate,style: TextStyle(fontSize: 14*scalor, color: palette.widgetText2),),
               
@@ -96,41 +91,7 @@ ${gameData}
                   children: <Widget>[
               
                     Divider(),
-                    // gameData["gameParameters"]["gameType"] == "arcade" ? 
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       flex: 1,
-                    //       child: Container(
-                    //         child: Row(
-                    //           children: [
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Icon(Icons.lock_clock,color:palette.widgetText2)
-                    //             ),
-              
-                    //             Expanded(
-                    //               flex: 3,
-                    //               child: Text("Duration",style: TextStyle(color: palette.widgetText2),)
-                    //             ),
-              
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Text(Helpers().formatDuration(gameData["durationSeconds"]),style: TextStyle(color: palette.widgetText2),)
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       )
-                    //     ),
-                    //     Expanded(
-                    //       flex: 1,
-                    //       child: SizedBox()
-                    //     )                     
-                    //   ],
-                    // ) : SizedBox(),
-              
-                    // gameData["gameParameters"]["gameType"] == "arcade" ? 
-                    // Divider() : SizedBox(),
+
               
                     RowItem(
                       palette: palette, 

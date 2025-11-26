@@ -1822,6 +1822,8 @@ class GameLogic extends ChangeNotifier {
   void storeEndOfGameData(SettingsController settings, GamePlayState gamePlayState) {
 
     late Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    late List<dynamic> gameHistory = userData["gameHistory"];
+
     late List<String> badgeKeys = [];
     late List<int> multiWords = [];
     late List<int> streaks = [];
@@ -1940,8 +1942,8 @@ class GameLogic extends ChangeNotifier {
     }
 
     List<dynamic> totalUniqueWords = [];
-    for (int i=0; i<settings.userGameHistory.value.length; i++) {
-      List<dynamic> gameWords = settings.userGameHistory.value[i]["uniqueWords"];
+    for (int i=0; i<gameHistory.length; i++) {
+      List<dynamic> gameWords = gameHistory[i]["uniqueWords"];
       for (int j=0;j<gameWords.length;j++) {
         if (!totalUniqueWords.contains(gameWords[j])) {
           totalUniqueWords.add(gameWords[j]);
@@ -1987,16 +1989,17 @@ class GameLogic extends ChangeNotifier {
 
     if (shouldSaveData) {
       // print("don't save, tutorial was completed");
-      final int currentXP = settings.xp.value;
+      // final int currentXP = settings.xp.value;
+      final int currentXP = userData["xp"];
       final int xpEarnedInGame = gamePlayState.gameResultData["xp"]??0;
       gamePlayState.gameResultData.update("xp",(v) => xpEarnedInGame+xpEarnedFromBadges);
       final int newXpValue = currentXP + xpEarnedFromBadges + xpEarnedInGame;
-      settings.setXP(newXpValue);
+      // settings.setXP(newXpValue);
       
-      final int currentCoins = settings.coins.value;
+      final int currentCoins = userData["coins"]; //settings.coins.value;
       final int coinsAwarded = gamePlayState.gameResultData["reward"];
       final int newCoinsValue = currentCoins+coinsAwarded;
-      settings.setCoins(newCoinsValue);
+      // settings.setCoins(newCoinsValue);
 
 
       final int score = Helpers().calculateScore(gamePlayState);
@@ -2032,10 +2035,12 @@ ${data}
 =1=1=1=1=1=1=1=1=1==1=1=1=1=1=1=1
 """);
 
-      List<dynamic> history = settings.userGameHistory.value;
-      List<Map<String,dynamic>> updatedHistory = List<Map<String,dynamic>>.from(history);
-      updatedHistory.add(data);
-      settings.setUserGameHistory(updatedHistory);
+      // Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      // List<dynamic> history = userData["gameHistory"];
+
+
+      // updatedHistory.add(data);
+      // settings.setUserGameHistory(updatedHistory);
       gamePlayState.gameResultData.update("badges", (v) => badgesEarned);
 
       settings.setAchievementData(achievementData);

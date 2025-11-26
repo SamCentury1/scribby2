@@ -17,6 +17,7 @@ import 'package:scribby_flutter_v2/functions/styling_utils.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/game_over_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/ads/game_screen_banner_ad.dart';
@@ -28,6 +29,7 @@ import 'package:scribby_flutter_v2/screens/home_screen/components/home_screen_dr
 import 'package:scribby_flutter_v2/screens/home_screen/components/home_screen_utils.dart';
 import 'package:scribby_flutter_v2/screens/home_screen/components/new_game_dialog.dart';
 import 'package:scribby_flutter_v2/screens/home_screen/components/new_rank_overlay.dart';
+import 'package:scribby_flutter_v2/screens/home_screen/components/tutorial_modal.dart';
 import 'package:scribby_flutter_v2/screens/home_screen/components/xp_holdings.dart';
 import 'package:scribby_flutter_v2/screens/instructions_screen/instructions_screen.dart';
 // import 'package:scribby_flutter_v2/screens/temp_screen.dart';
@@ -45,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<Map<String,dynamic>> backgroundFigures = [];
   
   // final GlobalKey<ScaffoldState> _homeScaffoldKey = GlobalKey();
+
+  late SettingsController settings;
   @override
   void initState() {
     // TODO: implement initState
@@ -67,6 +71,27 @@ class _HomeScreenState extends State<HomeScreen> {
       {"rows": 7, "columns": 8},
       {"rows": 8, "columns": 8},
     ];
+
+    settings = Provider.of<SettingsController>(context,listen: false);
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    
+    bool tutorialComplete = userData["parameters"]["shownTutorialModal"] ?? false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!tutorialComplete) {
+
+        setState(() {
+          MediaQueryData mediaQueryData = MediaQuery.of(context);
+          openTutorialModal(context, mediaQueryData);
+
+          Map<String,dynamic> params = userData["parameters"];
+          // if (params["shownTutorialModal"]!=)
+          params.update("shownTutorialModal", (v) => true);
+          settings.setUserData(userData);
+
+          FirestoreMethods().updateParameters(settings, "shownTutorialModal", true);
+        });
+      }
+    });
 
     Random random = Random(); 
 
@@ -200,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   HomeScreenDrawerButton(
                                     icon: Icons.close,
                                     body: "Sign Out", 
-                                    onPress: () => AuthService().signOut()
+                                    onPress: () => AuthService().signOut(context)
                                   ),
                               
                                 ],
@@ -220,13 +245,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: double.infinity,
                                       child: Stack(
                                         children: [
-
+              
                                             // CustomPaint(
                                             //   painter: ScribbyLogoPainter(settings: settings, palette: palette),
                                             // ),
-
+              
                                           
-
+              
                                           Column(
                                             children: [
                                               Expanded(
@@ -238,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: palette.navigationButtonBg1,
                                                     borderRadius: BorderRadius.all(Radius.circular(12.0 * scalor))
                                                   ),
-
+              
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(8.0),
                                                     child: Row(
@@ -289,13 +314,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       ],
                                                     ),
                                                   ),
-
+              
                                                 ),
                                               ),
                                               Expanded(flex:1, child: SizedBox())
                                             ],
                                           ),
-
+              
                                           IgnorePointer(
                                             child: SizedBox(
                                               width: double.infinity,
@@ -323,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     )
                                   ),
-
+              
                                   // SizedBox(height: 30 * scalor,),
                               
                                   Expanded(
@@ -354,8 +379,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           painter: HowToPlayTilePainter(settings: settings, palette: palette),
                                                         ),
                                                       ),
-
-
+              
+              
                                                       Padding(
                                                         padding: EdgeInsets.all(12.0*scalor),
                                                         child: Column(
@@ -374,70 +399,81 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               ),
                                                             ),
                                                             
-                                                            ElevatedButton(
-                                                              style: ElevatedButton.styleFrom(
-                                                                backgroundColor: palette.widget1,
-                                                                foregroundColor: palette.widgetText1,
-                                                                shape: RoundedRectangleBorder(
-                                                                  borderRadius: BorderRadius.all(Radius.circular(8*scalor))
+                                                            Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: ElevatedButton(
+                                                                style: ElevatedButton.styleFrom(
+                                                                  backgroundColor: palette.widget1,
+                                                                  foregroundColor: palette.widgetText1,
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.all(Radius.circular(8*scalor))
+                                                                  ),
+                                                                  padding: EdgeInsets.all(8.0*scalor),
+                                                                  elevation: 3.0 *scalor
                                                                 ),
-                                                                padding: EdgeInsets.all(8.0*scalor),
-                                                                elevation: 3.0 *scalor
-                                                              ),
-                                                              onPressed: () => HomeScreenUtils().navigateToInstructionsScreen(context,false),
-                                                              child: FittedBox(
-                                                                fit: BoxFit.scaleDown,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Icon(Icons.help,size: 18 * scalor,),
-                                                                    SizedBox(width: 10*scalor,),
-                                                                    Text(
-                                                                    "Instructions",
-                                                                      style: palette.mainAppFont(
-                                                                        // color: Colors.white,
-                                                                        textStyle: TextStyle(
-                                                                          fontSize: 18*scalor,
+                                                                onPressed: () => HomeScreenUtils().navigateToInstructionsScreen(context,false),
+                                                                child: FittedBox(
+                                                                  fit: BoxFit.scaleDown,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Icon(Icons.help,size: 18 * scalor,),
+                                                                      SizedBox(width: 10*scalor,),
+                                                                      Text(
+                                                                      "Instructions",
+                                                                        style: palette.mainAppFont(
+                                                                          // color: Colors.white,
+                                                                          textStyle: TextStyle(
+                                                                            fontSize: 18*scalor,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),                                                                
-                                                              
-                                                            ),
-
-                                                            ElevatedButton(
-                                                              style: ElevatedButton.styleFrom(
-                                                                backgroundColor: palette.navigationButtonBg3,
-                                                                foregroundColor: palette.navigationButtonText3,
-                                                                shape: RoundedRectangleBorder(
-                                                                  borderRadius: BorderRadius.all(Radius.circular(8*scalor))
-                                                                ),
-                                                                padding: EdgeInsets.all(8.0*scalor),
-                                                                elevation: 3.0 *scalor
-                                                              ),
-                                                              onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings, palette),
-                                                              child: Row(
-                                                                children: [
-                                                                  Icon(Icons.play_arrow,size: 18 * scalor,),
-                                                                  SizedBox(width: 10*scalor,),
-                                                                  Text(
-                                                                  "Tutorial",
-                                                                    style: palette.mainAppFont(
-                                                                      // color: Colors.white,
-                                                                      textStyle: TextStyle(
-                                                                        fontSize: 18*scalor,
-                                                                      ),
-                                                                    ),
+                                                                      SizedBox(width: 10*scalor,),
+                                                                    ],
                                                                   ),
-                                                                ],
-                                                              ),                                                                
-                                                              
+                                                                ),                                                                
+                                                                
+                                                              ),
+                                                            ),
+              
+                                                            Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: ElevatedButton(
+                                                                style: ElevatedButton.styleFrom(
+                                                                  backgroundColor: palette.navigationButtonBg3,
+                                                                  foregroundColor: palette.navigationButtonText3,
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.all(Radius.circular(8*scalor))
+                                                                  ),
+                                                                  padding: EdgeInsets.all(8.0*scalor),
+                                                                  elevation: 3.0 *scalor
+                                                                ),
+                                                                onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings, palette),
+                                                                child: FittedBox(
+                                                                  fit: BoxFit.scaleDown,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Icon(Icons.play_arrow,size: 18 * scalor,),
+                                                                      SizedBox(width: 10*scalor,),
+                                                                      Text(
+                                                                      "Tutorial",
+                                                                        style: palette.mainAppFont(
+                                                                          // color: Colors.white,
+                                                                          textStyle: TextStyle(
+                                                                            fontSize: 18*scalor,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(width: 10*scalor,),
+                                                                    ],
+                                                                  ),
+                                                                ),                                                                
+                                                                
+                                                              ),
                                                             ),                                                            
                                                             
                                                             
-
-
+              
+              
                                                           ],
                                                         ),
                                                       )
@@ -492,7 +528,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 //   // ),
                                                 // )
                                               ),
-
+              
                                               SizedBox(height: 20,),
                               
                                               Expanded(
@@ -513,7 +549,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     // crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                                                                   
-
+              
                                                       SizedBox(
                                                         width: double.infinity,
                                                         height: double.infinity,
@@ -521,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           painter: ShopTilePainter(settings: settings, palette: palette),
                                                         ),
                                                       ),                                                        
-
+              
                                                                                                               
                                                       FittedBox(
                                                         fit: BoxFit.scaleDown,
@@ -535,8 +571,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                         ),
                                                       ),
-
-                                                      Center(child: Icon(Icons.store_rounded, size: 100 * scalor, color: palette.text1.withAlpha(200),))
+              
+                                                      Center(child: Icon(Icons.store_rounded, size: 100 * scalor, color: palette.text1.withAlpha(255),))
                                                       // Flexible(
                                                       //   child: Image(
                                                       //     semanticLabel: "",
@@ -553,7 +589,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           )
                                         ),
                                         SizedBox(width: 20,),
-
+              
                                         Expanded(
                                           flex: 2,
                                           child: Column(
@@ -567,7 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     // color: const Color.fromARGB(255, 168, 168, 214),
                                                     borderRadius: BorderRadius.all(Radius.circular(12.0 * scalor))
                                                   ),
-
+              
                                                   child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
                                                       backgroundColor: palette.navigationButtonBg3,
@@ -588,7 +624,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           child: FittedBox(
                                                             fit: BoxFit.scaleDown,
                                                             child: Text(
-                                                              "Leaderboards",
+                                                              "Game History",
                                                               style: palette.mainAppFont(
                                                                 // color: Colors.white,
                                                                 textStyle: TextStyle(
@@ -635,7 +671,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           painter: StatsTile(settings: settings, palette: palette),
                                                         ),
                                                       ),
-
+              
                                                       Column(
                                                         children: [
                                                           Text(
@@ -650,8 +686,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ),
                                                           ),
                                                           Center(child: Icon(Icons.bar_chart, size: 100 * scalor, color: palette.navigationButtonText1.withAlpha(200),))                                                          
-
-
+              
+              
                                                         ],
                                                       ),
                                                     ],
@@ -665,10 +701,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   width: double.infinity,
                                                   height: double.infinity,
                                                   decoration: BoxDecoration(
-                                                    color: const Color.fromARGB(255, 134, 100, 255),
+                                                    color: Colors.transparent, //const Color.fromARGB(255, 134, 100, 255),
                                                     borderRadius: BorderRadius.all(Radius.circular(12.0 * scalor))
                                                   ),
-
+              
                                                   child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
                                                       backgroundColor: palette.navigationButtonBg2,
@@ -684,11 +720,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     child: Stack(
                                                       children: [                                          
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
-
+              
                                                             Icon(Icons.person_2, size: 26 * scalor, color: palette.navigationButtonText2,),
-
+                                                            SizedBox(width: 10*scalor,),
                                                             Text(
                                                               "Profile",
                                                               style: palette.mainAppFont(
@@ -703,7 +739,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       ],
                                                     ),
                                                   ),                                                                                                   
-
+              
                                                 )
                                               ),                                                                                            
                                             ],
@@ -713,7 +749,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   ),
                                   SizedBox(height: 20,),
-
+              
                                   Expanded(
                                     flex: 1,
                                     child: Container(
@@ -751,7 +787,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             // bottomNavigationBar: GameScreenBannerAd(),
                           ),
-
+              
                           // Overlay()
                           NewRankOverlay()
                         ],
@@ -879,6 +915,17 @@ Future<void> initializeAppData(SettingsController settings, ColorPalette palette
 
 
 }
+Future<void> openTutorialModal(BuildContext context, MediaQueryData mediaQueryData) async {
+
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return TutorialDialog(mediaQueryData: mediaQueryData,);
+    }
+  );
+}
+
+
 
 
 Future<void> openNewGameDialog(BuildContext context, MediaQueryData mediaQueryData) async {
@@ -1073,7 +1120,7 @@ class ShopTilePainter extends CustomPainter {
     ];
     for (int i=0; i < circles.length; i++) {
       Paint circlePaint = Paint()
-      ..color = const Color.fromARGB(225, 38, 29, 116)
+      ..color = Color.lerp(palette.navigationButtonText2, Colors.transparent, 0.7)??Colors.transparent // const Color.fromARGB(225, 38, 29, 116)
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round;
       // ..strokeWidth = circles[i]["width"];
@@ -1115,7 +1162,7 @@ class StatsTile extends CustomPainter {
     ];
     for (int i=0; i < circles.length; i++) {
       Paint circlePaint = Paint()
-      ..color = const Color.fromARGB(225, 38, 29, 116)
+      ..color = Color.lerp(palette.navigationButtonText1, Colors.transparent, 0.8)??palette.navigationButtonText1 //const Color.fromARGB(225, 38, 29, 116)
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round;
       // ..strokeWidth = circles[i]["width"];
@@ -1196,3 +1243,10 @@ class ScribbyLogoPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
+Future<void> loadTutorialOpen(SettingsController settings, BuildContext context) async {
+  Map<String,dynamic> userData = settings.user.value as Map<String,dynamic>;
+  bool tutorialShown = userData["parameters"]["shownTutorialModal"];
+  if (!tutorialShown) {
+    openTutorialModal(context, MediaQuery.of(context));
+  }
+} 

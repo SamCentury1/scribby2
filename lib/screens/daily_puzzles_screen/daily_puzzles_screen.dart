@@ -92,16 +92,6 @@ class _DailyPuzzlesScreenState extends State<DailyPuzzlesScreen> {
 
         late double scalor = 1.0;
 
-        final Map<dynamic,dynamic> userData = settings.userData.value as Map<dynamic,dynamic>;
-
-        GamePlayState gamePlayState = Provider.of<GamePlayState>(context, listen: false);
-        List<dynamic> dailyChallenges = settings.userGameHistory.value;
-
-
-
-        
-
-
         return PopScope(
           canPop: true,
           child: Consumer<ColorPalette>(
@@ -127,7 +117,16 @@ class _DailyPuzzlesScreenState extends State<DailyPuzzlesScreen> {
                         onDrawerChanged: (var details) {},
                         appBar: AppBar(
                           backgroundColor: const Color.fromARGB(0, 49, 49, 49),
-                          title: Text("Daily Puzzles", style: TextStyle(color: palette.text2, fontSize: 28*scalor),),
+                          title: Text(
+                            "Daily Puzzles", 
+                            // style: TextStyle(color: palette.text2, fontSize: 28*scalor),
+                            style: palette.mainAppFont(
+                              textStyle: TextStyle(
+                                color: palette.appBarText,
+                                fontSize: 36*scalor,
+                              )
+                            ),                            
+                          ),
                           leading: IconButton(
                             icon: Icon(Icons.arrow_back, color: palette.text2),
                             onPressed: () => Navigator.of(context).pop(true),

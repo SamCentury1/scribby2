@@ -735,9 +735,12 @@ class Helpers {
 
 
   List<String> getAllUniqueWords(SettingsController settings) {
+    late Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    late List<dynamic> gameHistory = userData["gameHistory"];
+
     List<String> allUniqueWords = [];
-    for (int i=0; i<settings.userGameHistory.value.length; i++) {
-      List<dynamic> uniqueWords = settings.userGameHistory.value[i]["uniqueWords"];
+    for (int i=0; i<gameHistory.length; i++) {
+      List<dynamic> uniqueWords = gameHistory[i]["uniqueWords"];
       for (int j=0; j<uniqueWords.length; j++) {
         if (!allUniqueWords.contains(uniqueWords[j])) {
           allUniqueWords.add(uniqueWords[j]);
@@ -748,9 +751,11 @@ class Helpers {
   }
 
   int getAllPointsScored(SettingsController settings) {
+    late Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    late List<dynamic> gameHistory = userData["gameHistory"];    
     int scored = 0;
-    for (int i=0; i<settings.userGameHistory.value.length; i++) {
-      int score = settings.userGameHistory.value[i]["score"];
+    for (int i=0; i<gameHistory.length; i++) {
+      int score = gameHistory[i]["score"];
       scored = scored + score;
     } 
     return scored;
@@ -763,8 +768,9 @@ class Helpers {
 
     String newRank = currentRank;
     List<dynamic> ranks = settings.rankData.value;
+    late int currentXp = userData["xp"];
     for (int i=0; i<ranks.length; i++) {
-      if (settings.xp.value >= ranks[i]["xpRange"][0] && settings.xp.value <= ranks[i]["xpRange"][1]) {
+      if (currentXp >= ranks[i]["xpRange"][0] && currentXp <= ranks[i]["xpRange"][1]) {
         newRank = ranks[i]["key"];
       }
     }
@@ -992,9 +998,10 @@ class Helpers {
         children: texts,
         style: TextStyle(
           fontSize: fontSize,
-          color: palette.widgetText1
-        )
-      )
+          color: palette.widgetText1,
+        ),
+      ),
+      textAlign: TextAlign.start,
     );
     return text;
   }  
@@ -1075,6 +1082,17 @@ class Helpers {
     return res;
   }
 
+  List<dynamic> getGameHistory(SettingsController settings) {
+    late Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    late List<dynamic> gameHistory = userData["gameHistory"];
+    return gameHistory;    
+  }
+
+  int getUserCoins(SettingsController settings) {
+    late Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    late int coins = userData["coins"];
+    return coins;        
+  }
 
 
 }

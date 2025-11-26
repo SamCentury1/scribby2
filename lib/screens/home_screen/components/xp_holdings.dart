@@ -39,10 +39,11 @@ class _XPHoldingsState extends State<XPHoldings> {
     // TODO: implement initState
     super.initState();
     settings = Provider.of<SettingsController>(context,listen: false);
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
 
     Map<dynamic,dynamic> achievements = settings.achievements.value as Map<dynamic,dynamic>;
 
-    int currentXP = settings.xp.value;
+    int currentXP = userData["xp"]; //settings.xp.value;
     xp = currentXP;
 
     if (achievements.isNotEmpty) {

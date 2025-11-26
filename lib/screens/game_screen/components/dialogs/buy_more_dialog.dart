@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/ad_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'dart:ui' as ui;
 
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/navigation_painters.dart';
@@ -125,12 +126,16 @@ class _BuyMoreModalState extends State<BuyMoreModal> {
               }
 
               void option2Callback() {
-                int coins = settings.coins.value;
+                // int coins = settings.coins.value;
+                int coins = Helpers().getUserCoins(settings);
+                
                 print("### ${tileMenuBuyMoreModalData["options"]}");
                 
                 if (optionData.isNotEmpty) {
                   int cost = optionData["cost"];
-                  settings.setCoins(coins-cost);
+                  int newCoinsValue = coins-cost;
+                  FirestoreMethods().updateParameters(settings,'coins',newCoinsValue);
+                  // settings.setCoins(coins-cost);
                   GameLogic().closeTileMenuBuyMoreModal(gamePlayState,palette,1);
                   GameLogic().executePauseDialogPopScope(gamePlayState,palette);
                 }

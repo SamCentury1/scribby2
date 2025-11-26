@@ -83,124 +83,119 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   builder: (context,constraints) {
                     return SingleChildScrollView(
                       padding: EdgeInsets.symmetric(horizontal: 12.0 * scalor),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                        child: IntrinsicHeight(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height*0.25,
+                            child: Center(
+                              child: Image.asset('assets/images/scribby_label_1.png'),
+                            ),
+                          ),
+                              
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height*0.25,
-                                child: Center(
-                                  child: Image.asset('assets/images/scribby_label_1.png'),
+                              Text(
+                                "Welcome!",
+                                style: palette.mainAppFont(
+                                  textStyle: TextStyle(
+                                    fontSize: 34 * scalor, 
+                                    color: palette.text1
+                                  ),
                                 ),
                               ),
-                                  
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            
+                              LoginTextField(controller: usernameController, hintText: 'Username', obscureText: false, palette: palette,),
+                          
+                              LoginTextField(controller: emailController, hintText: 'Email', obscureText: false, palette: palette,),
+                            
+                              LoginTextField(controller: password1Controller, hintText: 'Password', obscureText: true, palette: palette,),
+                          
+                              LoginTextField(controller: password2Controller, hintText: 'Confirm Password', obscureText: true, palette: palette,),
+                            
+                              LoginButton(onTap: registerUser, body: "Register", palette: palette,),
+                          
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 25.0 * scalor),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Divider(thickness: 0.5*scalor, color: palette.text1),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10.0 * scalor, vertical: 18.0 * scalor),
+                                      child: Text(
+                                        "or continue with",
+                                        style: palette.authFont(
+                                          textStyle: TextStyle(
+                                            fontSize: 16 * scalor, 
+                                            color: palette.text1
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Divider(thickness: 0.5*scalor, color: palette.text1),
+                                    )                      
+                                  ],
+                                )
+                              ),
+                          
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "Welcome!",
-                                    style: palette.mainAppFont(
-                                      textStyle: TextStyle(
-                                        fontSize: 34 * scalor, 
-                                        color: palette.text1
-                                      ),
-                                    ),
+                                  AuthProviderTile(
+                                    palette: palette, 
+                                    // onTap: () => AuthService().signInWithGoogle(), 
+                                    onTap: () => AuthService().signInWithGoogle(context),
+                                    iconData: Icons.g_mobiledata,
                                   ),
-                                
-                                  LoginTextField(controller: usernameController, hintText: 'Username', obscureText: false, palette: palette,),
-                              
-                                  LoginTextField(controller: emailController, hintText: 'Email', obscureText: false, palette: palette,),
-                                
-                                  LoginTextField(controller: password1Controller, hintText: 'Password', obscureText: true, palette: palette,),
-                              
-                                  LoginTextField(controller: password2Controller, hintText: 'Confirm Password', obscureText: true, palette: palette,),
-                                
-                                  LoginButton(onTap: registerUser, body: "Register", palette: palette,),
-                              
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 25.0 * scalor),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Divider(thickness: 0.5*scalor, color: palette.text1),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 10.0 * scalor, vertical: 18.0 * scalor),
-                                          child: Text(
-                                            "or continue with",
-                                            style: palette.authFont(
-                                              textStyle: TextStyle(
-                                                fontSize: 16 * scalor, 
-                                                color: palette.text1
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Divider(thickness: 0.5*scalor, color: palette.text1),
-                                        )                      
-                                      ],
-                                    )
+                                  SizedBox(width: 10,),
+                            
+                                  AuthProviderTile(
+                                    palette: palette, 
+                                    onTap: () => AuthService().signInWithApple(context),
+                                    iconData: Icons.apple,
                                   ),
-                              
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      AuthProviderTile(
-                                        palette: palette, 
-                                        // onTap: () => AuthService().signInWithGoogle(), 
-                                        onTap: () => AuthService().signInWithGoogle(context),
-                                        iconData: Icons.g_mobiledata,
-                                      ),
-                                      SizedBox(width: 10,),
-                                
-                                      AuthProviderTile(
-                                        palette: palette, 
-                                        onTap: () => AuthService().signInWithApple(context),
-                                        iconData: Icons.apple,
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 12.0 * scalor),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text("already a member?", 
-                                          style: palette.authFont(
-                                            textStyle: TextStyle(
-                                              fontSize: 16 * scalor, 
-                                              color: palette.text1
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 5,),
-                                        InkWell(
-                                          onTap: widget.onTap,
-                                          child: Text(
-                                            "login now",
-                                            style: palette.authFont(
-                                              textStyle: TextStyle(
-                                                fontSize: 16 * scalor,
-                                                fontWeight: FontWeight.bold,
-                                                color: palette.text1
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                                                  
-                                      ],
-                                    ),
-                                  )
                                 ],
                               ),
-                                  
-                              // Expanded(flex: 4, child:SizedBox())
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 12.0 * scalor),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("already a member?", 
+                                      style: palette.authFont(
+                                        textStyle: TextStyle(
+                                          fontSize: 16 * scalor, 
+                                          color: palette.text1
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 5,),
+                                    InkWell(
+                                      onTap: widget.onTap,
+                                      child: Text(
+                                        "login now",
+                                        style: palette.authFont(
+                                          textStyle: TextStyle(
+                                            fontSize: 16 * scalor,
+                                            fontWeight: FontWeight.bold,
+                                            color: palette.text1
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                                              
+                                  ],
+                                ),
+                              )
                             ],
                           ),
-                        ),
+                              
+                          // Expanded(flex: 4, child:SizedBox())
+                        ],
                       ),
                     );
                   }

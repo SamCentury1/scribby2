@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/styling_utils.dart';
 import 'package:scribby_flutter_v2/providers/ad_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
@@ -17,7 +18,12 @@ import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class GameOverCounter extends StatefulWidget {
   final SettingsController settings; 
-  const GameOverCounter({super.key,required this.settings});
+  final ColorPalette palette;
+  const GameOverCounter({
+    super.key,
+    required this.settings,
+    required this.palette,
+  });
 
   @override
   State<GameOverCounter> createState() => _GameOverCounterState();
@@ -45,7 +51,8 @@ class _GameOverCounterState extends State<GameOverCounter> {
                 (e)=>e["key"]=="game-over-count",
                 orElse: () => {}
               );
-              late int scoreBody = 0;
+              // late int scoreValue = 0;
+              late String scoreBody = '0';
               late double progress = 0.0;
               late int animationDuration = 0;
               late double highlightAnimationProgress1 = 0.0;
@@ -53,7 +60,10 @@ class _GameOverCounterState extends State<GameOverCounter> {
 
               if (scoreboardAnimationObject.isNotEmpty) {
 
-                scoreBody = scoreboardAnimationObject["scoreBody"];
+                scoreBody = scoreboardAnimationObject["scoreBody"].toString();
+                if (gamePlayState.gameParameters["gameType"]=='sprint') {
+                  scoreBody = Helpers().formatDuration(scoreboardAnimationObject["scoreBody"]);
+                }
                 progress = scoreboardAnimationObject["progress"];
                 animationDuration = scoreboardAnimationObject["duration"];
                 highlightAnimationProgress1 = scoreboardAnimationObject["highlight1"];
@@ -67,7 +77,8 @@ class _GameOverCounterState extends State<GameOverCounter> {
                 child: Container(
                   child: CustomPaint(
                     painter: GameOverCounterPainter(
-                      gamePlayState: gamePlayState, 
+                      gamePlayState: gamePlayState,
+                      palette: widget.palette,
                       // settingsState: settingsState
                       body:scoreBody.toString(),
                       progress: progress,
@@ -89,6 +100,7 @@ class _GameOverCounterState extends State<GameOverCounter> {
 
 class GameOverCounterPainter extends CustomPainter {
   final GamePlayState gamePlayState;
+  final ColorPalette palette;
   // final SettingsState settingsState;
   final String body;
   final double progress;
@@ -99,6 +111,7 @@ class GameOverCounterPainter extends CustomPainter {
 
   const GameOverCounterPainter({
     required this.gamePlayState,
+    required this.palette,
     // required this.settingsState,
     required this.body,
     required this.progress,
@@ -114,16 +127,16 @@ class GameOverCounterPainter extends CustomPainter {
 
     // print("progress: $progress || duration: $duration");
 
-    // Size tileSize = gamePlayState.elementSizes["tileSize"];
+    // Size tileSize = gamePlayState.elementSizes["tileSize)
 
-      List<Map<String,dynamic>> colorSequence = AnimationUtils().getScoreboardOscillatingColorSequence(duration);
-      // print(colorSequence);
+    List<Map<String,dynamic>> colorSequence = AnimationUtils().getScoreboardOscillatingColorSequence(duration);
+    // print(colorSequence);
 
-      // int hexCode = progressIndex.isEven ? 0xFFFFA500 : 0xFFFFFF00;
-      Color colorRes = StylingUtils().getColorLerp(colorSequence,progress);    
+    // int hexCode = progressIndex.isEven ? 0xFFFFA500 : 0xFFFFFF00;
+    Color colorRes = StylingUtils().getColorLerp(colorSequence,progress);    
 
     Paint containerPaint = Paint()
-    ..color = progress < 1.0 ? colorRes : Color.fromARGB(166, 230, 230, 230)
+    ..color = progress < 1.0 ? colorRes : palette.text2 //Color.fromARGB(166, 230, 230, 230)
     ..style = PaintingStyle.stroke
     ..strokeJoin = StrokeJoin.round
     ..strokeWidth = 6*scalor;
@@ -132,7 +145,7 @@ class GameOverCounterPainter extends CustomPainter {
 
     // Digits
     TextStyle textStyle = GoogleFonts.tektur(
-        color: progress < 1.0 ? colorRes : Color.fromARGB(166, 230, 230, 230),
+        color: progress < 1.0 ? colorRes : palette.text2,
         fontSize: 66*scalor,
         fontWeight: FontWeight.w400,
     );
@@ -151,12 +164,12 @@ class GameOverCounterPainter extends CustomPainter {
 
 
 
-
+    print("score: $body");
 
 
     // "Score"
     TextStyle labelTextStyle = GoogleFonts.tektur(
-        color: Color.fromARGB(255, 220, 220, 223),
+        color: palette.text2,  //Color.fromARGB(255, 220, 220, 223),
         fontSize: 24*scalor,
         fontWeight: FontWeight.w400,
     );
@@ -294,3 +307,4 @@ Path getContainerPath(Offset center, TextPainter labelPainter, TextPainter score
   
   return res;
 }
+

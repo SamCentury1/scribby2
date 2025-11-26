@@ -96,7 +96,7 @@ flutter:
     - assets/json/achievements.json
     - assets/json/alphabets.json
     
-    - assets/images/treasure_scribby.png
+    # - assets/images/treasure_scribby.png
     - assets/images/play-player-button-of-video-svgrepo-com.svg
     - assets/images/bomb_icon.png
     - assets/images/snowflake_icon.png
@@ -107,10 +107,7 @@ flutter:
     - assets/images/no_damn_good_studios_logo.png
     - assets/images/ndg_logo_official.png
     - assets/images/scribby_label_1.png
-    - assets/images/home_page_tiles.png
-    - assets/images/how_to_play_icon.png
     - assets/images/shop_image.png
-    - assets/images/analytics_image.jpeg
     - assets/images/coins_1.png
     - assets/images/coins_2.png
     - assets/images/coins_3.png

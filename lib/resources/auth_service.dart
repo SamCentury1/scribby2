@@ -4,6 +4,7 @@ import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
 import 'package:scribby_flutter_v2/screens/authentication/components/auth_error_dialog.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -143,8 +144,15 @@ class AuthService {
   }
 
 
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     await _firebaseAuth.signOut();
+
+    if (context.mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const AuthScreen()),
+        (route) => false, // remove all previous pages
+      );
+    }
   }
 
 

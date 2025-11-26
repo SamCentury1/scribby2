@@ -8,18 +8,19 @@ import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
-class GameSummaryDialog extends StatefulWidget {
+class DailyPuzzleRankingFuture extends StatefulWidget {
   final Map<String,dynamic> gameData;
-  const GameSummaryDialog({
-    super.key,
+  const DailyPuzzleRankingFuture({
     required this.gameData,
+    super.key
   });
 
   @override
-  State<GameSummaryDialog> createState() => _GameSummaryDialogState();
+  State<DailyPuzzleRankingFuture> createState() => _DailyPuzzleRankingFutureState();
 }
 
-class _GameSummaryDialogState extends State<GameSummaryDialog> {
+class _DailyPuzzleRankingFutureState extends State<DailyPuzzleRankingFuture> {
+
 
   late SettingsController settings;
   late ColorPalette palette;
@@ -34,8 +35,14 @@ class _GameSummaryDialogState extends State<GameSummaryDialog> {
     settings = Provider.of<SettingsController>(context, listen: false);
     palette = Provider.of<ColorPalette>(context, listen: false);
     scalor = Helpers().getScalor(settings);
+    print("=-------------------------------------");
+    print(widget.gameData);
+    print("=-------------------------------------");
 
-    DateTime dateTime = DateTime.parse(widget.gameData["createdAt"]);
+
+    // DateTime dateTime = DateTime.parse(widget.gameData["createdAt"]);
+    List<String> puzzleIdPieces = widget.gameData["puzzleId"].split("-"); 
+    final DateTime dateTime  = DateTime(int.parse(puzzleIdPieces[0]),int.parse(puzzleIdPieces[1]),int.parse(puzzleIdPieces[2]));
     formattedDate = DateFormat('MMM. d').format(dateTime);
 
     Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
@@ -47,22 +54,18 @@ class _GameSummaryDialogState extends State<GameSummaryDialog> {
 
 
   }  
+    
   @override
   Widget build(BuildContext context) {
-    
-
       return FutureBuilder(
-        future: FirestoreMethods().getDailyPuzzleObject(widget.gameData["gameParameters"]["puzzleId"]),
+        future: FirestoreMethods().getDailyPuzzleObject(widget.gameData["puzzleId"]),
         builder: (context, asyncSnapshot) {
           if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-            return Dialog(
-              backgroundColor: Colors.transparent,
-              child: Center(
-                child: SizedBox(
-                  width: 50, 
-                  height: 50, 
-                  child: CircularProgressIndicator()
-                )
+            return Center(
+              child: SizedBox(
+                width: 50, 
+                height: 50, 
+                child: CircularProgressIndicator()
               )
             );
           } else if (asyncSnapshot.hasError) {
@@ -75,91 +78,86 @@ class _GameSummaryDialogState extends State<GameSummaryDialog> {
          
 
             late Table tableRes = getRankingTable(puzzle["data"],uid, puzzle["gameType"] ,palette,scalor);
-            return Dialog(
-              backgroundColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12.0*scalor))),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    radius: 0.6*scalor,
-                    colors: [palette.dialogBg1,palette.dialogBg2]
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(12.0*scalor))
+            return Container(
+              // decoration: BoxDecoration(
+              //   gradient: RadialGradient(
+              //     radius: 0.6*scalor,
+              //     colors: [palette.dialogBg1,palette.dialogBg2]
+              //   ),
+              //   borderRadius: BorderRadius.all(Radius.circular(12.0*scalor))
+              // ),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(12.0*scalor,12.0*scalor,12.0*scalor,22.0*scalor),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                        
+                    Text(
+                      "Daily Puzzle $formattedDate (${puzzle["difficulty"]})",
+                      style: palette.mainAppFont(
+                        textStyle: TextStyle(
+                          color: palette.widgetText1,
+                          fontSize: 22*scalor,
+                        )
+                      ),
+                    ),
+            
+                    Divider(),
+                    
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        color: palette.widget1
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Objective: ",
+                                style: palette.mainAppFont(
+                                  textStyle: TextStyle(
+                                    color: palette.widgetText1,
+                                    fontSize: 18*scalor,
+                                  )
+                                ),                                
+                              ),
+                            ),
+                            Helpers().getGameObjectiveString(
+                              puzzle["gameType"],
+                              puzzle["duration"],
+                              puzzle["target"],
+                              puzzle["timeToPlace"],
+                              palette,
+                              16 *scalor
+                            ),
+            
+                          ],
+                        ),
+                      ),
+                    ),
+            
+                    SizedBox(height: 12 * scalor,),
+            
+            
+                    Text(
+                      "Ranking",
+                      style: palette.mainAppFont(
+                        textStyle: TextStyle(
+                          color: palette.widgetText1,
+                          fontSize: 22*scalor,
+                        )
+                      ),
+                    ),
+            
+            
+                    Expanded(child: SingleChildScrollView(child: tableRes))                      
+                        
+                  ]
                 ),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(12.0*scalor,12.0*scalor,12.0*scalor,22.0*scalor),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-            
-                      Text(
-                        "Daily Puzzle $formattedDate (${puzzle["difficulty"]})",
-                        style: palette.mainAppFont(
-                          textStyle: TextStyle(
-                            color: palette.widgetText1,
-                            fontSize: 22*scalor,
-                          )
-                        ),
-                      ),
-
-                      Divider(),
-                      
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          color: palette.widget1
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Objective: ",
-                                  style: palette.mainAppFont(
-                                    textStyle: TextStyle(
-                                      color: palette.widgetText1,
-                                      fontSize: 18*scalor,
-                                    )
-                                  ),                                
-                                ),
-                              ),
-                              Helpers().getGameObjectiveString(
-                                puzzle["gameType"],
-                                puzzle["duration"],
-                                puzzle["target"],
-                                puzzle["timeToPlace"],
-                                palette,
-                                16 *scalor
-                              ),
-
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 12 * scalor,),
-
-
-                      Text(
-                        "Ranking",
-                        style: palette.mainAppFont(
-                          textStyle: TextStyle(
-                            color: palette.widgetText1,
-                            fontSize: 22*scalor,
-                          )
-                        ),
-                      ),
-
-
-                      tableRes                      
-            
-                    ]
-                  ),
-                )
-              ),
+              )
             );
           } else {
             return Text("No data");
@@ -168,7 +166,6 @@ class _GameSummaryDialogState extends State<GameSummaryDialog> {
       );    
   }
 }
-
 
 TableRow playerRankingRow(Map<String,dynamic> rowData, String gameType, String uid, ColorPalette palette, double scalor) {
 
@@ -242,23 +239,26 @@ List<dynamic> getRankingSubset(List<dynamic> _rankingData, String uid,) {
     res.add(rank);
   }
 
+
+
   return res;
 }
-
 Table getRankingTable(List<dynamic> rankingData, String uid, String gameType,  ColorPalette palette, double scalor) {
   List<dynamic> _rankingData = fakeRanking(rankingData,gameType);
-  Map<String,dynamic> rankObject = _rankingData.firstWhere((e)=>e["uid"]==uid,orElse: ()=> <String,dynamic>{});
-  int rankObjectIndex = _rankingData.indexOf(rankObject);
+  Map<String,dynamic> rankObject = rankingData.firstWhere((e)=>e["uid"]==uid,orElse: ()=> <String,dynamic>{});
+  int rankObjectIndex = rankingData.indexOf(rankObject);
 
   List<dynamic> rankingSubset = getRankingSubset(_rankingData, uid);
     print("""
   RANKING SUBSET
+  ${_rankingData}
   """);
   for (dynamic item in rankingSubset) {
     print(item);
   }
 
   late Table tableRes = Table(
+
     columnWidths: const <int, TableColumnWidth>{
       0: FlexColumnWidth(2),
       1: FlexColumnWidth(4),

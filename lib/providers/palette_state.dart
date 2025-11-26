@@ -476,9 +476,9 @@ class ColorPalette extends ChangeNotifier {
           "text5" : const Color.fromARGB(255, 44, 44, 44),
 
           "widget1" : const Color.fromARGB(246, 49, 68, 151),
-          "widget2" : const Color.fromARGB(255, 236, 239, 255),
+          "widget2" : const Color.fromARGB(255, 202, 202, 202),
 
-          "widgetText1" : const Color.fromARGB(255, 236, 236, 236),
+          "widgetText1" : const Color.fromARGB(255, 202, 202, 202),
           "widgetText2" : const Color.fromARGB(255, 11, 0, 109),      
 
           "widgetShadow1" : const Color.fromARGB(115, 0, 0, 0),
@@ -511,8 +511,8 @@ class ColorPalette extends ChangeNotifier {
           "scoreboardAnimationBorder1" : const Color.fromARGB(255, 236, 215, 23),
           "scoreboardAnimationBorder2" : const Color.fromARGB(255, 235, 55, 42),
 
-          "perkBarBackgroundColor": const Color.fromARGB(214, 221, 221, 221),
-          "perkSelectedColor": const Color.fromARGB(255, 103, 103, 112),
+          "perkBarBackgroundColor": const Color.fromARGB(88, 221, 221, 221),
+          "perkSelectedColor": const Color.fromARGB(235, 241, 241, 241),
           "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
           "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
           
@@ -535,13 +535,13 @@ class ColorPalette extends ChangeNotifier {
           "inputFieldBorderColor" : const Color.fromARGB(255, 36, 71, 230),
           "inputFieldTextColor" : const Color.fromARGB(255, 26, 26, 26),
 
-          "navigationButtonBg1" : const Color.fromARGB(255, 66, 136, 228),
+          "navigationButtonBg1" : const Color.fromARGB(255, 113, 173, 252),
           "navigationButtonBg2" : const Color.fromARGB(255, 133, 193, 243),
           "navigationButtonBg3" : const Color.fromARGB(255, 167, 198, 233),
 
-          "navigationButtonText1" : const Color.fromARGB(255, 240, 240, 240),
-          "navigationButtonText2" : const Color.fromARGB(255, 10, 10, 10),
-          "navigationButtonText3" : const Color.fromARGB(255, 14, 14, 14),
+          "navigationButtonText1" : const Color.fromARGB(255, 31, 31, 31),
+          "navigationButtonText2" : const Color.fromARGB(255, 36, 36, 36),
+          "navigationButtonText3" : const Color.fromARGB(255, 37, 37, 37),
           
           "dialogBg1" : const Color.fromARGB(255, 186, 215, 238),
           "dialogBg2" : const Color.fromARGB(255, 151, 194, 250),
@@ -602,8 +602,8 @@ class ColorPalette extends ChangeNotifier {
 
       },
       "dark" : {
-          "bg1" : const Color.fromARGB(255, 26, 26, 26),
-          "bg2" : const Color.fromARGB(255, 22, 22, 22),
+          "bg1" : const Color.fromARGB(255, 49, 49, 49),
+          "bg2" : const Color.fromARGB(255, 41, 41, 41),
 
           "appBarText" : const Color.fromARGB(230, 231, 231, 231),
           "drawerBg": const Color.fromARGB(255, 22, 22, 22),
@@ -613,7 +613,7 @@ class ColorPalette extends ChangeNotifier {
           "inputFieldTextColor" : const Color.fromARGB(255, 214, 214, 214),
 
           "navigationButtonBg1" : const Color.fromARGB(255, 13, 3, 41),
-          "navigationButtonBg2" : const Color.fromARGB(255, 39, 39, 39),
+          "navigationButtonBg2" : const Color.fromARGB(255, 26, 26, 26),
           "navigationButtonBg3" : const Color.fromARGB(255, 40, 32, 70),
 
           "navigationButtonText1" : const Color.fromARGB(255, 236, 236, 236),

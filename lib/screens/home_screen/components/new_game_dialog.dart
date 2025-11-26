@@ -96,6 +96,11 @@ class _NewGameDialogState extends State<NewGameDialog> {
     ColorPalette palette = Provider.of<ColorPalette>(context);
     SettingsController settings = Provider.of<SettingsController>(context, listen: false);
     final double scalor = Helpers().getScalor(settings);
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    bool showTutorialButton = false;
+    if (!userData["parameters"]["tutorialComplete"]) {
+      showTutorialButton = true;
+    }
     // AdState adState = Provider.of<AdState>(context, listen: false);
     gameTypeInfo = settings.gameInfoData.value.firstWhere((e) => e["name"]==gameTypeChoice, orElse: () => {});
 
@@ -507,49 +512,61 @@ class _NewGameDialogState extends State<NewGameDialog> {
                           ],
                         ),                        
                   
-                  
-                        SizedBox(height: 22*scalor,),
-                        Divider(thickness: 1.0,color: const Color.fromARGB(155, 158, 158, 158),),
-                        Padding(
-                          padding: EdgeInsets.all(8.0*scalor),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: palette.widget2,
-                              foregroundColor: palette.widgetText2,
-                              minimumSize: Size(0.0, 0.0),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(8))
-                              )
-                            ),
-                            onPressed: () {        
-                              Initializations().startGame(
-                                gamePlayState,
-                                "tutorial",
-                                null,
-                                null,
-                                gridTargets[1],
-                                gridTargets[1],
-                                null,
-                                null,
-                                settings,
-                                widget.mediaQueryData,
-                                context,
-                                palette,
+
+                        Builder(
+                          builder: (context) {
+                            if (showTutorialButton) {
+                              return Column(
+                                children: [
+                                  SizedBox(height: 22*scalor,),
+                                  Divider(thickness: 1.0,color: const Color.fromARGB(155, 158, 158, 158),),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0*scalor),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: palette.widget2,
+                                        foregroundColor: palette.widgetText2,
+                                        minimumSize: Size(0.0, 0.0),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(8))
+                                        )
+                                      ),
+                                      onPressed: () {        
+                                        Initializations().startGame(
+                                          gamePlayState,
+                                          "tutorial",
+                                          null,
+                                          null,
+                                          gridTargets[1],
+                                          gridTargets[1],
+                                          null,
+                                          null,
+                                          settings,
+                                          widget.mediaQueryData,
+                                          context,
+                                          palette,
+                                        );
+                                      },
+                                      
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(8.0*scalor,4.0*scalor,8.0*scalor,4.0*scalor),
+                                        child: Text(
+                                          "Tutorial",
+                                          style: GoogleFonts.lilitaOne(
+                                            // color: Colors.white,
+                                            // color: palette.text1,
+                                            fontSize: 22*scalor
+                                          ),),
+                                      )
+                                    ),
+                                  ),                             
+                                ],
                               );
-                            },
-                            
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(8.0*scalor,4.0*scalor,8.0*scalor,4.0*scalor),
-                              child: Text(
-                                "Tutorial",
-                                style: GoogleFonts.lilitaOne(
-                                  // color: Colors.white,
-                                  // color: palette.text1,
-                                  fontSize: 22*scalor
-                                ),),
-                            )
-                          ),
-                        ),                             
+                            } else {
+                              return SizedBox();
+                            }
+                          }
+                        ),
                         Divider(thickness: 1.0,color: palette.text2),
                         
                     

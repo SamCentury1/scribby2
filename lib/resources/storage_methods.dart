@@ -150,6 +150,21 @@ class StorageMethods {
     return res;
   }  
 
+
+  dynamic getSpecificPuzzle(SettingsController settings, String puzzleId) {
+    late dynamic res = {};
+    try {
+      // print("RUNTIME TYPE: ${settings.dailyPuzzleData.value.runtimeType}");
+      dynamic puzzles = settings.dailyPuzzleData.value as dynamic;
+      String difficulty = puzzleId.split("-").last;
+      res = puzzles[difficulty];
+    } catch (e,t) {
+      print("error in getDailyPuzzles: ${e.toString()} | traceback: $t");
+    }
+
+    print("res: $res");
+    return res;
+  }  
   // Future<void> saveWordListToLocalStorage(List<String> wordList, String fileName) async {
   //   final directory = await getApplicationDocumentsDirectory();
   //   final filePath = '${directory.path}/$fileName';

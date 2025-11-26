@@ -47,67 +47,71 @@ class _ShopScreenState extends State<ShopScreen> {
           canPop: true,
           child: Consumer<ColorPalette>(
             builder: (context,palette,child) {
-              return SizedBox(
-                // width: MediaQuery.of(context).size.width,
-                // height: MediaQuery.of(context).size.height,            
-                child: SafeArea(
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        // top: 1,
+              return SafeArea(
+                child: Stack(
+                  children: [
+                    Positioned(
+                      // top: 1,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,//-MediaQuery.of(context).padding.top-MediaQuery.of(context).padding.bottom,
+                        child: CustomPaint(
+                          painter: GradientBackground(settings: settings, palette: palette, decorationData: []),
+                        ),
+                      ),
+                    ),             
+                    Scaffold(
+                      backgroundColor: Colors.transparent,
+                      onDrawerChanged: (var details) {},
+                      appBar: AppBar(
+                        backgroundColor: const Color.fromARGB(0, 49, 49, 49),
+                        title: Text(
+                          "Shop", 
+                          style: palette.mainAppFont(
+                            textStyle: TextStyle(
+                              color: palette.appBarText,
+                              fontSize: 36*scalor,
+                            )
+                          ),
+                        ),
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back, color: palette.text2),
+                          onPressed: () => Navigator.of(context).pop(true),
+                        ),
+                      ),
+                            
+                      body: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                      
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,//-MediaQuery.of(context).padding.top-MediaQuery.of(context).padding.bottom,
-                          child: CustomPaint(
-                            painter: GradientBackground(settings: settings, palette: palette, decorationData: []),
-                          ),
-                        ),
-                      ),             
-                      Scaffold(
-                        backgroundColor: Colors.transparent,
-                        onDrawerChanged: (var details) {},
-                        appBar: AppBar(
-                          backgroundColor: const Color.fromARGB(0, 49, 49, 49),
-                          title: Text("Shop", style: TextStyle(color: palette.text2, fontSize: 28*scalor),),
-                          leading: IconButton(
-                            icon: Icon(Icons.arrow_back, color: palette.text2),
-                            onPressed: () => Navigator.of(context).pop(true),
-                          ),
-                        ),
-              
-                        body: SizedBox(
-                          width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
-                        
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12.0 * scalor),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-
-                                    ShopItem(fileName: "no_ads", label: "No Ads", cost: 2.99),
-                                    Divider(),
-                                    ShopItem(fileName: "coins_1", label: "100 Coins", cost: 0.99),
-                                    ShopItem(fileName: "coins_2", label: "350 Coins", cost: 1.99),
-                                    ShopItem(fileName: "coins_3", label: "500 Coins", cost: 3.49),
-                                    ShopItem(fileName: "coins_4", label: "1000 Coins", cost: 6.99),
-                                    ShopItem(fileName: "coins_5", label: "5000 Coins", cost: 25.49),
-                                
-
-
-                                
-                                  ],
-                                ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12.0 * scalor),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+              
+                                  ShopItem(fileName: "no_ads", label: "No Ads", cost: 2.99),
+                                  Divider(),
+                                  ShopItem(fileName: "coins_1", label: "100 Coins", cost: 0.99),
+                                  ShopItem(fileName: "coins_2", label: "350 Coins", cost: 1.99),
+                                  ShopItem(fileName: "coins_3", label: "500 Coins", cost: 3.49),
+                                  ShopItem(fileName: "coins_4", label: "1000 Coins", cost: 6.99),
+                                  ShopItem(fileName: "coins_5", label: "5000 Coins", cost: 25.49),
+                              
+              
+              
+                              
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             }

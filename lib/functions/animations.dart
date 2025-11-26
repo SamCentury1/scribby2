@@ -1674,9 +1674,13 @@ class Animations extends ChangeNotifier {
     
     const String animationType = "game-over-count";
     // Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
+    String gameType = gamePlayState.gameParameters["gameType"];
 
-
+    // int scored = Helpers().calculateScore(gamePlayState);
     int scored = Helpers().calculateScore(gamePlayState);
+    if (gameType=='sprint') {
+      scored = gamePlayState.duration.inSeconds;
+    }
 
     late bool shouldRemoveAnimation = false;
 

@@ -29,6 +29,7 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
   late ColorPalette palette;
   late double scalor = 1.0;
   late List<dynamic> puzzlesPlayed = [];
+  late List<dynamic> gameHistory = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -37,9 +38,12 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
     gamePlayState = Provider.of<GamePlayState>(context, listen: false);
     palette = Provider.of<ColorPalette>(context, listen: false);
     scalor = Helpers().getScalor(settings);
+    gameHistory = Helpers().getGameHistory(settings);
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
 
-      puzzlesPlayed = settings.userGameHistory.value
+
+      puzzlesPlayed = gameHistory
         .where((e)=>e["gameParameters"]["puzzleId"]!=null)
         .map((e)=>e["gameParameters"]["puzzleId"])
         .toList();
@@ -60,17 +64,10 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
   Widget build(BuildContext context) {
     if (widget.puzzleObject.isNotEmpty) {
 
-      List<dynamic> gameHistory = settings.userGameHistory.value;
-      Map<String,dynamic> matchingPuzzleObjects = settings.userGameHistory.value.firstWhere(
+      Map<String,dynamic> matchingPuzzleObjects = gameHistory.firstWhere(
         (e)=>e["gameParameters"]["puzzleId"]==widget.puzzleObject["levelName"],
         orElse: ()=><String,dynamic>{}
       );
-      // Map<String,dynamic> matchingPuzzleObjects2 = {};
-      // late String score = "";
-      // if (matchingPuzzleObjects.isNotEmpty) {
-      //   matchingPuzzleObjects2 =;
-      // }
-
 
       if (puzzlesPlayed.contains(widget.puzzleObject["levelName"])) {
         // return GameSummaryCard(gameData: matchingPuzzleObjects, palette: palette);
@@ -126,13 +123,16 @@ class _DailyPuzzleCardState extends State<DailyPuzzleCard> {
                             ),
                       
                             SizedBox(height: 15,),
-                            Helpers().getGameObjectiveString(
-                              widget.puzzleObject["gameType"],
-                              widget.puzzleObject["duration"],
-                              widget.puzzleObject["target"],
-                              widget.puzzleObject["timeToPlace"],
-                              palette,
-                              18.0 * scalor
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Helpers().getGameObjectiveString(
+                                widget.puzzleObject["gameType"],
+                                widget.puzzleObject["duration"],
+                                widget.puzzleObject["target"],
+                                widget.puzzleObject["timeToPlace"],
+                                palette,
+                                18.0 * scalor
+                              ),
                             ),
                             // getDescription(todayPuzzle,palette),
                             SizedBox(height: 15,),

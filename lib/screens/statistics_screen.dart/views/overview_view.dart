@@ -19,31 +19,58 @@ class OverviewView extends StatefulWidget {
 }
 
 class _OverviewViewState extends State<OverviewView> {
+
+  late double scalor = 1.0;
+  late Map<String,dynamic> userData = {};
+  late List<String> allUniqueWords = [];
+  late int totalPointsScored = 0;
+  late String createdAt = "";
+  late String rankText = "";
+  late List<dynamic> gameHistory = [];
+  late int xp = 0;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+      
+        userData = widget.settings.userData.value as Map<String,dynamic>;
+        scalor = Helpers().getScalor(widget.settings);
+        late String rankKey  = userData["rank"];
+        Map<dynamic,dynamic> rankObject = widget.settings.rankData.value.firstWhere((e)=>e["key"]==rankKey,orElse: ()=>{});
+        if (rankObject.isNotEmpty) {
+          rankText = "Level ${rankObject['level']} ${Helpers().translateRankTitle(rankObject['rank'], userData['language'])}";
+        }
+
+        allUniqueWords = Helpers().getAllUniqueWords(widget.settings);
+        totalPointsScored = Helpers().getAllPointsScored(widget.settings);
+        createdAt = Helpers().formatDate(userData["createdAt"]);
+        gameHistory = Helpers().getGameHistory(widget.settings);
+        xp = userData["xp"];
+      });
+    });
+    
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
-    final double scalor = Helpers().getScalor(widget.settings);
-
-    final Map<String,dynamic> userData = widget.settings.userData.value as Map<String,dynamic>;
-    final int xp = widget.settings.xp.value;
-    final String rankKey = userData["rank"];
-    final Map<dynamic,dynamic> rankObject = widget.settings.rankData.value.firstWhere((e)=>e["key"]==rankKey,orElse: ()=>{});
-    late int rank = 1;
-    late int level = 1;
-    if (rankObject.isNotEmpty) {
-      level = rankObject["level"];
-      rank = rankObject["rank"];
-    }
-
-    print("rankKey: $rankKey | level: $level | rank: $rank");
-
-    List<String> allUniqueWords = Helpers().getAllUniqueWords(widget.settings);
-    int totalPointsScored = Helpers().getAllPointsScored(widget.settings);
-    String createdAt = Helpers().formatDate(userData["createdAt"]);
-    // print(widget.settings.userGameHistory.value[2]);
 
 
-    String rankText = "Level $level ${Helpers().translateRankTitle(rank, userData['language'])}";
+
+    // final int xp = widget.settings.xp.value;
+
+
+
+    // List<String> allUniqueWords = Helpers().getAllUniqueWords(widget.settings);
+    // int totalPointsScored = Helpers().getAllPointsScored(widget.settings);
+    // String createdAt = Helpers().formatDate(userData["createdAt"]);
+    // String rankText = "Level $level ${Helpers().translateRankTitle(rank, userData['language'])}";
 
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -191,7 +218,8 @@ class _OverviewViewState extends State<OverviewView> {
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
-                                    widget.settings.xp.value.toString(),
+                                    // widget.settings.xp.value.toString(),
+                                    xp.toString(),
                                     // "231242223432",
                                     style: widget.palette.counterFont(
                                       textStyle: TextStyle(
@@ -230,7 +258,7 @@ class _OverviewViewState extends State<OverviewView> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  widget.settings.userGameHistory.value.length.toString(),
+                  gameHistory.length.toString(),
                   style: widget.palette.counterFont(
                     textStyle: TextStyle(
                       fontSize: 36 * scalor,

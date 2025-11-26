@@ -205,32 +205,32 @@ class MainDrawerView extends StatelessWidget {
               ),
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.summarize, color: Colors.white, size: 26 * scalor,),
+                leading: Icon(Icons.summarize, color: palette.text1, size: 26 * scalor,),
                 title: Text("Summary", style: listTileTextStyle),
                 onTap: navigateToSummary,
               ),
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.shopping_cart, color: Colors.white, size: 26 * scalor),
+                leading: Icon(Icons.shopping_cart, color: palette.text1, size: 26 * scalor),
                 title: Text("Shop", style: listTileTextStyle),
                 onTap: navigateToShop,
               ),
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.help, color: Colors.white, size: 26 * scalor),
+                leading: Icon(Icons.help, color: palette.text1, size: 26 * scalor),
                 title: Text("Instructions", style: listTileTextStyle),
                 onTap: navigateToInstructions,
               ),   
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.home, color: Colors.white, size: 26 * scalor),
+                leading: Icon(Icons.home, color: palette.text1, size: 26 * scalor),
                 title: Text("Quit Game", style: listTileTextStyle),
                 onTap: () => openQuitGameDialog(context,gamePlayState),
               ),
 
               ListTile(
                 minTileHeight: 10.0,
-                leading: Icon(Icons.refresh, color: Colors.white, size: 26 * scalor),
+                leading: Icon(Icons.refresh, color: palette.text1, size: 26 * scalor),
                 title: Text("Restart Game", style: listTileTextStyle),
                 onTap: () => openRestartGameDialog(context,settings,gamePlayState,scaffoldState),
               ),                                                         

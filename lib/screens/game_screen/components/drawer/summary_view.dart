@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/widget_utils.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class SummaryView extends StatelessWidget {
@@ -16,10 +17,11 @@ class SummaryView extends StatelessWidget {
   Widget build(BuildContext context) {
   /// Builds the settings view with an independent `onBack` callback
     SettingsController settings = Provider.of<SettingsController>(context,listen: false);
+    ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
     return Consumer<GamePlayState>(
       builder: (context,gamePlayState,child) {
         final double scalor = Helpers().getScalor(settings);
-        List<TableRow> rows = WidgetUtils().getSummaryTableRows(context,gamePlayState,scalor);
+        List<TableRow> rows = WidgetUtils().getSummaryTableRows(context,gamePlayState,scalor,palette);
 
         return SizedBox(
           height: gamePlayState.elementSizes["screenSize"].height,
@@ -61,10 +63,10 @@ class SummaryView extends StatelessWidget {
                           children: [
                             TableRow(
                               children: [
-                                WidgetUtils().headingItem("Trun",scalor),
-                                WidgetUtils().headingItem("Words",scalor),
-                                WidgetUtils().headingItem("Bonus",scalor),
-                                WidgetUtils().headingItem("Points",scalor),
+                                WidgetUtils().headingItem("Trun",scalor,palette),
+                                WidgetUtils().headingItem("Words",scalor,palette),
+                                WidgetUtils().headingItem("Bonus",scalor,palette),
+                                WidgetUtils().headingItem("Points",scalor,palette),
                               ]
                             ), ... rows
                           ],

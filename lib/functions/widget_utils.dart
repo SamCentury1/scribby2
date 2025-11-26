@@ -36,7 +36,7 @@ class WidgetUtils {
     return textPainter;   
   }
 
-  List<TableRow> getSummaryTableRows(BuildContext context, GamePlayState gamePlayState, double scalor) {
+  List<TableRow> getSummaryTableRows(BuildContext context, GamePlayState gamePlayState, double scalor, ColorPalette palette) {
 
     List<TableRow> rows = [];
     for (int i=0; i<gamePlayState.scoreSummary.length; i++) {
@@ -57,7 +57,7 @@ class WidgetUtils {
           String word = stringObject["word"].toString();
           Widget wordWidget =  GestureDetector(
             onTap: ()=>Gestures().openViewDefinitionDialog(context, word),
-            child: Text(word,style: TextStyle(color: Colors.white, fontSize: 20 * scalor),)
+            child: Text(word,style: TextStyle(color: palette.text1, fontSize: 20 * scalor),)
           );
           stringItems.add(wordWidget);
         }
@@ -70,7 +70,7 @@ class WidgetUtils {
             width: 25*scalor,
             height: 25*scalor,
             child: CustomPaint(
-              painter: BonusIconPaitner(bonusType: "streak",scalor: scalor),
+              painter: BonusIconPaitner(bonusType: "streak",scalor: scalor,color: palette.text1),
             ),
           );
           multipliers.add(item);
@@ -82,7 +82,7 @@ class WidgetUtils {
             width: 25*scalor,
             height: 25*scalor,          
             child: CustomPaint(
-              painter: BonusIconPaitner(bonusType: "cross",scalor: scalor),
+              painter: BonusIconPaitner(bonusType: "cross",scalor: scalor,color: palette.text1),
             ),
           );        
           multipliers.add(item);
@@ -93,7 +93,7 @@ class WidgetUtils {
             width: 25*scalor,
             height: 25*scalor,          
             child: CustomPaint(
-              painter: BonusIconPaitner(bonusType: "words",scalor: scalor),
+              painter: BonusIconPaitner(bonusType: "words",scalor: scalor,color: palette.text1),
             ),
           );        
           multipliers.add(item);
@@ -107,7 +107,7 @@ class WidgetUtils {
               verticalAlignment: TableCellVerticalAlignment.middle,
               child: Align(
                 alignment: Alignment.center,
-                child: Text(turn.toString(),style: TextStyle(color: Colors.white, fontSize: 20 * scalor),),
+                child: Text(turn.toString(),style: TextStyle(color: palette.text1, fontSize: 20 * scalor),),
               )
             ),
 
@@ -129,7 +129,7 @@ class WidgetUtils {
 
             TableCell(
               child: Center(
-                child: Text(score.toString(),style: TextStyle(color: Colors.white, fontSize: 20 * scalor),),
+                child: Text(score.toString(),style: TextStyle(color: palette.text1, fontSize: 20 * scalor),),
               )
             ),                        
           ]
@@ -141,14 +141,14 @@ class WidgetUtils {
   }
 
 
-  Widget headingItem(String body, double scalor) {
+  Widget headingItem(String body, double scalor, ColorPalette palette) {
     return TableCell(
       child: Container(
         child: Center(
           child: Text(
             body,
             style: TextStyle(
-              color: Colors.white,
+              color: palette.text1,
               fontWeight: FontWeight.w600,
               fontSize: 20*scalor ),),),));
   }

@@ -23,6 +23,7 @@ class _DailyPuzzleStatsSectionState extends State<DailyPuzzleStatsSection> {
   late List<dynamic> completedPuzzles = [];
   late int xpEarned = 0;
   late int streak = 0;
+  late List<dynamic> gameHistory = [];
 
   @override
   void initState() {
@@ -31,14 +32,9 @@ class _DailyPuzzleStatsSectionState extends State<DailyPuzzleStatsSection> {
     // settings = Provider.of<SettingsController>(context, listen:false);
     palette = Provider.of<ColorPalette>(context, listen:false);
     scalor = Helpers().getScalor(widget.settings);
-
+    gameHistory = Helpers().getGameHistory(widget.settings);
 
     // final Map<dynamic,dynamic> userData = widget.settings.userData.value as Map<dynamic,dynamic>;
-
-    print("GAME HISTORY");
-
-    // List<dynamic> gameHistory = userData["gameHistory"];
-    List<dynamic> gameHistory = widget.settings.userGameHistory.value;
     completedPuzzles = [];
 
     for (dynamic game in gameHistory) {
@@ -117,7 +113,7 @@ class _DailyPuzzleStatsSectionState extends State<DailyPuzzleStatsSection> {
           child: Column(
             children: [
               Text(
-                "xpEarned",
+                "XP Earned",
                   style: palette.mainAppFont(
                     textStyle: TextStyle(
                       color: palette.text1,

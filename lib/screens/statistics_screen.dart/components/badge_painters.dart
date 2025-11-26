@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/styling_utils.dart';
 import 'dart:math';
@@ -194,11 +195,14 @@ class BadgePainter extends CustomPainter {
     
 
     // TEXT
-    TextStyle textStyle= TextStyle(
-      color: updateOpacity(Colors.black, isCompleted),
-      fontSize: size.width*0.1,
-      fontWeight: FontWeight.bold,
+    TextStyle textStyle = GoogleFonts.cinzel(
+      textStyle: TextStyle(
+        color: updateOpacity(Colors.black, isCompleted),
+        fontSize: size.width*0.1,
+        fontWeight: FontWeight.bold,
+      )
     );
+
     BadgePainters().getCurvedText(canvas,size,badgeData["name"], size.width*0.9,textStyle,);
     
 

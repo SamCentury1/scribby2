@@ -43,7 +43,7 @@ class _CoinHoldingsState extends State<CoinHoldings> {
     // Map<String,dynamic> achievements = {"coins": 2000, "rank": null};
     Map<dynamic,dynamic> achievements = settings.achievements.value as Map<dynamic,dynamic>;
 
-    int currentCoins = settings.coins.value;
+    int currentCoins = Helpers().getUserCoins(settings);//settings.coins.value;
     coins = currentCoins;
 
     if (achievements.isNotEmpty) {

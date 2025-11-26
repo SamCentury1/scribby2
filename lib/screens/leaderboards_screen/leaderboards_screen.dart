@@ -140,7 +140,7 @@ class _LeaderboardsScreenState extends State<LeaderboardsScreen> {
     SettingsController settings = Provider.of<SettingsController>(context, listen: false);
 
     Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
-    int xp = settings.xp.value;
+    int xp = userData["xp"]; //settings.xp.value;
 
     Map<String,dynamic> userCard = {'uid': userData["uid"], 'username': userData["username"], 'xp': xp};
     leaderboardData.add(userCard);

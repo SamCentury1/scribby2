@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
@@ -65,12 +66,15 @@ class ShopItem extends StatelessWidget {
                     padding: EdgeInsets.all(8.0*scalor)
                   ),
                   onPressed: () => print("$label is gonna cost ya $cost"),
-                      child: Text(
-                      "\$ ${cost.toString()}",
-                        style: palette.mainAppFont(
-                          // color: Colors.white,
-                          textStyle: TextStyle(
-                            fontSize: 24*scalor,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                        "\$ ${cost.toString()}",
+                          style: palette.mainAppFont(
+                            // color: Colors.white,
+                            textStyle: TextStyle(
+                              fontSize: 24*scalor,
+                            ),
                           ),
                         ),
                       ),                                                                                

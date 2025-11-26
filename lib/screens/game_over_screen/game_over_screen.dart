@@ -19,10 +19,15 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
+import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
+import 'package:scribby_flutter_v2/screens/game_over_screen/components/daily_puzzle_ranking_section.dart';
+import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_over_badge_section.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_over_counter_painter.dart';
+import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_over_data_section.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/painters/bonus_painters.dart';
 import 'package:scribby_flutter_v2/screens/home_screen/home_screen.dart';
 import 'package:scribby_flutter_v2/screens/statistics_screen.dart/components/badge_painters.dart';
+import 'package:scribby_flutter_v2/screens/statistics_screen.dart/views/badges_view.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class GameOverScreen extends StatefulWidget {
@@ -194,12 +199,17 @@ class _GameOverScreenState extends State<GameOverScreen> {
                   ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
                   final double scalor = Helpers().getScalor(settings);
                   double scoreFontSize = Helpers().getScoreFontSize(MediaQuery.of(context),0.045);
-                  final int uniqueWords = Helpers().countUniqueWords(gamePlayState);
-                  final int turns = Helpers().countTurns(gamePlayState);
-                  final int streak = Helpers().getLongestStreak(gamePlayState);
-                  final int crosswords = Helpers().countCrosswords(gamePlayState);
-                  final int biggestTurn = Helpers().getBiggestTurn(gamePlayState);
-                  final String duration = Helpers().formatDuration(gamePlayState.duration.inSeconds);
+                  // final String gameType = Helpers().capitalize(gamePlayState.gameParameters["gameType"]) ;
+                  // final int score = Helpers().calculateScore(gamePlayState);
+                  // final int uniqueWords = Helpers().countUniqueWords(gamePlayState);
+                  // final int turns = Helpers().countTurns(gamePlayState);
+                  // final int streak = Helpers().getLongestStreak(gamePlayState);
+                  // final int crosswords = Helpers().countCrosswords(gamePlayState);
+                  // final int biggestTurn = Helpers().getBiggestTurn(gamePlayState);
+                  // final String duration = Helpers().formatDuration(gamePlayState.duration.inSeconds);
+                  print("------------- puzzle data ---------------");
+                  print(gamePlayState.gameParameters["puzzleId"]);
+                  print("----------------------------------");
                   
                   // double scoreBorderSize = getScoreBorderWidth(MediaQuery.of(context));
                   return PopScope(
@@ -213,248 +223,226 @@ class _GameOverScreenState extends State<GameOverScreen> {
                             height: MediaQuery.of(context).size.height,
                             child: CustomPaint(painter: GradientBackground(settings: settings, palette: palette, decorationData: []),)
                           ),
-                          Column(
-                            children: [
-                                    
-                              // top section
-                              Expanded(
-                                flex: 1,
-                                child: SizedBox()
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Container(
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12.0*scalor),
+                            child: Column(
+                              children: [
+                                      
+                                // top section
+                                Expanded(
+                                  flex: 1,
+                                  child: SizedBox()
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: SizedBox(),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            child: GameOverCounter(settings: settings,),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              child: GameOverCounter(settings: settings, palette: palette,),
+                                            ),
                                           ),
                                         ),
-                                      ),
-              
-              
-                                        Builder(
-                                          builder: (context) {
-                                            if (badgeData.isNotEmpty) {
-                                              return Container(
-                                                child: Center(
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        "New Badges:",
-                                                        style: TextStyle(
-                                                          fontSize: 16*scalor,
-                                                          color: Color.fromARGB(255, 220, 220, 223),
-                                                        ),
-                                                      ),
-                                                      Builder(
-                                                        builder: (context) {
-                                                          List<Widget> res = [];
-                                                          final double itemWidth = min(50*scalor,gamePlayState.elementSizes["screenSize"].width/badgeData.length);
-                                                          for (int i=0; i<badgeData.length; i++){
-                                                            Map<String ,dynamic> badgeDetails = badgeData[i] as Map<String ,dynamic>;
-                                                            Widget badge = Container(
-                                                              width: itemWidth,
-                                                              height: itemWidth,
-                                                              // color: Colors.yellow,
-                                                              child: CustomPaint(
-                                                                painter: BadgePainter(badgeData: badgeDetails),
-                                                              ),
-                                                            );
-                                                            res.add(badge);
-                                                          } 
-                                                          return Row(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: res,
-                                                          );
-                                                        }
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            } else {
-                                              return SizedBox();
-                                            }
-                                          }
-                                        ),
-                                    ],
-                                  ),
-                                )
-                              ),
-                              // Text(gamePlayState.gameResultData.toString()),
-              
-                              // middle section
-                              Expanded(
-                                flex: 8,
-                                child: Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                    
-                                      summaryItem(Icons.gamepad, "Game Type", gamePlayState.gameParameters["gameType"],scoreFontSize*0.36 ),
-                                      summaryItem(Icons.library_books, "Unique Words",uniqueWords ,scoreFontSize*0.36 ),
-                                      ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          maxWidth:500,
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
-                                          child: Divider(),
-                                        ),
-                                      ),
-                                    
-                                      gamePlayState.gameParameters["gameType"]!="sprint"
-                                      ? summaryItem(Icons.timer, "Duration", duration,scoreFontSize*0.36 )
-                                      : SizedBox(),
-                                    
-                                      summaryItem(Icons.control_point_rounded, "Turns", turns,scoreFontSize*0.36 ),
-                                      summaryItem(Icons.bar_chart, "Level", gamePlayState.currentLevel,scoreFontSize*0.36 ),
-                                      ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          maxWidth:500,
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
-                                          child: Divider(),
-                                        ),
-                                      ),
-                                    
-                                      summaryItem(Icons.bolt, "Longest Streak", streak,scoreFontSize*0.36 ),
-                                      summaryItem(Icons.close, "Crosswords", crosswords,scoreFontSize*0.36 ),
-                                      summaryItem(Icons.star, "Biggest Turn", biggestTurn,scoreFontSize*0.36 ),
-                                    
-                                    ],
-                                  ),
-                                ),
-                              ),
-                                    
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0*scalor),
-                                      child: Container(
-                                        child: Center(
-                                          child:ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color.fromARGB(255, 220, 220, 223),
-                                              foregroundColor: const Color.fromARGB(255, 44, 34, 185),
-                                              textStyle: GoogleFonts.lilitaOne(
-                                                fontSize: 24*scalor
-                                              ),                                    
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
-                                              ),
-                                              minimumSize: Size(200*scalor,scoreFontSize*0.7)
-                                            ),                          
-                                            onPressed: () => openViewSummaryDialog(context,settings,palette), 
-                                            child: Text("View Points Summary")
-                                          ),                        
-                                        ),
-                                      ),
+                            
+                                        GameOverBadgeSection(badgeData: badgeData,),
+                            
+                                      ],
                                     ),
-              
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0*scalor),
-                                      child: Container(
-                                        child: Center(
-                                          child:ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color.fromARGB(255, 4, 19, 87),
-                                              foregroundColor: Colors.white,
-                                              textStyle: GoogleFonts.lilitaOne(
-                                                fontSize: 24*scalor
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
-                                              ),
-                                              minimumSize: Size(200*scalor,scoreFontSize*0.7)
-                                            ),
-                                            onPressed: () {
-                                      
-                                              // if (gamePlayState.gameResultData["didCompleteGame"]) {
-                                                openDoubleCoinsDialog(context,settings);
-                                              // } else {
-                                                // final int rewardAmount = gamePlayState.gameResultData["reward"];
-                                                // final int xpAmount = gamePlayState.gameResultData["xp"];
-                                                // final String? rank = gamePlayState.gameResultData["newRank"];
-                                                // settings.setAchievements({"coins":rewardAmount,"xp": xpAmount, "rank":rank, "badges":badgeData});  
-                                                
-                                      
-                                                // print("navigating home");
-                                                // Navigator.of(context).pushAndRemoveUntil(
-                                            
-                                                //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                                                //   (Route<dynamic> route) => false,
-                                                // );
-                                                // gamePlayState.refreshAllData();  
-                                                                                  
-                                              // }
-                                      
-                                            }, 
-                                            child: Text("Home"),
-                                          ),                        
-                                        ),
-                                      ),
-                                    ),                                
-                                  ],
+                                  )
                                 ),
-                              ),                  
-                                    
-                              // // bottom section
-                              // Expanded(
-                              //   flex: 2,
-                              //   child: Container(
-                              //     child: Center(
-                              //       child:ElevatedButton(
-                              //         style: ElevatedButton.styleFrom(
-                              //           backgroundColor: const Color.fromARGB(255, 4, 19, 87),
-                              //           foregroundColor: Colors.white,
-                              //           textStyle: GoogleFonts.lilitaOne(
-                              //             fontSize: 24*scalor
-                              //           ),
-                              //           shape: RoundedRectangleBorder(
-                              //             borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
-                              //           ),
-                              //           minimumSize: Size(200*scalor,scoreFontSize*0.7)
-                              //         ),
-                              //         onPressed: () {
-              
-                              //           if (gamePlayState.gameResultData["didCompleteGame"]) {
-                              //             openDoubleCoinsDialog(context,settings);
-                              //           } else {
-                              //             final int rewardAmount = gamePlayState.gameResultData["reward"];
-                              //             settings.setAchievements({"coins":rewardAmount,"rank":null, "badges":badgeData});  
+                                // Text(gamePlayState.gameResultData.toString()),
                                           
-              
-                              //             print("navigating home");
-                              //             Navigator.of(context).pushAndRemoveUntil(
-                                       
-                              //               MaterialPageRoute(builder: (context) => const HomeScreen()),
-                              //               (Route<dynamic> route) => false,
-                              //             );
-                              //             gamePlayState.refreshAllData();  
-                                                                            
-                              //           }
-              
-                              //         }, 
-                              //         child: Text("Home"),
-                              //       ),                        
-                              //     ),
-                              //   ),
-                              // ),
-                            ]
+                                // middle section
+                                Expanded(
+                                  flex: 7,
+                                  child: Builder(
+                                    builder: (context) {
+                                      if (gamePlayState.gameParameters["puzzleId"] == null) {
+                                        return GameOverDataSection();
+                                      } else {
+                                        return DailyPuzzleRankingSection(gameData: gamePlayState.gameParameters,);
+                                      }
+                                    }
+                                  ),
+                                  // child: Padding(
+                                  //   padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  //   child: Container(
+                                  //     decoration: BoxDecoration(
+                                  //       color: const Color.fromARGB(33, 255, 255, 255),
+                                  //       borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
+                                  //     ),
+                                  //     child: Column(
+                                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  //       children: [
+                                        
+                                  //         summaryItem(Icons.gamepad, "Game Type", Helpers().capitalize(gamePlayState.gameParameters["gameType"]),scoreFontSize*0.36,palette ),
+                                  //         summaryItem(Icons.library_books, "Unique Words",uniqueWords ,scoreFontSize*0.36,palette ),
+                                  //         ConstrainedBox(
+                                  //           constraints: BoxConstraints(
+                                  //             maxWidth:500,
+                                  //           ),
+                                  //           child: Padding(
+                                  //             padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
+                                  //             child: Divider(),
+                                  //           ),
+                                  //         ),
+                                        
+                                  //         gamePlayState.gameParameters["gameType"]=="sprint"
+                                  //         ? summaryItem(Icons.score, "Score", score, scoreFontSize*0.36,palette )
+                                  //         : summaryItem(Icons.timer, "Duration", duration,scoreFontSize*0.36,palette ),
+                                        
+                                  //         summaryItem(Icons.control_point_rounded, "Turns", turns,scoreFontSize*0.36,palette ),
+                                  //         summaryItem(Icons.bar_chart, "Level", gamePlayState.currentLevel,scoreFontSize*0.36,palette ),
+                                  //         ConstrainedBox(
+                                  //           constraints: BoxConstraints(
+                                  //             maxWidth:500,
+                                  //           ),
+                                  //           child: Padding(
+                                  //             padding: EdgeInsets.symmetric(horizontal:scoreFontSize ),
+                                  //             child: Divider(),
+                                  //           ),
+                                  //         ),
+                                        
+                                  //         summaryItem(Icons.bolt, "Longest Streak", streak,scoreFontSize*0.36,palette ),
+                                  //         summaryItem(Icons.close, "Crosswords", crosswords,scoreFontSize*0.36,palette ),
+                                  //         summaryItem(Icons.star, "Biggest Turn", biggestTurn,scoreFontSize*0.36,palette ),
+                                        
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                ),
+                                      
+                                Expanded(
+                                  flex: 3,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical:4.0*scalor),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 2.0*scalor),
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: palette.navigationButtonBg2, //const Color.fromARGB(255, 220, 220, 223),
+                                                foregroundColor: palette.navigationButtonText2, // const Color.fromARGB(255, 44, 34, 185),
+                                                textStyle: GoogleFonts.lilitaOne(
+                                                  fontSize: 24*scalor
+                                                ),                                    
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
+                                                ),
+                                                minimumSize: Size(200*scalor,50*scalor)
+                                              ),                          
+                                              onPressed: () => openViewSummaryDialog(context,settings,palette), 
+                                              child: Text("View Points Summary")
+                                            ),
+                                          ),
+                                        ),
+                                            
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 2.0*scalor),
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: palette.navigationButtonBg1,
+                                                // backgroundColor: const Color.fromARGB(255, 4, 19, 87),
+                                                foregroundColor: palette.navigationButtonText1,
+                                                textStyle: GoogleFonts.lilitaOne(
+                                                  fontSize: 24*scalor
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
+                                                ),
+                                                minimumSize: Size(200*scalor,50*scalor)
+                                              ),
+                                              onPressed: () {
+                                                                                  
+                                                // if (gamePlayState.gameResultData["didCompleteGame"]) {
+                                                  openDoubleCoinsDialog(context,settings);
+                                                // } else {
+                                                  // final int rewardAmount = gamePlayState.gameResultData["reward"];
+                                                  // final int xpAmount = gamePlayState.gameResultData["xp"];
+                                                  // final String? rank = gamePlayState.gameResultData["newRank"];
+                                                  // settings.setAchievements({"coins":rewardAmount,"xp": xpAmount, "rank":rank, "badges":badgeData});  
+                                                  
+                                                                                  
+                                                  // print("navigating home");
+                                                  // Navigator.of(context).pushAndRemoveUntil(
+                                              
+                                                  //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                                                  //   (Route<dynamic> route) => false,
+                                                  // );
+                                                  // gamePlayState.refreshAllData();  
+                                                                                    
+                                                // }
+                                                                                  
+                                              }, 
+                                              child: Text("Home"),
+                                            ),
+                                          ),
+                                        ),                                
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: MediaQuery.of(context).padding.bottom,)                
+                                      
+                                // // bottom section
+                                // Expanded(
+                                //   flex: 2,
+                                //   child: Container(
+                                //     child: Center(
+                                //       child:ElevatedButton(
+                                //         style: ElevatedButton.styleFrom(
+                                //           backgroundColor: const Color.fromARGB(255, 4, 19, 87),
+                                //           foregroundColor: Colors.white,
+                                //           textStyle: GoogleFonts.lilitaOne(
+                                //             fontSize: 24*scalor
+                                //           ),
+                                //           shape: RoundedRectangleBorder(
+                                //             borderRadius: BorderRadius.all(Radius.circular(scoreFontSize*0.15)),
+                                //           ),
+                                //           minimumSize: Size(200*scalor,scoreFontSize*0.7)
+                                //         ),
+                                //         onPressed: () {
+                                          
+                                //           if (gamePlayState.gameResultData["didCompleteGame"]) {
+                                //             openDoubleCoinsDialog(context,settings);
+                                //           } else {
+                                //             final int rewardAmount = gamePlayState.gameResultData["reward"];
+                                //             settings.setAchievements({"coins":rewardAmount,"rank":null, "badges":badgeData});  
+                                            
+                                          
+                                //             print("navigating home");
+                                //             Navigator.of(context).pushAndRemoveUntil(
+                                         
+                                //               MaterialPageRoute(builder: (context) => const HomeScreen()),
+                                //               (Route<dynamic> route) => false,
+                                //             );
+                                //             gamePlayState.refreshAllData();  
+                                                                              
+                                //           }
+                                          
+                                //         }, 
+                                //         child: Text("Home"),
+                                //       ),                        
+                                //     ),
+                                //   ),
+                                // ),
+                              ]
+                            ),
                           ),
                         ],
                       ),
@@ -471,58 +459,58 @@ class _GameOverScreenState extends State<GameOverScreen> {
 }
 
 
-Widget summaryItem(IconData icon, String body, dynamic value, double size) {
-  Widget res = ConstrainedBox(
-    constraints: BoxConstraints(
-      maxWidth: 400
-    ),
-    child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: size),
-      child: Container(
-        child: Row(
-          children: [
-            Expanded(
-              flex:2, 
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(icon,size: size,color: Color.fromARGB(255, 235, 235, 235),)
-              )
-            ),
-            Expanded(
-              flex:5, 
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  body, 
-                  style: TextStyle(
-                      color: const Color.fromARGB(255, 235, 235, 235),
-                      fontSize: size
-                  ),
-                  // textAlign: TextAlign.start,
-                ),
-              )
-            ),
-            Expanded(
-              flex:3, 
-              child: Align(
-                alignment: Alignment.centerRight, 
-                child: Text(
-                  value.toString(), 
-                  style: TextStyle(
-                    fontSize: size,
-                    color: Color.fromARGB(255, 235, 235, 235),
-                  ),
-                )
-              )
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-  return res;
-}
+// Widget summaryItem(IconData icon, String body, dynamic value, double size, ColorPalette palette) {
+//   Widget res = ConstrainedBox(
+//     constraints: BoxConstraints(
+//       maxWidth: 400
+//     ),
+//     child: Padding(
+//       padding: EdgeInsets.symmetric(horizontal: size),
+//       child: Container(
+//         child: Row(
+//           children: [
+//             Expanded(
+//               flex:2, 
+//               child: Align(
+//                 alignment: Alignment.centerLeft,
+//                 child: Icon(icon,size: size,color: palette.text1)
+//               )
+//             ),
+//             Expanded(
+//               flex:5, 
+//               child: FittedBox(
+//                 fit: BoxFit.scaleDown,
+//                 alignment: Alignment.centerLeft,
+//                 child: Text(
+//                   body, 
+//                   style: TextStyle(
+//                       color: palette.text1,
+//                       fontSize: size
+//                   ),
+//                   // textAlign: TextAlign.start,
+//                 ),
+//               )
+//             ),
+//             Expanded(
+//               flex:3, 
+//               child: Align(
+//                 alignment: Alignment.centerRight, 
+//                 child: Text(
+//                   value.toString(), 
+//                   style: TextStyle(
+//                     fontSize: size,
+//                     color: palette.text1,
+//                   ),
+//                 )
+//               )
+//             ),
+//           ],
+//         ),
+//       ),
+//     ),
+//   );
+//   return res;
+// }
 
 
 Future<void> openViewSummaryDialog(BuildContext context, SettingsController settings, ColorPalette palette) async {
@@ -550,7 +538,7 @@ class ViewSummaryDialog extends StatelessWidget {
     return Consumer<GamePlayState>(
       builder: (context,gamePlayState,child) {
         final double scalor = Helpers().getScalor(settings);
-        List<TableRow> rows = WidgetUtils().getSummaryTableRows(context,gamePlayState,scalor);
+        List<TableRow> rows = WidgetUtils().getSummaryTableRows(context,gamePlayState,scalor,palette);
         
 
         return Dialog(
@@ -586,10 +574,10 @@ class ViewSummaryDialog extends StatelessWidget {
                       children: [
                         TableRow(
                           children: [
-                            WidgetUtils().headingItem("Trun",scalor),
-                            WidgetUtils().headingItem("Words",scalor),
-                            WidgetUtils().headingItem("Bonus",scalor),
-                            WidgetUtils().headingItem("Points",scalor),
+                            WidgetUtils().headingItem("Trun",scalor,palette),
+                            WidgetUtils().headingItem("Words",scalor,palette),
+                            WidgetUtils().headingItem("Bonus",scalor,palette),
+                            WidgetUtils().headingItem("Points",scalor,palette),
                           ]
                         ), ... rows
                       ],
@@ -672,7 +660,7 @@ class _DoubleCoinsDialogState extends State<DoubleCoinsDialog> {
               print("go caca !!!!");
         
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const HomeScreen())
+                MaterialPageRoute(builder: (context) => const AuthScreen())
               );
               gamePlayState.refreshAllData();
             }
@@ -752,12 +740,12 @@ class _DoubleCoinsDialogState extends State<DoubleCoinsDialog> {
                           SizedBox(
                             width: 200*scalor,
                             height: 200*scalor,
-                            child: Image(
-                              semanticLabel: "Treasure",
-                              image: AssetImage(
-                                'assets/images/treasure_scribby.png'
-                              )
-                            ),
+                            // child: Image(
+                            //   semanticLabel: "Treasure",
+                            //   image: AssetImage(
+                            //     'assets/images/treasure_scribby.png'
+                            //   )
+                            // ),
                           ),
                     
                           Text(
@@ -782,12 +770,12 @@ class _DoubleCoinsDialogState extends State<DoubleCoinsDialog> {
                                   adState.gameOverRewardedAd?.show(
                                     onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
                                       // Reward logic here
-                                      final int coins = settings.coins.value;
+                                      final int coins = Helpers().getUserCoins(settings); // settings.coins.value;
                                       final int rewardAmount = gamePlayState.gameResultData["reward"];
                                       final int xpAmount = gamePlayState.gameResultData["xp"];
                                       final String? rank = gamePlayState.gameResultData["newRank"];
                                       List<Map<dynamic,dynamic>> badgeData = gamePlayState.gameResultData["badges"];
-                                      settings.setCoins(coins + rewardAmount);
+                                      // settings.setCoins(coins + rewardAmount);
                                       FirestoreMethods().updateUserDoc(settings,"coins",(coins + rewardAmount));
                                       settings.setAchievements({"coins":rewardAmount,"xp":xpAmount, "rank":rank, "badges":badgeData});                                      
 

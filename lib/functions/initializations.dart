@@ -54,10 +54,7 @@ class Initializations {
       await StorageMethods().saveAlphabetToSettings(settings,"english");
     }
 
-    // List<dynamic> userGameHistory = settings.userGameHistory.value;
-    // print('=============== userGameHistory ====================');
-    // print(userGameHistory.length);
-    // print('===================================');
+
     
     // userGameHistory.removeLast();
     // settings.setUserGameHistory(userGameHistory);
@@ -80,7 +77,7 @@ class Initializations {
     Map<String,dynamic> userData = await FirestoreMethods().getFirestoreDocument(user!.uid);
     settings.setUserData(userData);
 
-    print("userData => $userData");
+    print("userData => ${userData["gameHistory"].length}");
     
     if (userData.isNotEmpty) {
       // fix bug of old user doc in firebase which saved the theme as a bool in parameters

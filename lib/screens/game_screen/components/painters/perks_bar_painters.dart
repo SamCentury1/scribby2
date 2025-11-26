@@ -43,8 +43,8 @@ class PerksBarPainters {
     Size perkAreaSize = gamePlayState.elementSizes["perksAreaSize"];
     
     
-    Paint perkPaint = Paint();
-    perkPaint.color = Colors.white;
+    // Paint perkPaint = Paint();
+    // perkPaint.color = Colors.white;
     
 
     for (int i=0; i<gamePlayState.tileMenuOptions.length; i++) {
@@ -86,14 +86,15 @@ class PerksBarPainters {
           final double updatedSizeValue = (perkAreaSize.height*0.85) + (perkAreaSize.height*0.85*0.3*progress);
           final Size updatedSize = Size(updatedSizeValue,updatedSizeValue);
           itemDiameter = updatedSize.width*0.75;
-          perkColor = Color.lerp(unselectedColor, selectedColor, progress)??selectedColor; 
+          perkColor = Color.lerp(unselectedColor, selectedColor, progress)??selectedColor;  
           TilePainters().drawOptionIcon(canvas,perkCenter,iconType,updatedSize,1.0,perkColor);
         }
       } else {
-        if (isOpen) {
+        if (isOpen || isSelected) {
           perkSize = Size(perkAreaSize.height*0.85*1.3,perkAreaSize.height*0.85*1.3);
           perkColor = selectedColor;
           itemDiameter = perkSize.width*0.75;
+
         }
         TilePainters().drawOptionIcon(canvas,perkCenter,iconType,perkSize,1.0,perkColor);
       }   

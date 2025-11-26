@@ -9,10 +9,12 @@ import 'package:scribby_flutter_v2/components/background_painter.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
+import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -103,6 +105,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
 
+  Future<void> _openUrl(url) async {
+    final uri = Uri.parse(url);
+
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication, // opens browser
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -177,7 +190,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onDrawerChanged: (var details) {},
                         appBar: AppBar(
                           backgroundColor: const Color.fromARGB(0, 49, 49, 49),
-                          title: Text("Profile", style: TextStyle(color: palette.text2, fontSize: 28*scalor),),
+                          title: Text(
+                            "Profile", 
+                            style: palette.mainAppFont(
+                              textStyle: TextStyle(
+                                color: palette.appBarText,
+                                fontSize: 36*scalor,
+                              )
+                            ),
+                          ),
                           leading: IconButton(
                             icon: Icon(Icons.arrow_back, color: palette.text2),
                             onPressed: () => Navigator.of(context).pop(true),
@@ -264,10 +285,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                 
                                         child: ListTile(
-                                          leading: Icon(Icons.email,color: palette.widgetText1),
+                                          leading: Icon(Icons.email,color: palette.widgetText2),
                                           title: Text(
                                             userData["email"],
-                                            style: TextStyle(color: palette.widgetText1),
+                                            style: TextStyle(color: palette.widgetText2),
                                           )
                                         
                                         ),                                  
@@ -293,16 +314,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                 
                                         child: ListTile(
-                                          leading: Icon(Icons.language,color: palette.widgetText1),
+                                          leading: Icon(Icons.language,color: palette.widgetText2),
                                           title: DropdownButtonFormField<String>(
                                             value: _selectedLanguage,
                                             alignment: AlignmentDirectional.centerStart,
 
-                                            dropdownColor: palette.widget1,
+                                            dropdownColor: palette.widget2,
                                             decoration: InputDecoration(
                                               border: null,
                                               focusedBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(color: palette.widgetText1)
+                                                borderSide: BorderSide(color: palette.widgetText2)
                                               )
                                             ),                                            
                                             items: _languages.map((lang) {
@@ -310,7 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 value: lang["code"] as String, 
                                                 child: Text(
                                                   lang["label"] as String,
-                                                  style: TextStyle(color: palette.widgetText1),
+                                                  style: TextStyle(color: palette.widgetText2),
                                                 )
                                               );
                                             }).toList(),
@@ -338,13 +359,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ]                                          
                                         ),
                                         child: ListTile(
-                                          leading: Icon(Icons.volume_up,color: palette.widgetText1),
+                                          leading: Icon(Icons.volume_up,color: palette.widgetText2),
                                           title: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               settings.soundsOn.value
-                                                ? Text("Sound On", style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText1),)
-                                                : Text("Sound Off", style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText1),),
+                                                ? Text("Sound On", style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2),)
+                                                : Text("Sound Off", style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2),),
               
                                                 Transform.scale(
                                                   scale: 0.8 * scalor,
@@ -363,103 +384,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
               
-                                    
-                                
-                                    // Padding(
-                                    //   padding: EdgeInsets.all(8.0*scalor),
-                                    //   child: Container(
-                                    //     height: 60 * scalor,
-                                    //     decoration: BoxDecoration(
-                                    //       borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
-                                    //       color: palette.widget1,
-                                    //       boxShadow: [
-                                    //         BoxShadow(
-                                    //           color: palette.widgetShadow1,
-                                    //           spreadRadius: 2.0 * scalor,
-                                    //           blurRadius: 15.0 * scalor,
-                                    //           offset: Offset(0.0, 5.0 * scalor),
-                                    //         )
-                                    //       ]
-                                    //     ),
-                                
-                                    //     child: ListTile(
-                                    //       leading: Icon(Icons.color_lens,color: palette.widgetText1),
-                                    //       title: DropdownButtonFormField<String>(
-                                    //         value: _selectedTheme,
-                                    //         alignment: AlignmentDirectional.centerStart,
-                                    //         dropdownColor: palette.widget1,
-                                    //         padding: EdgeInsets.all(0.0),
-                                    //         items: _colorThemes.map((theme) {
-                                    //           return DropdownMenuItem(
-                                    //             value: theme, 
-                                    //             child: Row(
-                                    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    //               children: [
-                                    //                 Text(
-                                    //                   "${Helpers().formatWord(theme)} Theme",
-                                    //                   style: TextStyle(
-                                    //                     color: palette.widgetText1,
-                                    //                   ),
-                                    //                 ),
-                                    //                 SizedBox(width: 50,),
-                                                    
-                                    //                 Row(
-                                    //                   children: [
-                                    //                     SizedBox(
-                                    //                       width: 20 * scalor, 
-                                    //                       height: 20 * scalor,
-                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["bg2"],),
-                                    //                     ),
-                                                    
-                                    //                     SizedBox(
-                                    //                       width: 20 * scalor, 
-                                    //                       height: 20 * scalor,
-                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["dialog1"],),
-                                    //                     ),
-                                                    
-                                    //                     SizedBox(
-                                    //                       width: 20 * scalor, 
-                                    //                       height: 20 * scalor,
-                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["dialog2"],),
-                                    //                     ),
-                                                    
-                                    //                     SizedBox(
-                                    //                       width: 20 * scalor, 
-                                    //                       height: 20 * scalor,
-                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["widget1"],),
-                                    //                     ),
-                                                    
-                                    //                     SizedBox(
-                                    //                       width: 20 * scalor, 
-                                    //                       height: 20 * scalor,
-                                    //                       child: CircleAvatar(backgroundColor: colorsDictionary[theme]!["widget2"],),
-                                    //                     ),
-                                    //                   ],
-                                    //                 )
-                                                                                                                                                                                                                        
-                                                    
-                                                                                                                                               
-                                                
-                                    //               ],
-                                    //             )
-                                    //           );
-                                    //         }).toList(),
-                                    //         onChanged: (value) => _pickColorTheme(settings,palette,value),
-                                    //         decoration: InputDecoration(
-                                    //           border: null,
-                                    //           focusedBorder: UnderlineInputBorder(
-                                    //             borderSide: BorderSide(color: palette.widgetText1)
-                                    //           )
-                                    //         ),
-                                    //       ),
-                                    //     ),
-
-                                        
-                                                                         
-                                
-                                    //   ),
-                                    // ),                            
-                                
 
                                 
                                     Padding(
@@ -480,21 +404,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                 
                                         child: ListTile(
-                                          leading: Icon(Icons.color_lens,color: palette.widgetText1),
+                                          leading: Icon(Icons.color_lens,color: palette.widgetText2),
                                           title: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 "${Helpers().formatWord(_selectedTheme)} Theme",
                                                 style: TextStyle(
-                                                  color: palette.widgetText1,
+                                                  color: palette.widgetText2,
                                                 ),
                                               ),
                                               IconButton(
                                                 onPressed: () => openThemeDialog(context,scalor,_selectedTheme,_pickColorTheme), 
                                                 icon: Icon(
                                                   Icons.edit_square,
-                                                  color: palette.widgetText1,
+                                                  color: palette.widgetText2,
                                                 )
                                               )
                                             ],
@@ -507,7 +431,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),                            
                                 
-                                    const SizedBox(height: 30),                                    
+
+
+
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0*scalor),
+                                      child: Container(
+                                        height: 60 * scalor,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
+                                          color: palette.widget2,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: palette.widgetShadow1,
+                                              spreadRadius: 2.0 * scalor,
+                                              blurRadius: 15.0 * scalor,
+                                              offset: Offset(0.0, 5.0 * scalor),
+                                            )
+                                          ]                                          
+                                        ),
+                                        child: ListTile(
+                                          onTap: () => _openUrl("https://nodamngoodstudios.com/games/scribby/privacy-policy"),
+                                          leading: Icon(Icons.privacy_tip,color: palette.widgetText2),
+                                          title: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Privacy Policy",
+                                                style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2),
+
+                                              )
+                                            ]
+                                                
+       
+                                          ) 
+              
+                                        ),
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 30,),
+
+
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0*scalor),
+                                      child: Container(
+                                        height: 60 * scalor,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
+                                          color: palette.navigationButtonBg1,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: palette.widgetShadow1,
+                                              spreadRadius: 2.0 * scalor,
+                                              blurRadius: 15.0 * scalor,
+                                              offset: Offset(0.0, 5.0 * scalor),
+                                            )
+                                          ]                                          
+                                        ),
+                                        child: ListTile(
+                                          onTap: () => AuthService().signOut(context),
+                                          leading: Icon(Icons.logout_outlined,color: palette.navigationButtonText1),
+                                          title: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Sign Out",
+                                                style: TextStyle(fontSize: 18 * scalor, color: palette.navigationButtonText1),
+
+                                              )
+                                            ]
+                                                
+       
+                                          ) 
+              
+                                        ),
+                                      ),
+                                    ),                                    
+                                                                                
                                 
                                   ],
                                 ),
@@ -578,7 +579,7 @@ class UsernameCard extends StatelessWidget {
                       child: Text(username, style: TextStyle(
                         fontSize: 22*scalor, 
                         // fontWeight: FontWeight.bold,
-                        color: palette.widgetText1
+                        color: palette.widgetText2
                       )),
                     ),
                       
@@ -593,7 +594,7 @@ class UsernameCard extends StatelessWidget {
                             builder: (_) => UsernameDialog(currentUsername: username,scalor: scalor,palette: palette,)
                           );
                         }, 
-                        icon: Icon(Icons.edit,size: 25 * scalor,color: palette.widgetText1)
+                        icon: Icon(Icons.edit,size: 25 * scalor,color: palette.widgetText2)
                       ),
                     ),            
                   ],
@@ -638,7 +639,7 @@ Widget _rankCard({required String rank, required double scalor, required ColorPa
                   rank, style: TextStyle(
                     fontSize: 18*scalor, 
                     // fontWeight: FontWeight.bold,
-                    color: palette.widgetText1
+                    color: palette.widgetText2
                   )),
               ),
                           

@@ -135,9 +135,11 @@ class BonusIcons {
 class BonusIconPaitner extends CustomPainter{
   final String bonusType;
   final double scalor;
+  final Color color;
   const BonusIconPaitner({
     required this.bonusType,
     required this.scalor,
+    required this.color
   });
   @override
   void paint(Canvas canvas, Size size) {
@@ -145,11 +147,11 @@ class BonusIconPaitner extends CustomPainter{
     final double side = size.width*0.7;
     // final double side = 15*scalor;
     if (bonusType=="streak") {
-      BonusPainters().drawStreakIcon(canvas, Size(side,side), center, Colors.white);
+      BonusPainters().drawStreakIcon(canvas, Size(side,side), center, color);
     } else if (bonusType=="cross") {
-      BonusPainters().drawCrossWordIcon(canvas, Size(side,side), center, Colors.white);
+      BonusPainters().drawCrossWordIcon(canvas, Size(side,side), center, color);
     } else if (bonusType=="words") {
-      BonusPainters().drawMultiWordIcon(canvas, Size(side,side), center, Colors.white);
+      BonusPainters().drawMultiWordIcon(canvas, Size(side,side), center, color);
     }
   }
 

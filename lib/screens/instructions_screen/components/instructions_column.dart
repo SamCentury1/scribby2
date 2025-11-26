@@ -451,7 +451,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               scalor: widget.scalor,
               label: "Streak",
               body: "Multiplies your score by the number of conscutive turns where at least one word was found",
-              iconImage: CustomPaint(painter: BonusIconPaitner(bonusType: "streak",scalor: widget.scalor),),
+              iconImage: CustomPaint(painter: BonusIconPaitner(bonusType: "streak",scalor: widget.scalor,color: palette.text1),),
             ),
 
             FeatureDescriptionCard(
@@ -459,7 +459,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               scalor: widget.scalor,
               label: "Multi Words",
               body: "Multiplies your score by the number of words found in the turn",
-              iconImage: CustomPaint(painter: BonusIconPaitner(bonusType: "words",scalor: widget.scalor),),
+              iconImage: CustomPaint(painter: BonusIconPaitner(bonusType: "words",scalor: widget.scalor,color: palette.text1),),
             ),                        
 
             FeatureDescriptionCard(
@@ -467,7 +467,7 @@ class _InstructionsColumnState extends State<InstructionsColumn> {
               scalor: widget.scalor,
               label: "Cross Words",
               body: "Doubles the turns score when words are found on both axis",
-              iconImage: CustomPaint(painter: BonusIconPaitner(bonusType: "cross",scalor: widget.scalor),),
+              iconImage: CustomPaint(painter: BonusIconPaitner(bonusType: "cross",scalor: widget.scalor,color: palette.text1),),
             ),
 
 
