@@ -1347,7 +1347,7 @@ class GameLogic extends ChangeNotifier {
           for (int k=0; k<wordLength; k++) {
             Map<String,dynamic> letterObject = gamePlayState.alphabet.firstWhere((e)=>e["letter"]==word[k],orElse:()=>{});
             if (letterObject.isNotEmpty) {
-              score = score + letterObject["value"] as int;
+              score = score + letterObject["points"] as int;
             }
           }
           totalScore = totalScore + (score * (wordLength-2)); ;
@@ -1887,12 +1887,12 @@ class GameLogic extends ChangeNotifier {
           }
 
 
-          Map<dynamic,dynamic> correspondingBadge = achievementData.firstWhere((e)=>
+          Map<String,dynamic> correspondingBadge = achievementData.firstWhere((e)=>
             e["completed"] == false && 
             e["target"] == "crosswords" && 
             e["data"]["axis1"] == numAxis1 && 
             e["data"]["axis2"] == numAxis2,
-            orElse: () => {}
+            orElse: () => <String,dynamic>{}
           );
 
           if (correspondingBadge.isNotEmpty) {
@@ -1908,11 +1908,11 @@ class GameLogic extends ChangeNotifier {
 
     for (int i=0; i<multiWords.length; i++) {
       int wordsVal = multiWords[i];
-      Map<dynamic,dynamic> correspondingBadge = achievementData.firstWhere((e)=>
+      Map<String,dynamic> correspondingBadge = achievementData.firstWhere((e)=>
         e["completed"] == false && 
         e["target"] == "words" && 
         e["data"]["count"] == wordsVal,
-        orElse: () => {}
+        orElse: () => <String,dynamic>{}
       );
       if (correspondingBadge.isNotEmpty) {
         final String badgeKey = correspondingBadge["badgeKey"];
@@ -1926,11 +1926,11 @@ class GameLogic extends ChangeNotifier {
     
     for (int i=0; i<streaks.length; i++) {
       int streakVal = streaks[i];
-      Map<dynamic,dynamic> correspondingBadge = achievementData.firstWhere((e)=>
+      Map<String,dynamic> correspondingBadge = achievementData.firstWhere((e)=>
         e["completed"] == false && 
         e["target"] == "streak" && 
         e["data"]["count"] == streakVal,
-        orElse: () => {}
+        orElse: () => <String,dynamic>{}
       );
       if (correspondingBadge.isNotEmpty) {
         final String badgeKey = correspondingBadge["badgeKey"];
@@ -2044,6 +2044,7 @@ ${data}
       gamePlayState.gameResultData.update("badges", (v) => badgesEarned);
 
       settings.setAchievementData(achievementData);
+      FirestoreMethods().updateAchievementData(settings,badgesEarned);
       FirestoreMethods().updateGameHistory(settings, data);
       FirestoreMethods().updateDailyPuzzleGameComplete(settings,data);
       FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);

@@ -10,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 import 'package:scribby_flutter_v2/app_lifecycle/app_lifecycle.dart';
+import 'package:scribby_flutter_v2/functions/initializations.dart';
 import 'package:scribby_flutter_v2/providers/ad_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
@@ -25,11 +26,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();  
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );  
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);  
   await MobileAds.instance.initialize();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Hive.initFlutter();
@@ -41,21 +40,41 @@ void main() async {
     adsController.initialize();
   }
 
+  final settings = SettingsController(
+    persistence: LocalStorageSettingsPersistence(),
+  );
 
+  print("*  *  *  * BEFORE INITIALIZATION *  *  *  *  *  ");
+  Initializations().printAllSettingsData(settings);
+
+  await settings.loadStateFromPersistence();
+
+  final palette = ColorPalette();
+  await Initializations().initializeDeviceData(settings);
+  palette.getThemeColors(settings.theme.value);
+
+  await Initializations().initializeAppData1(settings);
+
+  print("*  *  *  * AFTER INITIALIZATION *  *  *  *  *  ");
+  Initializations().printAllSettingsData(settings);  
+  
     
   runApp(MyApp(
-    settingsPersistence: LocalStorageSettingsPersistence(),
+    settings: settings,
     adsController: adsController,
+    palette: palette,
   ));
 }
 
 class MyApp extends StatefulWidget {
-  final SettingsPersistence settingsPersistence;
+  final SettingsController settings;
   final AdsController? adsController;
+  final ColorPalette palette;
   const MyApp({
     super.key, 
-    required this.settingsPersistence,
+    required this.settings,
     required this.adsController,
+    required this.palette,
   });
 
   @override
@@ -96,30 +115,21 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => GamePlayState()),
           ChangeNotifierProvider(create: (_) => SettingsState()),
           ChangeNotifierProvider(create: (_) => AdState(),),
-          ChangeNotifierProvider(create: (_) => ColorPalette(),),
           ChangeNotifierProvider(create: (_) => TutorialState(),),
+          ChangeNotifierProvider.value(value: widget.palette,),
           Provider<AdsController?>.value(value: widget.adsController),
-          Provider<SettingsController>(
-            lazy: false,
-            create: (context) => SettingsController(
-              persistence: widget.settingsPersistence
-            )..loadStateFromPersistence(),
-          ),
+          Provider<SettingsController>.value(value: widget.settings,),
+          // Provider<SettingsController>(
+          //   lazy: false,
+          //   create: (context) => SettingsController(
+          //     persistence: widget.settingsPersistence
+          //   )..loadStateFromPersistence(),
+          // ),
         ],
-        child: Builder(
-          builder: (context)  {
-
-
-
-
-            // palette.getThemeColors("default");
-            
-            return MaterialApp(
-              title: "Scribby",
-              debugShowCheckedModeBanner: false,
-              home: const AuthScreen(),
-            );
-          }
+        child: MaterialApp(
+          title: "Scribby",
+          debugShowCheckedModeBanner: false,
+          home: const AuthScreen(),
         ),
       ),
     );

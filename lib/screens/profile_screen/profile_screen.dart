@@ -12,6 +12,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/resources/storage_methods.dart';
+import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -154,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         
         _selectedTheme = userData["parameters"]["theme"]??"default";
         
-        Map<dynamic,dynamic> rankObject = settings.rankData.value.firstWhere((e)=>e["key"]==_rank,orElse: ()=>{});
+        Map<String,dynamic> rankObject = settings.rankData.value.firstWhere((e)=>e["key"]==_rank,orElse: ()=><String,dynamic>{});
         int rankIndex = rankObject["rank"];
         int _level = rankObject["level"];
         if (userData["photoUrl"] != null && File(userData["photoUrl"]).existsSync()) {
@@ -240,7 +241,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ValueListenableBuilder(
                                       valueListenable: settings.userData,
                                       builder: (context, value, child) {
-                                        final userData = value as Map<String, dynamic>;
+                                        final Map<dynamic, dynamic> rawData = value as Map<dynamic, dynamic>;
+                                        final userData = Map<String, dynamic>.from(rawData); // <-- convert keys to String
+
                                         final username = userData["username"] ?? "Unknown";
               
                                         return UsernameCard(username: username,palette: palette,);
@@ -490,7 +493,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ]                                          
                                         ),
                                         child: ListTile(
-                                          onTap: () => AuthService().signOut(context),
+                                          onTap: ()  {
+                                            AuthService().signOut(settings);
+                                                                                  
+                                            if (context.mounted) {
+                                              Navigator.of(context).pushAndRemoveUntil(
+                                                MaterialPageRoute(builder: (_) => const AuthScreen()),
+                                                (route) => false,
+                                              );
+                                            }                                              
+                                          },
                                           leading: Icon(Icons.logout_outlined,color: palette.navigationButtonText1),
                                           title: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -549,7 +561,7 @@ class UsernameCard extends StatelessWidget {
 
         final double scalor = Helpers().getScalor(settings);
 
-        Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+        Map<dynamic,dynamic> userData = settings.userData.value as Map<dynamic,dynamic>;
         String username = userData["username"]??"";
         return Center(
           child: Padding(
@@ -726,7 +738,9 @@ class _UsernameDialogState extends State<UsernameDialog> {
     final userData = Map<String, dynamic>.from(settings.userData.value as Map<String,dynamic>);
 
     userData["username"] = newUsername;
+    // settings.setUserData(userData); // trigger rebuild
     settings.setUserData(userData); // trigger rebuild
+    FirestoreMethods().updateUserDoc(settings, "username", newUsername);
 
     Navigator.of(context).pop(); // close the dialog
   }
@@ -747,9 +761,10 @@ class _UsernameDialogState extends State<UsernameDialog> {
     final userData = Map<String, dynamic>.from(settings.userData.value as Map<String,dynamic>);
 
     userData["username"] = newUsername;
-    settings.setUserData(userData); // trigger rebuild
+    _controller.text = newUsername;
+    // settings.setUserData(userData); // trigger rebuild
 
-    Navigator.of(context).pop(); // close the dialog
+    // Navigator.of(context).pop(); // close the dialog
   } 
 
 

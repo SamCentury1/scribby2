@@ -43,7 +43,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late List<Map<String,dynamic>> levelData;
   late List<Map<String,dynamic>> backgroundFigures = [];
   
   // final GlobalKey<ScaffoldState> _homeScaffoldKey = GlobalKey();
@@ -53,45 +52,36 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    levelData = [
-      {"rows": 5, "columns": 5},
-      {"rows": 6, "columns": 5},
-      {"rows": 7, "columns": 5},
-      {"rows": 8, "columns": 5},
-      {"rows": 5, "columns": 6},
-      {"rows": 6, "columns": 6},
-      {"rows": 7, "columns": 6},
-      {"rows": 8, "columns": 6},
-      {"rows": 5, "columns": 7},
-      {"rows": 6, "columns": 7},
-      {"rows": 7, "columns": 7},
-      {"rows": 8, "columns": 7},
-      {"rows": 5, "columns": 8},
-      {"rows": 6, "columns": 8},
-      {"rows": 7, "columns": 8},
-      {"rows": 8, "columns": 8},
-    ];
+
 
     settings = Provider.of<SettingsController>(context,listen: false);
     Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+
+    print("userData: ${userData}");
+
+    if (userData.isEmpty) {
+      AuthService().signOut(settings);
+    } else {
+      bool tutorialComplete = userData["parameters"]["shownTutorialModal"] ?? false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!tutorialComplete) {
+
+          setState(() {
+            MediaQueryData mediaQueryData = MediaQuery.of(context);
+            openTutorialModal(context, mediaQueryData);
+
+            Map<String,dynamic> params = userData["parameters"];
+            // if (params["shownTutorialModal"]!=)
+            params.update("shownTutorialModal", (v) => true);
+            settings.setUserData(userData);
+
+            FirestoreMethods().updateParameters(settings, "shownTutorialModal", true);
+          });
+        }
+      });
+
+    }
     
-    bool tutorialComplete = userData["parameters"]["shownTutorialModal"] ?? false;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!tutorialComplete) {
-
-        setState(() {
-          MediaQueryData mediaQueryData = MediaQuery.of(context);
-          openTutorialModal(context, mediaQueryData);
-
-          Map<String,dynamic> params = userData["parameters"];
-          // if (params["shownTutorialModal"]!=)
-          params.update("shownTutorialModal", (v) => true);
-          settings.setUserData(userData);
-
-          FirestoreMethods().updateParameters(settings, "shownTutorialModal", true);
-        });
-      }
-    });
 
     Random random = Random(); 
 
@@ -225,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   HomeScreenDrawerButton(
                                     icon: Icons.close,
                                     body: "Sign Out", 
-                                    onPress: () => AuthService().signOut(context)
+                                    onPress: () => AuthService().signOut(settings)
                                   ),
                               
                                 ],
@@ -836,85 +826,87 @@ List<Widget> listDailyPuzzles(double scalor) {
 
 
 
-Future<void> initializeAppData(SettingsController settings, ColorPalette palette) async {
+// Future<void> initializeAppData(SettingsController settings, ColorPalette palette) async {
 
 
-  // if local storage is empty - get the level data as json payload and set it
-  // levels to play
-  await StorageMethods().saveLevelDataFromJsonFileToLocalStorage(settings);
-  // text explaining the types of games
-  await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
+//   // if local storage is empty - get the level data as json payload and set it
+//   // levels to play
+//   await StorageMethods().saveLevelDataFromJsonFileToLocalStorage(settings);
+//   // text explaining the types of games
+//   await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
 
-  if (settings.achievementData.value.isEmpty) {
-    // print("loading achievements");
-    await StorageMethods().saveAchievementDataFromJsonFileToLocalStorage(settings);
-  }
-  if (settings.rankData.value.isEmpty) {
-    print("loading ranks");
-    await StorageMethods().saveRankDataFromJsonFileToLocalStorage(settings);
-  }
+//   if (settings.achievementData.value.isEmpty) {
+//     // print("loading achievements");
+//     await StorageMethods().saveAchievementDataFromJsonFileToLocalStorage(settings);
+//   }
+//   if (settings.rankData.value.isEmpty) {
+//     print("loading ranks");
+//     await StorageMethods().saveRankDataFromJsonFileToLocalStorage(settings);
+//   }
 
 
 
-  await saveDeviceSizeInfoToSettings(settings);
+//   await saveDeviceSizeInfoToSettings(settings);
 
 
   
-  // print("deviceSizeInfo runtimeType: ${settings.deviceSizeInfo.value.runtimeType}");
-  // print("deviceSizeInfo value: ${settings.deviceSizeInfo.value}");
+//   // print("deviceSizeInfo runtimeType: ${settings.deviceSizeInfo.value.runtimeType}");
+//   // print("deviceSizeInfo value: ${settings.deviceSizeInfo.value}");
 
-  // print("userData runtimeType: ${settings.userData.value.runtimeType}");
-  // print("userData value: ${settings.userData.value}");  
+//   // print("userData runtimeType: ${settings.userData.value.runtimeType}");
+//   // print("userData value: ${settings.userData.value}");  
 
-  // List<dynamic> userDataList = settings.userData.value as List<dynamic>;
-  // for (dynamic item in userDataList) {
-  //   print(item);
-  //   print("=========");
-  // }
-  // Map<String,dynamic> userData = userDataList[0];
+//   // List<dynamic> userDataList = settings.userData.value as List<dynamic>;
+//   // for (dynamic item in userDataList) {
+//   //   print(item);
+//   //   print("=========");
+//   // }
+//   // Map<String,dynamic> userData = userDataList[0];
   
-  // print(userData);
-  // settings.setXP(849);
+//   // print(userData);
+//   // settings.setXP(849);
   
-  Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
-  // if (userData.isEmpty) {
-  //   print("add template data");
-  //   Object newUserData = {
-  //     "username": Helpers().generateRandomUsername(),
-  //     "displayName": "User",
-  //     "email" : "user@gmail.com",
-  //     "rank": "1_1",
-  //     "language": "en",
-  //     "photoUrl": null,
-  //     "soundOn": true,
-  //     "colorTheme":"default",
-  //     "createdAt": DateTime.now().toIso8601String(),
-  //   };
-  //   settings.setUserData(newUserData);
-  // } 
-  // else {
-  //   userData.update("rank", (v)=>"4_4");
-  // }
-  if (userData["colorTheme"] != null) {
-    palette.getThemeColors(userData["colorTheme"]);
-  } else {
-    palette.getThemeColors("default");
-  }
+//   Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+//   // if (userData.isEmpty) {
+//   //   print("add template data");
+//   //   Object newUserData = {
+//   //     "username": Helpers().generateRandomUsername(),
+//   //     "displayName": "User",
+//   //     "email" : "user@gmail.com",
+//   //     "rank": "1_1",
+//   //     "language": "en",
+//   //     "photoUrl": null,
+//   //     "soundOn": true,
+//   //     "colorTheme":"default",
+//   //     "createdAt": DateTime.now().toIso8601String(),
+//   //   };
+//   //   settings.setUserData(newUserData);
+//   // } 
+//   // else {
+//   //   userData.update("rank", (v)=>"4_4");
+//   // }
+//   if (userData["colorTheme"] != null) {
+//     palette.getThemeColors(userData["colorTheme"]);
+//   } else {
+//     palette.getThemeColors("default");
+//   }
 
-  // Object userData = {
-  //   "username": "Mimou the Terrible",
-  //   "displayName": "Mimou Grimm",
-  //   "email" : "mimou.grimm@gmail.com",
-  //   "language": "english",
-  //   "photoUrl": "",
-  // };
+//   // Object userData = {
+//   //   "username": "Mimou the Terrible",
+//   //   "displayName": "Mimou Grimm",
+//   //   "email" : "mimou.grimm@gmail.com",
+//   //   "language": "english",
+//   //   "photoUrl": "",
+//   // };
 
   
 
 
 
 
-}
+// }
+
+
 Future<void> openTutorialModal(BuildContext context, MediaQueryData mediaQueryData) async {
 
   return showDialog<void>(

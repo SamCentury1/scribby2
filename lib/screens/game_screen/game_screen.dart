@@ -54,6 +54,10 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

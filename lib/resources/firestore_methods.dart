@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class FirestoreMethods {
@@ -15,9 +16,18 @@ class FirestoreMethods {
 
 
   Future<Map<String,dynamic>> getFirestoreDocument(String uid) async {
-    late DocumentSnapshot<Map<String,dynamic>> docStream;
-    docStream = await _firestore.collection("users").doc(uid).get();
-    return docStream.data() as Map<String, dynamic>;
+    Map<String,dynamic> res = {};
+    try {
+      late DocumentSnapshot<Map<String,dynamic>> docStream;
+      docStream = await _firestore.collection("users").doc(uid).get();
+      if (docStream.data()!=null) {
+        res = docStream.data()!;
+      }
+    }catch(e,s) {
+      print("uid: ${uid}");
+      debugPrint("an error occured getting firestore document : $e | $s");
+    }
+    return res;
   }  
 
   // Future<List<Map<dynamic,dynamic>>> getLevelsFromFirestore() async {
@@ -113,15 +123,41 @@ class FirestoreMethods {
     return res;
   }
 
+  Future<void> updateAchievementData(SettingsController settings, List<Map<dynamic,dynamic>> newBadges) async {
+    try {
+
+      // final querySnapshot = await FirebaseFirestore.instance
+      //     .collection('achievements')
+      //     .get();
+
+
+      // List<Map<dynamic,dynamic>> existingBadges = querySnapshot.docs
+      //     .map((doc) => doc.data() )
+      //     .toList();
+
+      // List<Map<dynamic,dynamic>> updatedValue = existingBadges;
+      // updatedValue.addAll([...newBadges]);
+      
+
+      // Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      // final docRef = FirebaseFirestore.instance.collection('users').doc(userData["uid"]);
+      // await docRef.update({"achievementData": updatedValue});
+    } catch (e,t) {
+      debugPrint("an error occured updating achievement data: $e | $t");
+    }
+
+
+  }
 
   Future<void> saveUserToDatabase(Map<String,dynamic> userData) async {
+    
     late String os = "";
     if (Platform.isAndroid) {
       os = 'android';
     } else {
       os = 'iOS';
     }
-
+    late String langCode = userData["langCode"] ?? 'en';
     final String uid = userData["uid"];
     final String displayName = userData["displayName"];
     final String email = userData["email"];
@@ -139,8 +175,9 @@ class FirestoreMethods {
         "tutorialComplete":false,
         "shownTutorialModal": false,
       },
+      "achievementData": [],
       "gameHistory": [],
-      "language": "en",
+      "language": langCode,
       "createdAt": DateTime.now().toIso8601String(),
       "providerData": providerData,
       "os": os,
@@ -171,6 +208,7 @@ class FirestoreMethods {
     try {
       Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
       final docRef = FirebaseFirestore.instance.collection('users').doc(userData["uid"]);
+      print("update this shit!");
       await docRef.update({field: updatedValue});
     } catch (e) {
       debugPrint("caught an error running 'updateParameters()' ${e.toString()}");
@@ -238,17 +276,11 @@ class FirestoreMethods {
           completedPuzzle["data"]=scoreData;
         }
         
-        // docData.update(difficulty, (v) => completedPuzzle);
         Map<String,dynamic> savedPuzzleObject = settings.dailyPuzzleData.value as Map<String,dynamic>;
         savedPuzzleObject.update(difficulty, (v) => completedPuzzle);
         settings.setDailyPuzzleData(savedPuzzleObject);
-        // settings.setDailyPuzzleData(docData);
 
         await docRef.update({difficulty: completedPuzzle});
-
-        print("IN THE updateDailyPuzzleGameComplete FUNC:");
-        print("doc data: $docData");     
-        // await
       }
     } catch (e,s) {
       debugPrint("Error: $e | Stack: $s");
@@ -256,7 +288,69 @@ class FirestoreMethods {
   }
 
 
-  
+  Future<List<dynamic>> downloadAchievements() async {
+    List<dynamic> res = [];
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('achievements')
+          .get();
+
+      res = querySnapshot.docs
+          .map((doc) => doc.data() )
+          .toList(); 
+      
+      debugPrint("successfully downloaded achievements");
+    } catch (e,t) {
+      debugPrint("error when downloading achievements: $e | $t");
+      
+    }
+    return res;
+
+  }  
+
+  Future<List<dynamic>> downloadRanks() async {
+    List<dynamic> res = [];
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('ranks')
+          .get();
+
+      res = querySnapshot.docs
+          .map((doc) => doc.data() )
+          .toList(); 
+      
+      debugPrint("successfully downloaded ranks");
+    } catch (e,t) {
+      debugPrint("error when downloading ranks: $e | $t");
+      
+    }
+    return res;
+  }  
+
+  Future<List<Map<String,dynamic>>> downloadAlphabet(String lang) async {
+    List<Map<String,dynamic>> res = [];
+    try {
+      String langCode = 'en';
+      if (['en','es','nl','de','it','pt','el','fr'].contains(lang)) {
+        langCode = lang;
+      }
+      final snapshot = await FirebaseFirestore.instance
+          .collection('alphabets')
+          .where('locale', isEqualTo: langCode)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        final doc = snapshot.docs.first.data();
+        res = List<Map<String, dynamic>>.from(doc['alphabet'].map((item) => item as Map<String, dynamic>));
+      }
+      debugPrint("successfully retrieved $lang alphabet");
+    } catch (e,t) {
+      debugPrint("error when downloading ranks: $e | $t");
+    }
+    return res;
+
+  }
+
 
   Future<void> downloadWordList(String? language) async {
     late String? actualLanguage = 'english';
@@ -291,7 +385,7 @@ class FirestoreMethods {
       await wordBox.put('words_$actualLanguage', words);
 
     } catch (e) {
-      // debugPrint("there was an error running downloadWordList() : ${e.toString()} ");
+      debugPrint("there was an error running downloadWordList() : ${e.toString()} ");
       // Handle errors
     }
     // return contents;
@@ -349,55 +443,34 @@ class FirestoreMethods {
 
   Future<void> saveDailyPuzzlesToLocalStorage(SettingsController settings) async {
     try {
-      final now = DateTime.now().toUtc();
+      final now = DateTime.now().toLocal();
       final year = now.year.toString().padLeft(4, '0');
       final month = now.month.toString().padLeft(2, '0');
       final day = now.day.toString().padLeft(2, '0');
-      String dateString = '$year-$month-${day}T00:00:00.000Z';
-      String date = '$year-$month-${day}';
-      // String dateString = '2025-03-11T00:00:00.000Z';   
+
+      final date = '$year-$month-$day';
 
       bool syncPuzzles = false;
-      print("""
 
-in the saveDailyPuzzlesToLocalStorage???
-  ${settings.dailyPuzzleData.value}
----------------------------------------
+      dynamic puzzleData = settings.dailyPuzzleData.value as dynamic;
 
-""");
-      // if ((settings.dailyPuzzleData.value as dynamic).length > 0) {
-        dynamic puzzleData = settings.dailyPuzzleData.value as dynamic;
-        print("puzzleData in saveDailyPuzzlesToLocalStorage | $puzzleData");
-
-        if (puzzleData.isEmpty) {
+      if (puzzleData.isEmpty) {
+        syncPuzzles = true;
+      } else {
+        if (puzzleData["date"]!=date) {
           syncPuzzles = true;
-        } else {
-          if (puzzleData["date"]!=date) {
-            print("${puzzleData["date"]} | $date");
-            print("there's data in settings but date don't match up");
-            syncPuzzles = true;
-          }
         }
-        print("should sync puzz? $syncPuzzles");
-
-        if (syncPuzzles) {
-
-          final docRef = FirebaseFirestore.instance.collection('puzzles').doc(date);
-          final docSnap = await docRef.get();
-          final dynamic docData = docSnap.data() as dynamic;
-          print("doc data: $docData");     
-          settings.setDailyPuzzleData(docData);        
-        }
-      // }
-
-      
-
+      }
+      if (syncPuzzles) {
+        final docRef = FirebaseFirestore.instance.collection('puzzles').doc(date);
+        final docSnap = await docRef.get();
+        final dynamic docData = docSnap.data() as dynamic;
+        settings.setDailyPuzzleData(docData);        
+      }
     } catch (e,t) {
-      print("error in saveDailyPuzzlesToLocalStorage: ${e.toString() } | traceback: $t");
+      debugPrint("error in saveDailyPuzzlesToLocalStorage: ${e.toString() }");
+      debugPrint("traceback: $t");
     }
-
-    // print("res: $res");
-    // return res;
   }    
 
 

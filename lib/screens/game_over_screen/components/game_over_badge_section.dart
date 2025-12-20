@@ -52,6 +52,7 @@ class _GameOverBadgeSectionState extends State<GameOverBadgeSection> {
           child: SizedBox(
             height: availableHeight,
             child: ListView.separated(
+              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               separatorBuilder: (_, __) => SizedBox(width: 12.0 * scalor),
               itemCount: widget.badgeData.length,

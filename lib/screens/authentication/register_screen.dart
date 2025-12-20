@@ -3,6 +3,7 @@ import 'package:scribby_flutter_v2/components/background_painter.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
+import 'package:scribby_flutter_v2/screens/authentication/components/auth_error_dialog.dart';
 import 'package:scribby_flutter_v2/screens/authentication/components/auth_provider_tile.dart';
 import 'package:scribby_flutter_v2/screens/authentication/components/login_button.dart';
 // import 'package:scribby_flutter_v2/screens/authentication/components/login_textfield.dart';
@@ -28,33 +29,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final password2Controller = TextEditingController();
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void registerUser() async {
+  Future<void> registerUser() async {
     FocusManager.instance.primaryFocus?.unfocus();
-    try {
-      List<String> errors = [];
-      if (password1Controller.text != password2Controller.text) {
-        errors.add("passwords don't match");
-      }
 
-      if (password1Controller.text.length <= 6) {
-        errors.add("passowrd must be over 6 characters");        
-      }
+    final List<String> errors = [];
 
-      if (errors.isEmpty) {
+    if (password1Controller.text != password2Controller.text) {
+      errors.add("Passwords don't match");
+    }
 
-        await AuthService().registerUserManually(emailController.text, password1Controller.text,usernameController.text);
-   
-      } else {
-        AuthService().showLoginFailedDialog(context, "Errors", errors);
-      }
+    if (password1Controller.text.length < 7) {
+      errors.add("Password must be at least 7 characters");
+    }
 
-    } on FirebaseAuthException catch (e) {
-      if (mounted) {
-        debugPrint(e.toString());
-        AuthService().authenticationFailed(context, e.code);
-      }
+    if (errors.isNotEmpty) {
+      AuthService().showLoginFailedDialog(context, "Errors", errors);
+      return;
+    }
+
+    final String langCode =
+        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+
+    final result = await AuthService().registerUserManually(
+      emailController.text.trim(),
+      password1Controller.text,
+      usernameController.text.trim(),
+      langCode,
+    );
+
+    if (!mounted) return;
+
+    if (!result.isSuccess) {
+      AuthService().showLoginFailedDialog(
+        context,
+        "Registration Failed",
+        [result.errorMessage ?? "Something went wrong"],
+      );
     }
   }
+
+  void onGooglePressed() async {
+    final result = await AuthService().signInWithGoogle();
+
+    if (!mounted) return;
+
+    if (!result.isSuccess) {
+      showDialog(
+        context: context,
+        builder: (_) => AuthErrorDialog(
+          errorTitle: "Google Sign-in Error",
+          errors: [result.errorMessage!],
+        ),
+      );
+    }
+  }  
+
+  void onApplePressed() async {
+    final result = await AuthService().signInWithApple();
+
+    if (!mounted) return;
+
+    if (!result.isSuccess) {
+      showDialog(
+        context: context,
+        builder: (_) => AuthErrorDialog(
+          errorTitle: "Apple Sign-in Error",
+          errors: [result.errorMessage!],
+        ),
+      );
+    }
+  }      
 
   @override
   Widget build(BuildContext context) {
@@ -148,14 +192,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   AuthProviderTile(
                                     palette: palette, 
                                     // onTap: () => AuthService().signInWithGoogle(), 
-                                    onTap: () => AuthService().signInWithGoogle(context),
+                                    onTap: () => onGooglePressed(),
                                     iconData: Icons.g_mobiledata,
                                   ),
                                   SizedBox(width: 10,),
                             
                                   AuthProviderTile(
                                     palette: palette, 
-                                    onTap: () => AuthService().signInWithApple(context),
+                                    onTap: () => onApplePressed(),
                                     iconData: Icons.apple,
                                   ),
                                 ],

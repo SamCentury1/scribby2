@@ -22,85 +22,89 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   void initState() {
     super.initState();
-
-    final SettingsController settings = Provider.of<SettingsController>(context,listen:false);
-    final ColorPalette palette = Provider.of<ColorPalette>(context,listen:false);
-
-    print("in the initstate func of the auth screen. device size data: ${settings.deviceSizeInfo.value} | language: ${settings.language.value} ");
-    
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        // StorageMethods().saveDeviceSizeInfoToSettings(settings);
-        final SettingsController settings = Provider.of<SettingsController>(context, listen: false);
-        StorageMethods().saveDeviceSizeInfoToSettings(settings);
-        StorageMethods().saveLanguageLocalesToSettings(settings);
-        StorageMethods().initializeThemeColor(settings);
-        print("in auth screen: theme value = ${settings.theme.value}");        
-        palette.getThemeColors(settings.theme.value);
-      });
-    });        
   }  
   @override
   Widget build(BuildContext context) {
 
-    final SettingsController settings = Provider.of<SettingsController>(context,listen:false);
-    final ColorPalette palette = Provider.of<ColorPalette>(context,listen:false);
+    // final SettingsController settings = Provider.of<SettingsController>(context,listen:false);
+    // final ColorPalette palette = Provider.of<ColorPalette>(context,listen:false);
+    // final settings = context.read<SettingsController>();
+    // final palette = context.read<ColorPalette>();    
 
     
   
     return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          // print("Snapshot: $snapshot");
-
+    
           if (snapshot.connectionState == ConnectionState.waiting) {
-            print("waiting");
-            // return Scaffold(body: Center(child: CircularProgressIndicator()));
-            return Scaffold(
-              backgroundColor: Colors.transparent,
-              body: SizedBox(
-                width:MediaQuery.of(context).size.width, 
-                height:MediaQuery.of(context).size.height,
-                child: LoadingImage()
-              )
-            );            
-          } else {
-            if (snapshot.hasData) {
+            debugPrint("streaming auth state changes --- loading...");
+            return loadingImage(context);
+          }
+
+          if (snapshot.hasError) {
+            debugPrint("an error occured at auth screen : ${snapshot.error} | ${snapshot.stackTrace}");
+            return errorScreen(context, 'Error: ${snapshot.error} | ${snapshot.stackTrace}');
+          }
+
+          if (!snapshot.hasData) {
+            debugPrint("no authenticated user --- go to login or register screen");
+            return LoginOrRegisterScreen();
+          }
+
+          final settings = context.read<SettingsController>();
+          final palette  = context.read<ColorPalette>();          
+
+
+          return FutureBuilder(
+            future: Initializations().initializeAppData2(settings, palette, snapshot.data), 
+            builder: (context, AsyncSnapshot<void> futureSnapshot) {
+              if (futureSnapshot.connectionState == ConnectionState.waiting) {
+                debugPrint("initializing app data --- loading ...");
+                return loadingImage(context);                   
+              } 
               
-
-              return FutureBuilder(
-                future: Initializations().initializeAppData(settings, palette, snapshot.data), 
-                builder: (context, AsyncSnapshot<void> futureSnapshot) {
-                  if (futureSnapshot.connectionState == ConnectionState.waiting) {
-                    // return Scaffold(body: Center(child: CircularProgressIndicator()));
-                    return Scaffold(
-                      backgroundColor: Colors.transparent,
-                      body: SizedBox(
-                        width:MediaQuery.of(context).size.width, 
-                        height:MediaQuery.of(context).size.height,
-                        child: LoadingImage()
-                      )
-                    );                    
-                  } else if (futureSnapshot.hasError) {
-                    return Scaffold(body: Center(child: Text('Error: ${futureSnapshot.error} | ${futureSnapshot.stackTrace}')));
-                  } else {
-                    return HomeScreen(); // Only return after getScreenSizeData() completes
-
-                  }
-                }
-              );
-              // return HomeScreen();
-            }else {
-              print("============================================");
-              print("hm! ");
-              print("============================================");
-              // setScreenSizeData(context);
-              return LoginOrRegisterScreen();
+              if (futureSnapshot.hasError) {
+                debugPrint("An error during app initialization --- ${futureSnapshot.error} | ${futureSnapshot.stackTrace}");
+                return errorScreen(context, 'Error: ${futureSnapshot.error} | ${futureSnapshot.stackTrace}');
+              } 
+              
+              return HomeScreen();
             }
-          } 
+          );
+
         },
       );
     
   }
+}
+
+
+Widget loadingImage(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.transparent,
+    body: SizedBox(
+      width:MediaQuery.of(context).size.width, 
+      height:MediaQuery.of(context).size.height,
+      child: LoadingImage()
+    )
+  );   
+}
+
+Widget errorScreen(BuildContext context, String error) {
+  return Scaffold(
+    backgroundColor: Colors.transparent,
+    body: SizedBox(
+      width:MediaQuery.of(context).size.width, 
+      height:MediaQuery.of(context).size.height,
+      child: Center(
+        child: Column(
+          children: [
+            Text("An error occured"),
+            Text(error)
+          ],
+        ) 
+      )
+    )
+  );   
 }

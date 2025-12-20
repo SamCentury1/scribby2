@@ -8,6 +8,7 @@ import 'package:scribby_flutter_v2/components/background_painter.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/resources/auth_service.dart';
+import 'package:scribby_flutter_v2/screens/authentication/components/auth_error_dialog.dart';
 import 'package:scribby_flutter_v2/screens/authentication/components/auth_provider_tile.dart';
 import 'package:scribby_flutter_v2/screens/authentication/components/login_button.dart';
 import 'package:scribby_flutter_v2/screens/authentication/login_textfield.dart';
@@ -37,14 +38,50 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
     } on FirebaseAuthException catch (e) {
-      if (mounted) {
-        debugPrint(e.toString());
-        AuthService().authenticationFailed(context, e.code);
-      }
+      showDialog(
+        context: context,
+        builder: (_) => AuthErrorDialog(
+          errorTitle: "Google Sign-in Error",
+          errors: [e.toString()],
+        ),
+      );
     }
     
     // Navigator.pop(context);
   }
+
+
+  void onGooglePressed() async {
+    final result = await AuthService().signInWithGoogle();
+
+    if (!mounted) return;
+
+    if (!result.isSuccess) {
+      showDialog(
+        context: context,
+        builder: (_) => AuthErrorDialog(
+          errorTitle: "Google Sign-in Error",
+          errors: [result.errorMessage!],
+        ),
+      );
+    }
+  }  
+
+  void onApplePressed() async {
+    final result = await AuthService().signInWithApple();
+
+    if (!mounted) return;
+
+    if (!result.isSuccess) {
+      showDialog(
+        context: context,
+        builder: (_) => AuthErrorDialog(
+          errorTitle: "Apple Sign-in Error",
+          errors: [result.errorMessage!],
+        ),
+      );
+    }
+  }    
 
 
   @override
@@ -56,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context,settings,child) {
 
         final double scalor = Helpers().getScalor(settings);
-        // final List<Map<String,dynamic>> decorationData = [];
+
         
         return Stack(
           children: [
@@ -165,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     children: [
                                       AuthProviderTile(
                                         palette: palette, 
-                                        onTap: () => AuthService().signInWithGoogle(context), 
+                                        onTap: () => onGooglePressed(), 
                                           
                                         
                                         iconData: Icons.g_mobiledata,
@@ -174,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           
                                       AuthProviderTile(
                                         palette: palette, 
-                                        onTap: () => AuthService().signInWithApple(context),
+                                        onTap: () =>  onApplePressed(), 
                                         iconData: Icons.apple,
                                       ),                        
                                                  

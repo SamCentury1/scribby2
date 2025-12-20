@@ -28,6 +28,7 @@ class _AchievementsPageViewState extends State<AchievementsPageView> {
 
     // List<dynamic> badges = widget.settings.achievementData.value.where((e)=>e["completed"]==true).toList();
     List<dynamic> badges = widget.settings.achievementData.value.toList();
+    badges.sort((a,b)=>a["xp"].compareTo(b["xp"]));
 
     print("yooo we here in the achievements page view: ${widget.settings.achievementData.value}");
 
@@ -173,18 +174,21 @@ class _AchievementsPageViewState extends State<AchievementsPageView> {
                   Builder(
                     builder: (context) {
                       List<Widget> badgeWidgets = [];
-                      for (int i=0; i<badges.length; i++) {
-                        if (badges[i]["type"]=="global" && badges[i]["target"]=="words") {
+                      List<dynamic> badgeObjects = badges.where((e)=>e["type"]=="global" && e["target"]=="words").toList();
+                      print(badgeObjects);
+                      badgeObjects.sort((a,b)=>a["data"]["count"].compareTo(b["data"]["count"]));
+                      for (int i=0; i<badgeObjects.length; i++) {
+                        // if (badges[i]["type"]=="global" && badges[i]["target"]=="words") {
                           Widget badgeWidget = Padding(
                             padding: EdgeInsets.all(4.0*scalor),
                             child: SizedBox(
                               width: 75,
                               height: 75,
-                              child: BadgeWidget( badgeData: badges[i], scalor: scalor,),
+                              child: BadgeWidget( badgeData: badgeObjects[i], scalor: scalor,),
                             ),
                           );
                           badgeWidgets.add(badgeWidget);
-                        }
+                        // }
                       }
                       if (badgeWidgets.isNotEmpty) {
                         return Column(

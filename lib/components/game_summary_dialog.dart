@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/components/daily_puzzle_ranking_widget.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
@@ -74,7 +75,7 @@ class _GameSummaryDialogState extends State<GameSummaryDialog> {
 
          
 
-            late Table tableRes = getRankingTable(puzzle["data"],uid, puzzle["gameType"] ,palette,scalor);
+            // late Table tableRes = getRankingTable(puzzle["data"],uid, puzzle["gameType"] ,palette,scalor);
             return Dialog(
               backgroundColor: Colors.transparent,
               shape: RoundedRectangleBorder(
@@ -153,8 +154,15 @@ class _GameSummaryDialogState extends State<GameSummaryDialog> {
                         ),
                       ),
 
+                      SizedBox(
+                        height: 300,
+                        child: DailyPuzzleRankingWidget(gameType: puzzle["gameType"], ranking: puzzle["data"], settings: settings) ,                        
+                      )
 
-                      tableRes                      
+
+                      // tableRes    
+                      //
+                                       
             
                     ]
                   ),
@@ -170,126 +178,126 @@ class _GameSummaryDialogState extends State<GameSummaryDialog> {
 }
 
 
-TableRow playerRankingRow(Map<String,dynamic> rowData, String gameType, String uid, ColorPalette palette, double scalor) {
+// TableRow playerRankingRow(Map<String,dynamic> rowData, String gameType, String uid, ColorPalette palette, double scalor) {
 
-  String scoreValue = rowData["score"].toString();
+//   String scoreValue = rowData["score"].toString();
 
-  if (gameType == "classic" || gameType == "timed-move") {
-    scoreValue = rowData["score"].toString();
-  } else if (gameType == "sprint") {
-    scoreValue = Helpers().formatDuration(rowData["score"]);
-  } 
+//   if (gameType == "classic" || gameType == "timed-move") {
+//     scoreValue = rowData["score"].toString();
+//   } else if (gameType == "sprint") {
+//     scoreValue = Helpers().formatDuration(rowData["score"]);
+//   } 
 
-  bool isUser = rowData["uid"]==uid;
+//   bool isUser = rowData["uid"]==uid;
 
-  late TableRow res = TableRow(
-    children: [
-      SizedBox(
-        child: Text(
-          // string,
-          // index.toString(),
-          "${rowData["rank"]}.",
-          style: TextStyle(
-            color: palette.text1,
-            fontSize: 18 * scalor,
-            fontWeight: isUser ? FontWeight.w800 : FontWeight.normal 
-          ),
-        ),  
-      ),
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          // string,
-          rowData["username"],
-          style: TextStyle(
-            color: palette.text1,
-            fontSize: 18 * scalor,
-            fontWeight: isUser ? FontWeight.w800 : FontWeight.normal        
-          ),
-        ),            
-      ),
-      Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          // string,
-          scoreValue,
-          style: TextStyle(
-            color: palette.text1,
-            fontSize: 18 * scalor,
-            fontWeight: isUser ? FontWeight.w800 : FontWeight.normal        
-          ),
-        ),            
-      ),     
-    ]
-  );
-  return res;
-}
+//   late TableRow res = TableRow(
+//     children: [
+//       SizedBox(
+//         child: Text(
+//           // string,
+//           // index.toString(),
+//           "${rowData["rank"]}.",
+//           style: TextStyle(
+//             color: palette.text1,
+//             fontSize: 18 * scalor,
+//             fontWeight: isUser ? FontWeight.w800 : FontWeight.normal 
+//           ),
+//         ),  
+//       ),
+//       Align(
+//         alignment: Alignment.centerLeft,
+//         child: Text(
+//           // string,
+//           rowData["username"],
+//           style: TextStyle(
+//             color: palette.text1,
+//             fontSize: 18 * scalor,
+//             fontWeight: isUser ? FontWeight.w800 : FontWeight.normal        
+//           ),
+//         ),            
+//       ),
+//       Align(
+//         alignment: Alignment.centerRight,
+//         child: Text(
+//           // string,
+//           scoreValue,
+//           style: TextStyle(
+//             color: palette.text1,
+//             fontSize: 18 * scalor,
+//             fontWeight: isUser ? FontWeight.w800 : FontWeight.normal        
+//           ),
+//         ),            
+//       ),     
+//     ]
+//   );
+//   return res;
+// }
 
 
-List<dynamic> getRankingSubset(List<dynamic> _rankingData, String uid,) {
+// List<dynamic> getRankingSubset(List<dynamic> _rankingData, String uid,) {
   
-  List<dynamic> res = [];
-  Map<String,dynamic> rankObject = _rankingData.firstWhere((e)=>e["uid"]==uid,orElse: ()=> <String,dynamic>{});
-  int rankObjectIndex = _rankingData.indexOf(rankObject);
+//   List<dynamic> res = [];
+//   Map<String,dynamic> rankObject = _rankingData.firstWhere((e)=>e["uid"]==uid,orElse: ()=> <String,dynamic>{});
+//   int rankObjectIndex = _rankingData.indexOf(rankObject);
 
-  int under = rankObjectIndex-5 < 0 ? 0 : rankObjectIndex-5;
-  int over = rankObjectIndex+5 > _rankingData.length ? _rankingData.length : rankObjectIndex+5;
+//   int under = rankObjectIndex-5 < 0 ? 0 : rankObjectIndex-5;
+//   int over = rankObjectIndex+5 > _rankingData.length ? _rankingData.length : rankObjectIndex+5;
 
 
-  for (int i=under ; i< over; i++) {
-    Map<String,dynamic> rank = _rankingData[i];
-    rank["rank"] = i+1;
-    res.add(rank);
-  }
+//   for (int i=under ; i< over; i++) {
+//     Map<String,dynamic> rank = _rankingData[i];
+//     rank["rank"] = i+1;
+//     res.add(rank);
+//   }
 
-  return res;
-}
+//   return res;
+// }
 
-Table getRankingTable(List<dynamic> rankingData, String uid, String gameType,  ColorPalette palette, double scalor) {
-  List<dynamic> _rankingData = fakeRanking(rankingData,gameType);
-  Map<String,dynamic> rankObject = _rankingData.firstWhere((e)=>e["uid"]==uid,orElse: ()=> <String,dynamic>{});
-  int rankObjectIndex = _rankingData.indexOf(rankObject);
+// Table getRankingTable(List<dynamic> rankingData, String uid, String gameType,  ColorPalette palette, double scalor) {
+//   List<dynamic> _rankingData = fakeRanking(rankingData,gameType);
+//   Map<String,dynamic> rankObject = _rankingData.firstWhere((e)=>e["uid"]==uid,orElse: ()=> <String,dynamic>{});
+//   int rankObjectIndex = _rankingData.indexOf(rankObject);
 
-  List<dynamic> rankingSubset = getRankingSubset(_rankingData, uid);
-    print("""
-  RANKING SUBSET
-  """);
-  for (dynamic item in rankingSubset) {
-    print(item);
-  }
+//   List<dynamic> rankingSubset = getRankingSubset(_rankingData, uid);
+//     print("""
+//   RANKING SUBSET
+//   """);
+//   for (dynamic item in rankingSubset) {
+//     print(item);
+//   }
 
-  late Table tableRes = Table(
-    columnWidths: const <int, TableColumnWidth>{
-      0: FlexColumnWidth(2),
-      1: FlexColumnWidth(4),
-      2: FlexColumnWidth(3),
-    },
-    defaultVerticalAlignment:TableCellVerticalAlignment.middle,
-    // children: [
-    //   playerRankingRow({},palette,scalor),
-    //   playerRankingRow({},palette,scalor),
-    //   playerRankingRow({},palette,scalor),
-    //   playerRankingRow({},palette,scalor),
-    // ],
-    children: rankingSubset.map((e)=>playerRankingRow(e, gameType, uid, palette, scalor),).toList(),
-    // children: [
-      // for (int i = (rankObjectIndex-2); i < (rankObjectIndex+4); i++)
-      //   playerRankingRow((i+1),_rankingData[i], palette, scalor),
-    // ],
-  );
-  return tableRes; 
-}
+//   late Table tableRes = Table(
+//     columnWidths: const <int, TableColumnWidth>{
+//       0: FlexColumnWidth(2),
+//       1: FlexColumnWidth(4),
+//       2: FlexColumnWidth(3),
+//     },
+//     defaultVerticalAlignment:TableCellVerticalAlignment.middle,
+//     // children: [
+//     //   playerRankingRow({},palette,scalor),
+//     //   playerRankingRow({},palette,scalor),
+//     //   playerRankingRow({},palette,scalor),
+//     //   playerRankingRow({},palette,scalor),
+//     // ],
+//     children: rankingSubset.map((e)=>playerRankingRow(e, gameType, uid, palette, scalor),).toList(),
+//     // children: [
+//       // for (int i = (rankObjectIndex-2); i < (rankObjectIndex+4); i++)
+//       //   playerRankingRow((i+1),_rankingData[i], palette, scalor),
+//     // ],
+//   );
+//   return tableRes; 
+// }
 
-List<dynamic> fakeRanking(List<dynamic> actualRanking, String gameType) {
-  Random random = Random();
-  List<dynamic> res = List<dynamic>.from(actualRanking);
-  for (int i=0; i<100; i++) {
-    res.add({"uid": "abcdefghaijklmnopqrstuvwxyz$i","username":"user-$i","score":random.nextInt(150)});
-  }
-  if (gameType=="sprint") {
-    res.sort((a, b) => a["score"].compareTo(b["score"]));
-  } else if (gameType=="classic") {
-    res.sort((a, b) => b["score"].compareTo(a["score"]));
-  }
-  return res;
-}
+// List<dynamic> fakeRanking(List<dynamic> actualRanking, String gameType) {
+//   Random random = Random();
+//   List<dynamic> res = List<dynamic>.from(actualRanking);
+//   for (int i=0; i<100; i++) {
+//     res.add({"uid": "abcdefghaijklmnopqrstuvwxyz$i","username":"user-$i","score":random.nextInt(150)});
+//   }
+//   if (gameType=="sprint") {
+//     res.sort((a, b) => a["score"].compareTo(b["score"]));
+//   } else if (gameType=="classic") {
+//     res.sort((a, b) => b["score"].compareTo(a["score"]));
+//   }
+//   return res;
+// }

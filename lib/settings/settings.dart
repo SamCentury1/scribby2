@@ -19,7 +19,7 @@ class SettingsController {
 
   ValueNotifier<bool> soundsOn = ValueNotifier(false);
 
-  ValueNotifier<int> coins = ValueNotifier(10);  
+  ValueNotifier<int> coins = ValueNotifier(0);  
 
   ValueNotifier<int> xp = ValueNotifier(0);
 
@@ -53,27 +53,31 @@ class SettingsController {
   /// Asynchronously loads values from the injected persistence store.
 
   Future<void> loadStateFromPersistence() async {
-    await Future.wait([ // await
-      _persistence.getDeviceSizeInfo().then((value)=>deviceSizeInfo.value = value),
-      _persistence.getLanguage().then((value) => language.value = value),
-      _persistence.getTheme().then((value) => theme.value = value),
-      _persistence.getUser().then((value) => user.value = value),
-      _persistence.getUserData().then((value) => userData.value = value),
-      _persistence.getSoundsOn(defaultValue: kIsWeb).then((value) => soundsOn.value = value),
-      _persistence.getCoins().then((value) => coins.value = value),
-      _persistence.getXP().then((value) => xp.value = value),
-      _persistence.getUserGameHistory().then((value) => userGameHistory.value = value),
-      _persistence.getAchievements().then((value) => achievements.value = value),
-      _persistence.getLevelData().then((value) => levelData.value = value),
-      _persistence.getGameInfoData().then((value) => gameInfoData.value = value),
-      _persistence.getAlphabet().then((value) => alphabet.value = value),
-      _persistence.getDictionary().then((value) => dictionary.value = value),
-      _persistence.getRankData().then((value) => rankData.value = value),
-      _persistence.getAchievementData().then((value) => achievementData.value = value),
-      _persistence.getDailyPuzzleData().then((value) => dailyPuzzleData.value = value),
-      // _persistence.getColorTheme().then((value) => colorTheme.value = value),
+    try {
+      await Future.wait([ // await
+        _persistence.getDeviceSizeInfo().then((value)=>deviceSizeInfo.value = value),
+        _persistence.getLanguage().then((value) => language.value = value),
+        _persistence.getTheme().then((value) => theme.value = value),
+        _persistence.getUser().then((value) => user.value = value),
+        _persistence.getUserData().then((value) => userData.value = value),
+        _persistence.getSoundsOn(defaultValue: kIsWeb).then((value) => soundsOn.value = value),
+        _persistence.getCoins().then((value) => coins.value = value),
+        _persistence.getXP().then((value) => xp.value = value),
+        _persistence.getUserGameHistory().then((value) => userGameHistory.value = value),
+        _persistence.getAchievements().then((value) => achievements.value = value),
+        _persistence.getLevelData().then((value) => levelData.value = value),
+        _persistence.getGameInfoData().then((value) => gameInfoData.value = value),
+        _persistence.getAlphabet().then((value) => alphabet.value = value),
+        _persistence.getDictionary().then((value) => dictionary.value = value),
+        _persistence.getRankData().then((value) => rankData.value = value),
+        _persistence.getAchievementData().then((value) => achievementData.value = value),
+        _persistence.getDailyPuzzleData().then((value) => dailyPuzzleData.value = value),
+        // _persistence.getColorTheme().then((value) => colorTheme.value = value),
 
-    ]);
+      ]);
+    } catch (e,t) {
+      debugPrint("error in loadStateFromPersistence : $e | $t ");
+    }
   }
 
   void setDeviceSizeInfo(Object value) {

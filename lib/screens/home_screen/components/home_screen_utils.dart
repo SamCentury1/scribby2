@@ -57,14 +57,14 @@ class HomeScreenUtils {
     );      
   }  
 
-  void navigateToLeaderboardsScreen(BuildContext context, bool drawer) async {          
-    if (drawer) {
-      Navigator.pop(context);
-    }  
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const LeaderboardsScreen())
-    );      
-  }  
+  // void navigateToLeaderboardsScreen(BuildContext context, bool drawer) async {          
+  //   if (drawer) {
+  //     Navigator.pop(context);
+  //   }  
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(builder: (context) => const LeaderboardsScreen())
+  //   );      
+  // }  
 
 
   void navigateToShopScreen(BuildContext context, bool drawer) async {          

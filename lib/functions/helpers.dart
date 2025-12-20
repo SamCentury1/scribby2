@@ -1095,4 +1095,20 @@ class Helpers {
   }
 
 
+
+  List<dynamic> fakeRanking(List<dynamic> actualRanking, String gameType) {
+    Random random = Random();
+    List<dynamic> res = List<dynamic>.from(actualRanking);
+    for (int i=0; i<100; i++) {
+      res.add({"uid": "abcdefghaijklmnopqrstuvwxyz$i","username":"user-$i","score":random.nextInt(450)});
+    }
+    if (gameType=="sprint") {
+      res.sort((a, b) => a["score"].compareTo(b["score"]));
+    } else if (gameType=="classic") {
+      res.sort((a, b) => b["score"].compareTo(a["score"]));
+    }
+    return res;
+  }  
+
+
 }

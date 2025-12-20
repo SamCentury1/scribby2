@@ -159,12 +159,16 @@ class PerksBarPainters {
     // Offset scoreboardCenter = gamePlayState.elementPositions["scoreboardCenter"];
     Map<String,dynamic> animationDurations = gamePlayState.animationLengths.firstWhere((e)=>e["type"]=="add-perks",orElse: ()=>{});
     int animationDuration = (animationDurations["stops"]*animationDurations["interval"]*countAnimations);
-
-    // double opacityProgress = getPlusNPointsOpacity(progress);
-
     double adjustedProgress = AnimationUtils().getAdjustedProgress(index,countAnimations,progress,animationDuration);
-    // Color textColor = getPlusNPointsColor(adjustedProgress, palette);
     Color textColor = AnimationUtils().getPlusNPerksColor(adjustedProgress, palette);
+
+
+    // List<Map<String,dynamic>> yPositionAnimationDetails = [
+    //   {"source": 50.0 , "target": 0.0, "duration": 0.15},
+    //   {"source": 0.0, "target": 0.0, "duration": 0.85},
+    // ];
+    //   double yPositionProgress = AnimationUtils().getAnimationTransition(progress,yPositionAnimationDetails);
+    //   double updatedY = center.dy  + yPositionProgress;
 
     TextStyle textStyle = TextStyle(
       color: textColor, //Color.fromRGBO(255, 255, 255, opacityProgress),
@@ -183,6 +187,7 @@ class PerksBarPainters {
 
     
     double positionX = (center.dx + (40)/4) + xOffset;
+    // double positionY = updatedY;
     double positionY = center.dy + 40 - (40*adjustedProgress);
     // final Offset position = Offset(positionX, positionY);
 

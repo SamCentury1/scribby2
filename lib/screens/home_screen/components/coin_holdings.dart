@@ -81,7 +81,7 @@ class _CoinHoldingsState extends State<CoinHoldings> {
   void startCoinCount(int currentCoins, int newCoins, SettingsController settings) {
     late int count = currentCoins-newCoins;
     late int target = currentCoins;
-    final int increment = 10; 
+    final int increment = 20; 
     _coinCountTimer = Timer.periodic(const Duration(milliseconds: 20), (Timer t) {
 
       if (!mounted) {

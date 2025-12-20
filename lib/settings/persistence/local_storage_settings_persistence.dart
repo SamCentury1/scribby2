@@ -111,7 +111,7 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   @override
   Future<List<dynamic>> getAchievementData() async {
     final prefs = await instanceFuture;
-    return json.decode(prefs.getString("achievementData")??json.encode({}));
+    return json.decode(prefs.getString("achievementData")??json.encode([]));
   }
 
   @override

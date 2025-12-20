@@ -21,73 +21,192 @@ class Initializations {
   
   }
 
-  Future<void> initializeAppData(SettingsController settings, ColorPalette palette, User? user) async {
 
-    // // WidgetsBinding.instance.addPostFrameCallback((_) {
-    // StorageMethods().saveDeviceSizeInfoToSettings(settings);
-    // palette.getThemeColors('default');  
+  // Here - User? user is the snapshot data from the future
+  Future<void> initializeAppData1(SettingsController settings) async {
 
-    // print("set this shit up???");    
-    // // });      
+    try {
+      
+      // get info data to local storage
+      if (settings.gameInfoData.value.isEmpty) {
+        await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
+      }
+      // get achievement data from db to local storage
+      await StorageMethods().saveAchievementDataToLocalStorage(settings);
 
-    // await StorageMethods().saveDeviceSizeInfoToSettings(settings);
-    // if local storage is empty - get the level data as json payload and set it
-    // levels to play
-    if (settings.levelData.value.isEmpty) {
-      await StorageMethods().saveLevelDataFromJsonFileToLocalStorage(settings);
+      // get the ranks from db to local storage
+      await StorageMethods().saveRankDataToLocalStorage(settings);
+
+      // save alphabet 
+      await StorageMethods().saveAlphabetToLocalStorage(settings);
+
+
+
+
+      // save list of words to the phone storage
+      final Box wordBox = Hive.box('wordBox');
+      if (wordBox.isEmpty) {
+        await FirestoreMethods().downloadWordList("english");
+      }   
+    } catch (e,t) {
+      debugPrint("there was an error initializing app data: $e | $t");
     }
-    // text explaining the types of games
-    if (settings.gameInfoData.value.isEmpty) {
-      await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
-    }
+ 
+  }
 
-    if (settings.achievementData.value.isEmpty) {
-      await StorageMethods().saveAchievementDataFromJsonFileToLocalStorage(settings);
-    }
+  // Here - User? user is the snapshot data from the future
+  Future<void> initializeAppData2(SettingsController settings, ColorPalette palette, User? user) async {
+    print("executing initializeAppData2");
+    try {
+      
+      Map<String,dynamic> firestoreUserData = await FirestoreMethods().getFirestoreDocument(user!.uid);
 
-    if (settings.rankData.value.isEmpty) {
-      await StorageMethods().saveRankDataFromJsonFileToLocalStorage(settings);
-    }
+      if (firestoreUserData.isNotEmpty) {
 
-    if (settings.alphabet.value.isEmpty) {
-      // print("just added the english alphabet");
-      await StorageMethods().saveAlphabetToSettings(settings,"english");
+        // save the userdata to local storage
+        await StorageMethods().saveUserDocumentToLocalStorage(settings,firestoreUserData);
+
+        // get daily puzzle from db - save it to localstorage
+        await FirestoreMethods().saveDailyPuzzlesToLocalStorage(settings);
+                
+      } else {
+        print("the firestore user data is empty damn it!");
+      }
+
+
+
+
+
+
+
+    } catch (e,t) {
+      debugPrint("there was an error initializing app data 2: $e | $t");
     }
+ 
+  }  
+
+
+  // Future<void> initializeAppData(SettingsController settings, ColorPalette palette, User? user) async {
+
+
+  //   // // WidgetsBinding.instance.addPostFrameCallback((_) {
+  //   // StorageMethods().saveDeviceSizeInfoToSettings(settings);
+  //   // palette.getThemeColors('default');  
+
+  //   // print("set this shit up???");    
+  //   // // });      
+
+  //   // await StorageMethods().saveDeviceSizeInfoToSettings(settings);
+  //   // if local storage is empty - get the level data as json payload and set it
+  //   // levels to play
+  //   // text explaining the types of games
+  //   if (settings.gameInfoData.value.isEmpty) {
+  //     await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
+  //   }
+
+  //   if (settings.achievementData.value.isEmpty) {
+  //     await StorageMethods().saveAchievementDataFromJsonFileToLocalStorage(settings);
+  //   }
+
+  //   if (settings.rankData.value.isEmpty) {
+  //     await StorageMethods().saveRankDataFromJsonFileToLocalStorage(settings);
+  //   }
+
+  //   if (settings.alphabet.value.isEmpty) {
+  //     // print("just added the english alphabet");
+  //     await StorageMethods().saveAlphabetToSettings(settings,"english");
+  //   }
 
 
     
-    // userGameHistory.removeLast();
-    // settings.setUserGameHistory(userGameHistory);
+  //   // userGameHistory.removeLast();
+  //   // settings.setUserGameHistory(userGameHistory);
     
 
 
-    // if (settings.dailyPuzzleData.value.isEmpty) {
-    await FirestoreMethods().saveDailyPuzzlesToLocalStorage(settings);
-    // }
+  //   // if (settings.dailyPuzzleData.value.isEmpty) {
+  //   await FirestoreMethods().saveDailyPuzzlesToLocalStorage(settings);
+  //   // }
 
 
-    final Box wordBox = Hive.box('wordBox');
-    if (wordBox.isEmpty) {
-      // await StorageMethods().saveDictionaryToSettings(settings,"english");
-      await FirestoreMethods().downloadWordList("english");
-      // print("saved the dictionary to the settings");
-    }
+  //   final Box wordBox = Hive.box('wordBox');
+  //   if (wordBox.isEmpty) {
+  //     await FirestoreMethods().downloadWordList("english");
+  //   }
 
 
-    Map<String,dynamic> userData = await FirestoreMethods().getFirestoreDocument(user!.uid);
-    settings.setUserData(userData);
+  //   settings.setUserData(userData);
 
-    print("userData => ${userData["gameHistory"].length}");
+  //   print("userData => ${userData["gameHistory"].length}");
     
-    if (userData.isNotEmpty) {
-      // fix bug of old user doc in firebase which saved the theme as a bool in parameters
-      // palette.getThemeColors(userData["parameters"]["theme"]);
-      print("user data is not empty!");
-      palette.getThemeColors(settings.theme.value);
+  //   // if (userData.isNotEmpty) {
+  //   //   // fix bug of old user doc in firebase which saved the theme as a bool in parameters
+  //   //   // palette.getThemeColors(userData["parameters"]["theme"]);
+  //   //   print("user data is not empty!");
+  //   //   palette.getThemeColors(settings.theme.value);
+  //   // }
+
+    
+
+  //   // await StorageMethods().saveDummyUserToSettings(settings,palette);
+  // }
+
+
+  Future<void> initializeDeviceData(SettingsController settings) async {
+    try {
+      
+      await StorageMethods().saveDeviceSizeInfoToSettings(settings);
+      await StorageMethods().saveLanguageLocalesToSettings(settings);
+      await StorageMethods().initializeThemeColor(settings);
+
+
+
+    } catch (e,t) {
+      debugPrint("error in the initializeDeviceData function : $e | traceback: $t");
     }
+  }
 
-    // await StorageMethods().saveDummyUserToSettings(settings,palette);
+  void printAllSettingsData(SettingsController settings) {
 
+    debugPrint("""
+========================================================================
+    deviceSizeInfo:     ${settings.deviceSizeInfo.value}
+    ----------------------------------------------------------------
+    language:           ${settings.language.value}
+    ----------------------------------------------------------------
+    theme:              ${settings.theme.value}
+    ----------------------------------------------------------------
+    user:               ${settings.user.value}
+    ----------------------------------------------------------------
+    userData:           ${settings.userData.value}
+    ----------------------------------------------------------------
+    soundsOn:           ${settings.soundsOn.value}
+    ----------------------------------------------------------------
+    coins:              ${settings.coins.value}
+    ----------------------------------------------------------------
+    xp:                 ${settings.xp.value}
+    ----------------------------------------------------------------
+    userGameHistory:    ${settings.userGameHistory.value}
+    ----------------------------------------------------------------
+    achievements:       ${settings.achievements.value}
+    ----------------------------------------------------------------
+    levelData:          ${settings.levelData.value}
+    ----------------------------------------------------------------
+    gameInfoData:       ${settings.gameInfoData.value}
+    ----------------------------------------------------------------
+    alphabet:           ${settings.alphabet.value}
+    ----------------------------------------------------------------
+    dictionary:         ${settings.dictionary.value}
+    ----------------------------------------------------------------
+    rankData:           ${settings.rankData.value}
+    ----------------------------------------------------------------
+    achievementData:    ${settings.achievementData.value}
+    ----------------------------------------------------------------
+    dailyPuzzleData:    ${settings.dailyPuzzleData.value}
+    ----------------------------------------------------------------
+
+=====================================================================
+""");
   }
 
 

@@ -47,7 +47,7 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
 
           print("in the new rank overlay - $achievements");
 
-          Map<dynamic,dynamic> rankObject = settings.rankData.value.firstWhere((e)=>e["key"]==achievements["rank"],orElse: () => {});
+          Map<String,dynamic> rankObject = settings.rankData.value.firstWhere((e)=>e["key"]==achievements["rank"],orElse: () => <String,dynamic>{});
           if (rankObject.isNotEmpty) {
             rankString = "Level ${rankObject["level"]} ${rankObject["rankName"]}";
           }
@@ -357,52 +357,4 @@ class FireworksPainter extends CustomPainter {
   @override
   bool shouldRebuildSemantics(FireworksPainter oldDelegate) => false;  
 }
-
-
-// List<Map<String,dynamic>> generateFireworksData(Size screenSize) {
-//   Random random = Random();
-
-//   // final int numExplosions = random.nextInt(10)+10;
-
-//   final int numCols = 3;
-//   final int numRows = random.nextInt(3)+5;
-
-//   final int numExplosions = numCols*numRows;
-//   List<int> orders = List.generate(numExplosions, (v)=>v+1);
-//   // orders.shuffle();
-
-//   // int count = 0;
-//   List<Map<String,dynamic>> res = [];
-//   for (int col=1; col<(numCols+1); col++) {
-//     for (int row=1; row<(numRows+1); row++) {
-
-//       int idx = random.nextInt(orders.length);
-//       orders.removeAt(idx);
-
-//       double sectionCenterX = ((screenSize.width/3)/2)*(col) ;
-//       double sectionCenterY = ((screenSize.height/3)/2)*(row);
-
-//       double dx = sectionCenterX + random.nextDouble() * (screenSize.width/3) - ((screenSize.width/3)/2);
-//       double dy = sectionCenterY + random.nextDouble() * (screenSize.height/3) - ((screenSize.height/3)/2);
-
-//       Offset fireworksCenter = Offset(dx, dy);
-//       List<Map<String,dynamic>> explosionData = AnimationUtils().getFireworksData(fireworksCenter,Size(200,200));
-
-//       final double startDelay = 0.3 + (idx/numExplosions)*0.4;
-//       final double main = 0.2;
-//       final double endDelay = 1.0-(startDelay+main);
-
-//       List<Map<String,dynamic>> fireworksProgressAnimationDetails = [
-//         {"source": 0.0, "target": 0.0, "duration": startDelay},
-//         {"source": 0.0, "target": 1.0, "duration": main},
-//         {"source": 1.0, "target": 1.0, "duration": endDelay},
-//       ];
-
-//       res.add({"explosionData":explosionData,"progressDetails":fireworksProgressAnimationDetails});      
-//     }    
-//   }
-//   return res;
-// }
-
-
 

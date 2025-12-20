@@ -41,7 +41,7 @@ class _OverviewViewState extends State<OverviewView> {
         userData = widget.settings.userData.value as Map<String,dynamic>;
         scalor = Helpers().getScalor(widget.settings);
         late String rankKey  = userData["rank"];
-        Map<dynamic,dynamic> rankObject = widget.settings.rankData.value.firstWhere((e)=>e["key"]==rankKey,orElse: ()=>{});
+        Map<String,dynamic> rankObject = widget.settings.rankData.value.firstWhere((e)=>e["key"]==rankKey,orElse: ()=><String,dynamic>{});
         if (rankObject.isNotEmpty) {
           rankText = "Level ${rankObject['level']} ${Helpers().translateRankTitle(rankObject['rank'], userData['language'])}";
         }
@@ -176,7 +176,7 @@ class _OverviewViewState extends State<OverviewView> {
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
-                                    widget.settings.coins.value.toString(),
+                                    userData["coins"].toString(),
                                     // "231242223432",
                                     style: widget.palette.counterFont(
                                       textStyle: TextStyle(
