@@ -289,6 +289,18 @@ class _RewardDialogState extends State<RewardDialog> {
         children: [
           _title(scalor),
           const SizedBox(height: 16),
+
+          SizedBox(
+            width: 200*scalor,
+            height: 200*scalor,
+            child: Image(
+              semanticLabel: "Treasure",
+              image: AssetImage(
+                'assets/images/treasure_scribby.png'
+              )
+            ),
+          ),
+
           Text(
             "+$reward",
             style: GoogleFonts.luckiestGuy(
@@ -330,6 +342,7 @@ class _RewardDialogState extends State<RewardDialog> {
           ),
 
           const SizedBox(height: 12),
+
 
           // ---------------------------
           // CLAIM NORMAL REWARD

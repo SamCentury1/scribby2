@@ -164,7 +164,7 @@ class GameOverCounterPainter extends CustomPainter {
 
 
 
-    print("score: $body");
+    // print("score: $body");
 
 
     // "Score"

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
@@ -109,9 +110,33 @@ class _DailyPuzzleRankingWidgetState extends State<DailyPuzzleRankingWidget> {
                           BoxShadow(color: palette.widgetShadow1,offset: Offset(0.0,10.0), spreadRadius: 4.0, blurRadius: 14.0)
                         ]
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0*scalor),
-                        child: SingleChildScrollView(child: tableRes),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0*scalor),
+                            child: Text(
+                              "Ranking",
+                              style: GoogleFonts.lilitaOne(
+                                textStyle: TextStyle(
+                                  fontSize: 32.0 * scalor,
+                                  color: palette.text1
+                                )
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0*scalor),
+                                    child:  tableRes,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),                          
+                        ],
                       ))
                     )                      
                         
@@ -131,13 +156,6 @@ Table getRankingTable(List<dynamic> rankingData, String uid, String gameType, Co
 
 
   List<dynamic> rankingSubset = getRankingSubset(rankingData, gameType, uid);
-    print("""
-  RANKING SUBSET
-  ${rankingData}
-  """);
-  for (dynamic item in rankingSubset) {
-    print(item);
-  }
 
   late Table tableRes = Table(
 
@@ -191,13 +209,16 @@ TableRow playerRankingRow(Map<String,dynamic> rowData, String gameType, String u
       ),
       Align(
         alignment: Alignment.centerLeft,
-        child: Text(
-          // string,
-          rowData["username"],
-          style: TextStyle(
-            color: palette.text1,
-            fontSize: 14 * scalor,
-            fontWeight: isUser ? FontWeight.w800 : FontWeight.normal        
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            // string,
+            rowData["username"],
+            style: TextStyle(
+              color: palette.text1,
+              fontSize: 14 * scalor,
+              fontWeight: isUser ? FontWeight.w800 : FontWeight.normal        
+            ),
           ),
         ),            
       ),
@@ -223,7 +244,8 @@ List<dynamic> getRankingSubset(List<dynamic> _rankingData, String gameType, Stri
   
   List<dynamic> res = [];
   Map<String,dynamic> rankObject = _rankingData.firstWhere((e)=>e["uid"]==uid,orElse: ()=> <String,dynamic>{});
-  int rankObjectIndex = _rankingData.indexOf(rankObject);
+  // int rankObjectIndex = _rankingData.indexOf(rankObject);
+  // print("found rank object: $rankObject");
 
   // int under = rankObjectIndex-5 < 0 ? 0 : rankObjectIndex-5;
   // int over = rankObjectIndex+5 > _rankingData.length ? _rankingData.length : rankObjectIndex+5;
@@ -233,9 +255,12 @@ List<dynamic> getRankingSubset(List<dynamic> _rankingData, String gameType, Stri
     _rankingData.sort((a, b) => b["score"].compareTo(a["score"]));
   }
 
+
+  int rankObjectIndex = _rankingData.indexOf(rankObject);
+
   if (_rankingData.length > 10) {
-    List<int> ranksToAdd = ranksToAddAround(_rankingData,rankObjectIndex,3,4);
-    print("ranks to add : ${ranksToAdd}");
+    List<int> ranksToAdd = ranksToAddAround(_rankingData,rankObjectIndex,5,10);
+    // print("ranks to add : ${ranksToAdd}");
     int numAbove = ranksToAdd[0];
     int numBelow = ranksToAdd[1];
     for (int i=rankObjectIndex-numAbove ; i<rankObjectIndex+numBelow; i++) {

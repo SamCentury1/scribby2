@@ -7,6 +7,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/ads/ad_mob_service.dart';
 import 'package:scribby_flutter_v2/ads/banner_ad_widget.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
 import 'package:scribby_flutter_v2/components/background_painter.dart';
 import 'package:scribby_flutter_v2/functions/animations.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
@@ -67,6 +68,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       builder: (context,gamePlayState,child) {
         SettingsController settings = Provider.of<SettingsController>(context,listen: false);
         ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
+        AudioController audioController = Provider.of<AudioController>(context,listen: false);
 
         // bool isModalOpen = gamePlayState.tileMenuBuyMoreModalData["open"]??false;
 
@@ -131,7 +133,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                               },
                               onPointerUp: (PointerUpEvent details) {
                                 if (_activePointerId == details.pointer) {
-                                  Gestures().executePointerUpBehavior2(gamePlayState,palette,details,_scaffoldKey.currentState!, context);
+                                  Gestures().executePointerUpBehavior2(gamePlayState,palette,details,_scaffoldKey.currentState!, context, audioController);
                                   // Gestures().executePointerUpBehavior3(gamePlayState,palette,details,_scaffoldKey.currentState!, context);
                                   _activePointerId = null; // Reset the active pointer
                                 }            

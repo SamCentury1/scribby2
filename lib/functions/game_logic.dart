@@ -5,6 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/functions/animations.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
@@ -18,7 +21,13 @@ import 'package:scribby_flutter_v2/settings/settings.dart';
 
 class GameLogic extends ChangeNotifier {
 
-  void executeMove(BuildContext context, PointerUpEvent details, GamePlayState gamePlayState, ColorPalette palette, Map<String,dynamic> pointedElement) {
+  void executeMove(
+    BuildContext context, 
+    PointerUpEvent details, 
+    GamePlayState gamePlayState, 
+    ColorPalette palette, 
+    Map<String,dynamic> pointedElement, 
+    AudioController audioController) {
 
 
     late Map<String,dynamic> moveData = {};
@@ -31,9 +40,12 @@ class GameLogic extends ChangeNotifier {
       executeTileTappedLogic(gamePlayState,pointedElement,palette);
       moveData = {"type":"placed","data":{"target":pointedElement,"source":null}};
     }
+
+    audioController.playSfx(SfxType.tileTap);
+
     
     // now check if words have been found
-    executeFoundWordLogic(gamePlayState,palette, moveData);
+    executeFoundWordLogic(gamePlayState,palette, moveData, context, audioController);
 
     // check if the user should level up
     checkLevelUp(gamePlayState);
@@ -67,73 +79,118 @@ class GameLogic extends ChangeNotifier {
     Random random = Random();
     String newLetter = "";
 
-    
-    if (gamePlayState.isTutorial) {
-      int turn = gamePlayState.tutorialData["currentTurn"];
-      List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
-      Map<String,dynamic> tutorialStep = steps.firstWhere((e)=>e["step"]==turn,orElse: ()=>{});
-      if (tutorialStep.isNotEmpty) {
-        newLetter = tutorialStep["newLetter"];
-      }
-    } else {
+    try {
+      if (gamePlayState.isTutorial) {
+        int turn = gamePlayState.tutorialData["currentTurn"];
+        List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
+        Map<String,dynamic> tutorialStep = steps.firstWhere((e)=>e["step"]==turn,orElse: ()=>{});
+        if (tutorialStep.isNotEmpty) {
+          newLetter = tutorialStep["newLetter"];
+        }
+      } else {
 
-      List<Map<String,dynamic>> alphabetReal = gamePlayState.alphabet;
+        List<Map<String,dynamic>> alphabetReal = gamePlayState.alphabet;
+        String letterType = Helpers().getNextLetterType(alphabetReal);
 
-      String letterType = Helpers().getNextLetterType(alphabetReal);
-
-      // print("letter type: $letterType");
+        // print("letter type: $letterType");
 
 
-      String previousLetter = gamePlayState.randomLetterData.last["body"];
-      List<String> availableLetters = [];
-      
-      List<String> availableVowels = [];
-      List<String> availableConsonents = [];
-      for (int i=0; i<alphabetReal.length; i++) {
-        Map<String,dynamic> letterObject = alphabetReal[i];
-        // print("letter: ${letterObject['letter']} | count: ${letterObject['count']} | inplay: ${letterObject['inPlay']}");
-      }
-      for (Map<String, dynamic> randomLetterObject in alphabetReal) {
-        for (var i = 0; i < randomLetterObject["count"]; i++) {
-          if (randomLetterObject["type"] == letterType && randomLetterObject["letter"] != previousLetter) {
-            availableLetters.add(randomLetterObject["letter"]);
+        String previousLetter = gamePlayState.randomLetterData.last["body"];
+        List<String> availableLetters = [];
+        List<Map<String,dynamic>> availableLetterObjects = [];
+        
+        // List<String> availableVowels = [];
+        // List<String> availableConsonents = [];
+        // List<String> randomLetterHistory = gamePlayState.randomLetterData.map((e)=>e["body"] as String).toList().reversed.toList();
+        // List<String> reversedOrder = randomLetterHistory.reversed.toList();
+        // randomLetterHistory.reversed;
+        // print(randomLetterHistory);
+        // List<Map<String,dynamic>> probabilityObjects = [];
+        // for (int i=0; i<alphabetReal.length; i++) {
+        //   Map<String,dynamic> letterObject = alphabetReal[i];
+        //   int turnsAgo = randomLetterHistory.indexOf(letterObject['letter']);
+
+        //   Map<String,dynamic> letterObject2 = Map<String,dynamic>.from(letterObject);
+        //   letterObject2['turnsAgo'] = turnsAgo < 0 ? randomLetterHistory.length : turnsAgo;
+        //   probabilityObjects.add(letterObject2);
+
+        //   // print("letter: ${letterObject['letter']} | index: ${letterIndex}");
+        // }
+        for (Map<String, dynamic> randomLetterObject in alphabetReal) {
+          
+          // int turnsAgo = randomLetterHistory.indexOf(randomLetterObject['letter']);
+          // int countOtherLetters = probabilityObjects
+          //     .where((e) => e["type"] == letterType)
+          //     .map<int>((e) => e["count"] as int)
+          //     .fold(0, (prev, element) => prev + element);
+
+          // int sumOtherTurnsAgo = probabilityObjects
+          //     .where((e) => e["type"] == letterType)
+          //     .map<int>((e) => e["turnsAgo"] as int)
+          //     .fold(0, (prev, element) => prev + element);
+
+          
+          // print("letter: ${randomLetterObject['letter']} | last picked: ${turnsAgo} | count: ${randomLetterObject['count']} total: $countOtherLetters | turnsAgo: ${randomLetterObject['turnsAgo']} | $sumOtherTurnsAgo");
+
+
+          // double prob = randomLetterObject['count'] / countOtherLetters;
+          // double turnsAgoProb = randomLetterObject['turnsAgo']/sumOtherTurnsAgo;
+          // print("prob: $prob");
+
+          // final int adjustedCount = (prob * 10).round() * (turnsAgoProb *100).round();
+
+          // print("letter: ${randomLetterObject['letter']} | countProb: $prob | turnsAgoProb | $turnsAgoProb | $adjustedCount");
+
+          
+          // if (randomLetterObject["type"] == letterType && randomLetterObject["letter"] != previousLetter && randomLetterObject['count']>0) {
+          //   // Map<String,dynamic> availableLetterObjectCopy = Map<String,dynamic>.from(randomLetterObject);
+          //   // availableLetterObjectCopy['probability'] = 
+          //   // availableLetterObjects.add(randomLetterObject);
+          //   print(randomLetterObject);
+          //   availableLetters.add(randomLetterObject["letter"]);
+          // }
+          if (randomLetterObject['count']>0) {
+            for (var i = 0; i < randomLetterObject["count"]; i++) {
+            // for (var i = 0; i < adjustedCount; i++) {
+              if (randomLetterObject["type"] == letterType && randomLetterObject["letter"] != previousLetter) {
+                availableLetters.add(randomLetterObject["letter"]);
+              }
+            }
           }
         }
-      }
-      // print("available letters: $availableLetters");
+        // print("available letters: $availableLetters");
 
-      int availableLettersCount = availableLetters.length;
+        int availableLettersCount = availableLetters.length;
+        print("available letters: $availableLetters");
+        int randomIndex = random.nextInt(availableLettersCount);
+        String randomLetter = availableLetters[randomIndex];
 
-      int randomIndex = random.nextInt(availableLettersCount);
-      String randomLetter = availableLetters[randomIndex];
-
-      List<Map<String, dynamic>> newRandomLetterState = [];
-      for (Map<String, dynamic> randomLetterObject in alphabetReal) {
-        if (randomLetterObject["letter"] == randomLetter) {
-          randomLetterObject.update("count", (value) => randomLetterObject["count"] - 1);
-          randomLetterObject.update("inPlay", (value) => randomLetterObject["inPlay"] + 1);
+        List<Map<String, dynamic>> newRandomLetterState = [];
+        for (Map<String, dynamic> randomLetterObject in alphabetReal) {
+          if (randomLetterObject["letter"] == randomLetter) {
+            randomLetterObject.update("count", (value) => randomLetterObject["count"] - 1);
+            randomLetterObject.update("inPlay", (value) => randomLetterObject["inPlay"] + 1);
+          }
+          newRandomLetterState.add(randomLetterObject);
         }
-        newRandomLetterState.add(randomLetterObject);
+        // List<String> alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",];
+        // List<String> alphabet = ["A","A","A","A","A","A","B","B","B","B","B","B","B","B","B",];
+        // int randomIndex = random.nextInt(alphabet.length);    
+        // newLetter = alphabet[randomIndex];
+        newLetter = randomLetter;
       }
-
-
-
-      // List<String> alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",];
-      // List<String> alphabet = ["A","A","A","A","A","A","B","B","B","B","B","B","B","B","B",];
-      // int randomIndex = random.nextInt(alphabet.length);    
-      // newLetter = alphabet[randomIndex];
-      newLetter = randomLetter;
+      Map<String,dynamic> decorationObject = StylingUtils().generateNewTileStyle(gamePlayState,random);
+      decorationObject["gradientOffset"] = random.nextInt(4);
+      Map<String,dynamic> randomLetterObject = {"body":newLetter,"decorationData": decorationObject};
+      gamePlayState.setRandomLetterData([ ...gamePlayState.randomLetterData,randomLetterObject]);      
+      updateDecorationData(gamePlayState,random,palette);
+    } catch (e,t) {
+      debugPrint("""
+        error running generateNewRandomLetter
+        error: $e
+        stacktrace: $t
+      """);
     }
-
-
-
-
-
-    Map<String,dynamic> decorationObject = StylingUtils().generateNewTileStyle(gamePlayState,random);
-    decorationObject["gradientOffset"] = random.nextInt(4);
-    Map<String,dynamic> randomLetterObject = {"body":newLetter,"decorationData": decorationObject};
-    gamePlayState.setRandomLetterData([ ...gamePlayState.randomLetterData,randomLetterObject]);      
-    updateDecorationData(gamePlayState,random,palette);
     
 
   }
@@ -213,7 +270,7 @@ class GameLogic extends ChangeNotifier {
   
   }
 
-  void executeSwap(GamePlayState gamePlayState, ColorPalette palette, BuildContext context, Map<String,dynamic> pointedElement) {
+  void executeSwap(GamePlayState gamePlayState, ColorPalette palette, BuildContext context, Map<String,dynamic> pointedElement, AudioController audioController) {
     Map<String,dynamic> swappingTile = Helpers().getSwappingTile(gamePlayState);
     int turn = gamePlayState.scoreSummary.last["turn"];
     bool pointedElementFrozen = pointedElement["frozen"];
@@ -265,7 +322,7 @@ class GameLogic extends ChangeNotifier {
 
       chargeMenuItem(gamePlayState,"swap",-1);
       restartTimer(gamePlayState,"tile-swap"); 
-      executeFoundWordLogic(gamePlayState,palette, moveData);
+      executeFoundWordLogic(gamePlayState,palette, moveData, context, audioController);
       executeTutorialStep(gamePlayState,context);
     }
     gamePlayState.setTileData(gamePlayState.tileData);
@@ -313,7 +370,7 @@ class GameLogic extends ChangeNotifier {
     }
   }
 
-  void executePerk(BuildContext context, GamePlayState gamePlayState, ColorPalette palette, int tileKey, ) {
+  void executePerk(BuildContext context, GamePlayState gamePlayState, ColorPalette palette, int tileKey, AudioController audioController) {
     
     Map<String,dynamic> selectedTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
     Map<String,dynamic> perkOpen = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
@@ -339,6 +396,11 @@ class GameLogic extends ChangeNotifier {
         } else {
           
           Animations().startTileExplodeAnimation(gamePlayState,tileKey,);
+          // audioController.playSfx(SfxType.glassBreak,settingsState);
+          // context.read<AudioController>().playSfx(SfxType.glassBreak);
+          // audioController.playSfx(SfxType.glassBreak);
+          context.read<AudioService>().play("assets/audio/sfx/glass_break_1.wav");
+
           restartTimer(gamePlayState,"tile-explode");
           String explodedTileBody =selectedTileObject["body"];
           Map<String,dynamic> alphabetObject = gamePlayState.alphabet.firstWhere((e)=>e["letter"]==explodedTileBody,orElse: ()=>{});
@@ -358,7 +420,7 @@ class GameLogic extends ChangeNotifier {
             "type": "explode",
             "data": {"target":selectedTileObject,"body":explodedTileBody}
           };
-          executeFoundWordLogic(gamePlayState, palette, moveData);
+          executeFoundWordLogic(gamePlayState, palette, moveData, context, audioController);
         }
       } else if (perk=="freeze") {
 
@@ -392,7 +454,7 @@ class GameLogic extends ChangeNotifier {
             };            
             chargeMenuItem(gamePlayState,"freeze",-1);           
           }
-          executeFoundWordLogic(gamePlayState, palette, moveData);
+          executeFoundWordLogic(gamePlayState, palette, moveData, context, audioController);
           executeTutorialStep(gamePlayState,context);  
           restartTimer(gamePlayState,"tile-freeze");  
           perkOpen.update("open", (v)=>false);
@@ -421,7 +483,7 @@ class GameLogic extends ChangeNotifier {
           } else {
             if (swappingTileObject["key"]!=tileKey) {
               // print("source tile is selected as ${swappingTileObject["key"]} - target tile selected as ${tileKey}");
-              executeSwap(gamePlayState, palette, context, selectedTileObject);
+              executeSwap(gamePlayState, palette, context, selectedTileObject, audioController);
               
             } else {
               // cancelSwap(gamePlayState);
@@ -964,7 +1026,7 @@ class GameLogic extends ChangeNotifier {
 
   
 
-  void executeFoundWordLogic(GamePlayState gamePlayState, ColorPalette palette, Map<String,dynamic> moveData) {
+  void executeFoundWordLogic(GamePlayState gamePlayState, ColorPalette palette, Map<String,dynamic> moveData, BuildContext context, AudioController audioController) {
 
     validateStrings(gamePlayState,moveData);
 
@@ -981,6 +1043,9 @@ class GameLogic extends ChangeNotifier {
       int scoreTurn = gamePlayState.scoreSummary.last["turn"];
 
       Animations().startPreWordFoundAnimation(gamePlayState,palette, scoreTurn);
+      // context.read<AudioController>().playSfx(SfxType.wordFound);
+      audioController.playSfx(SfxType.wordFound);
+      
 
       late  int duration = 300; // DEFAULT but ideally, this should be updated below
       if (animationDurationData.isNotEmpty) {
@@ -990,18 +1055,6 @@ class GameLogic extends ChangeNotifier {
 
       Future.delayed(Duration(milliseconds: duration), () {
         // // animates the word tiles flashing and what not
-        // Animations().startWordFoundAnimation(gamePlayState, palette, scoreTurn);
-        // // animates the scoreboard counting and flashing
-        // Animations().startScoreboardCountAnimation(gamePlayState,scoreTurn,"${scoreTurn}_count");
-        // // animates the little +10, +20, elements flying in and out of view next to the scoreboard (for each word)
-        // Animations().startScoreboardPlusNPoints(gamePlayState,scoreTurn);
-        // // animates 2x streak, 4x words bonus items if there are any
-        // Animations().startBonusAnimations(gamePlayState,scoreTurn);
-        // // animates the +50 text over the play area board (for the turn)
-        // Animations().startNewPointsScoredAnimation(gamePlayState,scoreTurn,"${scoreTurn}_new_points");
-
-        // if the game mode has is_timed_move, stop the timer
-        // if (gameType == "arcade" || gameType == "timed-move") {
         if (isTimeToPlace) {
           gamePlayState.startStopWatch();
         }
@@ -1299,14 +1352,16 @@ class GameLogic extends ChangeNotifier {
   // }
 
   void validateStrings(GamePlayState gamePlayState, Map<String,dynamic>? moveData) {
-
+    print("-------- EXECUTING VALIDATE STRING ----------------");
     try {
       final Box wordBox = Hive.box('wordBox');
       late List<String> dictionary = List<String>.from(wordBox.get('words_english', defaultValue: []));
 
+
       if (gamePlayState.isTutorial) {
         dictionary = gamePlayState.tutorialData["dictionary"];
       }
+
 
       List<List<int>> validIdCombinations = gamePlayState.validIdCombinations;
       // List<String> dictionary = gamePlayState.dictionary;
@@ -1321,14 +1376,11 @@ class GameLogic extends ChangeNotifier {
       int turn = gamePlayState.scoreSummary.length;
 
 
-
       for (int i=0; i<validIdCombinations.length;i++) {
 
         List<int> idsInString = validIdCombinations[i];
         String word = "";
-        for (int j=0; j<idsInString.length; j++) {
-
-          
+        for (int j=0; j<idsInString.length; j++) {          
           Map<String,dynamic> validTileObject = tileData.firstWhere((e)=>e["key"]==idsInString[j],orElse: ()=>{});
           if (validTileObject.isNotEmpty) {
             String letter = validTileObject["body"] == "" ? "-" : validTileObject["body"];
@@ -1339,6 +1391,8 @@ class GameLogic extends ChangeNotifier {
           }
         }
 
+        
+        
 
         if (dictionary.contains(word)) {
 
@@ -1365,7 +1419,8 @@ class GameLogic extends ChangeNotifier {
           }
         }
       }
-    
+  
+
 
       for (int i=0;i<uniqueIds.length;i++) {
         int key = uniqueIds[i];

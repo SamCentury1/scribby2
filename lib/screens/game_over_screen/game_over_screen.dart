@@ -112,7 +112,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
     GameLogic().storeEndOfGameData(settings,gamePlayState);
     GameLogic().updateRank(settings,gamePlayState);
 
-    print("game result data: ${gamePlayState.gameResultData}");
+    // print("game result data: ${gamePlayState.gameResultData}");
 
     badgeData = gamePlayState.gameResultData["badges"];
     // Animations().startGameOverScreenCountAnimation(gamePlayState);
@@ -150,7 +150,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
       settings.setAchievements({"coins":rewardAmount,"xp":xpAmount, "rank":rank, "badges":badgeData});                                      
 
       // Now navigate home and reset
-      print("just earned that shit: {'coins':$rewardAmount,'xp':$xpAmount, 'rank':$rank, 'badges':$badgeData}");
+      // print("just earned that shit: {'coins':$rewardAmount,'xp':$xpAmount, 'rank':$rank, 'badges':$badgeData}");
       gamePlayState.refreshAllData();
     } catch (error, traceback) {
       debugPrint("error in user earned reward function - $error | $traceback");

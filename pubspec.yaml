@@ -64,6 +64,7 @@ dependencies:
   flutter_svg: ^2.1.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  flutter_soloud: ^3.4.10
 
 
 dev_dependencies:
@@ -96,7 +97,7 @@ flutter:
     - assets/json/achievements.json
     - assets/json/alphabets.json
     
-    # - assets/images/treasure_scribby.png
+    - assets/images/treasure_scribby.png
     - assets/images/play-player-button-of-video-svgrepo-com.svg
     - assets/images/bomb_icon.png
     - assets/images/snowflake_icon.png
@@ -114,6 +115,8 @@ flutter:
     - assets/images/coins_4.png
     - assets/images/coins_5.png
     - assets/images/no_ads.png
+
+    - assets/audio/sfx/  
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -10,6 +10,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 import 'package:scribby_flutter_v2/app_lifecycle/app_lifecycle.dart';
+import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
 import 'package:scribby_flutter_v2/functions/initializations.dart';
 import 'package:scribby_flutter_v2/providers/ad_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -83,10 +85,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+  late final AudioService _audioService;
+  // late final GamePlayState _gamePlayState;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // _gamePlayState = GamePlayState();
+    _audioService = AudioService(
+      settings: widget.settings,
+      // gamePlayState: _gamePlayState,
+    );
+
+    _audioService.init();    
     initializeSplashScreen();
 
   }
@@ -94,6 +106,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _audioService.dispose();
     super.dispose();
   }
 
@@ -119,6 +132,25 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider.value(value: widget.palette,),
           Provider<AdsController?>.value(value: widget.adsController),
           Provider<SettingsController>.value(value: widget.settings,),
+          // ProxyProvider2<SettingsController, ValueNotifier<AppLifecycleState>,AudioController>(
+          //   lazy: false,
+          //   create: (context) => AudioController()..initialize(),
+          //   update: (context, settings, lifecycleNotifier, audio) {
+          //     if (audio == null) throw ArgumentError.notNull();
+          //     audio.attachSettings(settings);
+          //     audio.attachLifecycleNotifier(lifecycleNotifier);
+          //     return audio;
+          //   },
+            // create: (context) => AudioController(polyphony: 6),
+            // update: (context, settings, lifecycle, audio) {
+            //   audio ??= AudioController(polyphony: 6);
+            //   audio.attachSettings(settings);
+            //   audio.attachLifecycleNotifier(lifecycle);
+            //   return audio;
+            // },
+
+          //   dispose: (context, audio) => audio.dispose(),
+          // ),            
           // Provider<SettingsController>(
           //   lazy: false,
           //   create: (context) => SettingsController(

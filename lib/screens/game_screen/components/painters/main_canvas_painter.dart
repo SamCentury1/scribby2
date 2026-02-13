@@ -42,11 +42,11 @@ class MainCanvasPainter extends CustomPainter {
 
     ScoreboardPainters().drawScoreboardArea(canvas,gamePlayState,palette);
     Painters().drawCountDown(canvas,gamePlayState, palette);
-    Painters().paintPerkCounts(canvas,gamePlayState);
+    // Painters().paintPerkCounts(canvas,gamePlayState);
     PerksBarPainters().drawPerksArea(canvas,gamePlayState,palette);
 
 
-    Painters().drawBonusArea(canvas,gamePlayState,palette); // shows the animation object
+    // Painters().drawAnimationDataOnScreen(canvas,gamePlayState,palette); // shows the animation object
 
     BonusPainters().drawBonusArea(canvas,gamePlayState);
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
@@ -33,6 +34,7 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
     settings = Provider.of<SettingsController>(context,listen: false);
 
     Map<dynamic,dynamic> achievements = settings.achievements.value as Map<dynamic,dynamic>;
+    // Map<dynamic,dynamic> achievements = {"rank":"4_1", }; FOR TESTING ONLY
     if (achievements.isNotEmpty) {
       if (achievements["rank"] != null) {
         print("show the overlay!");
@@ -102,6 +104,7 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
 
 
     // SettingsController settings = Provider.of<SettingsController>(context,listen: false);
+
     return Consumer<SettingsController>(
       builder:(context, settings, child) {
 
@@ -133,8 +136,8 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
 
         List<Map<String,dynamic>> labelPositionYAnimationDetails = [
           {"source": 0.0, "target": -30.0, "duration": 0.05},
-          {"source": -30.0, "target": -30.0, "duration": 0.20},
-          {"source": -30.0, "target": -60.0, "duration": 0.05},
+          {"source": -30.0, "target": -40.0, "duration": 0.20},
+          {"source": -40.0, "target": -60.0, "duration": 0.05},
           {"source": -60.0, "target": -60.0, "duration": 0.70},
         ];
         double labelPositionY = AnimationUtils().getAnimationTransition(animationProgress,labelPositionYAnimationDetails);           
@@ -192,6 +195,11 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
                               child: Text(
                                 "New Level Achieved!",
                                 textAlign: TextAlign.center,
+                                style: GoogleFonts.luckiestGuy(
+                                  textStyle: TextStyle(
+                                    // fontSize: 44.0,
+                                  )
+                                ),
                                 // shouldShowOverlay.toString()
                               )
                             ),
@@ -234,6 +242,11 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
                               ),
                               child: Text(
                                 rankString,
+                                style: GoogleFonts.luckiestGuy(
+                                  textStyle: TextStyle(
+                                    fontSize: 66 * scalor
+                                  )
+                                ),
                                 textAlign: TextAlign.center,
                                 // shouldShowOverlay.toString()
                               )

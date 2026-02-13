@@ -14,7 +14,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scribby_flutter_v2/ads/ads_controller.dart';
 
 import 'package:scribby_flutter_v2/main.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/settings/persistence/local_storage_settings_persistence.dart';
+import 'package:scribby_flutter_v2/settings/settings.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
@@ -24,10 +26,15 @@ void main() {
       adsController = AdsController(MobileAds.instance);
       adsController.initialize();
     }    
+
+    final settings = SettingsController(
+      persistence: LocalStorageSettingsPersistence(),
+    );    
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp(
-      settingsPersistence: LocalStorageSettingsPersistence(),
+      settings: settings,
       adsController: adsController,
+      palette: ColorPalette(),
     ));
 
 
