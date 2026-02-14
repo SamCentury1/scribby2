@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
-class AudioService {
+class AudioService extends ChangeNotifier{
   final SoLoud _soLoud = SoLoud.instance;
 
   final SettingsController settings;
@@ -24,7 +27,7 @@ class AudioService {
     if (_initialized) return;
     await _soLoud.init();
     _initialized = true;
-
+    print("AudioService initialized ✅");
     // // Optional: automatically pause/resume when game state changes
     // gamePlayState.addListener(() {
     //   if (gamePlayState.isGamePaused) {
@@ -43,14 +46,29 @@ class AudioService {
   }
 
   Future<void> play(
-    String assetPath, {
+    SfxType soundType, {
       double volume = 1.0,
       bool loop = false,
   }) async {
-    if (!_initialized) return;
+    print("***************** play sound!  ********************");
+
+    if (!_initialized) {
+      print("not initialized");
+      return;
+    };
 
     // if (gamePlayState.isGamePaused) return;
-
+    // List<String> assetPaths =[];
+    // String? assetPath;
+    // switch (soundType) {
+    //   case 'glassBreak':
+    //     assetPath = 'assets/audio/';
+    // }
+    final files = soundTypeToFileName(soundType);
+    Random rand = Random();
+    int rand_index = rand.nextInt(files.length-1);
+    String assetPath = "assets/audio/sfx/${files[rand_index]}";
+    
     if (!_sources.containsKey(assetPath)) {
       await preload(assetPath);
     }
@@ -61,6 +79,7 @@ class AudioService {
     final handle = await _soLoud.play(source,volume: volume, looping: loop);
 
     _activeHandles.add(handle);
+  
 
   }
 

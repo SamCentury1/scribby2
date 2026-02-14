@@ -129,9 +129,21 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => SettingsState()),
           ChangeNotifierProvider(create: (_) => AdState(),),
           ChangeNotifierProvider(create: (_) => TutorialState(),),
+          // ChangeNotifierProvider(create: (_) => AudioService(settings: widget.settings)),
           ChangeNotifierProvider.value(value: widget.palette,),
           Provider<AdsController?>.value(value: widget.adsController),
           Provider<SettingsController>.value(value: widget.settings,),
+          ChangeNotifierProvider<AudioService>(
+            create: (context) {
+              final service = AudioService(settings: widget.settings);
+              // initialize and preload immediately
+              service.init().then((_) async {
+                await service.preload("assets/audio/sfx/glass_break_1.wav");
+                // await service.preload("assets/audio/sfx/explode.wav");
+              });
+              return service;
+            },
+          ),          
           // ProxyProvider2<SettingsController, ValueNotifier<AppLifecycleState>,AudioController>(
           //   lazy: false,
           //   create: (context) => AudioController()..initialize(),

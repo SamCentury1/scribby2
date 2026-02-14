@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/styling_utils.dart';
@@ -42,7 +43,11 @@ class Initializations {
 
 
 
-
+      // final audioService = AudioService(settings: settings);
+      // await audioService.init();
+      // await audioService.preload("assets/audio/sfx/glass_break_1.wav");
+      // await audioService.preload("assets/audio/sfx/explode.wav");
+      
       // save list of words to the phone storage
       final Box wordBox = Hive.box('wordBox');
       if (wordBox.isEmpty) {

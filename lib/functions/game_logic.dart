@@ -27,7 +27,7 @@ class GameLogic extends ChangeNotifier {
     GamePlayState gamePlayState, 
     ColorPalette palette, 
     Map<String,dynamic> pointedElement, 
-    AudioController audioController) {
+    ) {
 
 
     late Map<String,dynamic> moveData = {};
@@ -41,11 +41,13 @@ class GameLogic extends ChangeNotifier {
       moveData = {"type":"placed","data":{"target":pointedElement,"source":null}};
     }
 
-    audioController.playSfx(SfxType.tileTap);
+    // context.read<AudioService>().play("assets/audio/sfx/tap_1.wav");
+    context.read<AudioService>().play(SfxType.tileTap);
+    // audioController.playSfx(SfxType.tileTap);
 
     
     // now check if words have been found
-    executeFoundWordLogic(gamePlayState,palette, moveData, context, audioController);
+    executeFoundWordLogic(gamePlayState,palette, moveData, context);
 
     // check if the user should level up
     checkLevelUp(gamePlayState);
@@ -270,7 +272,7 @@ class GameLogic extends ChangeNotifier {
   
   }
 
-  void executeSwap(GamePlayState gamePlayState, ColorPalette palette, BuildContext context, Map<String,dynamic> pointedElement, AudioController audioController) {
+  void executeSwap(GamePlayState gamePlayState, ColorPalette palette, BuildContext context, Map<String,dynamic> pointedElement) {
     Map<String,dynamic> swappingTile = Helpers().getSwappingTile(gamePlayState);
     int turn = gamePlayState.scoreSummary.last["turn"];
     bool pointedElementFrozen = pointedElement["frozen"];
@@ -322,7 +324,7 @@ class GameLogic extends ChangeNotifier {
 
       chargeMenuItem(gamePlayState,"swap",-1);
       restartTimer(gamePlayState,"tile-swap"); 
-      executeFoundWordLogic(gamePlayState,palette, moveData, context, audioController);
+      executeFoundWordLogic(gamePlayState,palette, moveData, context);
       executeTutorialStep(gamePlayState,context);
     }
     gamePlayState.setTileData(gamePlayState.tileData);
@@ -370,140 +372,147 @@ class GameLogic extends ChangeNotifier {
     }
   }
 
-  void executePerk(BuildContext context, GamePlayState gamePlayState, ColorPalette palette, int tileKey, AudioController audioController) {
-    
-    Map<String,dynamic> selectedTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
-    Map<String,dynamic> perkOpen = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
-    if (perkOpen.isNotEmpty && selectedTileObject.isNotEmpty) {
-      print("perk: ${perkOpen} | ");
-      String perk = perkOpen["item"];
-      if (perk == "explode") {
+  void executePerk(BuildContext context, GamePlayState gamePlayState, ColorPalette palette, int tileKey) {
 
-        // logic that would prevent a tutorial tile to be exploded
-        bool preventExplosion = false;
-        if (gamePlayState.isTutorial) {
-          Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
-          if (tutorialStep["focusTile"] != tileKey) {
+    try {
+
+      Map<String,dynamic> selectedTileObject = gamePlayState.tileData.firstWhere((e)=>e["key"]==tileKey,orElse: ()=>{});
+      Map<String,dynamic> perkOpen = gamePlayState.tileMenuOptions.firstWhere((e)=>e["open"]==true,orElse: ()=>{});
+      if (perkOpen.isNotEmpty && selectedTileObject.isNotEmpty) {
+        print("perk: ${perkOpen} | ");
+        String perk = perkOpen["item"];
+        if (perk == "explode") {
+
+          // logic that would prevent a tutorial tile to be exploded
+          bool preventExplosion = false;
+          if (gamePlayState.isTutorial) {
+            Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
+            if (tutorialStep["focusTile"] != tileKey) {
+              preventExplosion = true;
+            }
+          }
+          if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
             preventExplosion = true;
           }
-        }
-        if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
-          preventExplosion = true;
-        }
 
-        if (preventExplosion) {
-          cancelPerk(gamePlayState);
-        } else {
-          
-          Animations().startTileExplodeAnimation(gamePlayState,tileKey,);
-          // audioController.playSfx(SfxType.glassBreak,settingsState);
-          // context.read<AudioController>().playSfx(SfxType.glassBreak);
-          // audioController.playSfx(SfxType.glassBreak);
-          context.read<AudioService>().play("assets/audio/sfx/glass_break_1.wav");
-
-          restartTimer(gamePlayState,"tile-explode");
-          String explodedTileBody =selectedTileObject["body"];
-          Map<String,dynamic> alphabetObject = gamePlayState.alphabet.firstWhere((e)=>e["letter"]==explodedTileBody,orElse: ()=>{});
-          if (alphabetObject.isNotEmpty) {
-            alphabetObject.update("count", (v)=>v+1);
-            alphabetObject.update("inPlay", (v)=>v-1);
-          }
-
-          selectedTileObject.update("body", (v) => "");
-          selectedTileObject.update("active", (v) => true);
-          selectedTileObject.update("frozen", (v)=> false);
-          executeTutorialStep(gamePlayState,context);
-          chargeMenuItem(gamePlayState,perk,-1);       
-          perkOpen.update("open", (v)=>false);
-          gamePlayState.highlightEffectTimer.cancel();
-          Map<String,dynamic> moveData = {
-            "type": "explode",
-            "data": {"target":selectedTileObject,"body":explodedTileBody}
-          };
-          executeFoundWordLogic(gamePlayState, palette, moveData, context, audioController);
-        }
-      } else if (perk=="freeze") {
-
-        bool preventFreeze = false;
-        if (gamePlayState.isTutorial) {
-          Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
-          if (tutorialStep["focusTile"] != tileKey) {
-            preventFreeze = true;
-          }
-        }
-        if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
-          preventFreeze = true;
-        }        
-        if (preventFreeze) {
-          cancelPerk(gamePlayState);
-        } else {        
-          Animations().startTileFreezeAnimation(gamePlayState,tileKey);
-          Map<String,dynamic> moveData = {};
-          if (selectedTileObject["frozen"]) {
-            selectedTileObject.update("frozen", (v) => false);
-            moveData = {
-              "type":"freeze",
-              "data": {"target":selectedTileObject,"thaw":true}
-            };
-            // executeFoundWordLogic(gamePlayState,palette, moveData);
+          if (preventExplosion) {
+            cancelPerk(gamePlayState);
           } else {
-            selectedTileObject.update("frozen", (v) => true);
-            moveData = {
-              "type":"freeze",
-              "data": {"target":selectedTileObject,"thaw":false}
-            };            
-            chargeMenuItem(gamePlayState,"freeze",-1);           
-          }
-          executeFoundWordLogic(gamePlayState, palette, moveData, context, audioController);
-          executeTutorialStep(gamePlayState,context);  
-          restartTimer(gamePlayState,"tile-freeze");  
-          perkOpen.update("open", (v)=>false);
-          gamePlayState.highlightEffectTimer.cancel();   
-        }        
-      } else if (perk == "swap") {
-        // print("selected swap. is source tile selected?");
-        Map<String,dynamic> swappingTileObject = gamePlayState.tileData.firstWhere((e)=>e["swapping"]==true,orElse: ()=>{});
+            
+            Animations().startTileExplodeAnimation(gamePlayState,tileKey,);
+            // audioController.playSfx(SfxType.glassBreak,settingsState);
+            // context.read<AudioController>().playSfx(SfxType.glassBreak);
+            // audioController.playSfx(SfxType.glassBreak);
+            context.read<AudioService>().play(SfxType.glassBreak);
 
-        bool preventSwap = false;
-        if (gamePlayState.isTutorial) {
-          Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
-          if (tutorialStep["focusTile"] != tileKey || tutorialStep["targetKey"] != tileKey) {
-            preventSwap = true;
-          }
-        }
-        if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
-          preventSwap = true;
-        }  
-
-        if (selectedTileObject["body"]!=""&&selectedTileObject["active"]) {
-          if (swappingTileObject.isEmpty) {
-            // print("source tile NOT selected => selected : ${selectedTileObject["key"]}");
-            selectedTileObject.update("swapping", (v) => true);
-            executeTutorialStep(gamePlayState,context);
-          } else {
-            if (swappingTileObject["key"]!=tileKey) {
-              // print("source tile is selected as ${swappingTileObject["key"]} - target tile selected as ${tileKey}");
-              executeSwap(gamePlayState, palette, context, selectedTileObject, audioController);
-              
-            } else {
-              // cancelSwap(gamePlayState);
-              cancelPerk(gamePlayState);
-              cancelSwap(gamePlayState);
+            restartTimer(gamePlayState,"tile-explode");
+            String explodedTileBody =selectedTileObject["body"];
+            Map<String,dynamic> alphabetObject = gamePlayState.alphabet.firstWhere((e)=>e["letter"]==explodedTileBody,orElse: ()=>{});
+            if (alphabetObject.isNotEmpty) {
+              alphabetObject.update("count", (v)=>v+1);
+              alphabetObject.update("inPlay", (v)=>v-1);
             }
-            // cancelPerk(gamePlayState);
+
+            selectedTileObject.update("body", (v) => "");
+            selectedTileObject.update("active", (v) => true);
+            selectedTileObject.update("frozen", (v)=> false);
+            executeTutorialStep(gamePlayState,context);
+            chargeMenuItem(gamePlayState,perk,-1);       
             perkOpen.update("open", (v)=>false);
+            gamePlayState.highlightEffectTimer.cancel();
+            Map<String,dynamic> moveData = {
+              "type": "explode",
+              "data": {"target":selectedTileObject,"body":explodedTileBody}
+            };
+            executeFoundWordLogic(gamePlayState, palette, moveData, context);
           }
-        } else {
-          cancelPerk(gamePlayState);
-          cancelSwap(gamePlayState);
+        } else if (perk=="freeze") {
+
+          bool preventFreeze = false;
+          if (gamePlayState.isTutorial) {
+            Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
+            if (tutorialStep["focusTile"] != tileKey) {
+              preventFreeze = true;
+            }
+          }
+          if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
+            preventFreeze = true;
+          }        
+          if (preventFreeze) {
+            cancelPerk(gamePlayState);
+          } else {        
+            Animations().startTileFreezeAnimation(gamePlayState,tileKey);
+            Map<String,dynamic> moveData = {};
+            if (selectedTileObject["frozen"]) {
+              selectedTileObject.update("frozen", (v) => false);
+              moveData = {
+                "type":"freeze",
+                "data": {"target":selectedTileObject,"thaw":true}
+              };
+              // executeFoundWordLogic(gamePlayState,palette, moveData);
+            } else {
+              selectedTileObject.update("frozen", (v) => true);
+              moveData = {
+                "type":"freeze",
+                "data": {"target":selectedTileObject,"thaw":false}
+              };            
+              chargeMenuItem(gamePlayState,"freeze",-1);           
+            }
+            executeFoundWordLogic(gamePlayState, palette, moveData, context);
+            executeTutorialStep(gamePlayState,context);  
+            restartTimer(gamePlayState,"tile-freeze");  
+            perkOpen.update("open", (v)=>false);
+            gamePlayState.highlightEffectTimer.cancel();   
+          }        
+        } else if (perk == "swap") {
+          // print("selected swap. is source tile selected?");
+          Map<String,dynamic> swappingTileObject = gamePlayState.tileData.firstWhere((e)=>e["swapping"]==true,orElse: ()=>{});
+
+          bool preventSwap = false;
+          if (gamePlayState.isTutorial) {
+            Map<String,dynamic> tutorialStep = Helpers().getTutorialStepObject(gamePlayState);
+            if (tutorialStep["focusTile"] != tileKey || tutorialStep["targetKey"] != tileKey) {
+              preventSwap = true;
+            }
+          }
+          if (selectedTileObject["body"]==""&&selectedTileObject["active"]) {
+            preventSwap = true;
+          }  
+
+          if (selectedTileObject["body"]!=""&&selectedTileObject["active"]) {
+            if (swappingTileObject.isEmpty) {
+              // print("source tile NOT selected => selected : ${selectedTileObject["key"]}");
+              selectedTileObject.update("swapping", (v) => true);
+              executeTutorialStep(gamePlayState,context);
+            } else {
+              if (swappingTileObject["key"]!=tileKey) {
+                // print("source tile is selected as ${swappingTileObject["key"]} - target tile selected as ${tileKey}");
+                executeSwap(gamePlayState, palette, context, selectedTileObject);
+                
+              } else {
+                // cancelSwap(gamePlayState);
+                cancelPerk(gamePlayState);
+                cancelSwap(gamePlayState);
+              }
+              // cancelPerk(gamePlayState);
+              perkOpen.update("open", (v)=>false);
+            }
+          } else {
+            cancelPerk(gamePlayState);
+            cancelSwap(gamePlayState);
+          }
+
+
         }
-
-
+      } else {
+        
+        cancelPerk(gamePlayState);
       }
-    } else {
-      
-      cancelPerk(gamePlayState);
+    } catch (e,t) {
+      print("error at executePerk : $e");
+      print("stac : $t");
     }
+    
 
   }
 
@@ -1026,7 +1035,7 @@ class GameLogic extends ChangeNotifier {
 
   
 
-  void executeFoundWordLogic(GamePlayState gamePlayState, ColorPalette palette, Map<String,dynamic> moveData, BuildContext context, AudioController audioController) {
+  void executeFoundWordLogic(GamePlayState gamePlayState, ColorPalette palette, Map<String,dynamic> moveData, BuildContext context,) {
 
     validateStrings(gamePlayState,moveData);
 
@@ -1044,13 +1053,18 @@ class GameLogic extends ChangeNotifier {
 
       Animations().startPreWordFoundAnimation(gamePlayState,palette, scoreTurn);
       // context.read<AudioController>().playSfx(SfxType.wordFound);
-      audioController.playSfx(SfxType.wordFound);
+      // audioController.playSfx(SfxType.wordFound);
+      // context.read<AudioService>().play("assets/audio/sfx/word_found_1.wav");
       
 
       late  int duration = 300; // DEFAULT but ideally, this should be updated below
       if (animationDurationData.isNotEmpty) {
         duration = (animationDurationData["stops"]*animationDurationData["interval"]);
       } 
+
+      Future.delayed(Duration(milliseconds: 300), () {
+        context.read<AudioService>().play(SfxType.wordFound);
+      });
 
 
       Future.delayed(Duration(milliseconds: duration), () {

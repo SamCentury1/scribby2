@@ -279,7 +279,7 @@ class Gestures {
     PointerUpEvent details, 
     ScaffoldState scaffoldState, 
     BuildContext context,
-    AudioController audioController) {
+    ) {
 
     // check if the tile pointed down on is null.
     Map<String,dynamic> pointedElement = Helpers().getPointerElement(gamePlayState, details.localPosition);
@@ -341,7 +341,7 @@ class Gestures {
                 if (isTutorialDropPermitted) {
                   // print("----- 5. drop is permitted - execute move");
                   print("executed the move via drag and drop");
-                  GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement,audioController);
+                  GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
 
 
                 } else {
@@ -361,7 +361,7 @@ class Gestures {
                       // print("------- 7. released over a valid tile");
                       if (swappingTile["key"]!=pointedElement["key"]) {
                         // print("-------- 8. the tile is not the same as the initial swipe - execute swipe");
-                        GameLogic().executeSwap(gamePlayState,palette, context, pointedElement, audioController);
+                        GameLogic().executeSwap(gamePlayState,palette, context, pointedElement);
                       } else {
                         // print("-------- 8. the tile is the same as the initial swipe - cancel the swipe");
                         GameLogic().cancelSwap(gamePlayState);
@@ -377,12 +377,12 @@ class Gestures {
                         if (elementType=="board" && body=="") {
                           if (isActive!) {
                             print("executing move via tile type being board and body is empty");
-                            GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement,audioController);
+                            GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
                           } else {
                           }
                         } else if (elementType=="reserve" && body=="") {
                           print("executing move via tile type being reserve and body is empty");
-                          GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement,audioController); 
+                          GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement); 
                         }                        
                       }
                     }
@@ -392,7 +392,7 @@ class Gestures {
                       if (isActive!) {
                         // print("------- 8. release on active tile");
                         print("executing move via tile type being board and body is empty");
-                        GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement,audioController);
+                        GameLogic().executeMove(context,details,gamePlayState,palette,pointedElement);
                       } else {
                         // // print("------- 9. release on inactive tile");
                         // if (gamePlayState.isLongPress) {
@@ -403,7 +403,7 @@ class Gestures {
                     } else if (elementType=="reserve" && body=="") {
                       // print("------ 7. is  reserve - execute move");
                       print("executing move via tile type being reserve and body is empty");
-                      GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement,audioController); 
+                      GameLogic().executeMove(context, details, gamePlayState,palette, pointedElement); 
                     }
                   }
                 }            
@@ -430,7 +430,7 @@ class Gestures {
                 // print("EXECUTE ${perkType} FOR TILE: ${pointedElement["key"]}");
                 print(pointedElement["key"]);
                 perkOpen.update("selected", (v) => false);
-                GameLogic().executePerk(context,gamePlayState,palette,pointedElement["key"],audioController);
+                GameLogic().executePerk(context,gamePlayState,palette,pointedElement["key"]);
 
               } else {
                 GameLogic().cancelPerk(gamePlayState);
