@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
 import 'package:scribby_flutter_v2/functions/animations.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
@@ -296,6 +297,7 @@ class Gestures {
     bool isSwapActivated = swappingTile.isNotEmpty;
     Map<String,dynamic> isPerkSelectionDetected =  Helpers().detectPerkSelection(gamePlayState, details.localPosition);
     Map<String,dynamic> perkOpen =  Helpers().getSelectedPerk(gamePlayState);
+    AudioService audioService = context.read<AudioService>();
 
 
     // Map<String,dynamic> behavior = 
@@ -410,14 +412,22 @@ class Gestures {
               }
             } else {
               print(" ------------------------- RELEASED WHILE PERK IS SELECTED BUT *NOT* ACTIVE  --------------------------- ");
+              print(isPerkSelectionDetected);
               isPerkSelectionDetected["open"]=true;
+              if (gamePlayState.isTutorial) {
+                int turn = gamePlayState.tutorialData["currentTurn"];
+                Map<String,dynamic> tutorialStep = gamePlayState.tutorialData["steps"][turn];
+                if (tutorialStep['moveType']=='drag') {
+                  print("do nothing!");
+                } else {
+                  GameLogic().executePerkSelectedBehaviour(context,gamePlayState,);
+                  isPerkSelectionDetected["selected"]=false;
+                }
+              } else {
+                GameLogic().executePerkSelectedBehaviour(context,gamePlayState,);
+                isPerkSelectionDetected["selected"]=false;                
+              }
 
-              GameLogic().executePerkSelectedBehaviour(context,gamePlayState,);
-         
-
-              
-
-              isPerkSelectionDetected["selected"]=false;
             }
           
 
@@ -465,8 +475,9 @@ class Gestures {
       
       // gamePlayState.setIsLongPress(false);
 
-    } catch (e) {
-      log("CAUGHT AN IN ERROR executePointerUpBehavior ${e.toString()}",);
+    } catch (e,s) {
+      // log("CAUGHT AN IN ERROR executePointerUpBehavior ${e.toString()}",);
+      Helpers().printError('executePointerUpBehavior2', e, s);
     }
   }
   

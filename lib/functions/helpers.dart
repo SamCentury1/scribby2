@@ -304,6 +304,8 @@ class Helpers {
     double leftLimit = boardCenter.dx - boardSize.width/2;
     double rightLimit = boardCenter.dx + boardSize.width/2;
 
+    Map<String,dynamic> pointedElement = getPointerElement(gamePlayState,details.localPosition);
+
     if (details.localPosition.dy <= topLimit && details.localPosition.dy >= bottomLimit) {
       if (details.position.dx <= leftLimit || details.position.dx >= rightLimit) {
         res = true;
@@ -333,7 +335,9 @@ class Helpers {
         if (targetTile.isNotEmpty) {
 
           if (moveType == "drag") {
-            res = false;
+
+              res = false;
+            
           } else if (moveType=="perk") {
             res = true;
             Map<String,dynamic> perkObject = gamePlayState.tileMenuOptions.firstWhere((e)=>e["item"]==targetOption,orElse: ()=>{});
@@ -418,8 +422,6 @@ class Helpers {
         }
       }
     }
-
-    print(res);
     
     return res;
   }
@@ -494,7 +496,6 @@ class Helpers {
         }
       }
     }
-    print("in validateTutorialDragDropGesture: ${res}");
     return res;
   }
 
@@ -509,7 +510,6 @@ class Helpers {
 
     Map<String,dynamic> targetStyle = targetTile["decorationData"];
     sourceTile.update("decorationData", (v) => targetStyle);
-    print("animation has ended for tile $sourceTile");
   }  
 
 
@@ -1111,4 +1111,48 @@ class Helpers {
   }  
 
 
+  void printError(String functionName, Object error, Object stacktrace) {
+    debugPrint("""
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ -------------------- ERROR ------------------------ 
+ FUNCTION: $functionName
+ ERROR:    $error
+ STACK:    $stacktrace
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+""");
+  }
+
+
+
+  List<String> getNewBadgeKeys(List<dynamic> badgesInSettings, List<dynamic> badgesFromCloud) {
+    List<String> badgeKeysInSettings = badgesInSettings.map((e)=>e['badgeKey'] as String).toList();
+    List<String> badgeKeysFromCloud = badgesFromCloud.map((e)=>e['badgeKey'] as String).toList();
+    List<String> missingBadges = [];
+    for (String cloudBadge in badgeKeysFromCloud) {
+      if (badgeKeysInSettings.contains(cloudBadge)) {
+        print("already has this badge: $cloudBadge");
+      } else {
+        missingBadges.add(cloudBadge);
+      }
+    }
+    return missingBadges;
+  }
+
+  DateTime? getLatestGamePlayed(SettingsController settings) {
+    if (settings.userData.value.toString().isEmpty) {
+      return null;
+    } else {
+      List<dynamic> gameHistory = getGameHistory(settings);
+      if (gameHistory.isEmpty) {
+        return null;
+      } else {
+        gameHistory.sort((a,b) => b["createdAt"].compareTo(a["createdAt"]));
+        dynamic lastGameObject = gameHistory.first;
+        String lastGamePlayedString = lastGameObject['createdAt'];
+        DateTime lastGamePlayedDate = DateTime.parse(lastGamePlayedString);
+        return lastGamePlayedDate;
+      }
+    }
+
+  }
 }

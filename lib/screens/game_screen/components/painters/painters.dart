@@ -928,14 +928,51 @@ class Painters {
     int cols = gamePlayState.gameParameters["columns"];// Helpers().getNumAxis(gamePlayState.tileData)[1];
     Size tileSize = gamePlayState.elementSizes["tileSize"];
 
-    // elevation animation details TODO: UPDATE TO DYNAMIC VALUE
-    List<Map<String,dynamic>> opacityAnimationDetails = [
-      {"source": 0.0, "target": 1.0, "duration": 0.15},
-      {"source": 1.0, "target": 1.0, "duration": 0.70},
-      {"source": 1.0, "target": 0.0, "duration": 0.15},
+    // // elevation animation details TODO: UPDATE TO DYNAMIC VALUE
+    // List<Map<String,dynamic>> opacityAnimationDetails = [
+    //   {"source": 0.0, "target": 1.0, "duration": 0.15},
+    //   {"source": 1.0, "target": 1.0, "duration": 0.70},
+    //   {"source": 1.0, "target": 0.0, "duration": 0.15},
+    // ];
+
+    // OPACITY
+    List<Map<String,dynamic>> opacityProgressDetails = [
+      {"source": 0.0, "target": 1.0, "duration": 0.10},
+      {"source": 1.0, "target": 1.0, "duration": 0.60},
+      {"source": 1.0, "target": 0.0, "duration": 0.30},
+    ];    
+    // POSITION Y
+    List<Map<String,dynamic>> yPositionProgressDetails = [
+      {"source": 0.00, "target": 0.50, "duration": 0.70},
+      {"source": 0.50, "target": 0.80, "duration": 0.30},
+    ];
+
+    // SIZE
+    List<Map<String,dynamic>> sizeProgressDetails = [
+      {"source": 0.50, "target": 1.10, "duration": 0.10},
+      {"source": 1.10, "target": 0.95, "duration": 0.075},
+      {"source": 0.95, "target": 1.05, "duration": 0.05},
+      {"source": 1.05, "target": 1.00, "duration": 0.025},
+      {"source": 1.00, "target": 1.00, "duration": 0.75},
+    ];    
+
+    // COLOR
+    Color colorRes = Colors.transparent;
+    Color yellow = palette.gameplayWordFound1; //const ui.Color.fromARGB(255, 238, 178, 14);
+    Color red = palette.gameplayWordFound2; //const ui.Color.fromARGB(255, 238, 24, 9);
+    Color baseColor = palette.newPointsShadow; //const Color.fromARGB(153, 241, 241, 241);
+
+    List<Map<String,dynamic>> colorSequence = [
+      {"source": yellow, "target": red, "duration": 0.2},
+      {"source": red, "target": yellow, "duration": 0.1},
+      {"source": yellow, "target": red, "duration": 0.1},
+      {"source": red, "target": yellow, "duration": 0.1},
+      {"source": yellow, "target": red, "duration": 0.1},
+      {"source": red, "target": yellow, "duration": 0.1},
+      {"source": yellow, "target": red, "duration": 0.1},                        
+      {"source": red, "target": yellow, "duration": 0.2},
     ];
       
-
 
     for (int i=0; i<newPointsAnimations.length; i++) {
       Map<String,dynamic> newPointsAnimation = newPointsAnimations[i];
@@ -944,7 +981,7 @@ class Painters {
       int body = newPointsAnimation["body"];
       Map<String,dynamic> tile = newPointsAnimation["tile"];
 
-      double getOpacityValue = AnimationUtils().getAnimationTransition(progress,opacityAnimationDetails);     
+      // double getOpacityValue = AnimationUtils().getAnimationTransition(progress,opacityAnimationDetails);     
       
       int horizontalFactor = 1;
       int verticalFactor = 1;
@@ -960,41 +997,44 @@ class Painters {
         }
 
         positionX = tile["center"].dx + (tileSize.width*horizontalFactor);
-        positionY = tile["center"].dy + (tileSize.height*verticalFactor) - ((tileSize.height)*progress);        
+        // positionY = tile["center"].dy + (tileSize.height*verticalFactor) - ((tileSize.height)*progress);  
+        positionY = tile["center"].dy + (tileSize.height*verticalFactor);        
       } else {
         positionX = gamePlayState.elementPositions["boardCenter"].dx;
-        positionY = gamePlayState.elementPositions["boardCenter"].dy- ((tileSize.height)*progress);
+        // positionY = gamePlayState.elementPositions["boardCenter"].dy- ((tileSize.height)*progress);
+        positionY = gamePlayState.elementPositions["boardCenter"].dy- (tileSize.height*1.5);
       }
 
 
+      // POSITION Y
+      late double yPositionProgress = AnimationUtils().getAnimationTransition(progress,yPositionProgressDetails);
+      late double updatedY = positionY - ((tileSize.width) * yPositionProgress);
+      late Offset updatedCenter = Offset(positionX,updatedY);
+      
+      // SIZE
+      late double sizeProgress =  AnimationUtils().getAnimationTransition(progress,sizeProgressDetails);
+      late double updatedFontSize = (tileSize.width*1.0) * sizeProgress;
 
-      Offset location = Offset(positionX,positionY);
-
-      Color colorRes = Colors.transparent;
-      Color yellow = palette.gameplayWordFound1; //const ui.Color.fromARGB(255, 238, 178, 14);
-      Color red = palette.gameplayWordFound2; //const ui.Color.fromARGB(255, 238, 24, 9);
-      Color baseColor = palette.gameplayText1; //const Color.fromARGB(153, 241, 241, 241);
-
-      List<Map<String,dynamic>> colorSequence = [
-        {"source": baseColor, "target": red, "duration": 0.2},
-        {"source": red, "target": yellow, "duration": 0.1},
-        {"source": yellow, "target": red, "duration": 0.1},
-        {"source": red, "target": yellow, "duration": 0.1},
-        {"source": yellow, "target": red, "duration": 0.1},
-        {"source": red, "target": yellow, "duration": 0.1},
-        {"source": yellow, "target": red, "duration": 0.1},                        
-        {"source": red, "target": baseColor, "duration": 0.2},
-      ];
-
+      // COLOR
       colorRes = StylingUtils().getColorLerp(colorSequence,progress);
 
+      // OPACITY
+
+      late double opacityProgress = AnimationUtils().getAnimationTransition(progress,opacityProgressDetails);
 
 
-      // late double fontSize = double.parse( ((minFontSize/minTileSize)*tileSize.width).toStringAsFixed(2));
 
-      TextStyle textStyle = TextStyle(
-        color: colorRes, //const Color.fromARGB(190, 123, 191, 255),
-        fontSize: tileSize.width*0.6,
+      final int mainR = (colorRes.r * 255).floor();
+      final int mainG = (colorRes.g * 255).floor();
+      final int mainB = (colorRes.b * 255).floor();
+
+      final Color mainColor = ui.Color.fromRGBO(mainR, mainG, mainB, opacityProgress);
+
+      TextStyle textStyle = GoogleFonts.bangers( 
+        textStyle: TextStyle(
+          color: mainColor, //const Color.fromARGB(190, 123, 191, 255),
+          fontSize: updatedFontSize,
+        )
       );
       TextSpan textSpan = TextSpan(
         text: "+${body.toString()}",
@@ -1006,18 +1046,48 @@ class Painters {
       );
       textPainter.layout();
 
-      final int r = (palette.gameplayText1.r * 255).floor();
-      final int g = (palette.gameplayText1.g * 255).floor();
-      final int b = (palette.gameplayText1.b * 255).floor();
 
-      TextStyle outlineTextStyle = TextStyle(
-        fontSize: tileSize.width*0.6,
-        foreground: Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = tileSize.width*0.03
-          ..color = ui.Color.fromRGBO(r, g, b, getOpacityValue),
-    
+      // OUTLINE
+
+      // Shadow pass — paint before outline and fill
+      // final shadowPaint = Paint()
+      //   ..color = Colors.black.withOpacity(opacityProgress * 0.6)
+      //   ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4);      
+
+      // canvas.saveLayer(null, Paint());
+      // final shadowTextStyle = TextStyle(
+      //   fontSize: updatedFontSize,
+      //   foreground: shadowPaint,
+      // );
+      // final shadowTextSpan = TextSpan(
+      //   text: "+${body.toString()}",
+      //   style: shadowTextStyle,
+      // );
+      // final shadowPainter = TextPainter(
+      //   text: shadowTextSpan,
+      //   textDirection: TextDirection.ltr,
+      // );
+      // shadowPainter.layout();
+      // final shadowOffset = updatedCenter + Offset.zero; // shift for shadow direction
+      // shadowPainter.paint(canvas, shadowOffset);
+      // canvas.restore();      
+
+      final int r = (palette.newPointsShadow.r * 255).floor();
+      final int g = (palette.newPointsShadow.g * 255).floor();
+      final int b = (palette.newPointsShadow.b * 255).floor();
+
+      TextStyle outlineTextStyle = GoogleFonts.bangers(
+        textStyle: TextStyle(
+          fontSize: updatedFontSize,
+          foreground: Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = tileSize.width*0.10
+            ..color = ui.Color.fromRGBO(r, g, b, opacityProgress)
+            ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2*opacityProgress),
+      
+        ),
       );
+      canvas.saveLayer(null, Paint());
       TextSpan outlineTextSpan = TextSpan(
         text: "+${body.toString()}",
         style: outlineTextStyle,
@@ -1027,8 +1097,9 @@ class Painters {
         textDirection: TextDirection.ltr,
       );
       outlineTextPainter.layout();      
+      canvas.restore(); 
 
-      final position = Offset(location.dx - (textPainter.width/2), location.dy - (textPainter.height/2));
+      final position = Offset(updatedCenter.dx - (textPainter.width/2), updatedCenter.dy - (textPainter.height/2));
       outlineTextPainter.paint(canvas, position);
       textPainter.paint(canvas, position);
 
@@ -1046,6 +1117,9 @@ class Painters {
     if (gamePlayState.isGameOver) {
 
       Map<String,dynamic> animationObject = gamePlayState.animationData.firstWhere((e)=>e["type"]=="game-over",orElse: ()=>{});
+
+      final bool didAchieveObjective = gamePlayState.gameResultData['didAchieveObjective'];
+      String body = didAchieveObjective ? "Mission Accomplished" : "Game Over";
 
       if (animationObject.isNotEmpty) {
         double progress = animationObject["progress"];
@@ -1067,16 +1141,20 @@ class Painters {
         TextStyle textStyle = TextStyle(
           color:ui.Color.fromRGBO(243, 249, 255, 1.0 * progress),
           fontSize: 48* gamePlayState.scalor,
+
         );
         TextSpan textSpan = TextSpan(
-          text: "Game Over",
-          style: textStyle,
+          text: body,
+          style: GoogleFonts.lilitaOne(
+            textStyle: textStyle
+          ),
         );
         final textPainter = TextPainter(
           text: textSpan,
           textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center,
         );
-        textPainter.layout();
+        textPainter.layout(maxWidth: size.width * 0.8);
         final position = Offset(size.width/2 - (textPainter.width/2), size.height/2 - (textPainter.height/2));
         textPainter.paint(canvas, position);        
       }

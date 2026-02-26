@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
@@ -375,7 +377,7 @@ class Animations extends ChangeNotifier {
 
 
 
-  void startPreWordFoundAnimation(GamePlayState gamePlayState, ColorPalette palette, int turn) {
+  void startPreWordFoundAnimation(GamePlayState gamePlayState, ColorPalette palette, int turn, AudioService? audioService) {
 
     const String animationType = "pre-word-found";
     Map<String,dynamic> turnData = gamePlayState.scoreSummary.firstWhere((e)=>e["turn"]==turn,orElse: ()=>{});
@@ -431,7 +433,7 @@ class Animations extends ChangeNotifier {
           count,
           target,
           animationDurationData["interval"], 
-          ()=>GameLogic().executeWordFoundAnimations(gamePlayState, palette, turn)
+          ()=>GameLogic().executeWordFoundAnimations(gamePlayState, palette, turn, audioService)
           );
 
         // timerLogic(gamePlayState,animationObject,count,target,animationDurationData["interval"]);
@@ -575,7 +577,7 @@ class Animations extends ChangeNotifier {
   }
 
 
-  void startScoreboardCountAnimation(GamePlayState gamePlayState,int turn, String key) {
+  void startScoreboardCountAnimation(GamePlayState gamePlayState,int turn, String key, AudioService? audioService) {
 
     const String animationType = "score-count";
     // Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
@@ -647,10 +649,16 @@ class Animations extends ChangeNotifier {
       } else {
         if (count == target) {
           timer.cancel();
+          if (audioService!=null) {
+            print("---- SHOULD STOP TALLY SOUND ----");
+            audioService.stopTally();
+            audioService.play(SfxType.ding, 'ding');
+          }
           final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
           if (animationObjectIndex>=0) {
             try {
               gamePlayState.animationData.removeAt(animationObjectIndex);
+              
               startScoreboardHighlightAnimation(gamePlayState);
             } catch (e) {
               print("error caught in startScoreCountAnimation() => $e");
@@ -1670,151 +1678,154 @@ class Animations extends ChangeNotifier {
 
 
 
-  void startGameOverScreenCountAnimation(GamePlayState gamePlayState) {
-    
-    const String animationType = "game-over-count";
-    // Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
-    String gameType = gamePlayState.gameParameters["gameType"];
+  void startGameOverScreenCountAnimation(GamePlayState gamePlayState, AudioService audioService) {
 
-    // int scored = Helpers().calculateScore(gamePlayState);
-    int scored = Helpers().calculateScore(gamePlayState);
-    if (gameType=='sprint') {
-      scored = gamePlayState.duration.inSeconds;
-    }
+    try {
+      print("GGGGGGGGGGGGGGGGG SCORE TALLY SOUND GGGGGGGGGGGGGGGGGG");
+      audioService.play(SfxType.scoreTally,'scoreTally');
 
-    late bool shouldRemoveAnimation = false;
+      const String animationType = "game-over-count";
+      // Map<String,dynamic> animationDurationData = gamePlayState.animationLengths.firstWhere((e)=>e["type"]==animationType);
+      String gameType = gamePlayState.gameParameters["gameType"];
 
-    late int scoreBody = 0;
-    late double progress = 0.0;
-    late int target = 0;
-    late int increment = 0;
-    late int interval = 0;
-    late int animationDuration = 0;
-    late double highlightAnimationProgress1 = 0.0;
-    late double highlightAnimationProgress2 = 0.0;
-
-    int count = 0;
-
-    if (scored > 0) {
-      Map<String,dynamic> animationProperties = AnimationUtils().getScoreCountAnimationDuration(scored,600,2000);
-      target = animationProperties["target"];
-      increment = animationProperties["increment"];
-      interval = animationProperties["interval"];
-      animationDuration =  animationProperties["duration"];
-    }   
-
-    late Map<String,dynamic> actualAnimation = {}; 
-    Map<String,dynamic> existingAnimationObject = gamePlayState.animationData.firstWhere(
-      (e)=>e["type"]==animationType,
-      orElse:()=>{}
-    );
-
-    if (existingAnimationObject.isNotEmpty) {
-      final double progress = existingAnimationObject["progress"];
-      count = (progress*target).round();
-      actualAnimation = existingAnimationObject;      
-    }  else {
-      actualAnimation = {
-        "key": "game-over-count", 
-        "type":animationType, 
-        "progress":0.0, 
-        "scoreBody":scoreBody, 
-        "highlight1":highlightAnimationProgress1,
-        "highlight2": highlightAnimationProgress2,
-        "duration": animationDuration,
-      };
-      if (scored>0) {
-        gamePlayState.animationData.add(actualAnimation);
+      // int scored = Helpers().calculateScore(gamePlayState);
+      int scored = Helpers().calculateScore(gamePlayState);
+      if (gameType=='sprint') {
+        scored = gamePlayState.duration.inSeconds;
       }
-    }
 
+      late bool shouldRemoveAnimation = false;
 
-    void startHighlightAnimation2() {
+      late int scoreBody = 0;
+      late double progress = 0.0;
+      late int target = 0;
+      late int increment = 0;
+      late int interval = 0;
+      late int animationDuration = 0;
+      late double highlightAnimationProgress1 = 0.0;
+      late double highlightAnimationProgress2 = 0.0;
+
       int count = 0;
-      int target = 40;
-      Timer.periodic(Duration(milliseconds: 17), (Timer t) {
-        if (count == target) {
-          t.cancel();
-          shouldRemoveAnimation = true;
-        } else {
-          final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
-          if (animationObjectIndex<0) {
-            t.cancel();
-          } else {
-            count++;
-            highlightAnimationProgress2 = double.parse((count/target).toStringAsFixed(2));
-            gamePlayState.animationData[animationObjectIndex].update("highlight2", (v) => highlightAnimationProgress2);
-          }            
+
+      if (scored > 0) {
+        Map<String,dynamic> animationProperties = AnimationUtils().getScoreCountAnimationDuration(scored,600,2000);
+        target = animationProperties["target"];
+        increment = animationProperties["increment"];
+        interval = animationProperties["interval"];
+        animationDuration =  animationProperties["duration"];
+      }   
+
+      late Map<String,dynamic> actualAnimation = {}; 
+      Map<String,dynamic> existingAnimationObject = gamePlayState.animationData.firstWhere(
+        (e)=>e["type"]==animationType,
+        orElse:()=>{}
+      );
+
+      if (existingAnimationObject.isNotEmpty) {
+        final double progress = existingAnimationObject["progress"];
+        count = (progress*target).round();
+        actualAnimation = existingAnimationObject;      
+      }  else {
+        actualAnimation = {
+          "key": "game-over-count", 
+          "type":animationType, 
+          "progress":0.0, 
+          "scoreBody":scoreBody, 
+          "highlight1":highlightAnimationProgress1,
+          "highlight2": highlightAnimationProgress2,
+          "duration": animationDuration,
+        };
+        if (scored>0) {
+          gamePlayState.animationData.add(actualAnimation);
         }
-        gamePlayState.setAnimationData(gamePlayState.animationData);
-      });
-    }
+      }
 
-    void startHighlightAnimation1() {
-      int count = 0;
-      int target = 40;
-      Timer.periodic(Duration(milliseconds: 17), (Timer t) {
-        if (count == target) {
-          t.cancel();
-        } else {
-          if (count == (target/3).round()) {
-            startHighlightAnimation2();
+
+      void startHighlightAnimation2() {
+        int count = 0;
+        int target = 40;
+        Timer.periodic(Duration(milliseconds: 17), (Timer t) {
+          if (count == target) {
+            t.cancel();
+            shouldRemoveAnimation = true;
+          } else {
+            final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
+            if (animationObjectIndex<0) {
+              t.cancel();
+            } else {
+              count++;
+              highlightAnimationProgress2 = double.parse((count/target).toStringAsFixed(2));
+              gamePlayState.animationData[animationObjectIndex].update("highlight2", (v) => highlightAnimationProgress2);
+            }            
           }
+          gamePlayState.setAnimationData(gamePlayState.animationData);
+        });
+      }
+
+      void startHighlightAnimation1() {
+        int count = 0;
+        int target = 40;
+        Timer.periodic(Duration(milliseconds: 17), (Timer t) {
+          if (count == target) {
+            t.cancel();
+          } else {
+            if (count == (target/3).round()) {
+              startHighlightAnimation2();
+            }
+
+            final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
+            if (animationObjectIndex<0) {
+              t.cancel();
+            } else {
+              count++;
+              highlightAnimationProgress1 = double.parse((count/target).toStringAsFixed(2));
+              gamePlayState.animationData[animationObjectIndex].update("highlight1", (v) => highlightAnimationProgress1);
+            }           
+          }
+          gamePlayState.setAnimationData(gamePlayState.animationData);
+        });
+      }    
+
+
+
+
+      // void startTimer() {
+      Timer.periodic(Duration(milliseconds: interval), (Timer t) {
+        if (scoreBody>=target*increment) {
+          t.cancel();
+          startHighlightAnimation1();
+          audioService.stopAll();
+          audioService.play(SfxType.scoreTallyEnd,'scoreTallyEnd');
+          if (shouldRemoveAnimation) {
+            final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
+            if (animationObjectIndex>=0) {
+              try {
+                gamePlayState.animationData.removeAt(animationObjectIndex);
+              } catch (e) {
+                print("error caught in animation() => $e");
+              }
+            }                
+          }
+        } else {
 
           final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
           if (animationObjectIndex<0) {
             t.cancel();
           } else {
-            count++;
-            highlightAnimationProgress1 = double.parse((count/target).toStringAsFixed(2));
-            gamePlayState.animationData[animationObjectIndex].update("highlight1", (v) => highlightAnimationProgress1);
-          }           
+            scoreBody = scoreBody + increment;
+            progress = double.parse((scoreBody/(target*increment)).toStringAsFixed(2));
+            gamePlayState.animationData[animationObjectIndex].update("progress", (v) => progress);
+            gamePlayState.animationData[animationObjectIndex].update("scoreBody", (v) => scoreBody);
+          }        
         }
         gamePlayState.setAnimationData(gamePlayState.animationData);
       });
-    }    
+      // }
 
-
-
-
-    // void startTimer() {
-    Timer.periodic(Duration(milliseconds: interval), (Timer t) {
-      if (scoreBody>=target*increment) {
-        t.cancel();
-        startHighlightAnimation1();
-        if (shouldRemoveAnimation) {
-          final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
-          if (animationObjectIndex>=0) {
-            try {
-              gamePlayState.animationData.removeAt(animationObjectIndex);
-            } catch (e) {
-              print("error caught in animation() => $e");
-            }
-          }                
-        }
-      } else {
-
-        final int animationObjectIndex = gamePlayState.animationData.indexOf(actualAnimation);
-        if (animationObjectIndex<0) {
-          t.cancel();
-        } else {
-          scoreBody = scoreBody + increment;
-          progress = double.parse((scoreBody/(target*increment)).toStringAsFixed(2));
-          gamePlayState.animationData[animationObjectIndex].update("progress", (v) => progress);
-          gamePlayState.animationData[animationObjectIndex].update("scoreBody", (v) => scoreBody);
-        }        
-      }
-      gamePlayState.setAnimationData(gamePlayState.animationData);
-    });
-    // }
-
-
-
-   
-
-
-
-
+    } catch (e,s) {
+      print("error at startGameOverScreenCountAnimation: $e");
+      print("stack: $s");
+    }
   }
  
 

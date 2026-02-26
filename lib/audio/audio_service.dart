@@ -17,6 +17,7 @@ class AudioService extends ChangeNotifier{
   final Map<String,AudioSource> _sources = {};
   // final List<int> _activeHandles = [];
    final List<SoundHandle> _activeHandles = [];
+   final List<Map<String,SoundHandle>> _activeHandles2 = [];
 
   AudioService({
     required this.settings,
@@ -46,16 +47,22 @@ class AudioService extends ChangeNotifier{
   }
 
   Future<void> play(
-    SfxType soundType, {
+    SfxType soundType,
+    String type, {
       double volume = 1.0,
       bool loop = false,
   }) async {
-    print("***************** play sound!  ********************");
+    
 
     if (!_initialized) {
       print("not initialized");
       return;
     };
+
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    bool soundOn = userData['parameters']['soundOn'];
+
+    if (!soundOn) return;
 
     // if (gamePlayState.isGamePaused) return;
     // List<String> assetPaths =[];
@@ -65,9 +72,47 @@ class AudioService extends ChangeNotifier{
     //     assetPath = 'assets/audio/';
     // }
     final files = soundTypeToFileName(soundType);
+    print(" AUDIO FILES ${files.length}");
     Random rand = Random();
-    int rand_index = rand.nextInt(files.length-1);
-    String assetPath = "assets/audio/sfx/${files[rand_index]}";
+    int randIndex = rand.nextInt(files.length-1);
+    String assetPath = "assets/audio/sfx/${files[randIndex]}";
+    print("***************** play $assetPath!  ********************");
+    
+    if (!_sources.containsKey(assetPath)) {
+      await preload(assetPath);
+    }
+
+    final source = _sources[assetPath];
+    if (source==null) return;
+
+    final handle = await _soLoud.play(source,volume: volume, looping: loop);
+    // _activeHandles.add(handle);
+    Map<String,SoundHandle> handle2 = {type:handle};
+    _activeHandles2.add(handle2);
+  
+
+  }
+
+
+  Future<void> playWordFound(
+    int streak,
+    int words, {
+      double volume = 1.0,
+      bool loop = false,
+  }) async {
+    print("***************** play sound!  ********************");
+
+    if (!_initialized) {
+      print("not initialized");
+      return;
+    }
+
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    bool soundOn = userData['parameters']['soundOn'];
+    if (!soundOn) return;
+
+
+    String assetPath = 'assets/audio/sfx/word_found_${streak}_$words.wav';
     
     if (!_sources.containsKey(assetPath)) {
       await preload(assetPath);
@@ -78,24 +123,40 @@ class AudioService extends ChangeNotifier{
 
     final handle = await _soLoud.play(source,volume: volume, looping: loop);
 
-    _activeHandles.add(handle);
+    // _activeHandles.add(handle);
+
+    Map<String,SoundHandle> handle2 = {"wordFound":handle};
+    _activeHandles2.add(handle2);    
   
 
   }
 
+
   void pauseAll() {
-    for (final handle in _activeHandles) {
+    for (final handleObj in _activeHandles2) {
       try {
-        _soLoud.setPause(handle, true);
+        final handle = handleObj.values.first;
+        if (handle != null) {
+          _soLoud.setPause(handle, true);
+        }
       } catch (_) {
         debugPrint("error pausing sound");
       }
     }
   }
   void resumeAll() {
-    for (final handle in _activeHandles) {
+
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    bool soundOn = userData['parameters']['soundOn'];
+
+    if (!soundOn) return;
+        
+    for (final handleObj in _activeHandles2) {
       try {
-        _soLoud.setPause(handle, false);
+        final handle = handleObj.values.first;
+        if (handle != null) {
+          _soLoud.setPause(handle, false);
+        }
       } catch (_) {
         debugPrint("error resuming sound");        
       }
@@ -103,15 +164,52 @@ class AudioService extends ChangeNotifier{
   }
 
   void stopAll() {
-    for (final handle in _activeHandles) {
+    for (final handleObject in _activeHandles2) {
       try {
-        _soLoud.stop(handle);
+        final handle = handleObject.values.first;
+        if (handle!=null) {
+          _soLoud.stop(handle!);
+        }
+        print("stopped all sound");
       } catch (_) {
         debugPrint("error stopping sound");        
       }
     }
-    _activeHandles.clear();
+    _activeHandles2.clear();
   }
+
+  void stopTally() async {
+
+      try {
+        String assetPath = 'assets/audio/sfx/score_tally.wav';
+        
+        if (!_sources.containsKey(assetPath)) {
+          await preload(assetPath);
+        }
+
+        final source = _sources[assetPath];
+        if (source==null) return;
+
+        // final handle = await _soLoud.play(source,volume: 1, looping: false);
+        // [handle].clear();
+        print(_activeHandles2);
+        List<Map<String,SoundHandle>> tallyHandles = _activeHandles2.where((e)=>e.keys.first == 'scoreTally').toList();
+
+        for (final handleObject in tallyHandles) {
+          SoundHandle? handle = handleObject['scoreTally'];
+          if (handle != null) {
+            _soLoud.stop(handle);
+          }
+        }
+
+
+        print("stopped score tally sound");
+      } catch (_) {
+        debugPrint("error stopping sound");        
+      }
+  
+      _activeHandles.clear();
+  }  
 
   void dispose() {
     stopAll();

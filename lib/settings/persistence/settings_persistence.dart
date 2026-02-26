@@ -41,6 +41,8 @@ abstract class SettingsPersistence {
 
   Future<Object> getDailyPuzzleData();
 
+  Future<Object> getUpdates();
+
 
 
   /// ========== SAVE THE DATA ===================
@@ -83,4 +85,6 @@ abstract class SettingsPersistence {
   Future<void> saveXP(int value);       
 
   Future<void> saveDailyPuzzleData(Object value); 
+
+  Future<void> saveUpdates(Object value); 
 }

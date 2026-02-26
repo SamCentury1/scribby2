@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
@@ -39,6 +41,7 @@ class _CoinHoldingsState extends State<CoinHoldings> {
     // TODO: implement initState
     super.initState();
     settings = Provider.of<SettingsController>(context,listen: false);
+    final audioService = context.read<AudioService>();
 
     // Map<String,dynamic> achievements = {"coins": 2000, "rank": null};
     Map<dynamic,dynamic> achievements = settings.achievements.value as Map<dynamic,dynamic>;
@@ -49,7 +52,8 @@ class _CoinHoldingsState extends State<CoinHoldings> {
     if (achievements.isNotEmpty) {
       if (achievements["coins"]>0) {
         print(achievements);
-        startCoinCount(currentCoins,achievements["coins"],settings);
+        audioService.play(SfxType.scoreTally,'scoreTally');
+        startCoinCount(currentCoins,achievements["coins"],settings,audioService);
       }
 
       if (achievements["badges"].isNotEmpty) {
@@ -78,7 +82,7 @@ class _CoinHoldingsState extends State<CoinHoldings> {
   }
 
 
-  void startCoinCount(int currentCoins, int newCoins, SettingsController settings) {
+  void startCoinCount(int currentCoins, int newCoins, SettingsController settings, AudioService audioService) {
     late int count = currentCoins-newCoins;
     late int target = currentCoins;
     final int increment = 20; 
@@ -86,11 +90,13 @@ class _CoinHoldingsState extends State<CoinHoldings> {
 
       if (!mounted) {
         t.cancel();
+        audioService.stopTally();
         return;
       }
 
       if (count >= target) {
         t.cancel();
+        audioService.stopTally();
         settings.setAchievements({});
 
         if (mounted) {
@@ -98,8 +104,9 @@ class _CoinHoldingsState extends State<CoinHoldings> {
             isAnimating = true;
           });
         }
-        
+        audioService.play(SfxType.coins,'coins');
         startHighlightAnimation();
+        
       } else {
         count = count + increment;
         if (mounted) {

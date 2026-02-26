@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/styling_utils.dart';
@@ -116,7 +117,7 @@ class ScoreboardPainters {
       Color colorRes = StylingUtils().getColorLerp(colorSequence,progress);
       
 
-      drawScoreCountAnimation(canvas,gamePlayState,center,newBody,colorRes);
+      drawScoreCountAnimation(canvas,gamePlayState,palette,center,newBody,colorRes);
       // }
     } 
 
@@ -156,11 +157,13 @@ class ScoreboardPainters {
     ..strokeWidth = 3.0 * gamePlayState.scalor
     ..strokeCap = StrokeCap.round;
 
-    TextStyle textStyle = TextStyle(
-      color:  palette.gameplayText1, //const Color.fromARGB(224, 176, 230, 255),
-      fontSize: 22 * gamePlayState.scalor  // tileSize.width*0.4, 
-
+    TextStyle textStyle =  palette.scoreboardFont(
+      textStyle: TextStyle(
+        color:  palette.gameplayText1, //const Color.fromARGB(224, 176, 230, 255),
+        fontSize: 22 * gamePlayState.scalor  // tileSize.width*0.4, 
+      ) 
     );
+    
     TextSpan textSpan = TextSpan(
       text: body.toString(),
       style: textStyle,
@@ -179,7 +182,7 @@ class ScoreboardPainters {
   }
 
 
-  Canvas drawScoreCountAnimation(Canvas canvas, GamePlayState gamePlayState, Offset center, int body, Color color) {
+  Canvas drawScoreCountAnimation(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette, Offset center, int body, Color color) {
 
     Size scoreboardSize = gamePlayState.elementSizes["scoreboardAreaSize"];
     // Offset scoreboardCenter = gamePlayState.elementPositions["scoreboardCenter"];
@@ -190,10 +193,13 @@ class ScoreboardPainters {
     ..strokeWidth = 3.0 * gamePlayState.scalor
     ..strokeCap = StrokeCap.round;
 
-    TextStyle textStyle = TextStyle(
-      color: color,
-      fontSize: 22 * gamePlayState.scalor //tileSize.width*0.4,
+    TextStyle textStyle = palette.scoreboardFont(
+      textStyle: TextStyle(
+        color: color,
+        fontSize: 22 * gamePlayState.scalor //tileSize.width*0.4,
+      )
     );
+    
     TextSpan textSpan = TextSpan(
       text: body.toString(),
       style: textStyle,
@@ -286,10 +292,13 @@ class ScoreboardPainters {
     ..strokeCap = StrokeCap.round;    
     
 
-    TextStyle textStyle = TextStyle(
-      color: colorRes,
-      fontSize: 22 * gamePlayState.scalor // tileSize.width*0.4,
+    TextStyle textStyle = palette.scoreboardFont(
+      textStyle: TextStyle(
+        color: colorRes,
+        fontSize: 22 * gamePlayState.scalor // tileSize.width*0.4,
+      )
     );
+    
     TextSpan textSpan = TextSpan(
       text: body.toString(),
       style: textStyle,
@@ -431,9 +440,11 @@ class ScoreboardPainters {
     double adjustedProgress = AnimationUtils().getAdjustedProgress(index,countAnimations,progress,animationDuration);
     Color textColor = AnimationUtils().getPlusNPointsColor(adjustedProgress, palette);
 
-    TextStyle textStyle = TextStyle(
-      color: textColor, //Color.fromRGBO(255, 255, 255, opacityProgress),
-      fontSize: 22 * gamePlayState.scalor //tileSize.width*0.4,
+    TextStyle textStyle = palette.scoreboardFont(
+      textStyle: TextStyle(
+        color: textColor, //Color.fromRGBO(255, 255, 255, opacityProgress),
+        fontSize: 22 * gamePlayState.scalor //tileSize.width*0.4,
+      ) 
     );
     TextSpan textSpan = TextSpan(
       text: body.toString(),

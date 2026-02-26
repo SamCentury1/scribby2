@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -33,6 +35,8 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
     super.initState();
     settings = Provider.of<SettingsController>(context,listen: false);
 
+    final audioService = context.read<AudioService>(); 
+
     Map<dynamic,dynamic> achievements = settings.achievements.value as Map<dynamic,dynamic>;
     // Map<dynamic,dynamic> achievements = {"rank":"4_1", }; FOR TESTING ONLY
     if (achievements.isNotEmpty) {
@@ -55,6 +59,7 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
           }
                     
         });
+        audioService.play(SfxType.newRank,'newRank');
         startTimer();
       } 
     } 

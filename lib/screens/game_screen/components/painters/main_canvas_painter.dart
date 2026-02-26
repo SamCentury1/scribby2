@@ -48,7 +48,7 @@ class MainCanvasPainter extends CustomPainter {
 
     // Painters().drawAnimationDataOnScreen(canvas,gamePlayState,palette); // shows the animation object
 
-    BonusPainters().drawBonusArea(canvas,gamePlayState);
+    BonusPainters().drawBonusArea(canvas,gamePlayState,palette);
 
     Painters().displayRandomLetters(canvas,size,gamePlayState,palette);
 

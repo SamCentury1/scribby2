@@ -98,14 +98,14 @@ class _LoadingImageState extends State<LoadingImage> {
                         Text(
                           "created by",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: palette.text1,
                             fontSize: 16
                           ),
                         ),                    
                         Text(
                           "No Damn Good Studios",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: palette.text1,
                             fontSize: 24
                           ),
                         ),

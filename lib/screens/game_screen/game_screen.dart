@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/ads/ad_mob_service.dart';
 import 'package:scribby_flutter_v2/ads/banner_ad_widget.dart';
 import 'package:scribby_flutter_v2/audio/audio_controller.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
 import 'package:scribby_flutter_v2/components/background_painter.dart';
 import 'package:scribby_flutter_v2/functions/animations.dart';
 import 'package:scribby_flutter_v2/functions/game_logic.dart';
@@ -68,6 +69,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       builder: (context,gamePlayState,child) {
         SettingsController settings = Provider.of<SettingsController>(context,listen: false);
         ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
+        AudioService audioService = context.read<AudioService>();
         // AudioController audioController = Provider.of<AudioController>(context,listen: false);
 
         // bool isModalOpen = gamePlayState.tileMenuBuyMoreModalData["open"]??false;
@@ -110,6 +112,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                       onDrawerChanged: (var details) {
                         GameLogic().executePauseDialogPopScope(gamePlayState,palette);
                         gamePlayState.setIsGamePaused(false);
+                        audioService.resumeAll();
                       },
                       drawer: GameScreenDrawer(scaffoldState: _scaffoldKey.currentState,),
                       body: SizedBox(
@@ -164,7 +167,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                           onPressed: () {
                             _scaffoldKey.currentState!.openDrawer();
 
-                            gamePlayState.setIsGamePaused(true);             
+                            gamePlayState.setIsGamePaused(true);  
+                            // audioService.pauseAll();
+                            audioService.stopAll();
                           }, 
                           icon: Icon(
                             Icons.menu,

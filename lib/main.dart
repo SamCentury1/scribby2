@@ -27,14 +27,14 @@ import 'firebase_options.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();  
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);  
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await MobileAds.instance.initialize();
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Hive.initFlutter();
-  await Hive.openBox('wordBox');  
+  await Hive.openBox('wordBox');
 
   AdsController? adsController;
   if (kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
@@ -58,14 +58,11 @@ void main() async {
   await Initializations().initializeAppData1(settings);
 
   print("*  *  *  * AFTER INITIALIZATION *  *  *  *  *  ");
-  Initializations().printAllSettingsData(settings);  
-  
-    
-  runApp(MyApp(
-    settings: settings,
-    adsController: adsController,
-    palette: palette,
-  ));
+  Initializations().printAllSettingsData(settings);
+
+  runApp(
+    MyApp(settings: settings, adsController: adsController, palette: palette),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -73,7 +70,7 @@ class MyApp extends StatefulWidget {
   final AdsController? adsController;
   final ColorPalette palette;
   const MyApp({
-    super.key, 
+    super.key,
     required this.settings,
     required this.adsController,
     required this.palette,
@@ -84,7 +81,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   late final AudioService _audioService;
   // late final GamePlayState _gamePlayState;
 
@@ -98,9 +94,8 @@ class _MyAppState extends State<MyApp> {
       // gamePlayState: _gamePlayState,
     );
 
-    _audioService.init();    
+    _audioService.init();
     initializeSplashScreen();
-
   }
 
   @override
@@ -117,33 +112,78 @@ class _MyAppState extends State<MyApp> {
     FlutterNativeSplash.remove();
   }
 
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return AppLifecycleObserver(
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => GamePlayState()),
           ChangeNotifierProvider(create: (_) => SettingsState()),
-          ChangeNotifierProvider(create: (_) => AdState(),),
-          ChangeNotifierProvider(create: (_) => TutorialState(),),
+          ChangeNotifierProvider(create: (_) => AdState()),
+          ChangeNotifierProvider(create: (_) => TutorialState()),
           // ChangeNotifierProvider(create: (_) => AudioService(settings: widget.settings)),
-          ChangeNotifierProvider.value(value: widget.palette,),
+          ChangeNotifierProvider.value(value: widget.palette),
           Provider<AdsController?>.value(value: widget.adsController),
-          Provider<SettingsController>.value(value: widget.settings,),
+          Provider<SettingsController>.value(value: widget.settings),
           ChangeNotifierProvider<AudioService>(
             create: (context) {
               final service = AudioService(settings: widget.settings);
               // initialize and preload immediately
               service.init().then((_) async {
+                await service.preload("assets/audio/sfx/score_tally.wav");
+                await service.preload("assets/audio/sfx/score_tally_end.wav");
+                await service.preload("assets/audio/sfx/score_tally_end_2.wav");
+
+                await service.preload("assets/audio/sfx/new_rank.wav");
+
+                await service.preload("assets/audio/sfx/special_1.wav");
+                await service.preload("assets/audio/sfx/crossword_1.wav");
+                await service.preload("assets/audio/sfx/streak_1.wav");
+                await service.preload("assets/audio/sfx/thaw_1.wav");
+                await service.preload("assets/audio/sfx/thaw_2.wav");
+                await service.preload("assets/audio/sfx/perk_select.wav");
+                // await service.preload("assets/audio/sfx/special_2.wav");
+                // await service.preload("assets/audio/sfx/special_2_2.wav");
+                await service.preload("assets/audio/sfx/special_3.wav");
+
+                await service.preload("assets/audio/sfx/tile_undo_1.wav");
+                await service.preload("assets/audio/sfx/tile_undo_2.wav");
+
                 await service.preload("assets/audio/sfx/glass_break_1.wav");
-                // await service.preload("assets/audio/sfx/explode.wav");
+                await service.preload("assets/audio/sfx/glass_break_2.wav");
+
+                await service.preload("assets/audio/sfx/freeze_1.wav");
+                await service.preload("assets/audio/sfx/freeze_2.wav");
+                await service.preload("assets/audio/sfx/freeze_3.wav");
+                await service.preload("assets/audio/sfx/freeze_4.wav");
+
+                await service.preload("assets/audio/sfx/tap_1.wav");
+                await service.preload("assets/audio/sfx/tap_2.wav");
+                await service.preload("assets/audio/sfx/tap_3.wav");
+                await service.preload("assets/audio/sfx/tap_4.wav");
+                await service.preload("assets/audio/sfx/tap_5.wav");
+                await service.preload("assets/audio/sfx/tap_6.wav");                                
+
+                await service.preload("assets/audio/sfx/tile_swap_1.wav");
+                await service.preload("assets/audio/sfx/tile_swap_2.wav");
+
+                await service.preload("assets/audio/sfx/tile_kill_1.wav");
+                await service.preload("assets/audio/sfx/ding_2.wav");
+                await service.preload("assets/audio/sfx/coins.wav");
+                await service.preload("assets/audio/sfx/game_over.wav");
+                await service.preload("assets/audio/sfx/mission_accomplished.wav");
+
+                for (int i in [1,2,3,4,5,6,7,8,9]) {
+                  for (int j in [1,2,3,4,5,6,7,8,9]) {
+                    await service.preload("assets/audio/sfx/word_found_${i}_$j.wav");
+                  }
+                }
+
               });
               return service;
             },
-          ),          
+          ),
           // ProxyProvider2<SettingsController, ValueNotifier<AppLifecycleState>,AudioController>(
           //   lazy: false,
           //   create: (context) => AudioController()..initialize(),
@@ -153,16 +193,16 @@ class _MyAppState extends State<MyApp> {
           //     audio.attachLifecycleNotifier(lifecycleNotifier);
           //     return audio;
           //   },
-            // create: (context) => AudioController(polyphony: 6),
-            // update: (context, settings, lifecycle, audio) {
-            //   audio ??= AudioController(polyphony: 6);
-            //   audio.attachSettings(settings);
-            //   audio.attachLifecycleNotifier(lifecycle);
-            //   return audio;
-            // },
+          // create: (context) => AudioController(polyphony: 6),
+          // update: (context, settings, lifecycle, audio) {
+          //   audio ??= AudioController(polyphony: 6);
+          //   audio.attachSettings(settings);
+          //   audio.attachLifecycleNotifier(lifecycle);
+          //   return audio;
+          // },
 
           //   dispose: (context, audio) => audio.dispose(),
-          // ),            
+          // ),
           // Provider<SettingsController>(
           //   lazy: false,
           //   create: (context) => SettingsController(
@@ -179,4 +219,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

@@ -5,10 +5,11 @@ import 'package:scribby_flutter_v2/functions/initializations.dart';
 import 'package:scribby_flutter_v2/providers/ad_state.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
+import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/game_screen/components/drawer/navigation_dialog.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 
-class MainDrawerView extends StatelessWidget {
+class MainDrawerView extends StatefulWidget {
   final VoidCallback navigateToSummary;
   // final VoidCallback navigateToSettings;
   final VoidCallback navigateToShop;
@@ -24,11 +25,39 @@ class MainDrawerView extends StatelessWidget {
   });
 
   @override
+  State<MainDrawerView> createState() => _MainDrawerViewState();
+}
+
+class _MainDrawerViewState extends State<MainDrawerView> {
+
+  late bool _soundOn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SettingsController settings = Provider.of<SettingsController>(context,listen: false);
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    _soundOn = userData["parameters"]["soundOn"];
+
+  }
+  Future<void> _toggleSound(SettingsController settings, bool value) async {
+
+    Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+    
+    setState(() {
+      // userData["soundOn"] = value;
+      userData["parameters"].update("soundOn", (v) => value);
+      settings.setUserData(userData);
+      FirestoreMethods().updateParameters(settings,"soundOn",value);
+      _soundOn = value;
+      settings.toggleSoundOn();
+      
+    });    
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-
-
-
-
     return  Consumer<GamePlayState>(
       builder: (context,gamePlayState,child) {
 
@@ -183,20 +212,26 @@ class MainDrawerView extends StatelessWidget {
                       children: [
                         Padding(
                           padding: EdgeInsets.fromLTRB(22.0*scalor,4.0*scalor,4.0*scalor,4.0*scalor),
-                          child: settings.soundsOn.value
+                          child: _soundOn
                           ? soundControlText("Sound On",palette,scalor)  //Text("Sound On", style: TextStyle(fontSize: 18 * scalor),)
                           : soundControlText("Sound Off",palette,scalor) // Text("Sound Off", style: TextStyle(fontSize: 18 * scalor),)
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(0.0*scalor,0.0*scalor,22.0*scalor,0.0*scalor),
-                          child: IconButton(
-                            onPressed: () {
-                              settings.toggleSoundOn();
-                            }, 
-                            icon: settings.soundsOn.value 
-                            ? Icon(Icons.volume_up,   color: palette.widgetText2, size: 30 * scalor,) 
-                            : Icon(Icons.volume_off, color: palette.widgetText2, size: 30 * scalor),
-                          ),
+                          // child: IconButton(
+                          //   onPressed: (value) => _toggleSound(settings, value),
+                          //   icon: settings.soundsOn.value 
+                          //   ? Icon(Icons.volume_up,   color: palette.widgetText2, size: 30 * scalor,) 
+                          //   : Icon(Icons.volume_off, color: palette.widgetText2, size: 30 * scalor),
+                          // ),
+
+                          child: Switch(
+                            // activeColor: Colors.blue,
+                            activeColor: palette.widgetParticulars1,
+                            materialTapTargetSize:  MaterialTapTargetSize.shrinkWrap,
+                            value: _soundOn, 
+                            onChanged: (value) => _toggleSound(settings, value)
+                          ),                          
                         )
                       ],
                     ),
@@ -207,19 +242,19 @@ class MainDrawerView extends StatelessWidget {
                 minTileHeight: 10.0,
                 leading: Icon(Icons.summarize, color: palette.text1, size: 26 * scalor,),
                 title: Text("Summary", style: listTileTextStyle),
-                onTap: navigateToSummary,
+                onTap: widget.navigateToSummary,
               ),
               ListTile(
                 minTileHeight: 10.0,
                 leading: Icon(Icons.shopping_cart, color: palette.text1, size: 26 * scalor),
                 title: Text("Shop", style: listTileTextStyle),
-                onTap: navigateToShop,
+                onTap: widget.navigateToShop,
               ),
               ListTile(
                 minTileHeight: 10.0,
                 leading: Icon(Icons.help, color: palette.text1, size: 26 * scalor),
                 title: Text("Instructions", style: listTileTextStyle),
-                onTap: navigateToInstructions,
+                onTap: widget.navigateToInstructions,
               ),   
               ListTile(
                 minTileHeight: 10.0,
@@ -232,7 +267,7 @@ class MainDrawerView extends StatelessWidget {
                 minTileHeight: 10.0,
                 leading: Icon(Icons.refresh, color: palette.text1, size: 26 * scalor),
                 title: Text("Restart Game", style: listTileTextStyle),
-                onTap: () => openRestartGameDialog(context,settings,gamePlayState,scaffoldState),
+                onTap: () => openRestartGameDialog(context,settings,gamePlayState,widget.scaffoldState),
               ),                                                         
             ]
           ),
@@ -437,28 +472,45 @@ Widget getGameParameterWidget(ColorPalette palette, double scalor, IconData icon
 
 Future<void> openRestartGameDialog(BuildContext context, SettingsController settings, GamePlayState gamePlayState, ScaffoldState? scaffoldState) async {
 
-void onPressRestart(BuildContext context, SettingsController settings, GamePlayState gamePlayState, ScaffoldState? scaffoldState, ColorPalette palette) {
+  void onPressRestart(BuildContext context, SettingsController settings, GamePlayState gamePlayState, ScaffoldState? scaffoldState, ColorPalette palette) {
+
+    try {
+      Map<String,dynamic> gameParameters = Map<String,dynamic>.from(gamePlayState.gameParameters);
+      late bool isTutorial = gameParameters["gameType"]=='tutorial';
+      
+      
+      gamePlayState.refreshAllData();
+      
+      gamePlayState.setGameParameters(gameParameters);
+
+      MediaQueryData mediaQuery = gameParameters["mediaQueryData"];
+
+      Initializations().initializeTime(gamePlayState,gameParameters["gameType"], gameParameters["durationInMinutes"], gameParameters["timeToPlace"]);
+      Initializations().initializeTileData(gamePlayState, gameParameters["rows"], gameParameters["columns"]);
+      Initializations().initializeElementSizes(gamePlayState, mediaQuery);
+      Initializations().initializeElementPositions(gamePlayState, mediaQuery);
+
+      if (isTutorial) {
+        Initializations().initializeTutorial(settings,gamePlayState,palette);
+        
+      } else {
+        Initializations().initializeGame(settings,gamePlayState,palette);
+      }
+
+      scaffoldState?.closeDrawer();
+      
+      Navigator.of(context).pop();
+            
+
+      
   
-
-  Map<String,dynamic> gameParameters = Map<String,dynamic>.from(gamePlayState.gameParameters);
-
-  gamePlayState.refreshAllData();
-  gamePlayState.setGameParameters(gameParameters);
-
-  MediaQueryData mediaQuery = gameParameters["mediaQueryData"];
-
-  Initializations().initializeTime(gamePlayState,gameParameters["gameType"], gameParameters["durationInMinutes"], gameParameters["timeToPlace"]);
-  Initializations().initializeTileData(gamePlayState, gameParameters["rows"], gameParameters["columns"]);
-  Initializations().initializeElementSizes(gamePlayState, mediaQuery);
-  Initializations().initializeElementPositions(gamePlayState, mediaQuery);
-  Initializations().initializeGame(settings,gamePlayState,palette);
-
-  scaffoldState?.closeDrawer();
-  
-  Navigator.of(context).pop();
-         
-
+    } catch (e,s) {
+      Helpers().printError('onPressRestart', e, s);
+    }
   }
+    
+
+
 
 
   return showDialog<void>(

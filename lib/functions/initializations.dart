@@ -27,11 +27,21 @@ class Initializations {
   Future<void> initializeAppData1(SettingsController settings) async {
 
     try {
+
+      await StorageMethods().saveUpdatesToLocalStorage(settings);
+
+
+
       
       // get info data to local storage
       if (settings.gameInfoData.value.isEmpty) {
         await StorageMethods().saveGameInfoDataFromJsonFileToLocalStorage(settings);
       }
+
+      // DateTime? lastGamePlayedDate = Helpers().getLatestGamePlayed(settings);
+      // print("lastGamePlayedDate: ${lastGamePlayedDate}");        
+
+
       // get achievement data from db to local storage
       await StorageMethods().saveAchievementDataToLocalStorage(settings);
 
@@ -70,6 +80,8 @@ class Initializations {
 
         // save the userdata to local storage
         await StorageMethods().saveUserDocumentToLocalStorage(settings,firestoreUserData);
+
+
 
         // get daily puzzle from db - save it to localstorage
         await FirestoreMethods().saveDailyPuzzlesToLocalStorage(settings);
@@ -632,8 +644,8 @@ ${positionData}
       int randomIndex = random.nextInt(alphabet.length);
       Map<String, dynamic> randomLetterObject = alphabet[randomIndex];
       String body = randomLetterObject["letter"];
-      randomLetterObject.update("count", (value) => randomLetterObject["count"] - 1);
-      randomLetterObject.update("inPlay", (value) => randomLetterObject["inPlay"] + 1);
+      // randomLetterObject.update("count", (value) => randomLetterObject["count"] - 1);
+      // randomLetterObject.update("inPlay", (value) => randomLetterObject["inPlay"] + 1);
 
       // startingLetters.add(alphabet[randomIndex]["letter"]);
       // alphabet.removeAt(randomIndex);

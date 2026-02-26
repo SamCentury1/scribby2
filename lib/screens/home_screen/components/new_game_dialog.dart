@@ -34,8 +34,8 @@ class _NewGameDialogState extends State<NewGameDialog> {
   List<int> gridTargets = List.generate(4, (e)=>5 + e).toList();
   List<int?> timesToPlace = [null,3,4,5,6,7,8,9,10,11,12];
 
-  final int initialDurationItem = 9; // 10 minutes
-  final int initialPointsItem = 7;
+  late int durationIndex = 9; // 10 minutes
+  late int targetPointsIndex = 7;
   final int initialGridItem = 1; // 8 by 8 grid
   final int initialTimeToPlaceItem = 0; // 8 by 8 grid
 
@@ -58,8 +58,8 @@ class _NewGameDialogState extends State<NewGameDialog> {
 
     
 
-    durationController = FixedExtentScrollController(initialItem: initialDurationItem);
-    pointsController = FixedExtentScrollController(initialItem: initialPointsItem);
+    durationController = FixedExtentScrollController(initialItem: durationIndex);
+    pointsController = FixedExtentScrollController(initialItem: targetPointsIndex);
     gridRowController = FixedExtentScrollController(initialItem: initialGridItem);
     gridColumnController = FixedExtentScrollController(initialItem: initialGridItem);
     timesToPlaceController = FixedExtentScrollController(initialItem: initialTimeToPlaceItem);
@@ -68,8 +68,8 @@ class _NewGameDialogState extends State<NewGameDialog> {
     // timesToPlace.insert(0,item);
     // print("timesToPlace: $timesToPlace | ${timesToPlace}");
 
-    durationInMinutes = timesInMinutes[initialDurationItem]; 
-    targetPoints = pointTargets[initialPointsItem]; 
+    durationInMinutes = timesInMinutes[durationIndex]; 
+    targetPoints = pointTargets[targetPointsIndex]; 
     gridAxis = gridTargets[initialGridItem]; 
     timeToPlace = timesToPlace[initialTimeToPlaceItem];     
 
@@ -82,6 +82,75 @@ class _NewGameDialogState extends State<NewGameDialog> {
     }
 
 
+
+  }
+
+  void generateRandomGame() {
+    Random random = Random();
+
+    // game type
+    int gameTypeChoiceIndex = random.nextInt(2);
+    
+
+    // duration (can be null)
+    int randomTimesInMinutesIndex = random.nextInt(timesInMinutes.length);
+    
+
+
+    // target (can be null)
+    int pointsTargetIndex = random.nextInt(pointTargets.length);
+    
+    
+
+    // time to move (can be null)
+    int timeToPlaceIndexRaw = random.nextInt(timesToPlace.length*2);
+    int timeToPlaceIndex = timeToPlaceIndexRaw;
+    if (timeToPlaceIndexRaw>timesToPlace.length-1) {
+      timeToPlaceIndex = 0;
+    }
+    timesToPlaceController!.animateToItem(timeToPlaceIndex,duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+
+    // rows 
+    int randomRowIndex = random.nextInt(gridTargets.length);
+    gridRowController!.animateToItem(randomRowIndex,duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+
+    // cols
+    int randomColumnIndex = random.nextInt(gridTargets.length);
+    gridColumnController!.animateToItem(randomColumnIndex,duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+
+
+    setState(() {
+      // game type
+      gameTypeChoice = ["classic","sprint"][gameTypeChoiceIndex];
+
+      // game duration
+      durationIndex = randomTimesInMinutesIndex;
+      durationInMinutes = timesInMinutes[durationIndex];
+      if (gameTypeChoice=='sprint') {
+        durationInMinutes = null;
+      } else {
+        durationController!.animateToItem(durationIndex,duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+      }
+      
+      // target
+      targetPointsIndex = pointsTargetIndex;
+      targetPoints = pointTargets[targetPointsIndex];
+      if (gameTypeChoice=='classic') {
+        targetPoints = null;
+      } else {
+        pointsController!.animateToItem(targetPointsIndex,duration: Duration(milliseconds: 200), curve: Curves.decelerate);
+      }
+
+      print("generateRandomGame() durationInMinutes: $durationInMinutes");
+
+      // time to place
+      timeToPlace = timesToPlace[timeToPlaceIndex];
+
+      // grid values
+      rowValue = gridTargets[randomRowIndex];
+      colValue = gridTargets[randomColumnIndex];
+
+    });
 
   }
 
@@ -173,16 +242,16 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                     alignment: Alignment.center,
                                     value: gameTypeChoice,
                                     items: [
-                                      DropdownMenuItem(value: "classic",child: Text("Classic",style: TextStyle(color: palette.widgetText1),)),
+                                      DropdownMenuItem(value: "classic",child: Text("Classic",style: TextStyle(color: palette.text1),)),
                                       // DropdownMenuItem(value: "timed-move",child: Text("Timed-Move",style: TextStyle(color: palette.widgetText1),)), 
-                                      DropdownMenuItem(value: "sprint",child: Text("Sprint",style: TextStyle(color: palette.widgetText1),)), 
+                                      DropdownMenuItem(value: "sprint",child: Text("Sprint",style: TextStyle(color: palette.text1),)), 
                                       // DropdownMenuItem(value: "arcade",child: Text("Arcade",style: TextStyle(color: palette.widgetText1),)),                          
                                     ],
                                     dropdownColor: palette.widget1,
                                     borderRadius: BorderRadius.all(Radius.circular(12.0*scalor)),
                                     style: GoogleFonts.lilitaOne(
                                       color: palette.text1,
-                                      fontSize: 17*scalor,
+                                      fontSize: 18*scalor,
                                   
                                     ),
                                     
@@ -191,10 +260,11 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                         gameTypeChoice = value;
                                         if (value == 'sprint') {
                                           durationInMinutes = null;
-                                          targetPoints = pointTargets[initialPointsItem]; 
+                                          targetPoints = pointTargets[targetPointsIndex]; 
+                                          print("change this up: $targetPoints");
                                         }
                                         if (gameTypeChoice == "classic") {
-                                          durationInMinutes = timesInMinutes[initialDurationItem];
+                                          durationInMinutes = timesInMinutes[durationIndex];
                                           targetPoints = null;
                                         }
                                       });              
@@ -234,7 +304,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               child: Text(
                                 "Duration:",
                                 style: GoogleFonts.lilitaOne(
-                                  color: gameTypeChoice == "classic" ? palette.text1 : palette.text1.withOpacity(0.5),
+                                  color: gameTypeChoice == "classic" ? palette.text1 : palette.text1.withAlpha(150),
                                   fontSize: 22*scalor
                                 ),
                               ),
@@ -244,17 +314,19 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               child: Container(
                                 height: widgetHeight,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: palette.text2),
+                                  border: Border.all(
+                                    color: gameTypeChoice == "classic" ? palette.text2 : palette.text2.withAlpha(150) 
+                                  ),
                                   borderRadius: BorderRadius.all(Radius.circular(8.0*scalor))
                                 ),
-                                child: gameTypeChoice == "classic" ? ListWheelScrollView.useDelegate(
+                                child:ListWheelScrollView.useDelegate(
                                   
-                                  physics: FixedExtentScrollPhysics(),
+                                  physics: gameTypeChoice == "classic" ? FixedExtentScrollPhysics() : NeverScrollableScrollPhysics(),
                                   controller: durationController,
                                   itemExtent: widgetHeight*0.6 ,
                                   perspective: 0.0001,
                                   childDelegate: ListWheelChildLoopingListDelegate(
-                                    children: getListOfGameDurations(timesInMinutes,scalor,palette)
+                                    children: getListOfGameDurations(timesInMinutes,scalor,palette,gameTypeChoice)
                                   ),
                                   onSelectedItemChanged: (dynamic value) {
                                     int updatedValue = timesInMinutes[value];
@@ -263,18 +335,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                     });
                                   },
                                   
-                                ) : 
-                                  
-
-                                Center(
-                                  child: Text(
-                                    "Unlimited", 
-                                    style: GoogleFonts.lilitaOne(
-                                      color: palette.text1.withOpacity(0.5),
-                                    ),
-                                  )
-                                ),
-                                  
+                                )
                                 
                               ),
                             ),
@@ -302,17 +363,19 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               child: Container(
                                 height: widgetHeight,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: palette.text2),
+                                  border: Border.all(
+                                    color: gameTypeChoice == "classic" ? palette.text2.withAlpha(150) : palette.text2
+                                  ),
                                   borderRadius: BorderRadius.all(Radius.circular(8.0*scalor))
                                 ),
-                                child: gameTypeChoice == "sprint" ? ListWheelScrollView.useDelegate(
+                                child: ListWheelScrollView.useDelegate(
                                   
-                                  physics: FixedExtentScrollPhysics(),
+                                  physics: gameTypeChoice == "classic" ? NeverScrollableScrollPhysics() : FixedExtentScrollPhysics(),
                                   controller: pointsController,
                                   itemExtent: widgetHeight*0.6 ,
                                   perspective: 0.0001,
                                   childDelegate: ListWheelChildLoopingListDelegate(
-                                    children: getListOfPointTargets(pointTargets,scalor,palette)
+                                    children: getListOfPointTargets(pointTargets,scalor,palette,gameTypeChoice)
                                   ),
                                   onSelectedItemChanged: (dynamic value) {
                                     // int updatedValue = ;
@@ -320,17 +383,17 @@ class _NewGameDialogState extends State<NewGameDialog> {
                                       targetPoints = pointTargets[value];
                                     });
                                   },
-                                ) : 
+                                ) 
 
-                                Center(
-                                  child: Text(
-                                    "Unlimited",
-                                    style: GoogleFonts.lilitaOne(
-                                      color:  gameTypeChoice == "sprint" ? palette.text1 : palette.text1.withOpacity(0.5),
-                                      fontSize: 22*scalor
-                                    ),
-                                  )
-                                )
+                                // Center(
+                                //   child: Text(
+                                //     "Unlimited",
+                                //     style: GoogleFonts.lilitaOne(
+                                //       color:  gameTypeChoice == "sprint" ? palette.text1 : palette.text1.withOpacity(0.5),
+                                //       fontSize: 22*scalor
+                                //     ),
+                                //   )
+                                // )
                               ),
                             ),
                           ],
@@ -600,47 +663,7 @@ class _NewGameDialogState extends State<NewGameDialog> {
                               )
                             ),
                             // onPressed: () => Navigator.of(context).pop(),
-                            onPressed: () {
-                              Random random = Random();
-                              Map<String,dynamic> res = {};
-
-                              List<String> _gameTypeChoices = ["classic", "sprint"];
-                              int gameTypeChoiceIndex = random.nextInt(_gameTypeChoices.length);
-                              String _gameType = _gameTypeChoices[gameTypeChoiceIndex];
-
-                              int _rows = gridTargets[random.nextInt(gridTargets.length)];
-                              int _columns = gridTargets[random.nextInt(gridTargets.length)];
-                              int? _targetPoints = null;
-                              int? _duration = null;
-                              int? _timeToPlace = null;
-
-                              if (_gameType == 'classic') {
-                                _duration = timesInMinutes[random.nextInt(timesInMinutes.length)];
-                              }
-
-                              if (_gameType == 'sprint') {
-                                _targetPoints = pointTargets[random.nextInt(pointTargets.length)];
-                              }
-
-                              int durationIndex=  random.nextInt(timesInMinutes.length);
-
-                              setState(() {
-                                gameTypeChoice=_gameType;
-                                durationController!.animateToItem(durationIndex,duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                                gridRowController!.animateToItem(random.nextInt(gridTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                                gridColumnController!.animateToItem(random.nextInt(gridTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                                if (_gameType=="classic") {
-                                  List<dynamic> newDurationList = List.generate(5, (e) => e+1).toList();
-                                  durationController!.animateToItem(random.nextInt(newDurationList.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                                } else {
-                                  List<int> newPointTargets = List.generate(5, (e) => 300 + (e+100)).toList();
-                                  pointsController!.animateToItem(random.nextInt(newPointTargets.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                                }
-                                List<int?> newTimesToPlace = [null,null,null,null,null,null,null,5] + timesToPlace;
-                                timesToPlaceController!.animateToItem(random.nextInt(newTimesToPlace.length),duration: Duration(milliseconds: 200), curve: Curves.decelerate);
-                              });
-
-                            }, 
+                            onPressed: generateRandomGame,
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(8.0*scalor,4.0*scalor,8.0*scalor,4.0*scalor),
                               child: Text(
@@ -667,7 +690,16 @@ class _NewGameDialogState extends State<NewGameDialog> {
                             ),
                             onPressed: () {        
                               print("d: $durationInMinutes | p: $targetPoints | g: $gridAxis"); 
-                              print("user: ${settings.userData.value}");                 
+                              // print("user: ${settings.userData.value}");                 
+                              print("""
+********************************************************************
+      gameTypeChoice: ---------- $gameTypeChoice
+      durationInMinutes: ------- $durationInMinutes
+      targetPoints: ------------ $targetPoints
+      timeToPlace: ------------- $timeToPlace
+      board: ------------------- $rowValue by $colValue
+********************************************************************
+                                """);
                               Initializations().startGame(
                                 gamePlayState, 
                                 gameTypeChoice,
@@ -714,11 +746,11 @@ class _NewGameDialogState extends State<NewGameDialog> {
 
 
 
-List<Widget> getListOfGameDurations(List<int>durations,double scalor, ColorPalette palette) {
+List<Widget> getListOfGameDurations(List<int>durations,double scalor, ColorPalette palette, String gameType) {
   List<Widget> res  = [];
   for (int i=0; i<durations.length; i++) {
     int duration = durations[i];
-    String text = "${duration}:00";
+    String text = gameType == "classic" ? "${duration}:00" : "Unlimited";
     Widget widget = Container(
       width: 100*scalor,
       height: 40*scalor,
@@ -730,7 +762,7 @@ List<Widget> getListOfGameDurations(List<int>durations,double scalor, ColorPalet
         text,
         style: GoogleFonts.lilitaOne(
           fontSize: 18*scalor,
-          color: palette.text1
+          color: gameType == "classic" ? palette.text1 : palette.text1.withAlpha(150)
         )
       )),
     );
@@ -740,11 +772,11 @@ List<Widget> getListOfGameDurations(List<int>durations,double scalor, ColorPalet
 }
 
 
-List<Widget> getListOfPointTargets(List<int>points, double scalor, ColorPalette palette) {
+List<Widget> getListOfPointTargets(List<int>points, double scalor, ColorPalette palette, String gameType) {
   List<Widget> res  = [];
   for (int i=0; i<points.length; i++) {
     int target = points[i];
-    String text = "${target}";
+    String text = gameType == "classic" ? "None" : "${target}";
     Widget widget = Container(
       width: 100*scalor,
       height: 40*scalor,
@@ -756,7 +788,7 @@ List<Widget> getListOfPointTargets(List<int>points, double scalor, ColorPalette 
         text,
         style: GoogleFonts.lilitaOne(
           fontSize: 18*scalor,
-          color: palette.text1
+          color: gameType == "classic" ? palette.text1.withAlpha(150) :  palette.text1 
         )
       )),
     );
@@ -846,40 +878,42 @@ List<Widget> getListOfAxisNumbers(List<int> grids, double scalor, ColorPalette p
 }
 
 
-Map<String,dynamic> generateRandomGameObject(List<int> timesInMinutes, List<int> pointTargets, List<int> gridTargets, List<int> timesToPlace,) {
-  Random random = Random();
-  Map<String,dynamic> res = {};
+// Map<String,dynamic> generateRandomGameObject(List<int> timesInMinutes, List<int> pointTargets, List<int> gridTargets, List<int> timesToPlace,) {
+//   Random random = Random();
+//   Map<String,dynamic> res = {};
 
-  List<String> gameTypeChoices = ["classic", "sprint"];
-  int gameTypeChoiceIndex = random.nextInt(gameTypeChoices.length);
-  String gameType = gameTypeChoices[gameTypeChoiceIndex];
+//   List<String> gameTypeChoices = ["classic", "sprint"];
+//   int gameTypeChoiceIndex = random.nextInt(gameTypeChoices.length);
+//   String gameType = gameTypeChoices[gameTypeChoiceIndex];
 
-  int rows = gridTargets[random.nextInt(gridTargets.length)];
-  int columns = gridTargets[random.nextInt(gridTargets.length)];
-  int? targetPoints = null;
-  int? duration = null;
-  int? timeToPlace = null;
+//   int rows = gridTargets[random.nextInt(gridTargets.length)];
+//   int columns = gridTargets[random.nextInt(gridTargets.length)];
+//   int? targetPoints = null;
+//   int? duration = null;
+//   int? timeToPlace = null;
 
-  if (gameType == 'classic') {
-    duration = timesInMinutes[random.nextInt(timesInMinutes.length)];
-  }
+//   if (gameType == 'classic') {
+//     duration = timesInMinutes[random.nextInt(timesInMinutes.length)];
+//   }
 
-  if (gameType == 'sprint') {
-    targetPoints = pointTargets[random.nextInt(pointTargets.length)];
-  }
+//   if (gameType == 'sprint') {
+//     targetPoints = pointTargets[random.nextInt(pointTargets.length)];
+//   }
 
-  res = {
-      "gameType":gameType,
-      "target":targetPoints,
-      "targetType": null,
-      "rows":rows,
-      "columns":columns,
-      "durationInMinutes":duration,
-      "timeToPlace": timeToPlace,
-  };
+//   print("generateRandomGameObject: $pointTargets");
 
-  return res;
-}
+//   res = {
+//       "gameType":gameType,
+//       "target":targetPoints,
+//       "targetType": null,
+//       "rows":rows,
+//       "columns":columns,
+//       "durationInMinutes":duration,
+//       "timeToPlace": timeToPlace,
+//   };
+
+//   return res;
+// }
 
 
 // List<Widget> getListOfScrollableNumbers(int minNumber, int maxNumber) {

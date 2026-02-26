@@ -30,7 +30,12 @@ class _AchievementsPageViewState extends State<AchievementsPageView> {
     List<dynamic> badges = widget.settings.achievementData.value.toList();
     badges.sort((a,b)=>a["xp"].compareTo(b["xp"]));
 
-    print("yooo we here in the achievements page view: ${widget.settings.achievementData.value}");
+    List<dynamic> tutorialBadge = badges.where((e)=> e["target"]=='tutorial').toList();
+    print("--------------- TUTORIAL BADGE -----------------");
+    print(tutorialBadge);
+    print("--------------- TUTORIAL BADGE -----------------");
+
+    // print("yooo we here in the achievements page view: ${widget.settings.achievementData.value}");
 
     return Builder(
       builder: (context) {
@@ -42,6 +47,48 @@ class _AchievementsPageViewState extends State<AchievementsPageView> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  Builder(
+                    builder: (context) {
+                      List<Widget> badgeWidgets = [];
+                      for (int i=0; i<badges.length; i++) {
+                        if (badges[i]["target"]=="tutorial") {
+                          
+                          Widget badgeWidget = Padding(
+                            padding: EdgeInsets.all(4.0*scalor),
+                            child: SizedBox(
+                              width: 75,
+                              height: 75,
+                              child: BadgeWidget( badgeData: badges[i], scalor: scalor,),
+                              // child: CustomPaint(
+                              //   painter: BadgePainter(badgeData: badges[i]),
+                              // )
+                            ),
+                          );
+                          badgeWidgets.add(badgeWidget);
+                        }
+                      }
+                      if (badgeWidgets.isNotEmpty) {
+                        return Column(
+                          children: [
+                            Text(
+                              "Tutorial",
+                              style: widget.palette.mainAppFont(
+                                textStyle:  TextStyle(
+                                  color: widget.palette.text1,
+                                  fontSize: 22*scalor
+                                ),
+                              ),
+                            ),                      
+                            Wrap(
+                              children: badgeWidgets,
+                            ),
+                          ],
+                        );
+                      }
+                      return SizedBox();
+                    },
+                  ),
+
                   Builder(
                     builder: (context) {
                       List<Widget> badgeWidgets = [];
@@ -253,7 +300,7 @@ Future<void> openBadgeDialog(BuildContext context, Map<String,dynamic> badgeData
 
       final ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
 
-
+      print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% $badgeData");
       return Dialog(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(

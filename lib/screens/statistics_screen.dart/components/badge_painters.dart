@@ -153,6 +153,8 @@ class BadgePainter extends CustomPainter {
       BonusPainters().drawCrossWordIcon(canvas, Size(size.width*0.3,size.height*0.3), center, badgeColors["iconColor"]);
     } else if (badgeData["target"]== "words") {
       BonusPainters().drawMultiWordIcon(canvas, Size(size.width*0.3,size.height*0.3), center, badgeColors["iconColor"]);
+    } else if (badgeData["target"]=="tutorial") {
+      BonusPainters().drawTutorialIcon(canvas, Size(size.width*0.3,size.height*0.3), center, badgeColors["iconColor"]);
     }
 
     

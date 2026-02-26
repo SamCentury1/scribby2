@@ -327,6 +327,25 @@ class FirestoreMethods {
     return res;
   }  
 
+  Future<List<dynamic>> downloadUpdates() async {
+    List<dynamic> res = [];
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('updates')
+          .get();
+
+      res = querySnapshot.docs
+          .map((doc) => doc.data() )
+          .toList(); 
+      
+      debugPrint("successfully downloaded updates");
+    } catch (e,t) {
+      debugPrint("error when downloading updates: $e | $t");
+      
+    }
+    return res;
+  }    
+
   Future<List<Map<String,dynamic>>> downloadAlphabet(String lang) async {
     List<Map<String,dynamic>> res = [];
     try {

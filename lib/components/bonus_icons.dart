@@ -80,55 +80,55 @@ class BonusIcons {
   }
 
 
-  Canvas drawLevelUp(Canvas canvas, GamePlayState gamePlayState) {
-    Map<String,dynamic> levelUpAnimation = gamePlayState.animationData.firstWhere((e)=>e["type"]=="level-up",orElse: ()=>{});
-    if (levelUpAnimation.isNotEmpty) {
-      Offset position = gamePlayState.elementPositions["bonusCenter"];
-      int body = levelUpAnimation["body"];
-      double progress = levelUpAnimation["progress"];
+  // Canvas drawLevelUp(Canvas canvas, GamePlayState gamePlayState) {
+  //   Map<String,dynamic> levelUpAnimation = gamePlayState.animationData.firstWhere((e)=>e["type"]=="level-up",orElse: ()=>{});
+  //   if (levelUpAnimation.isNotEmpty) {
+  //     Offset position = gamePlayState.elementPositions["bonusCenter"];
+  //     int body = levelUpAnimation["body"];
+  //     double progress = levelUpAnimation["progress"];
       
-      // elevation animation details
-      List<Map<String,dynamic>> elevationAnimationDetails = [
-        {"source": 50.0 * gamePlayState.scalor, "target": 0.0, "duration": 0.15},
-        {"source": 0.0, "target": 0.0, "duration": 0.60},
-        {"source": 0.0, "target":-100.0 * gamePlayState.scalor, "duration": 0.25},
-      ];
-      double getElevationProgress = AnimationUtils().getAnimationTransition(progress,elevationAnimationDetails);
-      double updatedY = position.dy  + getElevationProgress;
-      Offset updatedPosition = Offset(position.dx, updatedY);
+  //     // elevation animation details
+  //     List<Map<String,dynamic>> elevationAnimationDetails = [
+  //       {"source": 50.0 * gamePlayState.scalor, "target": 0.0, "duration": 0.15},
+  //       {"source": 0.0, "target": 0.0, "duration": 0.60},
+  //       {"source": 0.0, "target":-100.0 * gamePlayState.scalor, "duration": 0.25},
+  //     ];
+  //     double getElevationProgress = AnimationUtils().getAnimationTransition(progress,elevationAnimationDetails);
+  //     double updatedY = position.dy  + getElevationProgress;
+  //     Offset updatedPosition = Offset(position.dx, updatedY);
 
-      // opacity animation details
-      List<Map<String,dynamic>> opacityAnimationDetails = [
-        {"source": 0.0, "target": 1.0, "duration": 0.15},
-        {"source": 1.0, "target": 1.0, "duration": 0.60},
-        {"source": 1.0, "target": 0.0, "duration": 0.25},
-      ];      
-      double getOpacityProgress = AnimationUtils().getAnimationTransition(progress,opacityAnimationDetails);
+  //     // opacity animation details
+  //     List<Map<String,dynamic>> opacityAnimationDetails = [
+  //       {"source": 0.0, "target": 1.0, "duration": 0.15},
+  //       {"source": 1.0, "target": 1.0, "duration": 0.60},
+  //       {"source": 1.0, "target": 0.0, "duration": 0.25},
+  //     ];      
+  //     double getOpacityProgress = AnimationUtils().getAnimationTransition(progress,opacityAnimationDetails);
 
-      late double fontSize = 36 * gamePlayState.scalor; 
+  //     late double fontSize = 36 * gamePlayState.scalor; 
 
-      TextStyle textStyle = TextStyle(
-        color: Color.fromRGBO(255, 255, 255, getOpacityProgress), //const Color.fromARGB(190, 123, 191, 255),
-        fontSize: fontSize,
-      );
-      TextSpan textSpan = TextSpan(
-        text: "Level ${body.toString()}",
-        style: textStyle,
-      );
-      final textPainter = TextPainter(
-        text: textSpan,
-        textDirection: TextDirection.ltr,
-      );
-      textPainter.layout();
-      final textPosition = Offset(updatedPosition.dx - (textPainter.width/2), updatedPosition.dy - (textPainter.height/2));
-      textPainter.paint(canvas, textPosition);
+  //     TextStyle textStyle = TextStyle(
+  //       color: Color.fromRGBO(255, 255, 255, getOpacityProgress), //const Color.fromARGB(190, 123, 191, 255),
+  //       fontSize: fontSize,
+  //     );
+  //     TextSpan textSpan = TextSpan(
+  //       text: "Level ${body.toString()}",
+  //       style: textStyle,
+  //     );
+  //     final textPainter = TextPainter(
+  //       text: textSpan,
+  //       textDirection: TextDirection.ltr,
+  //     );
+  //     textPainter.layout();
+  //     final textPosition = Offset(updatedPosition.dx - (textPainter.width/2), updatedPosition.dy - (textPainter.height/2));
+  //     textPainter.paint(canvas, textPosition);
 
 
-      // Rect rect = Rect.fromCenter(center: updatedPosition, width: 200, height: 50);
-      // canvas.drawRect(rect, paint);
-    }
-    return canvas;
-  }
+  //     // Rect rect = Rect.fromCenter(center: updatedPosition, width: 200, height: 50);
+  //     // canvas.drawRect(rect, paint);
+  //   }
+  //   return canvas;
+  // }
 
 }
 

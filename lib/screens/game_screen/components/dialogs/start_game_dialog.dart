@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'dart:ui' as ui;
 
 import 'package:scribby_flutter_v2/settings/settings.dart';
@@ -17,6 +19,7 @@ class _StartGameOverlayState extends State<StartGameOverlay> {
   @override
   Widget build(BuildContext context) {
     SettingsController settings = Provider.of<SettingsController>(context,listen: false);
+    ColorPalette palette = Provider.of<ColorPalette>(context,listen: false);
     final double scalor = Helpers().getScalor(settings);
     return Consumer<GamePlayState>(
       builder:(context, gamePlayState, child) {
@@ -70,13 +73,13 @@ class _StartGameOverlayState extends State<StartGameOverlay> {
                         ),
                         child: Center(
                           child: DefaultTextStyle(
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 43*scalor
+                            style: GoogleFonts.lilitaOne(
+                              textStyle: TextStyle(
+                                color:palette.text1,
+                                fontSize: 43*scalor
+                              ),
                             ),
-                            child: Text(
-                              "Tap to Start"
-                            )
+                            child: Text("Tap to Start",),
                           ),
                         ),
                       ),

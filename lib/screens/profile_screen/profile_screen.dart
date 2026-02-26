@@ -61,6 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //   }
   // }
 
+
   Future<void> _pickLanguage(SettingsController settings, String? value) async {
 
     Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
@@ -151,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _rank = userData["rank"] ?? "1_1";
         print("rank: ${_rank}");
         _selectedLanguage = userData["language"]??"en";
-        _soundOn = settings.soundsOn.value;
+        _soundOn = userData["parameters"]["soundOn"]; // settings.soundsOn.value;
         
         _selectedTheme = userData["parameters"]["theme"]??"default";
         

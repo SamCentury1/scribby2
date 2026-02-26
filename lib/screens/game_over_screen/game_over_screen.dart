@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:scribby_flutter_v2/ads/ad_mob_service.dart';
+import 'package:scribby_flutter_v2/audio/audio_service.dart';
+import 'package:scribby_flutter_v2/audio/sounds.dart';
 import 'package:scribby_flutter_v2/components/background_painter.dart';
 import 'package:scribby_flutter_v2/components/daily_puzzle_ranking_widget.dart';
 import 'package:scribby_flutter_v2/components/loading_image.dart';
@@ -244,7 +246,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
             });
 
             // ⭐ Recommended: give UI time to settle before showing
-            Future.delayed(const Duration(milliseconds: 50), () {
+            Future.delayed(const Duration(milliseconds: 20), () {
               if (mounted) {
                 _interstitialAd?.show();
               }
@@ -263,7 +265,10 @@ class _GameOverScreenState extends State<GameOverScreen> {
             });
 
             // Continue to game over screen animation even if ad fails
-            Animations().startGameOverScreenCountAnimation(gamePlayState);
+            final audioService = context.read<AudioService>();
+            // print("????");
+            // audioService.play(SfxType.scoreTally);            
+            Animations().startGameOverScreenCountAnimation(gamePlayState,audioService);
           },
         ),
       );
@@ -279,8 +284,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
       setState(() {
         isLoading = false;
       });
-
-      Animations().startGameOverScreenCountAnimation(gamePlayState);
+      final audioService = context.read<AudioService>();
+      // audioService.play(SfxType.scoreTally);
+      Animations().startGameOverScreenCountAnimation(gamePlayState,audioService);
     }
   }
 
@@ -296,7 +302,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
         if (!mounted) return;
 
-        Animations().startGameOverScreenCountAnimation(gamePlayState);
+        Animations().startGameOverScreenCountAnimation(gamePlayState,context.read<AudioService>());
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
         debugPrint("Interstitial failed to show: $error");
@@ -305,7 +311,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
         if (!mounted) return;
 
-        Animations().startGameOverScreenCountAnimation(gamePlayState);
+        Animations().startGameOverScreenCountAnimation(gamePlayState,context.read<AudioService>());
       },
     );
   }  
@@ -514,7 +520,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
                                             
                                                                                 
-                                                  if (gamePlayState.gameResultData["didCompleteGame"]) {
+                                                  if (gamePlayState.gameResultData["didCompleteGame"] && gamePlayState.gameResultData["reward"] > 0) {
                                                     // openDoubleCoinsDialog(context,settings);
                                                     showDialog<void>(
                                                       context: context,

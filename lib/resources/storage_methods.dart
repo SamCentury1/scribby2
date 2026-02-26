@@ -41,15 +41,41 @@ class StorageMethods {
     settings.setAchievementData(allData);
   }
 
+
+  Future<void> saveUpdatesToLocalStorage(SettingsController settings) async {
+    try {
+      print("update data is empty - download it and set it to local storage!");
+      final List<dynamic> allData = await FirestoreMethods().downloadUpdates();
+      final Map<String,dynamic> updates = allData[0];
+      settings.setUpdates(updates);
+    } catch (e,t) {
+      debugPrint("an error occured while setting update data to local storage: $e | $t");
+    }
+  }    
+
   Future<void> saveAchievementDataToLocalStorage(SettingsController settings) async {
     try {
       Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      Map<String,dynamic> updates = settings.updates.value as Map<String,dynamic>;
+      DateTime lastUpdate = DateTime.parse(updates['achievements']);
       if (settings.achievementData.value.isEmpty) {
         final List<dynamic> allData = await FirestoreMethods().downloadAchievements();
-        settings.setAchievementData(allData);   
+        settings.setAchievementData(allData);
       } else {
-
         if (userData.isNotEmpty) {
+          DateTime? lastGamePlayedDate = Helpers().getLatestGamePlayed(settings);
+
+          if (lastGamePlayedDate != null) {
+            if (lastGamePlayedDate.isBefore(lastUpdate)) {
+              List<dynamic> badgesInCloud = await FirestoreMethods().downloadAchievements();
+              List<String> newBadges = Helpers().getNewBadgeKeys(settings.achievementData.value, badgesInCloud);
+              print("LAST GAME PLAYED WAS BEFORE MOST RECENT UPDATE -> UPDATE $newBadges");
+            } else {
+              print("LAST GAME WAS PLAYED AFTER UPDATE -> DO NOTHING");
+            }
+    
+          } 
+
           List<dynamic> allData = settings.achievementData.value;
           Map<String,dynamic> userData =  settings.userData.value as Map<String,dynamic>;
           List<dynamic> gameHistory = userData["gameHistory"];
@@ -66,6 +92,10 @@ class StorageMethods {
               correspondingBadge.update("dateCompleted", (v)=>badgesEarned[i]["dateCompleted"]);
             }
           }
+
+          // List<String> missingBadges = Helpers().getNewBadgeKeys();
+
+          // check for missing badges
 
           settings.setAchievementData(allData);
           print("--------------------------------------");
@@ -101,10 +131,28 @@ class StorageMethods {
 
   Future<void> saveRankDataToLocalStorage(SettingsController settings) async {
     try {
+      Map<String,dynamic> updates = settings.updates.value as Map<String,dynamic>;
+      Map<String,dynamic> userData = settings.userData.value as Map<String,dynamic>;
+      DateTime lastUpdate = DateTime.parse(updates['achievements']);
       if (settings.rankData.value.isEmpty) {
         print("rank data is empty - download it and set it to local storage!");
         final List<dynamic> allData = await FirestoreMethods().downloadRanks();
         settings.setRankData(allData);    
+      } else {
+        print("rank data is not empty. check if there was an update");
+        if (userData.isNotEmpty) {
+          DateTime? lastGamePlayedDate = Helpers().getLatestGamePlayed(settings);
+          print("last game played? : ${lastGamePlayedDate}");
+          if (lastGamePlayedDate != null) {
+            if (lastGamePlayedDate.isBefore(lastUpdate)) {
+              final List<dynamic> allData = await FirestoreMethods().downloadRanks();
+              settings.setRankData(allData);                  
+            }
+          } else {
+            final List<dynamic> allData = await FirestoreMethods().downloadRanks();
+            settings.setRankData(allData);              
+          }
+        }        
       }
     } catch (e,t) {
       debugPrint("an error occured while setting rank data to local storage: $e | $t");

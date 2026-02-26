@@ -1,4 +1,6 @@
 [
+    {"badgeKey": "tutorial_complete", "name": "Completed Tutorial", "type": "global","xp":50, "target":"tutorial", "data": {"count":1}, "completed":false, "dateCompleted":null},
+
     {"badgeKey": "crosswords_3_3", "name": "3x3 Crossword", "type": "inGame","xp":20, "target":"crosswords", "data": {"axis1":3,"axis2":3}, "completed":false, "dateCompleted":null},
     {"badgeKey": "crosswords_3_4", "name": "3x4 Crossword", "type": "inGame","xp":20, "target":"crosswords", "data": {"axis1":3,"axis2":4}, "completed":false, "dateCompleted":null},
     {"badgeKey": "crosswords_3_5", "name": "3x5 Crossword", "type": "inGame","xp":30, "target":"crosswords", "data": {"axis1":3,"axis2":5}, "completed":false, "dateCompleted":null},

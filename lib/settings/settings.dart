@@ -44,6 +44,8 @@ class SettingsController {
   // ValueNotifier<String> colorTheme = ValueNotifier('dark');
 
   ValueNotifier<Object> dailyPuzzleData = ValueNotifier({});
+  
+  ValueNotifier<Object> updates = ValueNotifier({});
 
 
   /// Creates a new instance of [SettingsController] backed by [persistence].
@@ -72,6 +74,7 @@ class SettingsController {
         _persistence.getRankData().then((value) => rankData.value = value),
         _persistence.getAchievementData().then((value) => achievementData.value = value),
         _persistence.getDailyPuzzleData().then((value) => dailyPuzzleData.value = value),
+        _persistence.getUpdates().then((value) => updates.value = value),
         // _persistence.getColorTheme().then((value) => colorTheme.value = value),
 
       ]);
@@ -165,6 +168,11 @@ class SettingsController {
     dailyPuzzleData.value = value;
     _persistence.saveDailyPuzzleData(dailyPuzzleData.value);
   }  
+
+  void setUpdates(Object value) {
+    updates.value = value;
+    _persistence.saveUpdates(updates.value);
+  }    
 
 
 }

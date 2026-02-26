@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
@@ -13,10 +14,10 @@ class TutorialPainters {
   Canvas paintTutorialPainters(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     paintTargetTile(canvas,gamePlayState);
     paintTutorialCountdown(canvas,gamePlayState,palette);
-    paintDottedLineIndicator(canvas,gamePlayState);
-    animateTutorialMessage(canvas,gamePlayState);
+    paintDottedLineIndicator(canvas,gamePlayState,palette);
+    animateTutorialMessage(canvas,gamePlayState,palette);
     paintTutorialEndScreen(canvas,gamePlayState);
-    displayStepMessage(canvas,gamePlayState);
+    displayStepMessage(canvas,gamePlayState,palette);
 
     // displayTutorialMessage(canvas,gamePlayState);
     
@@ -140,7 +141,7 @@ class TutorialPainters {
     return res;
   }
 
-  Canvas paintDottedLineIndicator(Canvas canvas, GamePlayState gamePlayState) {
+  Canvas paintDottedLineIndicator(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
 
     if (gamePlayState.isTutorial) {
 
@@ -171,13 +172,17 @@ class TutorialPainters {
 
 
 
-              
+              final int red = (palette.text1.r * 255).round();
+              final int green = (palette.text1.g * 255).round();
+              final int blue = (palette.text1.b * 255).round();
+
               for (int i = 5; i < stops-2; i++) {
 
                 double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,i);
+                
 
                 Paint linePaint = Paint()
-                ..color = ui.Color.fromRGBO(255, 255, 255, 1*opacity)
+                ..color = ui.Color.fromRGBO(red, green, blue, 1*opacity)
                 ..strokeCap = StrokeCap.round
                 ..style = PaintingStyle.stroke
                 ..strokeWidth = 3.0;              
@@ -204,16 +209,24 @@ class TutorialPainters {
 }
 
 
-Canvas displayTutorialText(Canvas canvas,double scalor, String content, Offset bonusCenter, double progress) {
+Canvas displayTutorialText(Canvas canvas,Size size, ColorPalette palette, double scalor, String content, Offset bonusCenter, double progress) {
 
   final double opacity = progress;
-  TextStyle textStyle = TextStyle(
-    color: ui.Color.fromRGBO(247, 247, 247, opacity),
-    fontSize: 22* scalor,
-    shadows: [
-      Shadow(color: ui.Color.fromRGBO(0, 0, 0, opacity),offset: Offset.zero,blurRadius: 10.0,)
-    ]
+
+  final int red = (palette.text1.r * 255).round();
+  final int green = (palette.text1.g * 255).round();
+  final int blue = (palette.text1.b * 255).round();
+
+  TextStyle textStyle = GoogleFonts.lilitaOne(
+    textStyle: TextStyle(
+      color: ui.Color.fromRGBO(red, green, blue, opacity),
+      fontSize: 26* scalor,
+      shadows: [
+        Shadow(color: ui.Color.fromRGBO(0, 0, 0, opacity),offset: Offset.zero,blurRadius: 10.0,)
+      ]
+    )
   );
+  
   TextSpan textSpan = TextSpan(
     text: content,
     style: textStyle,
@@ -221,9 +234,10 @@ Canvas displayTutorialText(Canvas canvas,double scalor, String content, Offset b
   final textPainter = TextPainter(
     text: textSpan,
     textDirection: TextDirection.ltr,
+    textAlign: TextAlign.center,
   );
   textPainter.layout(
-    maxWidth: 200
+    maxWidth: size.width * 0.8
   );
 
   final position = Offset(bonusCenter.dx - (textPainter.width/2), bonusCenter.dy - (textPainter.height/2));
@@ -232,8 +246,10 @@ Canvas displayTutorialText(Canvas canvas,double scalor, String content, Offset b
   return canvas;    
 }
 
-Canvas displayStepMessage(Canvas canvas, GamePlayState gamePlayState) {
+Canvas displayStepMessage(Canvas canvas,GamePlayState gamePlayState,ColorPalette palette ) {
   if (gamePlayState.isTutorial) {
+
+    Size size = gamePlayState.elementSizes['screenSize'];
 
     int turn = gamePlayState.tutorialData["currentTurn"];
     List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
@@ -248,8 +264,8 @@ Canvas displayStepMessage(Canvas canvas, GamePlayState gamePlayState) {
     if (step.isNotEmpty && tutorialFadeAnimations.isEmpty) {
 
       String content = step["message"];
-
-      displayTutorialText(canvas,gamePlayState.scalor,content,bonusCenter,1.0);
+      
+      displayTutorialText(canvas,size,palette,gamePlayState.scalor,content,bonusCenter,1.0);
 
     }
 
@@ -257,7 +273,7 @@ Canvas displayStepMessage(Canvas canvas, GamePlayState gamePlayState) {
   return canvas;
 }
 
-Canvas animateTutorialMessage(Canvas canvas,GamePlayState gamePlayState) {
+Canvas animateTutorialMessage(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
 
   if (gamePlayState.isTutorial) {
 
@@ -273,7 +289,7 @@ Canvas animateTutorialMessage(Canvas canvas,GamePlayState gamePlayState) {
 
     if (step.isNotEmpty) {
 
-      
+      Size size = gamePlayState.elementSizes['screenSize'];
 
       String content = step["message"];
       
@@ -290,7 +306,7 @@ Canvas animateTutorialMessage(Canvas canvas,GamePlayState gamePlayState) {
         late Offset updatedContentCenter = Offset(currentContentCenter.dx,updatedY);
         
 
-        displayTutorialText(canvas,gamePlayState.scalor,content,updatedContentCenter,animationProgress);
+        displayTutorialText(canvas,size,palette,gamePlayState.scalor,content,updatedContentCenter,animationProgress);
 
         if (previousStep.isNotEmpty) {
 
@@ -298,7 +314,7 @@ Canvas animateTutorialMessage(Canvas canvas,GamePlayState gamePlayState) {
           late Offset updatedPreviousContentCenter = Offset(currentContentCenter.dx,previousY);         
           late double previousContentProgress = 1.0 - animationProgress;
           String previousContent = previousStep["message"];
-          displayTutorialText(canvas,gamePlayState.scalor,previousContent,updatedPreviousContentCenter,previousContentProgress);
+          displayTutorialText(canvas,size,palette,gamePlayState.scalor,previousContent,updatedPreviousContentCenter,previousContentProgress);
         }
 
       }

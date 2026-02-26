@@ -8,8 +8,11 @@ class GamePlayState extends ChangeNotifier {
 /// ================= TUTORIAL =============================
 
   void refreshTutorialData() {
-    _isTutorial = false;
+    // _isTutorial = false;
     _tutorialData.update("currentTurn", (v)=>0);
+    // _duration = Duration(seconds: 0);
+    // _stopWatchDuration= Duration(milliseconds: 0);
+    // _countDownDuration = Duration(seconds: 0);     
   }
 
   late bool _isTutorial = false;
@@ -717,7 +720,7 @@ class GamePlayState extends ChangeNotifier {
     _timer?.cancel();
     _countDownTimer?.cancel();
     _stopWatchTimer?.cancel();    
-
+    _tutorialData.update("currentTurn", (v)=>0);
 
     _animationData=[];
     _elementPaths={};

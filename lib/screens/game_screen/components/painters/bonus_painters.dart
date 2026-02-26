@@ -1,14 +1,17 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scribby_flutter_v2/functions/animation_utils.dart';
 import 'package:scribby_flutter_v2/functions/helpers.dart';
 import 'package:scribby_flutter_v2/functions/styling_utils.dart';
 import 'package:scribby_flutter_v2/providers/game_play_state.dart';
+import 'package:scribby_flutter_v2/providers/palette_state.dart';
 
 class BonusPainters {
 
-  Canvas drawBonusArea(Canvas canvas, GamePlayState gamePlayState) {
+  Canvas drawBonusArea(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     // Size bonusArea = gamePlayState.elementSizes["bonusAreaSize"];
     // Offset bonusCenter = gamePlayState.elementPositions["bonusCenter"];
 
@@ -22,7 +25,7 @@ class BonusPainters {
 
     drawBonusElements(canvas,gamePlayState);
 
-    drawLevelUp(canvas,gamePlayState);
+    drawLevelUp(canvas,gamePlayState,palette);
     
     return canvas;
   }
@@ -81,10 +84,16 @@ class BonusPainters {
  
       // double topYValue = topY + (i*bonusElementSize);
       Map<String,dynamic> bonusAnimation = bonusAnimations[i];
-      TextStyle textStyle = TextStyle(
-        color: colorRes, //Color.fromRGBO(255, 255, 255, opacityProgress),
-        fontSize:  26 * gamePlayState.scalor // tileSize.width*0.3,
+      
+
+      // knewave, racingsansone
+      TextStyle textStyle = GoogleFonts.knewave(
+        textStyle: TextStyle(
+          color: colorRes, 
+          fontSize:  26 * gamePlayState.scalor
+        )
       );
+      
       TextSpan textSpan = TextSpan(
         text: "${bonusAnimation["animation"]["body"]}x",
         style: textStyle,
@@ -257,6 +266,163 @@ class BonusPainters {
     return canvas;    
   }
 
+  // Canvas drawLightbulb(Canvas canvas, Size size, Offset position, Color color) {
+
+  //     final cx = size.width / 2;
+  //     final cy = size.height / 2;
+
+  //     // Scale everything relative to the smaller dimension
+  //     final unit = math.min(size.width, size.height);
+
+  //     final bulbRadius = unit * 0.28;
+  //     final bulbCenterY = cy - unit * 0.08;
+
+  //     final baseBulbColor =Colors.white;
+  //     final baseGlowColor = Colors.white;
+
+  //     // --- Glow effect (only when on) ---
+
+  //     final glowPaint = Paint()
+  //       ..color = Colors.white
+  //       ..maskFilter = MaskFilter.blur(BlurStyle.normal, unit * 0.18);
+  //     canvas.drawCircle(Offset(cx, bulbCenterY), bulbRadius * 1.6, glowPaint);
+      
+
+  //     // --- Bulb body (rounded top circle) ---
+  //     final bulbPaint = Paint()
+  //       ..shader = RadialGradient(
+  //         center: const Alignment(-0.3, -0.4),
+  //         radius: 0.9,
+  //         colors: [
+  //           Colors.grey.shade300,
+  //           baseGlowColor.withOpacity(0.9),
+  //           baseBulbColor,
+  //         ],
+  //         stops: const [0.0, 0.4, 1.0],
+  //       ).createShader(Rect.fromCircle(
+  //         center: Offset(cx, bulbCenterY),
+  //         radius: bulbRadius,
+  //       ));
+
+  //     canvas.drawCircle(Offset(cx, bulbCenterY), bulbRadius, bulbPaint);
+
+  //     // --- Bulb outline ---
+  //     final outlinePaint = Paint()
+  //       ..color = baseBulbColor.withOpacity(0.6)
+  //       ..style = PaintingStyle.stroke
+  //       ..strokeWidth = unit * 0.012;
+  //     canvas.drawCircle(Offset(cx, bulbCenterY), bulbRadius, outlinePaint);
+
+  //     // --- Neck / base transition (trapezoid shape below bulb) ---
+  //     final neckTop = bulbCenterY + bulbRadius * 0.65;
+  //     final neckBottom = bulbCenterY + bulbRadius * 1.05;
+  //     final neckHalfWidthTop = bulbRadius * 0.52;
+  //     final neckHalfWidthBottom = bulbRadius * 0.38;
+
+  //     final neckPath = Path()
+  //       ..moveTo(cx - neckHalfWidthTop, neckTop)
+  //       ..lineTo(cx + neckHalfWidthTop, neckTop)
+  //       ..lineTo(cx + neckHalfWidthBottom, neckBottom)
+  //       ..lineTo(cx - neckHalfWidthBottom, neckBottom)
+  //       ..close();
+
+  //     final neckPaint = Paint()
+  //       ..shader = LinearGradient(
+  //         begin: Alignment.topCenter,
+  //         end: Alignment.bottomCenter,
+  //         colors: [
+  //           baseBulbColor.withOpacity(0.7),
+  //           baseBulbColor.withOpacity(0.4),
+  //         ],
+  //       ).createShader(Rect.fromLTWH(
+  //         cx - neckHalfWidthTop,
+  //         neckTop,
+  //         neckHalfWidthTop * 2,
+  //         neckBottom - neckTop,
+  //       ));
+  //     canvas.drawPath(neckPath, neckPaint);
+
+  //     // --- Screw base (horizontal lines) ---
+  //     final screwTop = neckBottom;
+  //     final screwBottom = screwTop + unit * 0.14;
+  //     final screwHalfWidth = neckHalfWidthBottom;
+  //     final screwLineCount = 3;
+  //     final screwLineSpacing = (screwBottom - screwTop) / (screwLineCount + 1);
+
+  //     final screwBgPaint = Paint()
+  //       ..color = Colors.grey.shade400
+  //       ..style = PaintingStyle.fill;
+
+  //     final screwRect = RRect.fromRectAndRadius(
+  //       Rect.fromLTWH(
+  //         cx - screwHalfWidth,
+  //         screwTop,
+  //         screwHalfWidth * 2,
+  //         screwBottom - screwTop,
+  //       ),
+  //       Radius.circular(unit * 0.02),
+  //     );
+  //     canvas.drawRRect(screwRect, screwBgPaint);
+
+  //     // Screw line stripes
+  //     final screwLinePaint = Paint()
+  //       ..color = Colors.grey.shade600
+  //       ..strokeWidth = unit * 0.012
+  //       ..strokeCap = StrokeCap.round;
+
+  //     for (int i = 1; i <= screwLineCount; i++) {
+  //       final y = screwTop + screwLineSpacing * i;
+  //       canvas.drawLine(
+  //         Offset(cx - screwHalfWidth + unit * 0.01, y),
+  //         Offset(cx + screwHalfWidth - unit * 0.01, y),
+  //         screwLinePaint,
+  //       );
+  //     }
+
+  //     // Screw base outline
+  //     final screwOutlinePaint = Paint()
+  //       ..color = Colors.grey.shade500
+  //       ..style = PaintingStyle.stroke
+  //       ..strokeWidth = unit * 0.012;
+  //     canvas.drawRRect(screwRect, screwOutlinePaint);
+
+  //     // --- Filament inside bulb (only drawn when on) ---
+    
+  //     final filamentPaint = Paint()
+  //       ..color = Colors.white.withOpacity(1.0)
+  //       ..strokeWidth = unit * 0.018
+  //       ..strokeCap = StrokeCap.round
+  //       ..style = PaintingStyle.stroke;
+
+  //     final filamentPath = Path();
+  //     final fCx = cx;
+  //     final fCy = bulbCenterY + unit * 0.04;
+  //     final fw = unit * 0.10;
+  //     final fh = unit * 0.08;
+
+  //     filamentPath.moveTo(fCx - fw, fCy + fh);
+  //     filamentPath.lineTo(fCx - fw, fCy);
+  //     filamentPath.quadraticBezierTo(fCx - fw, fCy - fh, fCx, fCy - fh);
+  //     filamentPath.quadraticBezierTo(fCx + fw, fCy - fh, fCx + fw, fCy);
+  //     filamentPath.lineTo(fCx + fw, fCy + fh);
+
+  //     canvas.drawPath(filamentPath, filamentPaint);
+      
+
+  //     // --- Shine highlight on bulb ---
+  //     final shinePaint = Paint()
+  //       ..color = Colors.white.withOpacity(0.55)
+  //       ..maskFilter = MaskFilter.blur(BlurStyle.normal, unit * 0.025);
+  //     canvas.drawCircle(
+  //       Offset(cx - bulbRadius * 0.28, bulbCenterY - bulbRadius * 0.32),
+  //       bulbRadius * 0.22,
+  //       shinePaint,
+  //     );
+  //     return canvas;
+  //   }
+  
+
+
   Canvas drawIcon(Canvas canvas, Size iconSize, Offset position, Color color,String icon, ) {
     if (icon == "streak") {
       drawStreakIcon(canvas, iconSize, position, color);
@@ -273,7 +439,7 @@ class BonusPainters {
   }
 
 
-  Canvas drawLevelUp(Canvas canvas, GamePlayState gamePlayState) {
+  Canvas drawLevelUp(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     Map<String,dynamic> levelUpAnimation = gamePlayState.animationData.firstWhere((e)=>e["type"]=="level-up",orElse: ()=>{});
     if (levelUpAnimation.isNotEmpty) {
       Offset position = gamePlayState.elementPositions["bonusCenter"];
@@ -307,10 +473,13 @@ class BonusPainters {
 
       late double fontSize = 36 * gamePlayState.scalor *getFontSizeProgress; // TODO: UPDATE TO DYNAMIC VALUE
 
-      TextStyle textStyle = TextStyle(
-        color: Color.fromRGBO(255, 255, 255, getOpacityProgress), //const Color.fromARGB(190, 123, 191, 255),
-        fontSize: fontSize,
-      );
+      TextStyle textStyle = palette.counterFont(
+        textStyle: TextStyle(
+          color: Color.fromRGBO(255, 255, 255, getOpacityProgress), //const Color.fromARGB(190, 123, 191, 255),
+          fontSize: fontSize,
+        ) 
+      ); 
+      
       TextSpan textSpan = TextSpan(
         text: "Level ${body.toString()}",
         style: textStyle,
@@ -330,5 +499,23 @@ class BonusPainters {
     return canvas;
   }
 
-
+  Canvas drawTutorialIcon(Canvas canvas, Size iconSize, Offset position, Color color) {
+      TextStyle textStyle = TextStyle(
+        color: color, //const Color.fromARGB(190, 123, 191, 255),
+        fontSize: iconSize.height,
+      );
+      TextSpan textSpan = TextSpan(
+        text: "?",
+        style: textStyle,
+      );
+      final textPainter = TextPainter(
+        text: textSpan,
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+      final textPosition = Offset(position.dx - (textPainter.width/2), position.dy - (textPainter.height/2));
+      textPainter.paint(canvas, textPosition);
+    
+    return canvas;    
+  }
 }
