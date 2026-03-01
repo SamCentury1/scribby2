@@ -85,6 +85,10 @@ class Initializations {
 
         // get daily puzzle from db - save it to localstorage
         await FirestoreMethods().saveDailyPuzzlesToLocalStorage(settings);
+
+        // update color theme:
+        palette.getThemeColors(firestoreUserData['parameters']['theme']);
+
                 
       } else {
         print("the firestore user data is empty damn it!");

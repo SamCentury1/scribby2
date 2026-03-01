@@ -280,10 +280,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: palette.widgetShadow1,
-                                              spreadRadius: 2.0 * scalor,
-                                              blurRadius: 15.0 * scalor,
-                                              offset: Offset(0.0, 5.0 * scalor),
+                                              color: palette.widgetShadow2,
+                                              spreadRadius: 1.0 * scalor,
+                                              blurRadius: 2.0 * scalor,
+                                              offset: Offset(0.0, 3.0 * scalor),
                                             )
                                           ]                                          
                                         ),
@@ -309,10 +309,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: palette.widgetShadow1,
-                                              spreadRadius: 2.0 * scalor,
-                                              blurRadius: 15.0 * scalor,
-                                              offset: Offset(0.0, 5.0 * scalor),
+                                              color: palette.widgetShadow2,
+                                              spreadRadius: 1.0 * scalor,
+                                              blurRadius: 2.0 * scalor,
+                                              offset: Offset(0.0, 3.0 * scalor),
                                             )
                                           ]                                          
                                         ),
@@ -355,10 +355,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: palette.widgetShadow1,
-                                              spreadRadius: 2.0 * scalor,
-                                              blurRadius: 15.0 * scalor,
-                                              offset: Offset(0.0, 5.0 * scalor),
+                                              color: palette.widgetShadow2,
+                                              spreadRadius: 1.0 * scalor,
+                                              blurRadius: 2.0 * scalor,
+                                              offset: Offset(0.0, 3.0 * scalor),
                                             )
                                           ]                                          
                                         ),
@@ -399,10 +399,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: palette.widgetShadow1,
-                                              spreadRadius: 2.0 * scalor,
-                                              blurRadius: 15.0 * scalor,
-                                              offset: Offset(0.0, 5.0 * scalor),
+                                              color: palette.widgetShadow2,
+                                              spreadRadius: 1.0 * scalor,
+                                              blurRadius: 2.0 * scalor,
+                                              offset: Offset(0.0, 3.0 * scalor),
                                             )
                                           ]
                                         ),
@@ -447,10 +447,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: palette.widget2,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: palette.widgetShadow1,
-                                              spreadRadius: 2.0 * scalor,
-                                              blurRadius: 15.0 * scalor,
-                                              offset: Offset(0.0, 5.0 * scalor),
+                                              color: palette.widgetShadow2,
+                                              spreadRadius: 1.0 * scalor,
+                                              blurRadius: 2.0 * scalor,
+                                              offset: Offset(0.0, 3.0 * scalor),
                                             )
                                           ]                                          
                                         ),
@@ -486,10 +486,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: palette.navigationButtonBg1,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: palette.widgetShadow1,
-                                              spreadRadius: 2.0 * scalor,
-                                              blurRadius: 15.0 * scalor,
-                                              offset: Offset(0.0, 5.0 * scalor),
+                                              color: palette.widgetShadow2,
+                                              spreadRadius: 1.0 * scalor,
+                                              blurRadius: 2.0 * scalor,
+                                              offset: Offset(0.0, 3.0 * scalor),
                                             )
                                           ]                                          
                                         ),
@@ -574,10 +574,10 @@ class UsernameCard extends StatelessWidget {
                 color: palette.widget2,
                 boxShadow: [
                   BoxShadow(
-                    color: palette.widgetShadow1,
-                    spreadRadius: 2.0 * scalor,
-                    blurRadius: 15.0 * scalor,
-                    offset: Offset(0.0, 5.0 * scalor),
+                    color: palette.widgetShadow2,
+                    spreadRadius: 1.0 * scalor,
+                    blurRadius: 2.0 * scalor,
+                    offset: Offset(0.0, 3.0 * scalor),
                   )
                 ]                
               ),
@@ -633,10 +633,10 @@ Widget _rankCard({required String rank, required double scalor, required ColorPa
           color: palette.widget2,
           boxShadow: [
             BoxShadow(
-              color: palette.widgetShadow1,
-              spreadRadius: 2.0 * scalor,
-              blurRadius: 15.0 * scalor,
-              offset: Offset(0.0, 5.0 * scalor),
+              color: palette.widgetShadow2,
+              spreadRadius: 1.0 * scalor,
+              blurRadius: 2.0 * scalor,
+              offset: Offset(0.0, 3.0 * scalor),
             )
           ]          
         ),
@@ -649,11 +649,15 @@ Widget _rankCard({required String rank, required double scalor, required ColorPa
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0 * scalor),
                 child: Text(
-                  rank, style: TextStyle(
-                    fontSize: 18*scalor, 
-                    // fontWeight: FontWeight.bold,
-                    color: palette.widgetText2
-                  )),
+                  rank, 
+                  style: palette.mainAppFont(
+                    textStyle: TextStyle(
+                      fontSize: 18*scalor, 
+                      // fontWeight: FontWeight.bold,
+                      color: palette.widgetText2
+                    )
+                  )
+                ),
               ),
                           
             ],
@@ -918,7 +922,7 @@ class SelectThemeDialog extends StatefulWidget {
 
 class _SelectThemeDialogState extends State<SelectThemeDialog> {
 
-  final List<String> _colorThemes = ['default', 'light', 'dark', 'nature','techno','beach',];
+  final List<String> _colorThemes = ['default', 'light', 'dark', 'nature','techno','beach',"fire"];
   late String currentSelection = widget.selectedTheme;//_colorThemes[_colorThemes.indexOf(widget.selectedTheme)];
   Map<String,Color> widgetThemeDict = {};
 
