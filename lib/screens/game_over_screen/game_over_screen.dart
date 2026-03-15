@@ -24,6 +24,7 @@ import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/resources/firestore_methods.dart';
 import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/components/daily_puzzle_ranking_section.dart';
+import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_failed_section.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_over_badge_section.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_over_counter_painter.dart';
 import 'package:scribby_flutter_v2/screens/game_over_screen/components/game_over_data_section.dart';
@@ -61,6 +62,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
   // rewarded ad
   RewardedAd? _rewardedAd;
   bool _isRewardedLoading = false;  
+  late bool isObjectiveFailed = false;
 
 
   final adUnitId = Platform.isAndroid
@@ -100,7 +102,13 @@ class _GameOverScreenState extends State<GameOverScreen> {
     // }
 
 
-
+    if (gamePlayState.gameParameters["gameType"]=="sprint") {
+      if (gamePlayState.gameResultData['didAchieveObjective']==false) {
+        setState(() {
+          isObjectiveFailed = true;
+        });
+      }
+    } 
 
 
 
@@ -146,7 +154,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
       final int rewardAmount = gamePlayState.gameResultData["reward"]*2;
       final int xpAmount = gamePlayState.gameResultData["xp"];
       final String? rank = gamePlayState.gameResultData["newRank"];
-      List<Map<dynamic,dynamic>> badgeData = gamePlayState.gameResultData["badges"];
+      List<dynamic> badgeData = gamePlayState.gameResultData["badges"];
       // settings.setCoins(coins + rewardAmount);
       FirestoreMethods().updateUserDoc(settings,"coins",(coins + rewardAmount));
       settings.setAchievements({"coins":rewardAmount,"xp":xpAmount, "rank":rank, "badges":badgeData});                                      
@@ -155,7 +163,8 @@ class _GameOverScreenState extends State<GameOverScreen> {
       // print("just earned that shit: {'coins':$rewardAmount,'xp':$xpAmount, 'rank':$rank, 'badges':$badgeData}");
       gamePlayState.refreshAllData();
     } catch (error, traceback) {
-      debugPrint("error in user earned reward function - $error | $traceback");
+      // debugPrint("error in user earned reward function - $error | $traceback");
+      Helpers().printError("onUserEarnedReward", error, traceback);
     }
   }
 
@@ -245,7 +254,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
               isLoading = false;
             });
 
-            // ⭐ Recommended: give UI time to settle before showing
+            // Recommended: give UI time to settle before showing
             Future.delayed(const Duration(milliseconds: 20), () {
               if (mounted) {
                 _interstitialAd?.show();
@@ -267,8 +276,10 @@ class _GameOverScreenState extends State<GameOverScreen> {
             // Continue to game over screen animation even if ad fails
             final audioService = context.read<AudioService>();
             // print("????");
-            // audioService.play(SfxType.scoreTally);            
-            Animations().startGameOverScreenCountAnimation(gamePlayState,audioService);
+            // audioService.play(SfxType.scoreTally);
+            if (!isObjectiveFailed) {
+              Animations().startGameOverScreenCountAnimation(gamePlayState,audioService);
+            } 
           },
         ),
       );
@@ -276,8 +287,7 @@ class _GameOverScreenState extends State<GameOverScreen> {
       _isAdLoading = false;
       _interstitialAd = null;
 
-      debugPrint("EXCEPTION loading interstitial: $e");
-      debugPrint(stack.toString());
+      Helpers().printError("loadInterstitialAd", e, stack);
 
       if (!mounted) return;
 
@@ -286,7 +296,10 @@ class _GameOverScreenState extends State<GameOverScreen> {
       });
       final audioService = context.read<AudioService>();
       // audioService.play(SfxType.scoreTally);
-      Animations().startGameOverScreenCountAnimation(gamePlayState,audioService);
+      if (!isObjectiveFailed) {
+        Animations().startGameOverScreenCountAnimation(gamePlayState,audioService);
+      } 
+      
     }
   }
 
@@ -302,7 +315,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
 
         if (!mounted) return;
 
-        Animations().startGameOverScreenCountAnimation(gamePlayState,context.read<AudioService>());
+        if (!isObjectiveFailed) {
+          Animations().startGameOverScreenCountAnimation(gamePlayState,context.read<AudioService>());
+        }
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
         debugPrint("Interstitial failed to show: $error");
@@ -310,8 +325,9 @@ class _GameOverScreenState extends State<GameOverScreen> {
         _interstitialAd = null;
 
         if (!mounted) return;
-
-        Animations().startGameOverScreenCountAnimation(gamePlayState,context.read<AudioService>());
+        if (!isObjectiveFailed) {
+          Animations().startGameOverScreenCountAnimation(gamePlayState,context.read<AudioService>());
+        }
       },
     );
   }  
@@ -366,16 +382,6 @@ class _GameOverScreenState extends State<GameOverScreen> {
                     ColorPalette palette = Provider.of<ColorPalette>(context, listen: false);
                     final double scalor = Helpers().getScalor(settings);
                     double scoreFontSize = Helpers().getScoreFontSize(MediaQuery.of(context),0.045);
-                    // final String gameType = Helpers().capitalize(gamePlayState.gameParameters["gameType"]) ;
-                    // final int score = Helpers().calculateScore(gamePlayState);
-                    // final int uniqueWords = Helpers().countUniqueWords(gamePlayState);
-                    // final int turns = Helpers().countTurns(gamePlayState);
-                    // final int streak = Helpers().getLongestStreak(gamePlayState);
-                    // final int crosswords = Helpers().countCrosswords(gamePlayState);
-                    // final int biggestTurn = Helpers().getBiggestTurn(gamePlayState);
-                    // final String duration = Helpers().formatDuration(gamePlayState.duration.inSeconds);
-
-                    // double scoreBorderSize = getScoreBorderWidth(MediaQuery.of(context));
                     return PopScope(
                       canPop: false,
                       child: Scaffold(
@@ -399,7 +405,22 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                   ),
                                   Expanded(
                                     flex: 4,
-                                    child: Container(
+                                    child: isObjectiveFailed 
+                                    ? SizedBox(
+                                      child: Center(
+                                        child: Text(
+                                          "Game Over",
+                                          style: palette.mainAppFont(
+                                            textStyle: TextStyle(
+                                              fontSize: 42*scalor,
+                                              color: palette.text1
+                                            )
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    
+                                    : SizedBox(
                                       child: Column(
                                         children: [
                                           Expanded(
@@ -429,41 +450,14 @@ class _GameOverScreenState extends State<GameOverScreen> {
                                     flex: 7,
                                     child: Builder(
                                       builder: (context) {
-                                        if (gamePlayState.gameParameters["puzzleId"] == null) {
-                                          return GameOverDataSection();
+                                        if (isObjectiveFailed) {
+                                          return GameFailedSection();
                                         } else {
-                                          return DailyPuzzleRankingWidget(gameType:puzzle["gameType"], ranking: puzzle["data"], settings: settings,);
-
-                                          // return FutureBuilder(
-                                          //   future: FirestoreMethods().getDailyPuzzleObject(gamePlayState.gameParameters["puzzleId"]),
-                                          //   builder: (context, asyncSnapshot) {
-                                          //     if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-
-                                          //       return Center(
-                                          //         child: SizedBox(
-                                          //           width: 50, 
-                                          //           height: 50, 
-                                          //           child: CircularProgressIndicator()
-                                          //         )
-                                          //       );
-                                          //     } else if (asyncSnapshot.hasError) {
-                                          //       setState(() {
-                                          //         isRankingLoading = false;
-                                          //       });
-                                          //       return Text("Error: ${asyncSnapshot.error}");
-                                          //     } else if (asyncSnapshot.hasData) {
-                                          //       setState(() {
-                                          //         isRankingLoading = false;
-                                          //       });
-                                          //       final puzzle = asyncSnapshot.data!;
-                                          //       print("HERE IS THE PUZZLE FROM THE DB");
-                                          //       print(puzzle);
-                                          //       return DailyPuzzleRankingWidget(gameType:puzzle["gameType"], ranking: puzzle["data"], settings: settings,);
-                                          //     }
-                                          //     return SizedBox();
-                                          //   }
-                                          // );
-                                          // return DailyPuzzleRankingSection(gameData: gamePlayState.gameParameters,);
+                                          if (gamePlayState.gameParameters["puzzleId"] == null) {
+                                            return GameOverDataSection();
+                                          } else {
+                                            return DailyPuzzleRankingWidget(gameType:puzzle["gameType"], ranking: puzzle["data"], settings: settings,);
+                                          }
                                         }
                                       }
                                     ),

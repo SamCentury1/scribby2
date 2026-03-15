@@ -1925,6 +1925,10 @@ class GameLogic extends ChangeNotifier {
           reward = 100;
           xp = 0;
 
+          if (gamePlayState.gameParameters["gameType"]=='sprint') {
+            reward = 0;
+          }
+
           gamePlayState.gameResultData.update("didCompleteGame", (v)=> didCompleteGame);
           gamePlayState.gameResultData.update("didAchieveObjective", (v)=> didAchieveObjective);
           gamePlayState.gameResultData.update("reward", (v)=> reward);
@@ -2236,6 +2240,7 @@ class GameLogic extends ChangeNotifier {
     late List<dynamic> achievementData = settings.achievementData.value;
     late int xpEarnedFromBadges = 0;
     late bool shouldSaveData = true;
+    late bool isTutorial = gamePlayState.gameParameters["gameType"]=="tutorial";
     
 
     Map<String,dynamic> tutorialBadge = settings.achievementData.value.firstWhere(
@@ -2244,7 +2249,7 @@ class GameLogic extends ChangeNotifier {
     );
     print("8888888888888888888888888888 $tutorialBadge");
 
-    if (gamePlayState.gameParameters["gameType"]=="tutorial") {
+    if (isTutorial) {
       if (userData["parameters"]["tutorialComplete"]) {
         shouldSaveData = false;
       }
@@ -2460,28 +2465,42 @@ class GameLogic extends ChangeNotifier {
 
 
 
-      if (!userData["parameters"]["tutorialComplete"]) {
+      if (isTutorial) {
+
+        if (!userData["parameters"]["tutorialComplete"]) {
+
+          print("UPDATE THIS SUMBITCH");
+          FirestoreMethods().updateParameters(settings, "tutorialComplete", true);
+
+          gamePlayState.gameResultData.update("badges", (v) => [tutorialBadge]);
+
+          tutorialBadge.update("completed", (v)=>true);
+          tutorialBadge.update("dateCompleted", (v)=>DateTime.now().toIso8601String());        
+
+          FirestoreMethods().updateAchievementData(settings,[tutorialBadge]);
+          FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
+          FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
+          settings.setAchievementData(achievementData);       
+        }
         
-        print("UPDATE THIS SUMBITCH");
-        FirestoreMethods().updateParameters(settings, "tutorialComplete", true);
-
-        gamePlayState.gameResultData.update("badges", (v) => [tutorialBadge]);
-
-        tutorialBadge.update("completed", (v)=>true);
-        tutorialBadge.update("dateCompleted", (v)=>DateTime.now().toIso8601String());        
-
-        FirestoreMethods().updateAchievementData(settings,[tutorialBadge]);
-        FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
-        FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
-        settings.setAchievementData(achievementData);       
       } else {
-        FirestoreMethods().updateAchievementData(settings,badgesEarned);
-        settings.setAchievementData(achievementData);
-        FirestoreMethods().updateAchievementData(settings,badgesEarned);
-        FirestoreMethods().updateGameHistory(settings, data);
-        FirestoreMethods().updateDailyPuzzleGameComplete(settings,data);
-        FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
-        FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
+        
+        late bool canSave = true;
+        if (gamePlayState.gameParameters["gameType"]=="sprint") {
+          if (gamePlayState.gameResultData['didAchieveObjective']==false) {
+            canSave = false;
+          }
+        } 
+
+        if (canSave) {
+          FirestoreMethods().updateAchievementData(settings,badgesEarned);
+          settings.setAchievementData(achievementData);
+          FirestoreMethods().updateAchievementData(settings,badgesEarned);
+          FirestoreMethods().updateGameHistory(settings, data);
+          FirestoreMethods().updateDailyPuzzleGameComplete(settings,data);
+          FirestoreMethods().updateUserDoc(settings,"coins",newCoinsValue);
+          FirestoreMethods().updateUserDoc(settings,"xp",newXpValue);
+        }
       }
     }
   }

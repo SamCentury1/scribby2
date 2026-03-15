@@ -10,6 +10,7 @@ import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
 import 'package:scribby_flutter_v2/screens/authentication/components/auth_error_dialog.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
 
@@ -177,6 +178,72 @@ class AuthService {
       );
     }
   }
+
+Future<AuthResult> signInWithFacebook() async {
+    try {
+      final LoginResult loginResult = await FacebookAuth.instance.login(
+        permissions: ['email', 'public_profile'],
+      );
+
+      if (loginResult.status == LoginStatus.cancelled) {
+        return AuthResult.failure(
+          errorCode: 'canceled',
+          errorMessage: 'Sign in cancelled',
+        );
+      }
+
+      if (loginResult.status != LoginStatus.success) {
+        return AuthResult.failure(
+          errorCode: 'facebook-auth-error',
+          errorMessage: loginResult.message ?? 'Facebook sign in failed',
+        );
+      }
+
+      final OAuthCredential oAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+
+      final UserCredential cred = await _firebaseAuth.signInWithCredential(oAuthCredential);
+
+      if (cred.additionalUserInfo?.isNewUser == true) {
+        final String uid = cred.user!.uid;
+
+        // Fetch user profile data from Facebook
+        final userData = await FacebookAuth.instance.getUserData(
+          fields: "name,email",
+        );
+
+        final String displayName = cred.user?.displayName ?? userData['name'] ?? 'User';
+
+        final String email = cred.user?.email ?? userData['email'] ?? 'user@facebook.com';
+
+        final String langCode = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+
+        const String providerData = "facebook";
+
+        final Map<String, dynamic> userDataMap = {
+          "uid": uid,
+          "displayName": displayName,
+          "email": email,
+          "langCode": langCode,
+          "providerData": providerData,
+        };
+
+        await FirestoreMethods().saveUserToDatabase(userDataMap);
+      }
+
+      return AuthResult.success(cred);
+    } on FirebaseAuthException catch (e) {
+      return AuthResult.failure(
+        errorCode: e.code,
+        errorMessage: e.message ?? 'Authentication failed',
+      );
+    } catch (e) {
+      return AuthResult.failure(
+        errorCode: 'unknown',
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
 
   // Future<UserCredential?> signInWithApple(BuildContext context) async {
   //   try {

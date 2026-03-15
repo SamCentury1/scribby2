@@ -477,7 +477,7 @@ class ColorPalette extends ChangeNotifier {
           "dialogText" : const Color.fromARGB(255, 235, 235, 235),
 
           "text1" : const Color.fromARGB(255, 224, 224, 224),
-          "text2" : const Color.fromARGB(255, 209, 209, 209),
+          "text2" : const Color.fromARGB(255, 240, 240, 240),
           "text3" : const Color.fromARGB(255, 13, 6, 110),
           "text4" : const Color.fromARGB(255, 20, 20, 20),
           "text5" : const Color.fromARGB(255, 44, 44, 44),
@@ -520,8 +520,8 @@ class ColorPalette extends ChangeNotifier {
           "newPointsShadow" : const Color.fromARGB(255, 228, 228, 228),
 
           "perkBarBackgroundColor": const Color.fromARGB(88, 221, 221, 221),
-          "perkSelectedColor": const Color.fromARGB(235, 241, 241, 241),
-          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkSelectedColor": const Color.fromARGB(235, 15, 3, 122),
+          "perkUnselectedColor": const Color.fromARGB(255, 248, 248, 248),
           "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
           
           "tileColor1" : const Color.fromARGB(255, 0, 13, 131),
@@ -599,8 +599,8 @@ class ColorPalette extends ChangeNotifier {
           
 
           "perkBarBackgroundColor": const Color.fromARGB(213, 126, 114, 231),
-          "perkSelectedColor": const Color.fromARGB(255, 254, 254, 255),
-          "perkUnselectedColor": const Color.fromARGB(213, 173, 159, 233),
+          "perkSelectedColor": const Color.fromARGB(255, 66, 170, 240),
+          "perkUnselectedColor": const Color.fromARGB(255, 103, 103, 112),
           "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),   
 
           "tileColor1" : const Color.fromARGB(255, 13, 68, 131),
@@ -678,8 +678,8 @@ class ColorPalette extends ChangeNotifier {
           "newPointsShadow" : const Color.fromARGB(255, 228, 228, 228),
 
           "perkBarBackgroundColor": const Color.fromARGB(101, 179, 179, 179),
-          "perkSelectedColor": const Color.fromARGB(226, 216, 214, 214),
-          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkSelectedColor": const Color.fromARGB(225, 100, 3, 165),
+          "perkUnselectedColor": const Color.fromARGB(255, 103, 103, 112),
           "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
 
           "tileColor1" : const Color.fromARGB(255, 40, 32, 70),
@@ -770,7 +770,7 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 21, 3, 54),
 
           "appBarText" : const Color.fromARGB(230, 240, 240, 240),
-          "drawerBg": const Color.fromARGB(255, 32, 32, 32),
+          "drawerBg": const Color.fromARGB(255, 224, 85, 236),
 
           "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
           "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),
@@ -784,8 +784,8 @@ class ColorPalette extends ChangeNotifier {
           "navigationButtonText2" : Colors.white,
           "navigationButtonText3" : Colors.white,
           
-          "dialogBg1" : const Color.fromARGB(255, 34, 35, 36),
-          "dialogBg2" : const Color.fromARGB(255, 2, 26, 134),
+          "dialogBg1" : const Color.fromARGB(255, 216, 66, 230),
+          "dialogBg2" : const Color.fromARGB(255, 21, 27, 51),
           "dialogText" : const Color.fromARGB(255, 235, 235, 235),
 
           "text1" : const Color.fromARGB(255, 224, 224, 224),
@@ -833,10 +833,10 @@ class ColorPalette extends ChangeNotifier {
 
           "perkBarBackgroundColor": const Color.fromARGB(213, 233, 233, 233),
           "perkSelectedColor": const Color.fromARGB(255, 86, 3, 102),
-          "perkUnselectedColor": const Color.fromARGB(212, 65, 65, 65),
+          "perkUnselectedColor": const Color.fromARGB(255, 103, 103, 112),
           "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),     
 
-          "tileColor1" : const Color.fromARGB(255, 212, 65, 212),
+          "tileColor1" : const Color.fromARGB(255, 151, 144, 144),
           "tileColor2" : const Color.fromARGB(255, 70, 170, 31),
           "tileColor3" : const Color.fromARGB(255, 25, 170, 180),
           "tileColor4" : const Color.fromARGB(255, 206, 203, 41),
@@ -847,7 +847,7 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255,255,234,194),
 
           "appBarText" : const Color.fromARGB(230, 20, 20, 20),
-          "drawerBg": const Color.fromARGB(255,228,235,207),
+          "drawerBg": const Color.fromARGB(255, 235, 211, 207),
 
           "inputFieldBgColor" : const Color.fromARGB(199, 17, 3, 138),
           "inputFieldBorderColor" : const Color.fromARGB(255, 35, 56, 236),
@@ -910,8 +910,8 @@ class ColorPalette extends ChangeNotifier {
           "newPointsShadow" : const Color.fromARGB(255, 228, 228, 228),
 
           "perkBarBackgroundColor": const Color.fromARGB(214, 221, 221, 221),
-          "perkSelectedColor": const Color.fromARGB(255, 103, 103, 112),
-          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkSelectedColor": const Color.fromARGB(255, 32, 53, 170),
+          "perkUnselectedColor": const Color.fromARGB(255, 103, 103, 112),
           "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
 
           "tileColor1" : const Color.fromARGB(255, 243, 213, 168),
@@ -926,15 +926,15 @@ class ColorPalette extends ChangeNotifier {
           "bg2" : const Color.fromARGB(255, 238, 87, 87),
 
           "appBarText" : const Color.fromARGB(230, 20, 20, 20),
-          "drawerBg": const Color.fromARGB(255,228,235,207),
+          "drawerBg": const Color.fromARGB(255, 211, 152, 152),
 
           "inputFieldBgColor" : const Color.fromARGB(197, 255, 100, 100),
           "inputFieldBorderColor" : const Color.fromARGB(255, 255, 154, 154),
           "inputFieldTextColor" : const Color.fromARGB(255, 238, 238, 238),
 
           "navigationButtonBg1" : const Color.fromARGB(255, 255, 196, 196),
-          "navigationButtonBg2" : const Color.fromARGB(255, 219, 19, 19),
-          "navigationButtonBg3" : const Color.fromARGB(255, 251, 136, 53),
+          "navigationButtonBg2" : const Color.fromARGB(255, 173, 8, 8),
+          "navigationButtonBg3" : const Color.fromARGB(255, 252, 54, 54),
 
           "navigationButtonText1" : const Color.fromARGB(255, 22, 22, 22),
           "navigationButtonText2" : const Color.fromARGB(255, 255, 255, 255),
@@ -989,8 +989,8 @@ class ColorPalette extends ChangeNotifier {
           "newPointsShadow" : const Color.fromARGB(255, 228, 228, 228),
 
           "perkBarBackgroundColor": const Color.fromARGB(214, 221, 221, 221),
-          "perkSelectedColor": const Color.fromARGB(255, 103, 103, 112),
-          "perkUnselectedColor": const Color.fromARGB(214, 190, 182, 182),
+          "perkSelectedColor": const Color.fromARGB(225, 250, 63, 63),
+          "perkUnselectedColor": const Color.fromARGB(255, 103, 103, 112),
           "perkShadowColor": const Color.fromARGB(255, 238, 238, 238),
 
           "tileColor1" : const Color.fromARGB(255, 247, 22, 22),

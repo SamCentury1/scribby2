@@ -87,7 +87,7 @@ class MainCanvasPainter extends CustomPainter {
     // Painters().drawMenuButton(canvas,gamePlayState);
 
     // Painters().drawTileMenuBuyMoreModal(canvas,gamePlayState);
-    Painters().paintGameOverOverlay(canvas,size,gamePlayState);
+    Painters().paintGameOverOverlay(canvas,size,gamePlayState,palette);
 
 
     if (gamePlayState.isTutorial) {

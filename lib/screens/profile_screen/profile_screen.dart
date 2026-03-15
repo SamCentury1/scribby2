@@ -292,7 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           leading: Icon(Icons.email,color: palette.widgetText2),
                                           title: Text(
                                             userData["email"],
-                                            style: TextStyle(color: palette.widgetText2),
+                                            style: palette.mainAppFont(textStyle:TextStyle(color: palette.widgetText2),),
                                           )
                                         
                                         ),                                  
@@ -335,7 +335,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 value: lang["code"] as String, 
                                                 child: Text(
                                                   lang["label"] as String,
-                                                  style: TextStyle(color: palette.widgetText2),
+                                                  style: palette.mainAppFont(textStyle:TextStyle(color: palette.widgetText2),)
                                                 )
                                               );
                                             }).toList(),
@@ -368,8 +368,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               settings.soundsOn.value
-                                                ? Text("Sound On", style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2),)
-                                                : Text("Sound Off", style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2),),
+                                                ? Text("Sound On", style: palette.mainAppFont(textStyle: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2)),)
+                                                : Text("Sound Off", style: palette.mainAppFont(textStyle: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2),)),
               
                                                 Transform.scale(
                                                   scale: 0.8 * scalor,
@@ -414,9 +414,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             children: [
                                               Text(
                                                 "${Helpers().formatWord(_selectedTheme)} Theme",
-                                                style: TextStyle(
+                                                style: palette.mainAppFont(
+                                                  textStyle: TextStyle(
                                                   color: palette.widgetText2,
-                                                ),
+                                                ),)
                                               ),
                                               IconButton(
                                                 onPressed: () => openThemeDialog(context,scalor,_selectedTheme,_pickColorTheme), 
@@ -462,7 +463,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             children: [
                                               Text(
                                                 "Privacy Policy",
-                                                style: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2),
+                                                style: palette.mainAppFont(textStyle: TextStyle(fontSize: 18 * scalor, color: palette.widgetText2)),
 
                                               )
                                             ]
@@ -510,7 +511,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             children: [
                                               Text(
                                                 "Sign Out",
-                                                style: TextStyle(fontSize: 18 * scalor, color: palette.navigationButtonText1),
+                                                style: palette.mainAppFont(textStyle:TextStyle(fontSize: 18 * scalor, color: palette.navigationButtonText1)),
 
                                               )
                                             ]
@@ -589,11 +590,13 @@ class UsernameCard extends StatelessWidget {
                       
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0 * scalor),
-                      child: Text(username, style: TextStyle(
+                      child: Text(username, style: palette.mainAppFont(textStyle:
+                        TextStyle(
                         fontSize: 22*scalor, 
                         // fontWeight: FontWeight.bold,
                         color: palette.widgetText2
                       )),
+                      ),
                     ),
                       
                     SizedBox(
@@ -681,10 +684,11 @@ Widget _infoTile({required IconData icon, required String value, required double
         leading: Icon(icon,color: palette.text1,),
         title: Text(
           value, 
-          style:TextStyle(
+          style: palette.mainAppFont(
+            textStyle:TextStyle(
             // fontWeight: FontWeight.bold,
             color: palette.text1
-          )
+          )),
         ),
 
       ),
@@ -776,6 +780,7 @@ class _UsernameDialogState extends State<UsernameDialog> {
 
   @override
   Widget build(BuildContext context) {
+
       return Dialog(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -799,10 +804,11 @@ class _UsernameDialogState extends State<UsernameDialog> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "UPDATE USERNAME",
-                      style: GoogleFonts.lilitaOne(
+                      style: widget.palette.mainAppFont(
+                        textStyle:TextStyle(
                         color: widget.palette.text1,
                         fontSize: 22*widget.scalor
-                      ),
+                      ),),
                     ),
                   ),
                 ),
@@ -854,11 +860,12 @@ class _UsernameDialogState extends State<UsernameDialog> {
                       padding: EdgeInsets.fromLTRB(8.0*widget.scalor,4.0*widget.scalor,8.0*widget.scalor,4.0*widget.scalor),
                       child: Text(
                         "Random Username",
-                        style: GoogleFonts.lilitaOne(
+                        style: widget.palette.mainAppFont(
+                          textStyle: TextStyle(
                           // color: Colors.white,
                           fontSize: 22*widget.scalor,
                           color: widget.palette.text1
-                        ),),
+                        ),),),
                     )
                   ),
 
@@ -881,11 +888,12 @@ class _UsernameDialogState extends State<UsernameDialog> {
                       padding: EdgeInsets.fromLTRB(8.0*widget.scalor,4.0*widget.scalor,8.0*widget.scalor,4.0*widget.scalor),
                       child: Text(
                         "SAVE",
-                        style: GoogleFonts.lilitaOne(
+                        style: widget.palette.mainAppFont(
+                          textStyle: TextStyle(
                           // color: Colors.white,
                           fontSize: 22*widget.scalor,
                           color: widget.palette.text1
-                        ),),
+                        ),),),
                     )
                   ),
                 )
@@ -959,124 +967,132 @@ class _SelectThemeDialogState extends State<SelectThemeDialog> {
           ),
           borderRadius: BorderRadius.all(Radius.circular(12.0*widget.scalor))
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Select Theme",
-                style: GoogleFonts.lilitaOne(
-                  color: widgetThemeDict['text1'],
-                  fontSize: 28*widget.scalor
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Select Theme",
+                  style: palette.mainAppFont(
+                    textStyle: TextStyle(
+                      color: widgetThemeDict['text1'],
+                      fontSize: 28*widget.scalor
+                    ),
+                  ),
                 ),
               ),
-            ),
-    
-            
-            Column(
-              children: _colorThemes.map((theme) {
-                Map<String,Color> themeDict = palette.colorsDictionary[theme]!;
-    
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      currentSelection = theme;
-                      widgetThemeDict = palette.colorsDictionary[currentSelection]!;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Card(
-                      color: themeDict['widget1'],
-                      
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "${Helpers().formatWord(theme)} Theme",
-                              style: GoogleFonts.lilitaOne(
-                                color: themeDict['widgetText1'],
-                                fontSize: 24*widget.scalor
-                              ),                                  
-                            ),
-            
-                            Radio(
-                              value: theme, 
-                              groupValue: currentSelection,
-                              activeColor: themeDict['widgetText1'],
-    
-                              onChanged: (val) {
-                                setState(() {
-                                  currentSelection = val!;
-                                  widgetThemeDict = palette.colorsDictionary[currentSelection]!;
-                                });
-                              }
-                            )
-                          ],
+              
+              
+              Column(
+                children: _colorThemes.map((theme) {
+                  Map<String,Color> themeDict = palette.colorsDictionary[theme]!;
+              
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        currentSelection = theme;
+                        widgetThemeDict = palette.colorsDictionary[currentSelection]!;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Card(
+                        color: themeDict['widget1'],
+                        
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "${Helpers().formatWord(theme)} Theme",
+                                style: palette.mainAppFont(textStyle:
+                                TextStyle(
+                                  color: themeDict['widgetText1'],
+                                  fontSize: 24*widget.scalor
+                                ),)                          
+                              ),
+              
+                              Radio(
+                                value: theme, 
+                                groupValue: currentSelection,
+                                activeColor: themeDict['widgetText1'],
+              
+                                onChanged: (val) {
+                                  setState(() {
+                                    currentSelection = val!;
+                                    widgetThemeDict = palette.colorsDictionary[currentSelection]!;
+                                  });
+                                }
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
-        
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: widgetThemeDict['widget1'],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.all(Radius.circular(8.0))
+                  );
+                }).toList(),
+              ),
+          
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: widgetThemeDict['widget1'],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.all(Radius.circular(8.0))
+                          )
+                        ),
+                        child: Text(
+                          "Cancel",
+                          style: palette.mainAppFont(
+                            textStyle:TextStyle(
+                              color: widgetThemeDict['widgetText1'],
+                              fontSize: 20*widget.scalor
+                          ),),
                         )
                       ),
-                      child: Text(
-                        "Cancel",
-                        style: GoogleFonts.lilitaOne(
-                          color: widgetThemeDict['widgetText1'],
-                          fontSize: 20*widget.scalor
-                        ),                        
-                      )
                     ),
-                  ),
-              
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        widget.selectNewTheme(settings,palette,currentSelection);
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: widgetThemeDict['widget2'],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.all(Radius.circular(8.0))
-                        ),                           
-                      ),                       
-                      child: Text(
-                        "Save",
-                        style: GoogleFonts.lilitaOne(
-                          color: widgetThemeDict['widgetText2'],
-                          fontSize: 20*widget.scalor
-                        ),                        
-                      )
-                    ),
-                  ),                    
-                ],
-              ),
-            )
-          ],
+                
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          widget.selectNewTheme(settings,palette,currentSelection);
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: widgetThemeDict['widget2'],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.all(Radius.circular(8.0))
+                          ),                           
+                        ),                       
+                        child: Text(
+                          "Save",
+          
+                          style:palette.mainAppFont(
+                            textStyle: TextStyle(
+                              color: widgetThemeDict['widgetText2'],
+                              fontSize: 20*widget.scalor
+                          ),),
+                        )
+                      ),
+                    ),                    
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
         
       )

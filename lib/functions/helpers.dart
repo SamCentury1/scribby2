@@ -1113,12 +1113,14 @@ class Helpers {
 
   void printError(String functionName, Object error, Object stacktrace) {
     debugPrint("""
+❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  -------------------- ERROR ------------------------ 
  FUNCTION: $functionName
  ERROR:    $error
  STACK:    $stacktrace
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
 """);
   }
 

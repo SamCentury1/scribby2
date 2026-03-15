@@ -286,8 +286,10 @@ class _RewardDialogState extends State<RewardDialog> {
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _title(scalor),
+          _title(scalor,palette.text1),
           const SizedBox(height: 16),
 
           SizedBox(
@@ -330,6 +332,19 @@ class _RewardDialogState extends State<RewardDialog> {
                             // After ad closes, send user home
                             Navigator.of(context).pop();
                             // Goes back to Auth Screen
+                            print("""
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+            AD DISMISSED - SHOULD ONLY NAVIGATE BACK TO HOME NOW
+
+
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+""");
                             _navigateHome();
                           },
                         );                        
@@ -370,9 +385,9 @@ class _RewardDialogState extends State<RewardDialog> {
 
   ButtonStyle buttonStyle(ColorPalette palette) {
     return ElevatedButton.styleFrom(
-      backgroundColor: palette.navigationButtonBg2,
-      foregroundColor: palette.navigationButtonText2,
-      shadowColor: palette.navigationButtonBorder2,
+      backgroundColor: palette.navigationButtonBg1,
+      foregroundColor: palette.navigationButtonText1,
+      shadowColor: palette.navigationButtonBorder1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     );
   }
@@ -386,7 +401,7 @@ class _RewardDialogState extends State<RewardDialog> {
           'assets/images/play-player-button-of-video-svgrepo-com.svg',
           height: 20 * scalor,
           width: 20 * scalor,
-          colorFilter: ColorFilter.mode(palette.navigationButtonText2, BlendMode.srcIn),
+          colorFilter: ColorFilter.mode(palette.navigationButtonText1, BlendMode.srcIn),
         ),
         SizedBox(width: 10 * scalor),
         Text(
@@ -397,11 +412,11 @@ class _RewardDialogState extends State<RewardDialog> {
     );
   }
 
-  Widget _title(double scalor) {
+  Widget _title(double scalor, Color color) {
     return Text(
       "AWESOME!",
       style: GoogleFonts.luckiestGuy(
-        color: Colors.white,
+        color: color,
         fontSize: 36 * scalor,
       ),
     );

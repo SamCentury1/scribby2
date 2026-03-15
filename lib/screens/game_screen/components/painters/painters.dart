@@ -1112,7 +1112,7 @@ class Painters {
   }
 
 
-  Canvas paintGameOverOverlay(Canvas canvas, Size size, GamePlayState gamePlayState) {
+  Canvas paintGameOverOverlay(Canvas canvas, Size size, GamePlayState gamePlayState, ColorPalette palette) {
 
     if (gamePlayState.isGameOver) {
 
@@ -1129,8 +1129,11 @@ class Painters {
         Paint overlayPaint = Paint()
         ..color = ui.Color.fromRGBO(0, 0, 0, progress);
         
+        int r = (palette.bg1.r*255).round();
+        int g = (palette.bg1.g*255).round();
+        int b = (palette.bg1.b*255).round();
         Paint overlayBlurPaint = Paint()
-        ..color = ui.Color.fromRGBO(155, 193, 255, progress)
+        ..color = Color.fromRGBO(r,g,b, progress)
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, 100.0);
 
 

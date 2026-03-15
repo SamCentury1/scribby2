@@ -22,7 +22,7 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
   // Timer? _timer;
 
   late bool shouldShowOverlay = false;
-
+  
   late SettingsController settings;
   Size fireworksSize = Size(0,0);
 
@@ -41,7 +41,15 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
     // Map<dynamic,dynamic> achievements = {"rank":"4_1", }; FOR TESTING ONLY
     if (achievements.isNotEmpty) {
       if (achievements["rank"] != null) {
-        print("show the overlay!");
+        print("""
+
+  ----------------------------------
+
+      SHOW THE NEW RANK OVERLAY
+
+  -----------------------------------
+
+""");
         setState(() {
           shouldShowOverlay = true;
 
@@ -75,24 +83,31 @@ class _NewRankOverlayState extends State<NewRankOverlay> {
   late double animationProgress = 0.0;
 
   void startTimer() {
-    late int count = 0;
-    late int target = 200;
-    Timer.periodic(const Duration(milliseconds: 20), (Timer t) {
-      if (count >= target) {
-        t.cancel();
-        setState(() {
-          shouldShowOverlay = false;
-          print("no more show overlay!");
-          count = 0;
-        });
 
-      } else {
-        setState(() {
-          count = count+1;
-          animationProgress = count/target;
-        });
-      }
-    });
+    try {
+      late int count = 0;
+      late int target = 200;
+      Timer.periodic(const Duration(milliseconds: 20), (Timer t) {
+        if (count >= target) {
+          t.cancel();
+          settings.setAchievements({});
+          setState(() {
+            shouldShowOverlay = false;
+            print("no more show overlay!");
+            
+            count = 0;
+          });
+
+        } else {
+          setState(() {
+            count = count+1;
+            animationProgress = count/target;
+          });
+        }
+      });
+    } catch (e,t) {
+      Helpers().printError("startTimer", e, t);
+    }
   }
 
 

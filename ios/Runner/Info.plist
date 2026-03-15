@@ -18,10 +18,19 @@
 					<!-- TODO Replace this value: -->
 					<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
 					<string>com.googleusercontent.apps.712370123958-tdvbkd1092mkvp12b025v7a8tqd1i5io</string>
+					<string>942400118146955</string>
 				</array>
 			</dict>
 		</array>
 		<!-- End of the Google Sign-in Section -->
+		<!-- FACEBOOK -->
+		<key>FacebookAppID</key>
+		<string>942400118146955</string>
+		<key>FacebookClientToken</key>
+		<string>b841594c5b50943a9d9d4bb01b574294</string>
+		<key>FacebookDisplayName</key>
+		<string>Scribby</string>		
+		<!-- end of FACEBOOK -->
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

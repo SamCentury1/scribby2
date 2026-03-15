@@ -267,12 +267,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           child: Column(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: [
-                                                              Text(
-                                                                "Pick up where we left off...",
-                                                                style: TextStyle(
-                                                                  color: palette.navigationButtonText1,
-                                                                  fontWeight: FontWeight.w700,
-                                                                  fontSize: 26
+                                                              Flexible(
+                                                                child: Text(
+                                                                  "Pick up where we left off...",
+                                                                  style: palette.mainAppFont(
+                                                                    textStyle: TextStyle(
+                                                                    color: palette.navigationButtonText1,
+                                                                    fontWeight: FontWeight.w700,
+                                                                    fontSize: 26*scalor
+                                                                    )
+                                                                  ),
                                                                 ),
                                                               ),
                                                               SizedBox(height: 20,),
@@ -389,75 +393,79 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               ),
                                                             ),
                                                             
-                                                            Align(
-                                                              alignment: Alignment.centerLeft,
-                                                              child: ElevatedButton(
-                                                                style: ElevatedButton.styleFrom(
-                                                                  backgroundColor: palette.widget1,
-                                                                  foregroundColor: palette.widgetText1,
-                                                                  shape: RoundedRectangleBorder(
-                                                                    borderRadius: BorderRadius.all(Radius.circular(8*scalor))
+                                                            Expanded(
+                                                              child: Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: palette.widget1,
+                                                                    foregroundColor: palette.widgetText1,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.all(Radius.circular(8*scalor))
+                                                                    ),
+                                                                    padding: EdgeInsets.all(8.0*scalor),
+                                                                    elevation: 3.0 *scalor
                                                                   ),
-                                                                  padding: EdgeInsets.all(8.0*scalor),
-                                                                  elevation: 3.0 *scalor
-                                                                ),
-                                                                onPressed: () => HomeScreenUtils().navigateToInstructionsScreen(context,false),
-                                                                child: FittedBox(
-                                                                  fit: BoxFit.scaleDown,
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Icon(Icons.help,size: 18 * scalor,),
-                                                                      SizedBox(width: 10*scalor,),
-                                                                      Text(
-                                                                      "Instructions",
-                                                                        style: palette.mainAppFont(
-                                                                          // color: Colors.white,
-                                                                          textStyle: TextStyle(
-                                                                            fontSize: 18*scalor,
+                                                                  onPressed: () => HomeScreenUtils().navigateToInstructionsScreen(context,false),
+                                                                  child: FittedBox(
+                                                                    fit: BoxFit.scaleDown,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(Icons.help,size: 18 * scalor,),
+                                                                        SizedBox(width: 10*scalor,),
+                                                                        Text(
+                                                                        "Instructions",
+                                                                          style: palette.mainAppFont(
+                                                                            // color: Colors.white,
+                                                                            textStyle: TextStyle(
+                                                                              fontSize: 18*scalor,
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      SizedBox(width: 10*scalor,),
-                                                                    ],
-                                                                  ),
-                                                                ),                                                                
-                                                                
+                                                                        SizedBox(width: 10*scalor,),
+                                                                      ],
+                                                                    ),
+                                                                  ),                                                                
+                                                                  
+                                                                ),
                                                               ),
                                                             ),
               
-                                                            Align(
-                                                              alignment: Alignment.centerLeft,
-                                                              child: ElevatedButton(
-                                                                style: ElevatedButton.styleFrom(
-                                                                  backgroundColor: palette.navigationButtonBg3,
-                                                                  foregroundColor: palette.navigationButtonText3,
-                                                                  shape: RoundedRectangleBorder(
-                                                                    borderRadius: BorderRadius.all(Radius.circular(8*scalor))
+                                                            Expanded(
+                                                              child: Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: palette.navigationButtonBg3,
+                                                                    foregroundColor: palette.navigationButtonText3,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.all(Radius.circular(8*scalor))
+                                                                    ),
+                                                                    padding: EdgeInsets.all(8.0*scalor),
+                                                                    elevation: 3.0 *scalor
                                                                   ),
-                                                                  padding: EdgeInsets.all(8.0*scalor),
-                                                                  elevation: 3.0 *scalor
-                                                                ),
-                                                                onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings, palette),
-                                                                child: FittedBox(
-                                                                  fit: BoxFit.scaleDown,
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Icon(Icons.play_arrow,size: 18 * scalor,),
-                                                                      SizedBox(width: 10*scalor,),
-                                                                      Text(
-                                                                      "Tutorial",
-                                                                        style: palette.mainAppFont(
-                                                                          // color: Colors.white,
-                                                                          textStyle: TextStyle(
-                                                                            fontSize: 18*scalor,
+                                                                  onPressed: () => HomeScreenUtils().navigateToTutorial(context,gamePlayState,settings, palette),
+                                                                  child: FittedBox(
+                                                                    fit: BoxFit.scaleDown,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(Icons.play_arrow,size: 18 * scalor,),
+                                                                        SizedBox(width: 10*scalor,),
+                                                                        Text(
+                                                                        "Tutorial",
+                                                                          style: palette.mainAppFont(
+                                                                            // color: Colors.white,
+                                                                            textStyle: TextStyle(
+                                                                              fontSize: 18*scalor,
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      SizedBox(width: 10*scalor,),
-                                                                    ],
-                                                                  ),
-                                                                ),                                                                
-                                                                
+                                                                        SizedBox(width: 10*scalor,),
+                                                                      ],
+                                                                    ),
+                                                                  ),                                                                
+                                                                  
+                                                                ),
                                                               ),
                                                             ),                                                            
                                                             

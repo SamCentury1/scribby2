@@ -758,6 +758,48 @@ class GamePlayState extends ChangeNotifier {
 
   }
 
+  void refreshAllData2() {
+
+    _timer?.cancel();
+    _countDownTimer?.cancel();
+    _stopWatchTimer?.cancel();    
+    _tutorialData.update("currentTurn", (v)=>0);
+
+    _animationData=[];
+    _elementPaths={};
+    refreshTileMenuBuyMoreModalData();
+    _isGameOver = false;
+    _isGameStarted = false;
+    _isGamePaused = false;
+    _randomLetterData=[];
+    _tileData=[];
+    // _elementSizes={};
+    // _elementPositions={};
+    _focusedElement={};
+    _tappedDownElement={};
+    _tappedUpElement={};
+    _draggedElementData=null;
+    _openMenuTile=null;
+    _validIdCombinations=[];
+    _scoreSummary=[];
+
+    refreshGameResultData();
+
+    _timer = null;
+    _stopWatchTimer = null;
+    _countDownTimer = null;
+
+    _currentLevel = 1;
+    refreshTileDecorationData();
+    refreshTileMenuOptions();
+
+    _duration = Duration(seconds: 0);
+    _stopWatchDuration= Duration(milliseconds: 0);
+    _countDownDuration = Duration(seconds: 0); 
+
+
+  }
+
   void quitGame() {
 
     _animationData=[];
