@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
-import FacebookCore
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
