@@ -1,3 +1,5 @@
+import 'package:in_app_purchase/in_app_purchase.dart';
+
 abstract class SettingsPersistence {
   /// ========== GET THE DATA ===================
   // Future<bool> getSoundsOn({required bool defaultValue});
@@ -43,6 +45,12 @@ abstract class SettingsPersistence {
 
   Future<Object> getUpdates();
 
+  Future<bool> getAdsRemoved();
+  // Future<int> getAddCoins();
+  // Future<bool> getIsPurchasePending();
+  // Future<String?> getPurchaseError();
+  // Future<List<ProductDetails>> getIapProducts();
+
 
 
   /// ========== SAVE THE DATA ===================
@@ -87,4 +95,11 @@ abstract class SettingsPersistence {
   Future<void> saveDailyPuzzleData(Object value); 
 
   Future<void> saveUpdates(Object value); 
+
+
+  Future<void> saveAdsRemoved(bool value);
+  // Future<void> saveIsPurchasePending(bool value);
+  // Future<void> saveAddCoins(int value);
+  // Future<void> savePurchaseError(String? value);
+  // Future<void> saveIapProducts(List<ProductDetails> value);  
 }

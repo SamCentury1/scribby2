@@ -22,11 +22,27 @@
           }
         },
         {
+          "client_id": "712370123958-notse3bpm75gn8mv4lttrg12447v73kc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scribby_flutter_v2",
+            "certificate_hash": "93fa2bec1faa50601f1a26d5765a0f831cc29e02"
+          }
+        },
+        {
           "client_id": "712370123958-r08g6e667hu25k4csv9jg0f43unlphkp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.scribby_flutter_v2",
             "certificate_hash": "d132101b42339b519fe974a0dc0b1fbb47e0b2b4"
+          }
+        },
+        {
+          "client_id": "712370123958-rrbdeub8ue1si1jbr0uohiqqd9vjln3b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scribby_flutter_v2",
+            "certificate_hash": "84ad5403499e635c0279cb977575c36fa08e4876"
           }
         },
         {

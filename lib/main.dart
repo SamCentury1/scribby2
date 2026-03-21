@@ -18,6 +18,7 @@ import 'package:scribby_flutter_v2/providers/game_play_state.dart';
 import 'package:scribby_flutter_v2/providers/palette_state.dart';
 import 'package:scribby_flutter_v2/providers/settings_state.dart';
 import 'package:scribby_flutter_v2/providers/tutorial_state.dart';
+import 'package:scribby_flutter_v2/resources/iap_service.dart';
 import 'package:scribby_flutter_v2/resources/storage_methods.dart';
 import 'package:scribby_flutter_v2/screens/authentication/auth_screen.dart';
 import 'package:scribby_flutter_v2/settings/persistence/local_storage_settings_persistence.dart';
@@ -50,6 +51,11 @@ void main() async {
   Initializations().printAllSettingsData(settings);
 
   await settings.loadStateFromPersistence();
+
+  // Attach and initialise IAP
+  final iapService = IAPService();
+  iapService.attach(settings);
+  await iapService.initialize();  
 
   final palette = ColorPalette();
   await Initializations().initializeDeviceData(settings);

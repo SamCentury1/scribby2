@@ -1,3 +1,4 @@
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -133,6 +134,34 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   }    
 
 
+  @override
+  Future<bool> getAdsRemoved() async {
+    final prefs = await instanceFuture;
+    return prefs.getBool('adsRemoved')??false;
+  }    
+
+  // @override
+  // Future<bool> getIsPurchasePending() async {
+  //   final prefs = await instanceFuture;
+  //   return prefs.getBool('isPurchasePending')??false;
+  // }      
+
+  // @override
+  // Future<String?> getPurchaseError() async {
+  //   final prefs = await instanceFuture;
+  //   return prefs.getString('purchaseError')??null;
+  // }      
+
+  // @override
+  // Future<List<ProductDetails>> getIapProducts() async {
+  //   final prefs = await instanceFuture;
+  //   return json.decode(prefs.getString("iapProducts")??json.encode({}));
+  // }      
+
+
+
+
+
   /// ========= SAVE THE DATA =================
 
   // @override
@@ -261,6 +290,26 @@ class LocalStorageSettingsPersistence extends SettingsPersistence {
   Future<void> saveUpdates(Object value) async {
     final prefs = await instanceFuture;
     prefs.setString("updates", json.encode(value)); 
-  }      
+  }   
+
+  @override
+  Future<void> saveAdsRemoved(bool value) async {
+    final prefs = await instanceFuture;
+    prefs.setBool("adsRemoved", value); 
+  }        
+
+  // @override
+  // Future<void> saveIsPurchasePending(bool value) async {
+  //   final prefs = await instanceFuture;
+  //   prefs.setBool("isPurchasePending", value); 
+  // }        
+
+
+
+  // @override
+  // Future<void> savePurchaseError(String? value) async {
+  //   final prefs = await instanceFuture;
+  //   prefs.setString("purchaseError", value); 
+  // }        
 
 }

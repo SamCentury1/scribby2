@@ -1,4 +1,5 @@
 
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
 
 /// An in-memory implementation of [SettingsPersistence].
@@ -23,6 +24,13 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   int xp = 10;  
   Object dailyPuzzleData = {};
   Object updates = {};
+
+  bool adsRemoved = false;
+  // int amount = 0;
+  // bool isPurchasePending = false;
+  // String? purchaseError = null;
+  // List<ProductDetails> iapProducts = [];
+
 
   /// ============= GET ===================
   @override
@@ -85,6 +93,21 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
 
   @override
   Future<Object> getUpdates() async => updates;  
+
+  @override
+  Future<bool> getAdsRemoved() async => adsRemoved;
+
+  // @override
+  // Future<int> getAddCoins() async => amount;
+
+  // @override
+  // Future<bool> getIsPurchasePending() async => isPurchasePending;
+
+  // @override
+  // Future<String?> getPurchaseError() async => purchaseError;
+
+  // @override
+  // Future<List<ProductDetails>> getIapProducts() async => iapProducts;
   /// =========== SAVE ========================
   // @override
   // Future<void> saveSoundsOn(bool value) async => soundsOn = value;
@@ -150,5 +173,21 @@ class MemoryOnlySettingsPersistence implements SettingsPersistence {
   Future<void> saveDailyPuzzleData(Object value) async => dailyPuzzleData = value; 
 
   @override
-  Future<void> saveUpdates(Object value) async => updates = value;    
+  Future<void> saveUpdates(Object value) async => updates = value;  
+
+  @override
+  Future<void> saveAdsRemoved(bool value) async => adsRemoved = value;
+
+  // @override
+  // Future<void> saveIsPurchasePending(bool value) async => isPurchasePending = value;
+
+  // @override
+  // Future<void> saveAddCoins(int value) => amount = value;
+
+  // @override
+  // Future<void> savePurchaseError(String? value) async => purchaseError = value;
+
+  // @override
+  // Future<void> saveIapProducts(List<ProductDetails> value) async => iapProducts = value;
+  
 }

@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 class SettingsState extends ChangeNotifier {
 
 
+
+
+
+
   late Map<String,dynamic> _gameOverCountAnimation = {};
   Map<String,dynamic> get gameOverCountAnimation => _gameOverCountAnimation;
   void setGameOverCountAnimation(Map<String,dynamic> value) {

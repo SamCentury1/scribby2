@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:scribby_flutter_v2/settings/persistence/settings_persistence.dart';
 
 class SettingsController {
@@ -48,10 +49,18 @@ class SettingsController {
   ValueNotifier<Object> updates = ValueNotifier({});
 
 
+  // ===== IN APP PURCHASES ==============
+  ValueNotifier<bool> adsRemoved = ValueNotifier(false);
+  ValueNotifier<bool> isPurchasePending = ValueNotifier(false);
+  ValueNotifier<String?> purchaseError = ValueNotifier(null);
+  ValueNotifier<List<ProductDetails>> iapProducts = ValueNotifier([]);  
+
+
+
+
   /// Creates a new instance of [SettingsController] backed by [persistence].
   SettingsController({required SettingsPersistence persistence})
       : _persistence = persistence;
-
   /// Asynchronously loads values from the injected persistence store.
 
   Future<void> loadStateFromPersistence() async {
@@ -75,6 +84,7 @@ class SettingsController {
         _persistence.getAchievementData().then((value) => achievementData.value = value),
         _persistence.getDailyPuzzleData().then((value) => dailyPuzzleData.value = value),
         _persistence.getUpdates().then((value) => updates.value = value),
+        _persistence.getAdsRemoved().then((value) => adsRemoved.value = value),
         // _persistence.getColorTheme().then((value) => colorTheme.value = value),
 
       ]);
@@ -174,5 +184,28 @@ class SettingsController {
     _persistence.saveUpdates(updates.value);
   }    
 
+
+  // ============ IAP =========================
+  void setAdsRemoved(bool value) {
+    adsRemoved.value = value;
+    _persistence.saveAdsRemoved(value);
+  }
+
+  void addCoins(int amount) {
+    coins.value = coins.value + amount;
+    _persistence.saveCoins(coins.value);
+  }
+
+  void setIsPurchasePending(bool value) {
+    isPurchasePending.value = value;
+  }
+
+  void setPurchaseError(String? value) {
+    purchaseError.value = value;
+  }
+
+  void setIapProducts(List<ProductDetails> value) {
+    iapProducts.value = value;
+  }  
 
 }
