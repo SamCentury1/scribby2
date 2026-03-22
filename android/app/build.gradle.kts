@@ -8,6 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.scribby_flutter_v2"
+    // namespace = "com.nodamngoodstudios.scribby"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"    
 

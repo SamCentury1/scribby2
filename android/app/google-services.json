@@ -72,6 +72,74 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712370123958:android:76268489ab3b0134056217",
+        "android_client_info": {
+          "package_name": "com.nodamngoodstudios.scribby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712370123958-06kubindjs7a2q7rs3or1su377f5qv35.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nodamngoodstudios.scribby",
+            "certificate_hash": "d132101b42339b519fe974a0dc0b1fbb47e0b2b4"
+          }
+        },
+        {
+          "client_id": "712370123958-b3naercr6fv3t3pkphnp9gikhmnce67t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nodamngoodstudios.scribby",
+            "certificate_hash": "93fa2bec1faa50601f1a26d5765a0f831cc29e02"
+          }
+        },
+        {
+          "client_id": "712370123958-p88kfvm02s7ukqbo9eks179d4039rcp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nodamngoodstudios.scribby",
+            "certificate_hash": "84ad5403499e635c0279cb977575c36fa08e4876"
+          }
+        },
+        {
+          "client_id": "712370123958-sk3lm50vd02k88r7nof7b8geaif87urk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nodamngoodstudios.scribby",
+            "certificate_hash": "230a9aa9c2526ec31317bc0fc28c453a45961361"
+          }
+        },
+        {
+          "client_id": "712370123958-l9ie0ke3dqk09m02sn1jllv38h1824sc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRs96lfDcjpM_iDtCOSSSYWtRS-X2VVJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712370123958-l9ie0ke3dqk09m02sn1jllv38h1824sc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "712370123958-553ei202o3j6s0pbkci3gto4tkg2kalj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.scribbyFlutterV2.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

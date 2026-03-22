@@ -4,10 +4,12 @@ project(runner LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
+# set(BINARY_NAME "scribby_flutter_v2")
 set(BINARY_NAME "scribby_flutter_v2")
 # The unique GTK application identifier for this application. See:
 # https://wiki.gnome.org/HowDoI/ChooseApplicationID
 set(APPLICATION_ID "com.example.scribby_flutter_v2")
+# set(APPLICATION_ID "com.nodamngoodstudios.scribby")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.

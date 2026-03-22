@@ -12,7 +12,7 @@ import 'package:scribby_flutter_v2/screens/game_screen/components/painters/tile_
 class TutorialPainters {
 
   Canvas paintTutorialPainters(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
-    paintTargetTile(canvas,gamePlayState);
+    paintTargetTile(canvas,gamePlayState,palette);
     paintTutorialCountdown(canvas,gamePlayState,palette);
     paintDottedLineIndicator(canvas,gamePlayState,palette);
     animateTutorialMessage(canvas,gamePlayState,palette);
@@ -25,7 +25,7 @@ class TutorialPainters {
   }
 
 
-  Canvas paintTargetTile(Canvas canvas, GamePlayState gamePlayState) {
+  Canvas paintTargetTile(Canvas canvas, GamePlayState gamePlayState, ColorPalette palette) {
     Size tileSize = gamePlayState.elementSizes["tileSize"];
     int currentTurn = gamePlayState.tutorialData["currentTurn"];
     List<Map<String,dynamic>> steps = gamePlayState.tutorialData["steps"];
@@ -36,6 +36,14 @@ class TutorialPainters {
       String elementType=step["type"];
       String moveType=step["moveType"];
       String? targetOption=step["perk"];
+
+      int textColorRed = (palette.text1.r*255).round();
+      int textColorGreen = (palette.text1.g*255).round();
+      int textColorBlue = (palette.text1.b*255).round();
+
+      int highlightColorRed = (palette.highlightColor.r*255).round();
+      int highlightColorGreen = (palette.highlightColor.g*255).round();
+      int highlightColorBlue = (palette.highlightColor.b*255).round();      
 
     
       Map<String,dynamic> targetTile = {};
@@ -62,10 +70,12 @@ class TutorialPainters {
               
               if (shouldGlow(gamePlayState)) {
                 late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,targetKey!);
+                Color textColor = ui.Color.fromRGBO(textColorRed, textColorGreen, textColorBlue, opacity);
+                Color highlightColor = ui.Color.fromRGBO(highlightColorRed, highlightColorGreen, highlightColorBlue, opacity);
                 if (focusPerk["open"]) {
-                  TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*1.1,tileCenter);        
+                  TilePainters().drawTileShadow(canvas,textColor,highlightColor,tileSize*1.1,tileCenter);        
                 } else {
-                  TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*0.9,perkCenter); 
+                  TilePainters().drawTileShadow(canvas,textColor,highlightColor,tileSize*0.9,perkCenter); 
                 }
               }            
             }
@@ -74,7 +84,9 @@ class TutorialPainters {
           } else {
             if (shouldGlow(gamePlayState)) {
               late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,targetKey!);
-              TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*1.1,tileCenter);
+              Color textColor = ui.Color.fromRGBO(textColorRed, textColorGreen, textColorBlue, opacity);
+              Color highlightColor = ui.Color.fromRGBO(highlightColorRed, highlightColorGreen, highlightColorBlue, opacity);              
+              TilePainters().drawTileShadow(canvas,textColor,highlightColor,tileSize*1.1,tileCenter);
             }
           }
           // if (targetTile["menuOpen"]) {
@@ -95,7 +107,9 @@ class TutorialPainters {
         } else {
           if (shouldGlow(gamePlayState)) {
             late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,targetKey!);
-            TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize,tileCenter);        
+            Color textColor = ui.Color.fromRGBO(textColorRed, textColorGreen, textColorBlue, opacity);
+            Color highlightColor = ui.Color.fromRGBO(highlightColorRed, highlightColorGreen, highlightColorBlue, opacity);            
+            TilePainters().drawTileShadow(canvas,textColor,highlightColor,tileSize,tileCenter);        
           }
         }
 
@@ -118,7 +132,9 @@ class TutorialPainters {
           Offset tileCenter = dragTargetTile["center"];
           if (shouldGlow(gamePlayState)) {
             late double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,dragTargetKey);
-            TilePainters().drawTileShadow(canvas,ui.Color.fromRGBO(255, 255, 255, opacity),ui.Color.fromRGBO(227, 210, 253, opacity),tileSize*1.1,tileCenter);
+            Color textColor = ui.Color.fromRGBO(textColorRed, textColorGreen, textColorBlue, opacity);
+            Color highlightColor = ui.Color.fromRGBO(highlightColorRed, highlightColorGreen, highlightColorBlue, opacity);            
+            TilePainters().drawTileShadow(canvas,textColor,highlightColor,tileSize*1.1,tileCenter);
           }
         }      
       }
@@ -147,57 +163,72 @@ class TutorialPainters {
 
       int currentStep = gamePlayState.tutorialData["currentTurn"];
       List<Map<String,dynamic>> tutorialSteps = gamePlayState.tutorialData["steps"];
-      List<Map<String,dynamic>> dragSteps = tutorialSteps.where((e)=>e["moveType"]=="drag",).toList(); // firstWhere((e)=> e["moveType"]=="drag", orElse: ()=>{} );
-      for (int i=0; i<dragSteps.length; i++) {
+      List<Map<String,dynamic>> dragSteps = tutorialSteps.where((e) => e["moveType"] == "drag").toList();
+
+      for (int i = 0; i < dragSteps.length; i++) {
         Map<String,dynamic> dragStep = dragSteps[i];
         if (dragStep.isNotEmpty) {
-          
+
           if (currentStep == dragStep["step"]) {
             final int reserveTileKey = dragStep["focusTile"];
             final int boardTileKey = dragStep["targetKey"];
 
-            final Map<String,dynamic> reserveTile = gamePlayState.reserveTileData.firstWhere((e)=>e["key"]==reserveTileKey, orElse: ()=>{});
-            final Map<String,dynamic> boardTile = gamePlayState.tileData.firstWhere((e)=>e["key"]==boardTileKey, orElse: ()=>{});
-
+            final Map<String,dynamic> reserveTile = gamePlayState.reserveTileData.firstWhere((e) => e["key"] == reserveTileKey, orElse: () => {});
+            final Map<String,dynamic> boardTile = gamePlayState.tileData.firstWhere((e) => e["key"] == boardTileKey, orElse: () => {});
 
             if (reserveTile.isNotEmpty && boardTile.isNotEmpty) {
 
-          
               final Offset reserveTileCenter = reserveTile["center"];
               final Offset boardTileCenter = boardTile["center"];
-
 
               final int stops = 30;
               final double dotSpacing = 1.0 / stops;
 
-
-
-              final int red = (palette.text1.r * 255).round();
+              final int red   = (palette.text1.r * 255).round();
               final int green = (palette.text1.g * 255).round();
-              final int blue = (palette.text1.b * 255).round();
+              final int blue  = (palette.text1.b * 255).round();
 
-              for (int i = 5; i < stops-2; i++) {
+              // Glow layers: each pass is wider and more transparent
+              // Drawn first so they sit underneath the crisp dot
+              const List<_GlowLayer> glowLayers = [
+                _GlowLayer(strokeWidth: 18.0, opacityMultiplier: 0.10),
+                _GlowLayer(strokeWidth: 12.0, opacityMultiplier: 0.18),
+                _GlowLayer(strokeWidth:  7.0, opacityMultiplier: 0.28),
+              ];
 
-                double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState,i);
-                
+              for (int i = 5; i < stops - 2; i++) {
+                if (i % 2 != 1) continue; // only odd segments, same as before
 
-                Paint linePaint = Paint()
-                ..color = ui.Color.fromRGBO(red, green, blue, 1*opacity)
-                ..strokeCap = StrokeCap.round
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = 3.0;              
+                double opacity = AnimationUtils().getHighlightEffectShadowOpacity(gamePlayState, i);
+
                 double t1 = i * dotSpacing;
                 double t2 = (i + 1) * dotSpacing;
-                // Interpolate between start and end
                 Offset p1 = Offset.lerp(reserveTileCenter, boardTileCenter, t1)!;
                 Offset p2 = Offset.lerp(reserveTileCenter, boardTileCenter, t2)!;
 
-                if (i % 2 == 1) {
-                  if (shouldGlow(gamePlayState)) {
-                    canvas.drawLine(p1, p2, linePaint);
+                if (shouldGlow(gamePlayState)) {
+
+                  // --- glow passes (back to front, widest first) ---
+                  for (final layer in glowLayers) {
+                    final Paint glowPaint = Paint()
+                      // ..color = ui.Color.fromRGBO(red, green, blue, opacity * layer.opacityMultiplier)
+                      ..color = ui.Color.fromRGBO(255, 0, 0, opacity * layer.opacityMultiplier)
+                      ..strokeCap = StrokeCap.round
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = layer.strokeWidth
+                      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4.0);
+                    canvas.drawLine(p1, p2, glowPaint);
                   }
+
+                  // --- crisp dot on top ---
+                  final Paint linePaint = Paint()
+                    ..color = ui.Color.fromRGBO(red, green, blue, opacity)
+                    ..strokeCap = StrokeCap.round
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 3.0;
+                  canvas.drawLine(p1, p2, linePaint);
                 }
-              }   
+              }
             }
           }
         }
@@ -207,7 +238,11 @@ class TutorialPainters {
     return canvas;
   }
 }
-
+class _GlowLayer {
+  final double strokeWidth;
+  final double opacityMultiplier;
+  const _GlowLayer({required this.strokeWidth, required this.opacityMultiplier});
+}
 
 Canvas displayTutorialText(Canvas canvas,Size size, ColorPalette palette, double scalor, String content, Offset bonusCenter, double progress) {
 
@@ -217,7 +252,7 @@ Canvas displayTutorialText(Canvas canvas,Size size, ColorPalette palette, double
   final int green = (palette.text1.g * 255).round();
   final int blue = (palette.text1.b * 255).round();
 
-  TextStyle textStyle = GoogleFonts.lilitaOne(
+  TextStyle textStyle = GoogleFonts.roboto(
     textStyle: TextStyle(
       color: ui.Color.fromRGBO(red, green, blue, opacity),
       fontSize: 26* scalor,

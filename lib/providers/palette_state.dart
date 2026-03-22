@@ -129,6 +129,9 @@ class ColorPalette extends ChangeNotifier {
   late Color _widgetParticulars2 = Colors.transparent;
   Color get widgetParticulars2 => _widgetParticulars2;
 
+  late Color _highlightColor = Colors.transparent;
+  Color get highlightColor => _highlightColor;  
+
 
 
   late Color _gameplayText1 = Colors.transparent;
@@ -272,6 +275,8 @@ class ColorPalette extends ChangeNotifier {
 
       _widgetParticulars1 = colorsDictionary[themeValue]!["widgetParticulars1"]!;
       _widgetParticulars2 = colorsDictionary[themeValue]!["widgetParticulars2"]!;
+      
+      _highlightColor = colorsDictionary[themeValue]!['highlightColor']!;
 
 
       _coinCounterBorder = colorsDictionary[themeValue]!["coinCounterBorder"]!; 
@@ -493,6 +498,8 @@ class ColorPalette extends ChangeNotifier {
 
           "widgetParticulars1" : const Color.fromARGB(255, 4, 15, 173),
           "widgetParticulars2" : const Color.fromARGB(255, 143, 197, 241),
+          
+          "highlightColor": const Color.fromARGB(255, 238, 12, 12),
 
           "coinCounterBorder" : const Color.fromARGB(211, 236, 236, 236),
           "coinCounterText" : const Color.fromARGB(211, 236, 236, 236),
@@ -573,6 +580,8 @@ class ColorPalette extends ChangeNotifier {
           "widgetParticulars1" : const Color.fromARGB(255, 26, 26, 26),
           "widgetParticulars2" : const Color.fromARGB(255, 8, 26, 126),
 
+          "highlightColor": const Color.fromARGB(255, 238, 12, 12),
+
           "coinCounterBorder" : const Color.fromARGB(210, 19, 19, 19),
           "coinCounterText" : const Color.fromARGB(210, 34, 34, 34),
 
@@ -652,6 +661,7 @@ class ColorPalette extends ChangeNotifier {
           "widgetParticulars1" : const Color.fromARGB(255, 170, 170, 170),
           "widgetParticulars2" : const Color.fromARGB(255, 47, 14, 70),          
 
+          "highlightColor": const Color.fromARGB(255, 245, 171, 255),
 
           "coinCounterBorder" : const Color.fromARGB(210, 194, 194, 194),
           "coinCounterText" : const Color.fromARGB(210, 206, 206, 206),
@@ -727,7 +737,9 @@ class ColorPalette extends ChangeNotifier {
           "widgetShadow2" : const Color.fromARGB(232, 26, 26, 26),
 
           "widgetParticulars1" : const Color.fromARGB(255, 12, 68, 20),
-          "widgetParticulars2" : const Color.fromARGB(255, 171, 241, 143),          
+          "widgetParticulars2" : const Color.fromARGB(255, 171, 241, 143),
+
+          "highlightColor": const Color.fromARGB(255, 238, 12, 12),        
 
 
           "coinCounterBorder" : const Color.fromARGB(211, 236, 236, 236),
@@ -804,8 +816,8 @@ class ColorPalette extends ChangeNotifier {
           "widgetShadow2" : const Color.fromARGB(232, 26, 26, 26),
 
           "widgetParticulars1" : const Color.fromARGB(255, 223, 223, 224),
-          "widgetParticulars2" : const Color.fromARGB(255, 57, 5, 73),          
-
+          "widgetParticulars2" : const Color.fromARGB(255, 57, 5, 73),
+          "highlightColor": const Color.fromARGB(255, 180, 20, 255),
 
           "coinCounterBorder" : const Color.fromARGB(211, 236, 236, 236),
           "coinCounterText" : const Color.fromARGB(211, 236, 236, 236),
@@ -881,7 +893,8 @@ class ColorPalette extends ChangeNotifier {
           "widgetShadow2" : const Color.fromARGB(232, 26, 26, 26),
 
           "widgetParticulars1" : const Color.fromARGB(255, 53, 202, 195),
-          "widgetParticulars2" : const Color.fromARGB(255, 143, 197, 241),          
+          "widgetParticulars2" : const Color.fromARGB(255, 143, 197, 241),
+          "highlightColor": const Color.fromARGB(255, 238, 12, 12),       
 
 
           "coinCounterBorder" : const Color.fromARGB(210, 27, 27, 27),
@@ -960,7 +973,9 @@ class ColorPalette extends ChangeNotifier {
           "widgetShadow2" : const Color.fromARGB(118, 12, 12, 12),
 
           "widgetParticulars1" : const Color.fromRGBO(197, 5, 5, 1),
-          "widgetParticulars2" : const Color.fromARGB(255, 241, 143, 143),          
+          "widgetParticulars2" : const Color.fromARGB(255, 241, 143, 143),
+
+          "highlightColor": const Color.fromARGB(255, 22, 255, 255),        
 
 
           "coinCounterBorder" : const Color.fromARGB(210, 27, 27, 27),

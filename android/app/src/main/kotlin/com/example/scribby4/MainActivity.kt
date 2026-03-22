@@ -1,4 +1,5 @@
-package com.example.scribby_flutter_v2
+ package com.nodamngoodstudios.scribby
+
 
 import io.flutter.embedding.android.FlutterActivity
 

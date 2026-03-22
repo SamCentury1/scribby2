@@ -733,20 +733,20 @@ class TilePainters {
       final RRect tileShadowRRect = RRect.fromRectAndRadius(tileShadowRect, Radius.circular(radius));    
 
       Paint shadowPaintBlur = Paint()
-      ..color = color1
+      ..color = color2
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = (tileSize.width*1.1)*0.5
-      ..maskFilter = MaskFilter.blur(BlurStyle.outer, tileSize.width*0.03);
+      ..strokeWidth = (tileSize.width*1.1)*0.075
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, tileSize.width*0.03);
 
       Paint shadowPaint = Paint()
-      ..color = color2
+      ..color = color1
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = (tileSize.width*1.1)*0.04;
 
+      canvas.drawRRect(tileShadowRRect, shadowPaintBlur);
       canvas.drawRRect(tileShadowRRect, shadowPaint);
-      // canvas.drawRRect(tileShadowRRect, shadowPaintBlur);
       
       return canvas;
   }
