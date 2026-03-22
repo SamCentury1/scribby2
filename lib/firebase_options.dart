@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD1001wRAmoKQnF-grCMjDoii17AnbZvGE',
-    appId: '1:712370123958:ios:9c1e9a4652e99935056217',
+    // appId: '1:712370123958:ios:9c1e9a4652e99935056217',
+    appId: '1:712370123958:ios:0fbaed31290597b1056217',
     messagingSenderId: '712370123958',
     projectId: 'scribby-6934e',
     storageBucket: 'scribby-6934e.appspot.com',

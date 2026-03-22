@@ -5,7 +5,8 @@
 		<key>GIDClientID</key>
 		<!-- TODO Replace this value: -->
 		<!-- Copied from GoogleService-Info.plist key CLIENT_ID -->
-		<string>712370123958-tdvbkd1092mkvp12b025v7a8tqd1i5io.apps.googleusercontent.com</string>
+		<!-- <string>712370123958-tdvbkd1092mkvp12b025v7a8tqd1i5io.apps.googleusercontent.com</string> -->
+		<string>712370123958-ifapjfii7gtg1m06hp6jas3ls05avai8.apps.googleusercontent.com</string>
 		<!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
 		<!-- Google Sign-in Section -->
 		<key>CFBundleURLTypes</key>
@@ -17,7 +18,8 @@
 				<array>
 					<!-- TODO Replace this value: -->
 					<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
-					<string>com.googleusercontent.apps.712370123958-tdvbkd1092mkvp12b025v7a8tqd1i5io</string>
+					<!-- <string>com.googleusercontent.apps.712370123958-tdvbkd1092mkvp12b025v7a8tqd1i5io</string> -->
+					<string>com.googleusercontent.apps.712370123958-ifapjfii7gtg1m06hp6jas3ls05avai8</string>
 					<string>942400118146955</string>
 				</array>
 			</dict>
