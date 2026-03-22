@@ -37,7 +37,7 @@ class IAPService {
   Future<void> loadProducts() async {
     print("🤑 Load products is being called");
     final response = await _iap.queryProductDetails(_kProductIds);
-    print("🤑 RESPONSE? ${response}");
+    print('IAP products found: ${response.productDetails.length}');
     _settings?.setIapProducts(response.productDetails);
   }
 

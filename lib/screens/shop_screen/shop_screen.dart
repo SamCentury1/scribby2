@@ -50,7 +50,11 @@ class _ShopScreenState extends State<ShopScreen> {
           child: Consumer<ColorPalette>(
             builder: (context,palette,child) {
 
-              print("🤑 ${settings.iapProducts.value}");
+              print("""
+----------------------- settings.iapProducts.value ----------------------- 
+${settings.iapProducts.value}
+--------------------------------------------------------------------------
+              """);
               return SafeArea(
                 child: Stack(
                   children: [
