@@ -106,6 +106,7 @@ class AuthService {
 
   Future<AuthResult> signInWithApple() async {
     try {
+      print("DEBUG: Starting Apple Sign In");
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -113,13 +114,19 @@ class AuthService {
         ],
       );
 
+      print("DEBUG: Got Apple credential");
+
+
       final oAuthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         accessToken: appleCredential.authorizationCode,
       );
 
-      final UserCredential cred =
-          await _firebaseAuth.signInWithCredential(oAuthCredential);
+      print("DEBUG: Created OAuth credential");
+
+      final UserCredential cred = await _firebaseAuth.signInWithCredential(oAuthCredential);
+
+      print("DEBUG: Firebase sign in complete");
 
       if (cred.additionalUserInfo?.isNewUser == true) {
         final String uid = cred.user!.uid;
