@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:scribby_flutter_v2/settings/settings.dart';
 const Set<String> _kProductIds = {
@@ -41,16 +43,29 @@ class IAPService {
     _settings?.setIapProducts(response.productDetails);
   }
 
-  Future<void> buyProduct(ProductDetails product) async {
-    final isConsumable = product.id != 'remove_ads';
-    final param = PurchaseParam(productDetails: product);
-    if (isConsumable) {
-      await _iap.buyConsumable(purchaseParam: param);
-    } else {
-      await _iap.buyNonConsumable(purchaseParam: param);
+  Future<void> buyProduct(
+    ProductDetails product, {
+    VoidCallback? onCancelled,
+    VoidCallback? onError,
+  }) async {
+    try {
+      final isConsumable = product.id != 'remove_ads';
+      final param = PurchaseParam(productDetails: product);
+      if (isConsumable) {
+        await _iap.buyConsumable(purchaseParam: param);
+      } else {
+        await _iap.buyNonConsumable(purchaseParam: param);
+      }
+    } on PlatformException catch (e) {
+      if (e.code == 'storekit_duplicate_product_object') {
+        onCancelled?.call();
+      } else {
+        onError?.call();
+      }
+    } catch (_) {
+      onError?.call();
     }
   }
-
   Future<void> restorePurchases() async {
     await _iap.restorePurchases();
   }
@@ -70,6 +85,7 @@ class IAPService {
       } else if (purchase.status == PurchaseStatus.error) {
         _settings?.setIsPurchasePending(false);
         _settings?.setPurchaseError(purchase.error!.message);
+        
       }
     }
   }

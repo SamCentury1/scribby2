@@ -285,9 +285,26 @@ class BadgeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => openBadgeDialog(context,badgeData,scalor),
-      child: CustomPaint(
+      // child: CustomPaint(
+      //   painter: BadgePainter(badgeData: badgeData),
+      // ),
+      child: badgeData["img_path"] != null ? Image.network(
+        badgeData['img_path'],
+        fit: BoxFit.contain,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(child: CircularProgressIndicator());
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Icon(Icons.broken_image_outlined);
+        },
+      )
+
+      :   
+      CustomPaint(
         painter: BadgePainter(badgeData: badgeData),
-      ),
+      ), 
+
     );
   }
 }
@@ -380,11 +397,29 @@ Future<void> openBadgeDialog(BuildContext context, Map<String,dynamic> badgeData
                 width: 300 * scalor,
                 height: 300 * scalor,
 
-                child: CustomPaint(
-                  painter: BadgePainter(
-                    badgeData: badgeData
-                  ),
-                ),
+                // child: CustomPaint(
+                //   painter: BadgePainter(
+                //     badgeData: badgeData
+                //   ),
+                // ),
+
+
+                child: badgeData["img_path"] != null ? Image.network(
+                  badgeData['img_path'],
+                  fit: BoxFit.contain,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(child: CircularProgressIndicator());
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.broken_image_outlined);
+                  },
+                )
+
+                :   
+                CustomPaint(
+                  painter: BadgePainter(badgeData: badgeData),
+                ),                                    
               )
 
             ],

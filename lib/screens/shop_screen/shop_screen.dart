@@ -24,12 +24,26 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
+
+
+
     
   @override
   Widget build(BuildContext context) {
 
 
     
+    Future<void> displayError(SettingsController settings) async {
+      if (settings.purchaseError.value != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Purchase was cancelled'),
+            duration: Duration(seconds:3),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );        
+      }
+    }
     return Consumer<SettingsController>(
       builder: (context,settings,child) {
 
@@ -101,27 +115,6 @@ ${settings.iapProducts.value}
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(height: 100 * scalor),
-                                  // ShopItem(fileName: "no_ads", label: "No Ads", cost: 2.99),
-                                  // Divider(),
-                                  // ShopItem(fileName: "coins_1", label: "100 Coins", cost: 0.99),
-                                  // ShopItem(fileName: "coins_2", label: "350 Coins", cost: 1.99),
-                                  // ShopItem(fileName: "coins_3", label: "500 Coins", cost: 3.49),
-                                  // ShopItem(fileName: "coins_4", label: "1000 Coins", cost: 6.99),
-                                  // ShopItem(fileName: "coins_5", label: "5000 Coins", cost: 25.49),
-
-                                  // ...settings.iapProducts.value.map((product) => ListTile(
-                                  //   tileColor: palette.widget2,
-                                  //   textColor: palette.widgetText2,
-                                    
-                                  //   title: Text(product.title),
-                                  //   subtitle: Text(product.price),
-                                  //   onTap: () => IAPService().buyProduct(product),
-                                  // )),
-
-                                  // ...settings.iapProducts.value.map((product) => ShopItem(productdetails: product),
-                                    // onTap: () => IAPService().buyProduct(product),
-                                  // )
-                                  // ),
 
                                   ShopItem(productId: "remove_ads",),
                                   Divider(),
@@ -131,10 +124,6 @@ ${settings.iapProducts.value}
                                   ShopItem(productId: "coins_10000", ),
                                   ShopItem(productId: "coins_20000", ),
 
-
-                              
-              
-              
                                   // Restore purchases button (required by Apple)
                                   TextButton(
                                     onPressed: () => IAPService().restorePurchases(),
@@ -143,10 +132,7 @@ ${settings.iapProducts.value}
                                       foregroundColor: palette.widgetText1
                                     ),
                                     child: Text('Restore purchases'),
-                                  ), 
-
-
-                                                             
+                                  ),                  
                                 ],
                               ),
 
@@ -156,9 +142,6 @@ ${settings.iapProducts.value}
                         ),
                       ),
                     ),
-
-                    // Pending overlay
-                    
                     Builder(
                       builder: (context) {
                         if (settings.isPurchasePending.value) {

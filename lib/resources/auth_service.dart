@@ -145,8 +145,7 @@ class AuthService {
             appleCredential.email ??
             'user@apple.com';
 
-        final String langCode =
-            WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+        final String langCode = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
 
         const String providerData = "apple";
 

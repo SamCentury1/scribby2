@@ -100,6 +100,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }      
 
+
+  void onFacebookPressed() async {
+    print("sign in with facebook");
+    final result = await AuthService().signInWithFacebook();
+
+    if (!mounted) return;
+
+    if (!result.isSuccess) {
+      showDialog(
+        context: context,
+        builder: (_) => AuthErrorDialog(
+          errorTitle: "Facebook Sign-in Error",
+          errors: [result.errorMessage!],
+        ),
+      );
+    }
+  }    
+
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen:false);
@@ -195,13 +213,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     onTap: () => onGooglePressed(),
                                     iconData: Icons.g_mobiledata,
                                   ),
+
+                                  
                                   SizedBox(width: 10,),
+
+                                  
                             
                                   AuthProviderTile(
                                     palette: palette, 
                                     onTap: () => onApplePressed(),
                                     iconData: Icons.apple,
                                   ),
+
+
+                                  SizedBox(width: 10,),
+                                  
+                                  AuthProviderTile(
+                                    palette: palette, 
+                                    onTap: () =>  onFacebookPressed(), 
+                                    iconData: Icons.facebook,
+                                  ),                                                                         
                                 ],
                               ),
                               Padding(

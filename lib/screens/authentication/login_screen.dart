@@ -104,14 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     late ColorPalette palette = Provider.of<ColorPalette>(context, listen:false);
-    // late SettingsController settings = Provider.of<SettingsController>(context, listen:false);
-    // final double scalor = Helpers().getScalor(settings);
     return Consumer<SettingsController>(
       builder: (context,settings,child) {
 
         final double scalor = Helpers().getScalor(settings);
 
-        
         return Stack(
           children: [
             Positioned(
@@ -139,8 +136,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              // SizedBox(height: 50,),
-                              // Icon(Icons.lock,size: 100,),
                               SizedBox(
                                 height: MediaQuery.of(context).size.height*0.25,
                                 child: Center(
@@ -154,8 +149,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   Text(
                                     "Welcome back!",
-                                    // style: TextStyle(color: Colors.grey[700],fontSize: 24),
-                                    // style: TextStyle(color: palette.text1,fontSize: 24*scalor),
                                     style: palette.mainAppFont(
                                       textStyle: TextStyle(
                                         fontSize: 34 * scalor, 
